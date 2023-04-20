@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/map_bottom_bar"
+        android:title="@string/map_bottom_nav"
+        app:showAsAction="always"
+        android:icon="@drawable/baseline_map_24"
+        />
+
+    <item
+        android:id="@+id/restaurant_list_bottom_bar"
+        android:title="@string/list_view_bottom_nav"
+        app:showAsAction="always"
+        android:icon="@drawable/baseline_format_list_bulleted_24"
+        />
+
+    <item
+        android:id="@+id/workmate_list_bottom_bar"
+        android:title="@string/workmates_bottom_nav"
+        app:showAsAction="always"
+        android:icon="@drawable/baseline_people_24"
+        />
+</menu>
