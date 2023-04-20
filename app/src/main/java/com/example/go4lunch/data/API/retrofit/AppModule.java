@@ -1,8 +1,5 @@
 package com.example.go4lunch.data.API.retrofit;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;

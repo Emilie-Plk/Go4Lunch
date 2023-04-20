@@ -3,7 +3,6 @@ package com.example.go4lunch.ui;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import com.example.go4lunch.R;
 import com.example.go4lunch.databinding.MainActivityBinding;
