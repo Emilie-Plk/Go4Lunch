@@ -6,11 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.go4lunch.R;
+import com.example.go4lunch.databinding.RestaurantListFragmentBinding;
 
 public class RestaurantListFragment extends Fragment {
+
+    private RestaurantListFragmentBinding binding;
 
     @NonNull
     public static RestaurantListFragment newInstance() {
@@ -18,9 +21,14 @@ public class RestaurantListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = RestaurantListFragmentBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
 
-        return inflater.inflate(R.layout.restaurant_list_fragment, container, false);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+//        setUpViewModel();
+//        initRecyclerView();
     }
 }

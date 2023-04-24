@@ -14,5 +14,14 @@ public interface GoogleMapsApi {
         @Query("location") String location,
         @Query("radius") int radius,
         @Query("type") String type,
-        @Query("key") String key);
+        @Query("key") String key,
+        @Query("maxResults") int maxResults);
+
+
+/*    https://maps.googleapis.com/maps/api/place/nearbysearch/json
+        ?keyword=cruise
+  &location=-33.8670522%2C151.1957362
+        &radius=1500
+        &type=restaurant
+  &key=YOUR_API_KEY*/
 }

@@ -1,6 +1,9 @@
 package com.example.go4lunch.data.API.nearby_search_restaurants;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
+import java.util.Objects;
 
 public class NearbySearchResponse {
     private List<Result> results;
@@ -102,6 +105,28 @@ public class NearbySearchResponse {
         public int getWidth() {
             return width;
         }
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "NearbySearchResponse{" +
+            "results=" + results +
+            ", status='" + status + '\'' +
+            '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NearbySearchResponse that = (NearbySearchResponse) o;
+        return Objects.equals(results, that.results) && Objects.equals(status, that.status);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(results, status);
     }
 }
 
