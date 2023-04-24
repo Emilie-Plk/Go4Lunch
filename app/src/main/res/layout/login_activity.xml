@@ -4,30 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.login.LoginActivity"
-    android:background="@drawable/ic_launcher_background"
-    >
+    tools:context=".ui.login.LoginActivity">
 
-   <Button
-       android:id="@+id/google_login_btn"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="@string/google_btn"
-       app:icon="@drawable/google_logo"
-       app:layout_constraintBottom_toTopOf="@+id/button"
-       app:layout_constraintEnd_toEndOf="parent"
-       app:layout_constraintStart_toStartOf="parent"
-       android:layout_marginBottom="34dp"/>
 
-   <Button
-       android:id="@+id/button"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="@string/facebook_btn"
-       app:icon="@drawable/facebook_f_icon"
-       android:layout_marginBottom="140dp"
-       app:layout_constraintBottom_toBottomOf="parent"
-       app:layout_constraintEnd_toEndOf="parent"
-       app:layout_constraintStart_toStartOf="parent" />
+    <Button
+        style="@style/Theme.Go4Lunch.LoginGoogleButton"
+        android:id="@+id/google_login_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="34dp"
+        android:text="@string/google_btn"
+        app:icon="@drawable/google_logo"
+        app:layout_constraintWidth_default="spread"
+        app:layout_constraintBottom_toTopOf="@+id/facebook_login_btn"
+        app:layout_constraintEnd_toEndOf="@+id/facebook_login_btn"
+        app:layout_constraintStart_toStartOf="@+id/facebook_login_btn" />
+
+    <Button
+        style="@style/Theme.Go4Lunch.LoginFacebookButton"
+        android:id="@+id/facebook_login_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="140dp"
+        android:text="@string/facebook_btn"
+        app:icon="@drawable/f_icon_reversed"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

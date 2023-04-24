@@ -88,7 +88,7 @@
 
         <RatingBar
             android:id="@+id/list_restaurant_rating"
-            style="@style/RatingBar"
+            style="@style/Theme.Go4Lunch.RatingBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"

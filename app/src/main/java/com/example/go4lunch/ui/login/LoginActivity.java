@@ -14,6 +14,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.go4lunch.R;
 import com.example.go4lunch.databinding.LoginActivityBinding;
 import com.example.go4lunch.ui.MainActivity;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -27,12 +32,17 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import java.util.Arrays;
+
 public class LoginActivity extends AppCompatActivity {
 
     private LoginActivityBinding binding;
 
     private GoogleSignInClient googleSignInClient;
     private FirebaseAuth firebaseAuth;
+
+    //FB
+    private CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +70,33 @@ public class LoginActivity extends AppCompatActivity {
         if (firebaseUser != null) {
             startActivity(new Intent(LoginActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
+
+        // FB
+
+        binding.facebookLoginBtn.setOnClickListener(v ->
+            LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile")
+            )
+        );
+
+        callbackManager = CallbackManager.Factory.create();
+
+        LoginManager.getInstance().registerCallback(callbackManager,
+            new FacebookCallback<LoginResult>() {
+                @Override
+                public void onSuccess(LoginResult loginResult) {
+                  startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                }
+
+                @Override
+                public void onCancel() {
+                    // App code
+                }
+
+                @Override
+                public void onError(@NonNull FacebookException exception) {
+                 Log.e(TAG, "Error while logging to Facebook" + exception);
+                }
+            });
     }
 
     @Override
@@ -92,6 +129,8 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         }
+        // Facebook
+
     }
 
 }
