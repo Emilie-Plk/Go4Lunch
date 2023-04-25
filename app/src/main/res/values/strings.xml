@@ -15,4 +15,5 @@
     <string name="map_bottom_nav">Map</string>
     <string name="list_avatar_workmate_a11y">Picture of %s</string>
     <string name="list_workmate_send_message_a11y">Send message</string>
+    <string name="detail_button_call">call</string>
 </resources>

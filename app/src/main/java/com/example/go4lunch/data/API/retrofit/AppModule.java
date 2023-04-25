@@ -1,5 +1,9 @@
 package com.example.go4lunch.data.API.retrofit;
 
+import androidx.annotation.NonNull;
+
+import com.example.go4lunch.data.API.GoogleMapsApi;
+
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
@@ -36,6 +40,12 @@ public class AppModule {
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
+    }
+
+    @Singleton
+    @Provides
+    public GoogleMapsApi provideGoogleMapsApi(@NonNull Retrofit retrofit) {
+        return retrofit.create(GoogleMapsApi.class);
     }
 
 }

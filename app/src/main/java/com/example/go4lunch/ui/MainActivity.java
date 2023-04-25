@@ -16,6 +16,8 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import dagger.hilt.android.AndroidEntryPoint;
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
 
     private MainActivityBinding binding;
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.mainToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
 
         firebaseAuth = FirebaseAuth.getInstance();

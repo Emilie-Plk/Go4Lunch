@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.go4lunch.R;
-import com.example.go4lunch.ui.restaurant_detail.WorkmateListFragment;
+import com.example.go4lunch.ui.workmate_list.WorkmateListFragment;
 import com.example.go4lunch.ui.restaurant_list.RestaurantListFragment;
 
 public class MainPagerAdapter extends FragmentStateAdapter {

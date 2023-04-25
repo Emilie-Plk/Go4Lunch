@@ -1,6 +1,7 @@
 package com.example.go4lunch.data.API.nearby_search_restaurants;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -11,11 +12,12 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
+@Singleton
 public class NearbySearchRepository {
     private final GoogleMapsApi googleMapsApi;
 
@@ -26,24 +28,20 @@ public class NearbySearchRepository {
 
 
     public LiveData<NearbySearchWrapper> getNearbyRestaurants(
-        @NonNull String keyword,
         @NonNull String location,
-        int radius,
         @NonNull String type,
-        @NonNull String key,
-        int limit) {
+        @Nullable String keyword,
+        @NonNull String rankby,
+        @NonNull String key) {
 
         MutableLiveData<NearbySearchWrapper> resultMutableLiveData = new MutableLiveData<>();
         resultMutableLiveData.setValue(new NearbySearchWrapper.Loading());
 
-        googleMapsApi.getNearby(keyword, location, radius, type, key, limit).enqueue(new Callback<NearbySearchResponse>() {
+        googleMapsApi.getNearby(location, type, keyword, rankby, key).enqueue(new Callback<NearbySearchResponse>() {
             @Override
-            public void onResponse(Call<NearbySearchResponse> call, Response<NearbySearchResponse> response) {
+            public void onResponse(@NonNull Call<NearbySearchResponse> call, @NonNull Response<NearbySearchResponse> response) {
                 if (response.isSuccessful()) {
                     List<NearbySearchResult> nearbySearchResults = NearbySearchResult.fromNearbySearchResponse(response.body());
-                    if (nearbySearchResults.size() > limit) {
-                        nearbySearchResults = nearbySearchResults.subList(0, limit);
-                    }
                     resultMutableLiveData.setValue(new NearbySearchWrapper.Success(nearbySearchResults));
                 } else {
                     resultMutableLiveData.setValue(new NearbySearchWrapper.Error(new Throwable("API call failed")));
@@ -51,7 +49,7 @@ public class NearbySearchRepository {
             }
 
             @Override
-            public void onFailure(Call<NearbySearchResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<NearbySearchResponse> call, @NonNull Throwable t) {
                 resultMutableLiveData.setValue(new NearbySearchWrapper.Error(t));
             }
         });

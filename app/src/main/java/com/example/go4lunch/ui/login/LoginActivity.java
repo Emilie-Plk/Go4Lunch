@@ -34,6 +34,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.Arrays;
 
+import dagger.hilt.android.AndroidEntryPoint;
+@AndroidEntryPoint
 public class LoginActivity extends AppCompatActivity {
 
     private LoginActivityBinding binding;

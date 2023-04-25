@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.restaurant_detail.RestaurantDetailActivity">
+
+    <ImageView
+        android:id="@+id/detail_restaurant_picture"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/fries_horizontal_tools" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/detail_restaurant_orange_middle_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/pumpkin_orange"
+        android:minHeight="80dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/detail_restaurant_picture">
+
+        <TextView
+            android:id="@+id/detail_restaurant_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textColor="@color/dirty_white"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Five Guys" />
+
+        <RatingBar
+            android:id="@+id/detail_restaurant_rating_bar"
+            style="@style/Theme.Go4Lunch.RatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="@id/detail_restaurant_name"
+            app:layout_constraintStart_toEndOf="@id/detail_restaurant_name"
+            app:layout_constraintTop_toTopOf="@id/detail_restaurant_name" />
+
+     <!--   <TextView
+            android:id="@+id/detail_restaurant_cuisine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            />-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/detail_restaurant_socials"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="80dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/detail_restaurant_orange_middle_bar_layout">
+
+        <com.google.android.material.button.MaterialButton
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:icon="@drawable/baseline_local_phone_24"
+            app:iconGravity="top"
+            app:iconSize="26dp"
+            android:text="@string/detail_button_call"
+            android:textAllCaps="true"
+            android:textColor="@color/crimson_rust"
+            app:iconTint="@color/crimson_rust"
+            android:backgroundTint="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/detail_restaurant_workmates_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/detail_restaurant_socials"
+        tools:listitem="@layout/workmates_item" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

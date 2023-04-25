@@ -23,7 +23,7 @@
         app:layout_constraintBottom_toBottomOf="@id/list_workmate_avatar"
         app:layout_constraintStart_toEndOf="@id/list_workmate_avatar"
         android:ellipsize="end"
-        tools:text="Marta is eating Korean (Mise Bulgogi)"
+        tools:text="Marta is eating Korean (Misa Bulgogi)"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
