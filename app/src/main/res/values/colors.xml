@@ -16,13 +16,13 @@
     <color name="reseda_green">#75704e</color>
     <color name="green_teal">#42D8AE</color>
     <color name="darker_gray">#1B1818</color>
-    <color name="licorice_gray">#291F1E</color>
+    <color name="licorice_gray">#221A19</color>
     <color name="golden_yellow">#FFC823</color>
 
 
     <color name="red_google">#EA4335</color>
     <color name="blue_facebook">#4267B2</color>
-
+<color name="light_gray">#9e9e9e</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>

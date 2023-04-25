@@ -44,20 +44,45 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             app:layout_constraintBottom_toBottomOf="@id/detail_restaurant_name"
-            app:layout_constraintStart_toEndOf="@id/detail_restaurant_name"
-            app:layout_constraintTop_toTopOf="@id/detail_restaurant_name" />
 
-     <!--   <TextView
+            app:layout_constraintStart_toEndOf="@id/detail_restaurant_name"
+            app:layout_constraintTop_toTopOf="@id/detail_restaurant_name"
+            tools:rating="2" />
+
+        <TextView
             android:id="@+id/detail_restaurant_cuisine"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/detail_restaurant_name"
+            app:layout_constraintTop_toBottomOf="@id/detail_restaurant_name"
+            tools:text="American" />
 
-            />-->
+        <TextView
+            android:id="@+id/detail_restaurant_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/detail_restaurant_cuisine"
+            app:layout_constraintStart_toEndOf="@id/detail_restaurant_cuisine"
+            app:layout_constraintTop_toTopOf="@id/detail_restaurant_cuisine"
+            tools:text="2 rue de la concorde" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <com.google.android.material.divider.MaterialDivider
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/detail_restaurant_orange_middle_bar_layout"
+        app:layout_constraintBottom_toTopOf="@id/detail_restaurant_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/detail_restaurant_socials"
+        android:background="@color/dirty_white"
+        android:id="@+id/detail_restaurant_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="80dp"
@@ -66,20 +91,53 @@
         app:layout_constraintTop_toBottomOf="@id/detail_restaurant_orange_middle_bar_layout">
 
         <com.google.android.material.button.MaterialButton
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:icon="@drawable/baseline_local_phone_24"
-            app:iconGravity="top"
-            app:iconSize="26dp"
-            android:text="@string/detail_button_call"
-            android:textAllCaps="true"
-            android:textColor="@color/crimson_rust"
-            app:iconTint="@color/crimson_rust"
-            android:backgroundTint="@color/white"
+            android:id="@+id/detail_restaurant_call_button"
+            style="@style/Theme.Go4Lunch.DetailRestaurantButtons"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="@string/detail_button_call"
+            app:icon="@drawable/baseline_local_phone_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/detail_restaurant_like_button"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/detail_restaurant_like_button"
+            style="@style/Theme.Go4Lunch.DetailRestaurantButtons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/detail_button_like"
+            app:icon="@drawable/baseline_star_border_24"
+            app:iconTint="@color/light_gray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/detail_restaurant_website_button"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/detail_restaurant_call_button"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/detail_restaurant_website_button"
+            style="@style/Theme.Go4Lunch.DetailRestaurantButtons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/detail_button_website"
+            app:icon="@drawable/baseline_internet_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/detail_restaurant_like_button"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/detail_restaurant_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/detail_restaurant_workmates_list"
@@ -87,7 +145,20 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/detail_restaurant_socials"
+        app:layout_constraintTop_toBottomOf="@id/detail_restaurant_buttons"
         tools:listitem="@layout/workmates_item" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/dirty_white"
+        android:text="Go?"
+        android:textColor="@color/licorice_gray"
+        app:icon="@drawable/baseline_restaurant_24"
+        app:iconTint="@color/crimson_rust"
+        app:layout_constraintBottom_toTopOf="@id/detail_restaurant_orange_middle_bar_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/detail_restaurant_picture" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,4 +16,7 @@
     <string name="list_avatar_workmate_a11y">Picture of %s</string>
     <string name="list_workmate_send_message_a11y">Send message</string>
     <string name="detail_button_call">call</string>
+    <string name="detail_button_like">like</string>
+    <string name="detail_button_website">website</string>
+    <string name="restaurant_item_food_image_a11y">Food image</string>
 </resources>
