@@ -7,8 +7,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
+import com.example.go4lunch.data.API.nearby_search_restaurants.NearbySearchModel;
 import com.example.go4lunch.data.API.nearby_search_restaurants.NearbySearchRepository;
-import com.example.go4lunch.data.API.nearby_search_restaurants.NearbySearchResult;
 import com.example.go4lunch.data.API.nearby_search_restaurants.NearbySearchWrapper;
 
 import java.util.ArrayList;
@@ -41,12 +41,12 @@ public class RestaurantListViewModel extends ViewModel {
                 API_KEY), nearbySearchWrapper -> {
                 List<RestaurantItemViewState> restaurantItemViewStates = new ArrayList<>();
                 if (nearbySearchWrapper instanceof NearbySearchWrapper.Success) {
-                    for (NearbySearchResult nearbySearchResult : ((NearbySearchWrapper.Success) nearbySearchWrapper).getResults()) {
+                    for (NearbySearchModel nearbySearchModel : ((NearbySearchWrapper.Success) nearbySearchWrapper).getResults()) {
                         restaurantItemViewStates.add(
                             new RestaurantItemViewState(
                                 maxId++,
-                                nearbySearchResult.getName(),
-                                nearbySearchResult.getAddress()
+                                nearbySearchModel.getName(),
+                                nearbySearchModel.getAddress()
                             )
                         );
                     }

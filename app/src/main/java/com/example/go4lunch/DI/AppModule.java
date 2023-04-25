@@ -1,4 +1,4 @@
-package com.example.go4lunch.data.API.retrofit;
+package com.example.go4lunch.DI;
 
 import androidx.annotation.NonNull;
 

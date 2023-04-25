@@ -18,4 +18,5 @@ public interface GoogleMapsApi {
         @Query("rankby") @NonNull String rankby,
         @Query("key") @NonNull String key);
 
+    // Other fields to consider: language/opennow/
 }

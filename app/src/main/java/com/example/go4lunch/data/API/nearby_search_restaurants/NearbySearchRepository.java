@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.go4lunch.data.API.GoogleMapsApi;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +22,7 @@ import retrofit2.Response;
 public class NearbySearchRepository {
     private final GoogleMapsApi googleMapsApi;
 
-    private final Map<Integer, List<NearbySearchResult>> nearbySearchCache = new HashMap<>();
+    private final Map<Integer, List<NearbySearchModel>> nearbySearchCache = new HashMap<>();
 
     @Inject
     public NearbySearchRepository(GoogleMapsApi googleMapsApi) {
@@ -41,21 +40,20 @@ public class NearbySearchRepository {
         MutableLiveData<NearbySearchWrapper> resultMutableLiveData = new MutableLiveData<>();
         Integer cacheKey = generateCacheKey(location, type, keyword, rankby, key);
 
-        if (!nearbySearchCache.containsKey(cacheKey)) {
+        List<NearbySearchModel> cachedNearbySearchModelList = nearbySearchCache.get(cacheKey);
+
+        if (cachedNearbySearchModelList == null) {
 
             resultMutableLiveData.setValue(new NearbySearchWrapper.Loading());
             googleMapsApi.getNearby(location, type, keyword, rankby, key).enqueue(
                 new Callback<NearbySearchResponse>() {
                     @Override
-                    public void onResponse(@NonNull Call<NearbySearchResponse> call, @NonNull Response<NearbySearchResponse> response) {
+                    public void onResponse(@NonNull Call<NearbySearchResponse> call, @NonNull Response<NearbySearchResponse> response
+                    ) {
                         if (response.isSuccessful()) {
-                            List<NearbySearchResult> nearbySearchResults = NearbySearchResult.fromNearbySearchResponse(response.body());
-                            if (!nearbySearchResults.isEmpty()) {
-                                nearbySearchCache.put(cacheKey, nearbySearchResults);
-                            }
-                            resultMutableLiveData.setValue(new NearbySearchWrapper.Success(nearbySearchResults));
-                        } else {
-                            resultMutableLiveData.setValue(new NearbySearchWrapper.Error(new Throwable("API call failed")));
+                            List<NearbySearchModel> nearbySearchModels = NearbySearchModel.fromNearbySearchResponse(response.body());
+                            nearbySearchCache.put(cacheKey, nearbySearchModels);
+                            resultMutableLiveData.setValue(new NearbySearchWrapper.Success(nearbySearchModels));
                         }
                     }
 
@@ -63,8 +61,11 @@ public class NearbySearchRepository {
                     public void onFailure(@NonNull Call<NearbySearchResponse> call, @NonNull Throwable t) {
                         resultMutableLiveData.setValue(new NearbySearchWrapper.Error(t));
                     }
-                });
-        } else   resultMutableLiveData.setValue(new NearbySearchWrapper.Success(nearbySearchCache.get(cacheKey)));
+                }
+            );
+        } else {
+            resultMutableLiveData.setValue(new NearbySearchWrapper.Success(cachedNearbySearchModelList));
+        }
         return resultMutableLiveData;
 
     }

@@ -9,13 +9,13 @@ public abstract class NearbySearchWrapper {
     }
 
     public static class Success extends NearbySearchWrapper {
-        private final List<NearbySearchResult> results;
+        private final List<NearbySearchModel> results;
 
-        public Success(List<NearbySearchResult> results) {
+        public Success(List<NearbySearchModel> results) {
             this.results = results;
         }
 
-        public List<NearbySearchResult> getResults() {
+        public List<NearbySearchModel> getResults() {
             return results;
         }
     }
