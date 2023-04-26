@@ -1,4 +1,4 @@
-package com.example.go4lunch.data.API.nearby_search_restaurants;
+package com.example.go4lunch.data.nearbySearchRestaurants;
 
 import java.util.List;
 
@@ -9,13 +9,13 @@ public abstract class NearbySearchWrapper {
     }
 
     public static class Success extends NearbySearchWrapper {
-        private final List<NearbySearchModel> results;
+        private final List<NearbySearchEntity> results;
 
-        public Success(List<NearbySearchModel> results) {
+        public Success(List<NearbySearchEntity> results) {
             this.results = results;
         }
 
-        public List<NearbySearchModel> getResults() {
+        public List<NearbySearchEntity> getResults() {
             return results;
         }
     }

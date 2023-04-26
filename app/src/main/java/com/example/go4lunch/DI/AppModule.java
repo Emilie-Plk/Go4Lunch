@@ -2,7 +2,7 @@ package com.example.go4lunch.DI;
 
 import androidx.annotation.NonNull;
 
-import com.example.go4lunch.data.API.GoogleMapsApi;
+import com.example.go4lunch.GoogleMapsApi;
 
 import java.util.concurrent.TimeUnit;
 

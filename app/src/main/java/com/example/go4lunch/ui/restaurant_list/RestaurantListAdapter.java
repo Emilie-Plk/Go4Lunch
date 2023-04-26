@@ -11,6 +11,9 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.go4lunch.databinding.RestaurantItemBinding;
 
 public class RestaurantListAdapter extends ListAdapter<RestaurantItemViewState, RestaurantListAdapter.ViewHolder> {
@@ -64,18 +67,18 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantItemViewState, 
             itemView.setOnClickListener(v -> listener.onRestaurantClicked(itemViewState.getId()));
 
             name.setText(itemViewState.getName());
-         ///  cuisine.setText(itemViewState.getCuisine());
+            cuisine.setText(itemViewState.getCuisine());
             address.setText(itemViewState.getAddress());
-           /** openingHours.setText(itemViewState.getOpeningHours());
+            openingHours.setText(itemViewState.getOpeningHours());
 
             Glide.with(itemView.getContext())
                 .load(itemViewState.getPictureUrl())
-                .centerCrop()
+                .transform(new CenterCrop(), new RoundedCorners(25))
                 .into(picture);
 
             distance.setText(itemViewState.getDistance());
             attendants.setText(itemViewState.getDistance());
-            rating.setRating(itemViewState.getRating());  // TODO: maybe a boolean or something to remove the ratingbar if 0*/
+            rating.setRating(itemViewState.getRating());
         }
 
     }

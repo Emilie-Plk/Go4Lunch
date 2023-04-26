@@ -48,8 +48,8 @@ public class RestaurantListFragment extends Fragment {
 
         RestaurantListAdapter adapter = new RestaurantListAdapter(new OnRestaurantClickedListener() {
             @Override
-            public void onRestaurantClicked(long id) {
-                Log.i(TAG, "Restaurant clicked!");
+            public void onRestaurantClicked(String id) {
+                Log.i(TAG, "Restaurant clicked! Id is:" + id);
             }
         });
 

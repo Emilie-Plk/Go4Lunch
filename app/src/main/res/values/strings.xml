@@ -6,7 +6,7 @@
     <string name="facebook_btn" translatable="false">Login with Facebook</string>
     <string name="facebook_app_id" translatable="false">447645630905453</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb447645630905453</string>
-    <string name="facebook_client_token" translatable="false">74f22194f7aba2216f53599469b95ec5</string>
+    <string name="facebook_client_token" translatable="false">17ebf072bc95a952bd8d2d5d87a47d99</string>
 
     <!-- TODO: translatable resources -->
     <string name="search">Search</string>
