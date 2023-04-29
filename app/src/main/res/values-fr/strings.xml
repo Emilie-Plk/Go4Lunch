@@ -1,3 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="facebook_btn">Connexion avec Facebook</string>
+    <string name="search">Rechercher</string>
+    <string name="list_view_bottom_nav">Vue liste</string>
+    <string name="map_bottom_nav">Carte</string>
+    <string name="workmates_bottom_nav">Collègues</string>
+    <string name="list_avatar_workmate_a11y">Image de %s</string>
+    <string name="list_workmate_send_message_a11y">Envoyer un message</string>
+    <string name="detail_button_call">Appeler</string>
+    <string name="detail_button_website">site web</string>
+    <string name="restaurant_item_food_image_a11y">Image de nourriture</string>
 </resources>

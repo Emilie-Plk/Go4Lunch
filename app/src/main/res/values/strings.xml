@@ -3,7 +3,7 @@
     <string name="title_activity_main" translatable="false">MainActivity</string>
     <string name="google_client_id" translatable="false">649898468705-70o8d171e13d0h5r4bql8qjfs13b55ct.apps.googleusercontent.com</string>
     <string name="google_btn" translatable="false">Google</string>
-    <string name="facebook_btn" translatable="false">Login with Facebook</string>
+    <string name="facebook_btn">Login with Facebook</string>
     <string name="facebook_app_id" translatable="false">447645630905453</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb447645630905453</string>
     <string name="facebook_client_token" translatable="false">17ebf072bc95a952bd8d2d5d87a47d99</string>
@@ -11,12 +11,12 @@
     <!-- TODO: translatable resources -->
     <string name="search">Search</string>
     <string name="list_view_bottom_nav">List View</string>
-    <string name="workmates_bottom_nav">Workmates</string>
     <string name="map_bottom_nav">Map</string>
+    <string name="workmates_bottom_nav">Workmates</string>
     <string name="list_avatar_workmate_a11y">Picture of %s</string>
     <string name="list_workmate_send_message_a11y">Send message</string>
     <string name="detail_button_call">call</string>
-    <string name="detail_button_like">like</string>
+    <string name="detail_button_like" translatable="false">like</string>
     <string name="detail_button_website">website</string>
     <string name="restaurant_item_food_image_a11y">Food image</string>
 </resources>
