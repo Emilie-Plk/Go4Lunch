@@ -12,17 +12,26 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:textColor">@color/licorice_gray</item>
 
     </style>
 
- <!--LOGIN ACTIVITY-->
+    <style name="Theme.Go4Lunch.LightText">
+        <item name="android:textColor">@color/dirty_white</item>
+    </style>
+
+    <style name="Theme.Go4Lunch.DarkText">
+        <item name="android:textColor">@color/licorice_gray</item>
+    </style>
+
+    <!--LOGIN ACTIVITY-->
 
     <style name="Theme.Go4Lunch.LoginFacebookButton" parent="Widget.Material3.Button.TonalButton">
         <item name="backgroundTint">@color/blue_facebook</item>
         <item name="textAllCaps">true</item>
         <item name="android:textColor">@color/white</item>
         <item name="iconTint">@color/white</item>
-         <item name="iconGravity">textStart</item>
+        <item name="iconGravity">textStart</item>
     </style>
 
     <style name="Theme.Go4Lunch.LoginGoogleButton" parent="Widget.Material3.Button.TonalButton">
@@ -35,6 +44,18 @@
 
     <style name="Theme.Go4Lunch.BackgroundImage">
         <item name="android:windowBackground">@drawable/lunch_background</item>
+    </style>
+
+    <!--MAIN ACTIVITY-->
+    <style name="Theme.Go4Lunch.BottomNavBar" parent="Widget.Material3.BottomNavigationView">
+        <item name="android:gravity">bottom</item>
+        <item name="itemTextColor">@drawable/bottom_nav</item>
+        <item name="itemIconTint">@drawable/bottom_nav</item>
+        <item name="background">@color/pumpkin_orange</item>
+    </style>
+
+    <style name="Theme.Go4Lunch.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:background">@color/crimson_rust</item>
     </style>
 
     <!--RESTAURANT LIST -->
@@ -51,6 +72,11 @@
         <item name="android:rating">0</item>
     </style>
 
+    <style name="Theme.Go4Lunch.RestaurantList.CardView" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardBackgroundColor">@color/white</item>
+        <item name="cardCornerRadius">4dp</item>
+    </style>
+
 
     <!--RESTAURANT DETAIL-->
     <style name="Theme.Go4Lunch.DetailRestaurantButtons" parent="Widget.Material3.Button.TextButton">
@@ -62,11 +88,22 @@
     </style>
 
 
-
-    <!-- Base application theme. -->
-    <style name="Base.Theme.Go4Lunch" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-
+    <style name="Theme.Go4Lunch.LightView">
+        <item name="android:background">@color/dirty_white</item>
     </style>
+
+    <style name="Theme.Go4Lunch.DarkView">
+        <item name="android:background">@color/pumpkin_orange</item>
+    </style>
+
+    <style name="Theme.Go4Lunch.DetailRestaurantLikeButton" parent="Theme.Go4Lunch.DetailRestaurantButtons">
+        <item name="iconTint">@color/light_gray</item>
+    </style>
+
+    <style name="Theme.Go4Lunch.DetailRestaurantChoseBtn" parent="Widget.Material3.ExtendedFloatingActionButton.Icon.Primary">
+        <item name="backgroundTint">@color/dirty_white</item>
+        <item name="android:textColor">@color/licorice_gray</item>
+        <item name="iconTint">@color/crimson_rust</item>
+    </style>
+
 </resources>

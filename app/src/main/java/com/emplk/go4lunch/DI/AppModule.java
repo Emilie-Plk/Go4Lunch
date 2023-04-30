@@ -1,8 +1,12 @@
 package com.emplk.go4lunch.DI;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import com.emplk.go4lunch.GoogleMapsApi;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 
 import java.util.concurrent.TimeUnit;
 
@@ -11,6 +15,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.components.SingletonComponent;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -42,10 +47,17 @@ public class AppModule {
             .build();
     }
 
-    @Singleton
     @Provides
+    @Singleton
     public GoogleMapsApi provideGoogleMapsApi(@NonNull Retrofit retrofit) {
         return retrofit.create(GoogleMapsApi.class);
+    }
+
+    @Provides
+    @Singleton
+    // redundant Singleton annotation?
+    public FusedLocationProviderClient provideFusedLocationProviderClient(@ApplicationContext Context context) {
+        return LocationServices.getFusedLocationProviderClient(context);
     }
 
 }

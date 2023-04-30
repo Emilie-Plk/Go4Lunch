@@ -10,8 +10,8 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.data.nearbySearchRestaurants.NearbySearchEntity;
-import com.emplk.go4lunch.data.nearbySearchRestaurants.NearbySearchWrapper;
 import com.emplk.go4lunch.data.nearbySearchRestaurants.NearbySearchRepository;
+import com.emplk.go4lunch.data.nearbySearchRestaurants.NearbySearchWrapper;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -27,8 +27,6 @@ public class RestaurantListViewModel extends ViewModel {
 
     @NonNull
     private final NearbySearchRepository repository;
-
-    private int maxId = 0;
 
     @Inject
     public RestaurantListViewModel(@NonNull NearbySearchRepository repository) {
@@ -70,7 +68,11 @@ public class RestaurantListViewModel extends ViewModel {
                             "error",
                             "error",
                             "error",
-                            "error", "error", isOpen, openingStateColor, "error", null
+                            "error",
+                            "error",
+                            false,
+                            "error",
+                            null
                         )
                     );
                 }

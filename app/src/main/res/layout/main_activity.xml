@@ -15,9 +15,9 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/main_toolbar"
+            style="@style/Theme.Go4Lunch.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
             app:menu="@menu/menu_main" />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -31,12 +31,9 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/main_bottom_appbar"
+        style="@style/Theme.Go4Lunch.BottomNavBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:itemTextColor="@drawable/bottom_nav"
-        app:itemIconTint="@drawable/bottom_nav"
-        android:background="@color/dirty_white"
-
         app:menu="@menu/bottom_menu_main" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
