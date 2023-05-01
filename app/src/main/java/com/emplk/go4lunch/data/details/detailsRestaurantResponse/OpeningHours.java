@@ -2,46 +2,47 @@ package com.emplk.go4lunch.data.details.detailsRestaurantResponse;
 
 import androidx.annotation.NonNull;
 
-import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-public class OpeningHours{
+import java.util.List;
 
-	@SerializedName("open_now")
-	private final boolean openNow;
+public class OpeningHours {
 
-	@SerializedName("periods")
-	private final List<PeriodsItem> periods;
+    @SerializedName("open_now")
+    private final boolean openNow;
 
-	@SerializedName("weekday_text")
-	private final List<String> weekdayText;
+    @SerializedName("periods")
+    private final List<PeriodsItem> periods;
 
-	public OpeningHours(boolean openNow, List<PeriodsItem> periods, List<String> weekdayText) {
-		this.openNow = openNow;
-		this.periods = periods;
-		this.weekdayText = weekdayText;
-	}
+    @SerializedName("weekday_text")
+    private final List<String> weekdayText;
 
-	public final boolean isOpenNow(){
-		return openNow;
-	}
+    public OpeningHours(boolean openNow, List<PeriodsItem> periods, List<String> weekdayText) {
+        this.openNow = openNow;
+        this.periods = periods;
+        this.weekdayText = weekdayText;
+    }
 
-	public final List<PeriodsItem> getPeriods(){
-		return periods;
-	}
+    public final boolean isOpenNow() {
+        return openNow;
+    }
 
-	public final List<String> getWeekdayText(){
-		return weekdayText;
-	}
+    public final List<PeriodsItem> getPeriods() {
+        return periods;
+    }
 
-	@NonNull
-	@Override
- 	public String toString(){
-		return 
-			"OpeningHours{" + 
-			"open_now = '" + openNow + '\'' + 
-			",periods = '" + periods + '\'' + 
-			",weekday_text = '" + weekdayText + '\'' + 
-			"}";
-		}
+    public final List<String> getWeekdayText() {
+        return weekdayText;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return
+            "OpeningHours{" +
+                "open_now = '" + openNow + '\'' +
+                ",periods = '" + periods + '\'' +
+                ",weekday_text = '" + weekdayText + '\'' +
+                "}";
+    }
 }

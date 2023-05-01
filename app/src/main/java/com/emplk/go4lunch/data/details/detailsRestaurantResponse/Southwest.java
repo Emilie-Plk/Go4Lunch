@@ -2,28 +2,28 @@ package com.emplk.go4lunch.data.details.detailsRestaurantResponse;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Southwest{
+public class Southwest {
 
-	@SerializedName("lng")
-	private Object lng;
+    @SerializedName("lng")
+    private Object lng;
 
-	@SerializedName("lat")
-	private Object lat;
+    @SerializedName("lat")
+    private Object lat;
 
-	public Object getLng(){
-		return lng;
-	}
+    public Object getLng() {
+        return lng;
+    }
 
-	public Object getLat(){
-		return lat;
-	}
+    public Object getLat() {
+        return lat;
+    }
 
-	@Override
- 	public String toString(){
-		return 
-			"Southwest{" + 
-			"lng = '" + lng + '\'' + 
-			",lat = '" + lat + '\'' + 
-			"}";
-		}
+    @Override
+    public String toString() {
+        return
+            "Southwest{" +
+                "lng = '" + lng + '\'' +
+                ",lat = '" + lat + '\'' +
+                "}";
+    }
 }

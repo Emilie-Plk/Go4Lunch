@@ -10,4 +10,6 @@
     <string name="detail_button_call">Appeler</string>
     <string name="detail_button_website">site web</string>
     <string name="restaurant_item_food_image_a11y">Image de nourriture</string>
+    <string name="detail_restaurant_chose_fab">Y aller ?</string>
+    <string name="list_workmate_name_joining">%s y va !</string>
 </resources>

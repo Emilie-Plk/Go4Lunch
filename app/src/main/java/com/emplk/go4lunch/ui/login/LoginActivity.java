@@ -33,8 +33,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import dagger.hilt.android.AndroidEntryPoint;
+
 @AndroidEntryPoint
 public class LoginActivity extends AppCompatActivity {
 
@@ -76,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
         // FB
 
         binding.facebookLoginBtn.setOnClickListener(v ->
-            LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile")
+            LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Collections.singletonList("public_profile")
             )
         );
 
@@ -86,7 +88,7 @@ public class LoginActivity extends AppCompatActivity {
             new FacebookCallback<LoginResult>() {
                 @Override
                 public void onSuccess(LoginResult loginResult) {
-                  startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 }
 
                 @Override
@@ -96,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onError(@NonNull FacebookException exception) {
-                 Log.e(TAG, "Error while logging to Facebook" + exception);
+                    Log.e(TAG, "Error while logging to Facebook" + exception);
                 }
             });
     }

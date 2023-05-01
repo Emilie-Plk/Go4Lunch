@@ -4,34 +4,34 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
-public class PeriodsItem{
+public class PeriodsItem {
 
-	@SerializedName("close")
-	private final Close close;
+    @SerializedName("close")
+    private final Close close;
 
-	@SerializedName("open")
-	private final Open open;
+    @SerializedName("open")
+    private final Open open;
 
-	public PeriodsItem(Close close, Open open) {
-		this.close = close;
-		this.open = open;
-	}
+    public PeriodsItem(Close close, Open open) {
+        this.close = close;
+        this.open = open;
+    }
 
-	public Close getClose(){
-		return close;
-	}
+    public Close getClose() {
+        return close;
+    }
 
-	public Open getOpen(){
-		return open;
-	}
+    public Open getOpen() {
+        return open;
+    }
 
-	@NonNull
-	@Override
- 	public String toString(){
-		return 
-			"PeriodsItem{" + 
-			"close = '" + close + '\'' + 
-			",open = '" + open + '\'' + 
-			"}";
-		}
+    @NonNull
+    @Override
+    public String toString() {
+        return
+            "PeriodsItem{" +
+                "close = '" + close + '\'' +
+                ",open = '" + open + '\'' +
+                "}";
+    }
 }

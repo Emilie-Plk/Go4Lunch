@@ -2,40 +2,41 @@ package com.emplk.go4lunch.data.details.detailsRestaurantResponse;
 
 import androidx.annotation.NonNull;
 
-import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-public class AddressComponentsItem{
+import java.util.List;
 
-	@SerializedName("types")
-	private List<String> types;
+public class AddressComponentsItem {
 
-	@SerializedName("short_name")
-	private String shortName;
+    @SerializedName("types")
+    private List<String> types;
 
-	@SerializedName("long_name")
-	private String longName;
+    @SerializedName("short_name")
+    private String shortName;
 
-	public List<String> getTypes(){
-		return types;
-	}
+    @SerializedName("long_name")
+    private String longName;
 
-	public String getShortName(){
-		return shortName;
-	}
+    public List<String> getTypes() {
+        return types;
+    }
 
-	public String getLongName(){
-		return longName;
-	}
+    public String getShortName() {
+        return shortName;
+    }
 
-	@NonNull
-	@Override
- 	public String toString(){
-		return 
-			"AddressComponentsItem{" + 
-			"types = '" + types + '\'' + 
-			",short_name = '" + shortName + '\'' + 
-			",long_name = '" + longName + '\'' + 
-			"}";
-		}
+    public String getLongName() {
+        return longName;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return
+            "AddressComponentsItem{" +
+                "types = '" + types + '\'' +
+                ",short_name = '" + shortName + '\'' +
+                ",long_name = '" + longName + '\'' +
+                "}";
+    }
 }

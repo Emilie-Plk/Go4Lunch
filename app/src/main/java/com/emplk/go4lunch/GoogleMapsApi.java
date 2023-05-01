@@ -13,7 +13,7 @@ public interface GoogleMapsApi {
         @Query("location") String location,
         @Query("type") String type,
         @Query("keyword") String keyword,
-        @Query("rankby")  String rankBy,
+        @Query("rankby") String rankBy,
         @Query("key") String apiKey
     );
 

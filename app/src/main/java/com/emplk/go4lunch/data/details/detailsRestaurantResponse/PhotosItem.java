@@ -2,48 +2,49 @@ package com.emplk.go4lunch.data.details.detailsRestaurantResponse;
 
 import androidx.annotation.NonNull;
 
-import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-public class PhotosItem{
+import java.util.List;
 
-	@SerializedName("photo_reference")
-	private String photoReference;
+public class PhotosItem {
 
-	@SerializedName("width")
-	private int width;
+    @SerializedName("photo_reference")
+    private String photoReference;
 
-	@SerializedName("html_attributions")
-	private List<String> htmlAttributions;
+    @SerializedName("width")
+    private int width;
 
-	@SerializedName("height")
-	private int height;
+    @SerializedName("html_attributions")
+    private List<String> htmlAttributions;
 
-	public String getPhotoReference(){
-		return photoReference;
-	}
+    @SerializedName("height")
+    private int height;
 
-	public int getWidth(){
-		return width;
-	}
+    public String getPhotoReference() {
+        return photoReference;
+    }
 
-	public List<String> getHtmlAttributions(){
-		return htmlAttributions;
-	}
+    public int getWidth() {
+        return width;
+    }
 
-	public int getHeight(){
-		return height;
-	}
+    public List<String> getHtmlAttributions() {
+        return htmlAttributions;
+    }
 
-	@NonNull
-	@Override
- 	public String toString(){
-		return 
-			"PhotosItem{" + 
-			"photo_reference = '" + photoReference + '\'' + 
-			",width = '" + width + '\'' + 
-			",html_attributions = '" + htmlAttributions + '\'' + 
-			",height = '" + height + '\'' + 
-			"}";
-		}
+    public int getHeight() {
+        return height;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return
+            "PhotosItem{" +
+                "photo_reference = '" + photoReference + '\'' +
+                ",width = '" + width + '\'' +
+                ",html_attributions = '" + htmlAttributions + '\'' +
+                ",height = '" + height + '\'' +
+                "}";
+    }
 }

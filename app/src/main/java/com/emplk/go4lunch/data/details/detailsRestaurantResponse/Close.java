@@ -4,34 +4,34 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Close{
+public class Close {
 
-	@SerializedName("time")
-	private final String time;
+    @SerializedName("time")
+    private final String time;
 
-	@SerializedName("day")
-	private final int day;
+    @SerializedName("day")
+    private final int day;
 
-	public Close(String time, int day) {
-		this.time = time;
-		this.day = day;
-	}
+    public Close(String time, int day) {
+        this.time = time;
+        this.day = day;
+    }
 
-	public String getTime(){
-		return time;
-	}
+    public String getTime() {
+        return time;
+    }
 
-	public int getDay(){
-		return day;
-	}
+    public int getDay() {
+        return day;
+    }
 
-	@NonNull
-	@Override
- 	public String toString(){
-		return 
-			"Close{" + 
-			"time = '" + time + '\'' + 
-			",day = '" + day + '\'' + 
-			"}";
-		}
+    @NonNull
+    @Override
+    public String toString() {
+        return
+            "Close{" +
+                "time = '" + time + '\'' +
+                ",day = '" + day + '\'' +
+                "}";
+    }
 }

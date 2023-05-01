@@ -1,7 +1,5 @@
 package com.emplk.go4lunch.ui.restaurant_list;
 
-import androidx.annotation.NonNull;
-
 public enum RestaurantOpeningColor {
 
 /*    IS_OPEN("#3D9C41"),

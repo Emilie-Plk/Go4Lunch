@@ -17,13 +17,13 @@ public class DetailsRestaurantResponse {
     @SerializedName("status")
     private final String status;
 
-	public DetailsRestaurantResponse(Result result, List<Object> htmlAttributions, String status) {
-		this.result = result;
-		this.htmlAttributions = htmlAttributions;
-		this.status = status;
-	}
+    public DetailsRestaurantResponse(Result result, List<Object> htmlAttributions, String status) {
+        this.result = result;
+        this.htmlAttributions = htmlAttributions;
+        this.status = status;
+    }
 
-	public Result getResult() {
+    public Result getResult() {
         return result;
     }
 
