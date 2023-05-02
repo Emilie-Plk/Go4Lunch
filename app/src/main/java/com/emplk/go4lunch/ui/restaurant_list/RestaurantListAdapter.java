@@ -30,21 +30,25 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (RestaurantListViewState.Type.values()[viewType]) {
             case LOADING:
-                return new RecyclerView.ViewHolder(LoadingStateBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false).getRoot()
+                return new RecyclerView.ViewHolder(
+                    LoadingStateBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false).getRoot()
                 ) {
                 };
             case NO_GPS_CONNEXION:
-                return new NoGPSConnexionViewHolder(RestaurantListErrorStateBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false)
+                return new NoGPSConnexionViewHolder(
+                    RestaurantListErrorStateBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false)
                 );
             case DISPLAY_RESTAURANT_LIST:
-                return new RestaurantListViewHolder(RestaurantItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false)
-                )
-                    ;
+                return new RestaurantListViewHolder(
+                    RestaurantItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false)
+                );
             case NO_RESTAURANT_FOUND:
-                return new NoRestaurantFoundViewHolder(RestaurantListErrorStateBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false)
+                return new NoRestaurantFoundViewHolder(
+                    RestaurantListErrorStateBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false)
                 );
             case DATABASE_ERROR:
-                return new DatabaseErrorViewHolder(RestaurantListErrorStateBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false)
+                return new DatabaseErrorViewHolder(
+                    RestaurantListErrorStateBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false)
                 );
             default:
                 throw new IllegalStateException("Unknown viewType : " + viewType);
@@ -150,10 +154,11 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
     private static class ListRestaurantItemCallback extends DiffUtil.ItemCallback<RestaurantListViewState> {
         @Override
         public boolean areItemsTheSame(@NonNull RestaurantListViewState oldItem, @NonNull RestaurantListViewState newItem) {
-            return (
-                oldItem instanceof RestaurantListViewState.Loading && newItem instanceof RestaurantListViewState.Loading
-            ) || (
-                oldItem instanceof RestaurantListViewState.RestaurantList && newItem instanceof RestaurantListViewState.RestaurantList &&
+            boolean bothAreLoading = oldItem instanceof RestaurantListViewState.Loading && newItem instanceof RestaurantListViewState.Loading;
+            boolean bothAreRestaurantList = oldItem instanceof RestaurantListViewState.RestaurantList && newItem instanceof RestaurantListViewState.RestaurantList;
+
+            return bothAreLoading ||
+                (bothAreRestaurantList &&
                     ((RestaurantListViewState.RestaurantList) oldItem).getId().equals(((RestaurantListViewState.RestaurantList) newItem).getId())
             ) || (
                 oldItem instanceof RestaurantListViewState.NoGpsConnexion && newItem instanceof RestaurantListViewState.NoGpsConnexion
