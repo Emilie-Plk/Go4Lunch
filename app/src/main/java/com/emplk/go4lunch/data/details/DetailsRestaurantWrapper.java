@@ -8,14 +8,14 @@ public abstract class DetailsRestaurantWrapper {
     }
 
     public static class Success extends DetailsRestaurantWrapper {
-        private final List<DetailsRestaurantEntity> results;
+        private final DetailsRestaurantEntity result;
 
-        public Success(List<DetailsRestaurantEntity> results) {
-            this.results = results;
+        public Success(DetailsRestaurantEntity result) {
+            this.result = result;
         }
 
-        public List<DetailsRestaurantEntity> getResults() {
-            return results;
+        public DetailsRestaurantEntity getResult() {
+            return result;
         }
     }
 

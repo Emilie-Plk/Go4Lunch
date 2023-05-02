@@ -74,8 +74,7 @@ public class RestaurantListViewModel extends ViewModel {
 
     private void combine(@Nullable Location location, @Nullable Boolean hasGpsPermission) {
         MediatorLiveData<List<RestaurantListViewState>> mediatorLiveData = new MediatorLiveData<>();
-
-       /* if (location == null) {
+         if (location == null) {
             if (hasGpsPermission == null || !hasGpsPermission) {
                 Log.e(TAG, "GPS permission not granted!");
                 //TODO: I don't want to display a LIST, just a <RestaurantListViewState> :'(
@@ -86,7 +85,7 @@ public class RestaurantListViewModel extends ViewModel {
                 );
             }
             return;
-        }*/
+        }
         switch (getLocationPermissionState(location, hasGpsPermission)) {
             case NO_PERMISSION:
                 // TODO: ViewState/Wrapper for permissions
