@@ -60,7 +60,11 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
+    }
 }

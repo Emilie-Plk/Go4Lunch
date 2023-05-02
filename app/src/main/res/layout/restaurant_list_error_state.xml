@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
+    android:orientation="vertical"
+
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/restaurant_list_error_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Uh-oh, seems wee didn't find \n any restaurants nearby!"
+        />
+
+    <ImageView
+        android:id="@+id/restaurant_list_error_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:src="@drawable/baseline_sad_face_24"
+        style="@style/Theme.Go4Lunch.RestaurantListErrorImage"
+        android:layout_margin="24dp"
+        android:importantForAccessibility="no" />
+
+</LinearLayout>

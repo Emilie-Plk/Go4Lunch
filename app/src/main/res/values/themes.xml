@@ -77,6 +77,11 @@
         <item name="cardCornerRadius">4dp</item>
     </style>
 
+    <style name="Theme.Go4Lunch.RestaurantListErrorImage">
+        <item name="tint">@color/pumpkin_orange</item>
+
+    </style>
+
 
     <!--RESTAURANT DETAIL-->
     <style name="Theme.Go4Lunch.DetailRestaurantButtons" parent="Widget.Material3.Button.TextButton">

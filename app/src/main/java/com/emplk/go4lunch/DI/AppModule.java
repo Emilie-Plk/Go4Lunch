@@ -55,7 +55,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    // redundant Singleton annotation?
+    // I mean why do it here and not inside my repo?
     public FusedLocationProviderClient provideFusedLocationProviderClient(@ApplicationContext Context context) {
         return LocationServices.getFusedLocationProviderClient(context);
     }

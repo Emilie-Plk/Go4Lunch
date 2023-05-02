@@ -2,6 +2,7 @@ package com.emplk.go4lunch.ui.restaurant_list;
 
 import static android.content.ContentValues.TAG;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,7 +34,7 @@ public class RestaurantListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = RestaurantListFragmentBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -43,6 +45,15 @@ public class RestaurantListFragment extends Fragment {
 
         setUpViewModel();
         initRecyclerView();
+        getGPSLocationPermission();
+    }
+
+    private void getGPSLocationPermission() {
+        ActivityCompat.requestPermissions(
+            requireActivity(),
+            new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+            0
+        );
     }
 
     private void initRecyclerView() {
@@ -58,12 +69,25 @@ public class RestaurantListFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        viewModel.getRestaurantListItemViewState()
+        viewModel.getRestaurantItemViewStateListLiveData()
             .observe(getViewLifecycleOwner(),
                 adapter::submitList);
     }
 
     private void setUpViewModel() {
         viewModel = new ViewModelProvider(this).get(RestaurantListViewModel.class);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        viewModel.refresh();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

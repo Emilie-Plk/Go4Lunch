@@ -81,7 +81,7 @@ public class NearbySearchRepository {
         String location,
         @NonNull String rankBy
     ) {
-        String[] coordinatesArr = location.split(", ");
+        String[] coordinatesArr = location.split(",");
         Double latitude = Double.parseDouble(coordinatesArr[1]);
         Double longitude = Double.parseDouble(coordinatesArr[0]);
 
