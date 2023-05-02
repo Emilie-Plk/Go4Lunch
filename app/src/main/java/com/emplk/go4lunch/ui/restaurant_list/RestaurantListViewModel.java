@@ -8,9 +8,11 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.data.GPSlocation.GPSLocationRepository;
@@ -58,34 +60,69 @@ public class RestaurantListViewModel extends ViewModel {
         this.gpsLocationRepository = gpsLocationRepository;
 
         LiveData<Location> locationLiveData = gpsLocationRepository.getLocationLiveData();
-        //  LiveData<NearbySearchWrapper> nearbySearchWrapperLiveData = nearbySearchRepository.getNearbyRestaurants(parameters?)
+        LiveData<NearbySearchWrapper> nearbySearchWrapperLiveData = Transformations.switchMap(locationLiveData, new Function<Location, LiveData<NearbySearchWrapper>>() {
+            @Override
+            public LiveData<NearbySearchWrapper> apply(Location location) {
+                return nearbySearchRepository.getNearbyRestaurants(
+                    location.getLatitude() + "," + location.getLongitude(),
+                    "restaurant",
+                    "restaurant",
+                    "distance",
+                    API_KEY
+                );
+            }
+        });
 
         restaurantListMediatorLiveData.addSource(locationLiveData, location ->
-            combine(location, hasGpsPermissionLiveData.getValue()
-            )
+            combine(location, nearbySearchWrapperLiveData.getValue(), hasGpsPermissionLiveData.getValue())
+        );
+
+        restaurantListMediatorLiveData.addSource(nearbySearchWrapperLiveData, nearbySearchWrapper ->
+            combine(locationLiveData.getValue(), nearbySearchWrapper, hasGpsPermissionLiveData.getValue())
         );
 
         restaurantListMediatorLiveData.addSource(hasGpsPermissionLiveData, hasGpsPermission ->
-            combine(locationLiveData.getValue(), hasGpsPermission
-            )
+            combine(locationLiveData.getValue(), nearbySearchWrapperLiveData.getValue(), hasGpsPermission)
         );
-
     }
 
-    private void combine(@Nullable Location location, @Nullable Boolean hasGpsPermission) {
-        MediatorLiveData<List<RestaurantListViewState>> mediatorLiveData = new MediatorLiveData<>();
-         if (location == null) {
-            if (hasGpsPermission == null || !hasGpsPermission) {
+    private void combine(@Nullable Location location, @Nullable NearbySearchWrapper nearbySearchWrapper, @Nullable Boolean hasGpsPermission) {
+        List<RestaurantListViewState> result = new ArrayList<>();
+        if (location == null) {
+            if (hasGpsPermission != null && !hasGpsPermission) {
                 Log.e(TAG, "GPS permission not granted!");
                 //TODO: I don't want to display a LIST, just a <RestaurantListViewState> :'(
-                mediatorLiveData.setValue(
-                    new RestaurantListViewState.DatabaseError(
-                        "Something went wrong with your request! \n Try later :)"
-                    )
-                );
+
+                result.add(new RestaurantListViewState.DatabaseError("Something went wrong with your request! \n Try later :)"));
+                restaurantListMediatorLiveData.setValue(result);
             }
             return;
         }
+        
+        if (nearbySearchWrapper instanceof NearbySearchWrapper.Success) {
+            for (NearbySearchEntity nearbySearchEntity : ((NearbySearchWrapper.Success) nearbySearchWrapper).getResults()) {
+                result.add(
+                    new RestaurantListViewState.RestaurantList(
+                        nearbySearchEntity.getPlaceId(),
+                        nearbySearchEntity.getRestaurantName(),
+                        formatCuisine(nearbySearchEntity.getCuisine()),
+                        nearbySearchEntity.getVicinity(),
+                        getDistanceString(location.getLatitude(), location.getLongitude(), nearbySearchEntity.getLatitude(), nearbySearchEntity.getLongitude()),
+                        "3",
+                        nearbySearchEntity.getOpeningHours().toString(),
+                        nearbySearchEntity.getOpeningHours(),
+                        "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=" + nearbySearchEntity.getPhotoReferenceUrl() + "&key=" + API_KEY,
+                        convertFiveToThreeRating(nearbySearchEntity.getRating())
+                    )
+                );
+            }
+
+            restaurantListMediatorLiveData.setValue(result);
+        }
+
+
+
+
         switch (getLocationPermissionState(location, hasGpsPermission)) {
             case NO_PERMISSION:
                 // TODO: ViewState/Wrapper for permissions
