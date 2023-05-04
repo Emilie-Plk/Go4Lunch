@@ -7,7 +7,7 @@ public class OpeningHours {
     @SerializedName("open_now")
     private boolean openNow;
 
-    public boolean isOpenNow() {
+    public Boolean isOpenNow() {
         return openNow;
     }
 }

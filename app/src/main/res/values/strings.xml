@@ -7,6 +7,7 @@
     <string name="facebook_app_id" translatable="false">447645630905453</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb447645630905453</string>
     <string name="facebook_client_token" translatable="false">17ebf072bc95a952bd8d2d5d87a47d99</string>
+    <string name="google_image_url" translatable="false">"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&amp;photo_reference=%1$s&amp;key=%2$s"</string>
 
     <!-- TODO: translatable resources -->
     <string name="search">Search</string>
@@ -21,4 +22,6 @@
     <string name="restaurant_item_food_image_a11y">Food image</string>
     <string name="detail_restaurant_chose_fab">Go?</string>
     <string name="list_workmate_name_joining">%s is joining!</string>
+    <string name="list_error_message_generic">Something went wrong with your request!\nTry later :)</string>
+    <string name="list_error_message_permission">Something went wrong!\nPlease activate your GPS :)</string>
 </resources>

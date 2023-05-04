@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.emplk.go4lunch.GoogleMapsApi;
+import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.data.nearbySearchRestaurants.nearbySearchResponse.NearbySearchResponse;
 import com.emplk.go4lunch.data.nearbySearchRestaurants.nearbySearchResponse.ResultsItem;
 
@@ -96,11 +97,17 @@ public class NearbySearchRepository {
                 String name = result.getName();
                 String vicinity = result.getVicinity();
                 String cuisine = result.getTypes().get(0);
-                String photoUrl = result.getPhotos().get(0).getPhotoReference();
+                String photoUrl = null;
+                if (!result.getPhotos().isEmpty() || result.getPhotos().get(0) != null){
+                    photoUrl =  result.getPhotos().get(0).getPhotoReference();
+                }
                 Float rating = result.getRating();
                 Float latitude = result.getGeometry().getLocation().getLat();
                 Float longitude = result.getGeometry().getLocation().getLng();
-                Boolean openingHours = result.getOpeningHours().isOpenNow();
+                Boolean openingHours = null;
+                if (result.getOpeningHours().isOpenNow() != null) {
+                    openingHours = result.getOpeningHours().isOpenNow();
+                }
                 NearbySearchEntity searchResult = new NearbySearchEntity(
                     placeId,
                     name,

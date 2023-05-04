@@ -29,22 +29,25 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (RestaurantListViewState.Type.values()[viewType]) {
-            case LOADING:
-                return new RecyclerView.ViewHolder(LoadingStateBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false).getRoot()
+            case LOADING_STATE:
+                return new RecyclerView.ViewHolder(
+                    LoadingStateBinding.inflate(
+                            LayoutInflater.from(parent.getContext()), parent, false)
+                        .getRoot()
                 ) {
                 };
-            case NO_GPS_CONNEXION:
-                return new NoGPSConnexionViewHolder(RestaurantListErrorStateBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false)
-                );
             case DISPLAY_RESTAURANT_LIST:
-                return new RestaurantListViewHolder(RestaurantItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false)
+                return new RestaurantListViewHolder(
+                    RestaurantItemBinding.inflate(
+                        LayoutInflater.from(parent.getContext()), parent, false
+                    )
                 )
                     ;
-            case NO_RESTAURANT_FOUND:
-                return new NoRestaurantFoundViewHolder(RestaurantListErrorStateBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false)
-                );
-            case DATABASE_ERROR:
-                return new DatabaseErrorViewHolder(RestaurantListErrorStateBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false)
+            case ERROR_STATE:
+                return new ErrorViewHolder(
+                    RestaurantListErrorStateBinding.inflate(
+                        LayoutInflater.from(parent.getContext()), parent, false
+                    )
                 );
             default:
                 throw new IllegalStateException("Unknown viewType : " + viewType);
@@ -53,14 +56,10 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof NoGPSConnexionViewHolder) {
-            ((NoGPSConnexionViewHolder) holder).bind((RestaurantListViewState.NoGpsConnexion) getItem(position));
-        } else if (holder instanceof RestaurantListViewHolder) {
+        if (holder instanceof RestaurantListViewHolder) {
             ((RestaurantListViewHolder) holder).bind((RestaurantListViewState.RestaurantList) getItem(position), listener);
-        } else if (holder instanceof NoRestaurantFoundViewHolder) {
-            ((NoRestaurantFoundViewHolder) holder).bind((RestaurantListViewState.NoRestaurantFound) getItem(position));
-        } else if (holder instanceof DatabaseErrorViewHolder) {
-            ((DatabaseErrorViewHolder) holder).bind((RestaurantListViewState.DatabaseError) getItem(position));
+        } else if (holder instanceof ErrorViewHolder) {
+            ((ErrorViewHolder) holder).bind((RestaurantListViewState.RestaurantListError) getItem(position));
         }
     }
 
@@ -101,48 +100,18 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
         }
     }
 
-    public static class NoGPSConnexionViewHolder extends RecyclerView.ViewHolder {
+    public static class ErrorViewHolder extends RecyclerView.ViewHolder {
 
         private final RestaurantListErrorStateBinding binding;
 
-        public NoGPSConnexionViewHolder(RestaurantListErrorStateBinding binding) {
-            super(binding.getRoot()); // mandatory when a class inherits from another (super) class
-            this.binding = binding;
-        }
-
-        public void bind(@NonNull RestaurantListViewState.NoGpsConnexion item) {
-            binding.restaurantListErrorTitle.setText(item.getNoGpsText());
-            binding.restaurantListErrorImage.setImageResource(R.drawable.baseline_gps_off_24);
-        }
-    }
-
-    public static class NoRestaurantFoundViewHolder extends RecyclerView.ViewHolder {
-
-        private final RestaurantListErrorStateBinding binding;
-
-        public NoRestaurantFoundViewHolder(RestaurantListErrorStateBinding binding) {
+        public ErrorViewHolder(RestaurantListErrorStateBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        public void bind(@NonNull RestaurantListViewState.NoRestaurantFound item) {
-            binding.restaurantListErrorTitle.setText(item.getNoRestaurantFoundText());
-            binding.restaurantListErrorImage.setImageResource(R.drawable.baseline_sad_face_24);
-        }
-    }
-
-    public static class DatabaseErrorViewHolder extends RecyclerView.ViewHolder {
-
-        private final RestaurantListErrorStateBinding binding;
-
-        public DatabaseErrorViewHolder(RestaurantListErrorStateBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-        }
-
-        public void bind(@NonNull RestaurantListViewState.DatabaseError item) {
-            binding.restaurantListErrorTitle.setText(item.getDatabaseErrorText());
-            binding.restaurantListErrorImage.setImageResource(R.drawable.baseline_network_off_24);
+        public void bind(@NonNull RestaurantListViewState.RestaurantListError item) {
+            binding.restaurantListErrorTitle.setText(item.getErrorMessage());
+            binding.restaurantListErrorImage.setImageDrawable(item.getErrorDrawable());
         }
     }
 
@@ -150,18 +119,16 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
     private static class ListRestaurantItemCallback extends DiffUtil.ItemCallback<RestaurantListViewState> {
         @Override
         public boolean areItemsTheSame(@NonNull RestaurantListViewState oldItem, @NonNull RestaurantListViewState newItem) {
-            return (
-                oldItem instanceof RestaurantListViewState.Loading && newItem instanceof RestaurantListViewState.Loading
-            ) || (
-                oldItem instanceof RestaurantListViewState.RestaurantList && newItem instanceof RestaurantListViewState.RestaurantList &&
-                    ((RestaurantListViewState.RestaurantList) oldItem).getId().equals(((RestaurantListViewState.RestaurantList) newItem).getId())
-            ) || (
-                oldItem instanceof RestaurantListViewState.NoGpsConnexion && newItem instanceof RestaurantListViewState.NoGpsConnexion
-            ) || (
-                oldItem instanceof RestaurantListViewState.NoRestaurantFound && newItem instanceof RestaurantListViewState.NoRestaurantFound
-            ) || (
-                oldItem instanceof RestaurantListViewState.DatabaseError && newItem instanceof RestaurantListViewState.DatabaseError
-            );
+
+            boolean bothAreLoading = oldItem instanceof RestaurantListViewState.Loading && newItem instanceof RestaurantListViewState.Loading;
+            boolean bothAreRestaurantLists = oldItem instanceof RestaurantListViewState.RestaurantList && newItem instanceof RestaurantListViewState.RestaurantList;
+
+            return bothAreLoading ||
+                    (bothAreRestaurantLists &&
+                        ((RestaurantListViewState.RestaurantList) oldItem).getId().equals(((RestaurantListViewState.RestaurantList) newItem).getId())
+                    ) || (
+                        oldItem instanceof RestaurantListViewState.RestaurantListError && newItem instanceof RestaurantListViewState.RestaurantListError);
+
         }
 
         @Override

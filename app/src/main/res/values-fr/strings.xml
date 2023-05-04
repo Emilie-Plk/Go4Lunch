@@ -12,4 +12,6 @@
     <string name="restaurant_item_food_image_a11y">Image de nourriture</string>
     <string name="detail_restaurant_chose_fab">Y aller ?</string>
     <string name="list_workmate_name_joining">%s y va !</string>
+    <string name="list_error_message_generic">Oups, quelque chose s\'est mal passé !\nRéessayez plus tard ! :)</string>
+    <string name="list_error_message_permission">Oups, quelque chose s\'est mal passé ! Merci d\'activer votre GPS :)</string>
 </resources>

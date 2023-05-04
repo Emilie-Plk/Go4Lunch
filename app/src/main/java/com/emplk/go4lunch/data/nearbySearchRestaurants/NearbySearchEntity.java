@@ -1,6 +1,7 @@
 package com.emplk.go4lunch.data.nearbySearchRestaurants;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.Objects;
 
@@ -13,13 +14,13 @@ public class NearbySearchEntity {
     @NonNull
     private final String vicinity;
 
-    @NonNull
+    @Nullable
     private final String photoReferenceUrl;
 
-    @NonNull
+    @Nullable
     private final String cuisine;
 
-    @NonNull
+    @Nullable
     private final Float rating;
 
     @NonNull
@@ -28,7 +29,7 @@ public class NearbySearchEntity {
     @NonNull
     private final Float longitude;
 
-    @NonNull
+    @Nullable
     private final Boolean openingHours;
 
 
@@ -36,12 +37,12 @@ public class NearbySearchEntity {
         @NonNull String placeId,
         @NonNull String restaurantName,
         @NonNull String vicinity,
-        @NonNull String photoReferenceUrl,
-        @NonNull String cuisine,
-        @NonNull Float rating,
+        @Nullable String photoReferenceUrl,
+        @Nullable String cuisine,
+        @Nullable Float rating,
         @NonNull Float latitude,
         @NonNull Float longitude,
-        @NonNull Boolean openingHours
+        @Nullable Boolean openingHours
     ) {
         this.placeId = placeId;
         this.restaurantName = restaurantName;
@@ -69,17 +70,17 @@ public class NearbySearchEntity {
         return vicinity;
     }
 
-    @NonNull
+    @Nullable
     public String getPhotoReferenceUrl() {
         return photoReferenceUrl;
     }
 
-    @NonNull
+    @Nullable
     public String getCuisine() {
         return cuisine;
     }
 
-    @NonNull
+    @Nullable
     public Float getRating() {
         return rating;
     }
@@ -94,7 +95,7 @@ public class NearbySearchEntity {
         return longitude;
     }
 
-    @NonNull
+    @Nullable
     public Boolean getOpeningHours() {
         return openingHours;
     }
@@ -104,8 +105,7 @@ public class NearbySearchEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         NearbySearchEntity that = (NearbySearchEntity) o;
-        if (!placeId.equals(that.placeId)) return false;
-        return restaurantName.equals(that.restaurantName) && vicinity.equals(that.vicinity) && photoReferenceUrl.equals(that.photoReferenceUrl) && cuisine.equals(that.cuisine) && rating.equals(that.rating) && latitude.equals(that.latitude) && longitude.equals(that.longitude) && openingHours.equals(that.openingHours);
+        return placeId.equals(that.placeId) && restaurantName.equals(that.restaurantName) && vicinity.equals(that.vicinity) && Objects.equals(photoReferenceUrl, that.photoReferenceUrl) && Objects.equals(cuisine, that.cuisine) && Objects.equals(rating, that.rating) && latitude.equals(that.latitude) && longitude.equals(that.longitude) && Objects.equals(openingHours, that.openingHours);
     }
 
     @Override

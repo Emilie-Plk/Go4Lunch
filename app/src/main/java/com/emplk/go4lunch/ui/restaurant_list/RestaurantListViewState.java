@@ -1,5 +1,7 @@
 package com.emplk.go4lunch.ui.restaurant_list;
 
+import android.graphics.drawable.Drawable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -8,11 +10,9 @@ import java.util.Objects;
 public abstract class RestaurantListViewState {
 
     public enum Type {
-        LOADING,
+        LOADING_STATE,
         DISPLAY_RESTAURANT_LIST,
-        NO_GPS_CONNEXION,
-        NO_RESTAURANT_FOUND,
-        DATABASE_ERROR
+        ERROR_STATE
     }
 
     @NonNull
@@ -32,8 +32,8 @@ public abstract class RestaurantListViewState {
 
     public static class Loading extends RestaurantListViewState {
 
-        public Loading(@NonNull String loadingText) {
-            super(Type.LOADING);
+        public Loading() {
+            super(Type.LOADING_STATE);
         }
 
         @NonNull
@@ -41,6 +41,7 @@ public abstract class RestaurantListViewState {
         public String toString() {
             return "Loading{}";
         }
+
         @Override
         public boolean equals(@Nullable Object obj) {
             if (this == obj) return true;
@@ -185,111 +186,48 @@ public abstract class RestaurantListViewState {
         }
     }
 
-    public static class NoGpsConnexion extends RestaurantListViewState {
-
+    public static class RestaurantListError extends RestaurantListViewState {
         @NonNull
-        private final String noGpsText;
+        private final String errorMessage;
 
-        public NoGpsConnexion(@NonNull String noGpsText) {
-            super(Type.NO_GPS_CONNEXION);
-            this.noGpsText = noGpsText;
+        @Nullable
+        private final Drawable errorDrawable;  // int or Drawable?
+
+        public RestaurantListError(@NonNull String errorMessage, @Nullable Drawable errorDrawable) {
+            super(Type.ERROR_STATE);
+            this.errorMessage = errorMessage;
+            this.errorDrawable = errorDrawable;
         }
 
         @NonNull
-        public String getNoGpsText() {
-            return noGpsText;
+        public String getErrorMessage() {
+            return errorMessage;
+        }
+
+        @Nullable
+        public Drawable getErrorDrawable() {
+            return errorDrawable;
         }
 
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            NoGpsConnexion that = (NoGpsConnexion) o;
-            return noGpsText.equals(that.noGpsText);
+            RestaurantListError that = (RestaurantListError) o;
+            return errorMessage.equals(that.errorMessage) && Objects.equals(errorDrawable, that.errorDrawable);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(noGpsText);
+            return Objects.hash(errorMessage, errorDrawable);
         }
 
         @NonNull
         @Override
         public String toString() {
-            return "NoGpsConnexion{" +
-                "noGpsText='" + noGpsText + '\'' +
-                '}';
-        }
-    }
-
-    public static class NoRestaurantFound extends RestaurantListViewState {
-        @NonNull
-        private final String noRestaurantFoundText;
-
-        public NoRestaurantFound(@NonNull String noRestaurantFoundText) {
-            super(Type.NO_RESTAURANT_FOUND);
-            this.noRestaurantFoundText = noRestaurantFoundText;
-        }
-
-        @NonNull
-        public String getNoRestaurantFoundText() {
-            return noRestaurantFoundText;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            NoRestaurantFound that = (NoRestaurantFound) o;
-            return noRestaurantFoundText.equals(that.noRestaurantFoundText);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(noRestaurantFoundText);
-        }
-
-        @NonNull
-        @Override
-        public String toString() {
-            return "NoRestaurantFound{" +
-                "noRestaurantFoundText='" + noRestaurantFoundText + '\'' +
-                '}';
-        }
-    }
-
-    public static class DatabaseError extends RestaurantListViewState {
-        @NonNull
-        private final String databaseErrorText;
-
-        public DatabaseError(@NonNull String databaseErrorText) {
-            super(Type.DATABASE_ERROR);
-            this.databaseErrorText = databaseErrorText;
-        }
-
-        @NonNull
-        public String getDatabaseErrorText() {
-            return databaseErrorText;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            DatabaseError that = (DatabaseError) o;
-            return databaseErrorText.equals(that.databaseErrorText);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(databaseErrorText);
-        }
-
-        @NonNull
-        @Override
-        public String toString() {
-            return "DatabaseError{" +
-                "databaseErrorText='" + databaseErrorText + '\'' +
+            return "RestaurantListError{" +
+                "errorMessage='" + errorMessage + '\'' +
+                ", errorDrawable=" + errorDrawable +
                 '}';
         }
     }
