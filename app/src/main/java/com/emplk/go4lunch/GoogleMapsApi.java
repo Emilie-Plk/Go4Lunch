@@ -18,7 +18,7 @@ public interface GoogleMapsApi {
     );
 
     @GET("details/json")
-    Call<DetailsRestaurantResponse> getDetails(
+    Call<DetailsRestaurantResponse> getPlaceDetails(
         @Query("place_id") String placeId,
         @Query("key") String apiKey
     );

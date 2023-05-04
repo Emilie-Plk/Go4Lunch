@@ -9,7 +9,7 @@ import java.util.List;
 public class OpeningHours {
 
     @SerializedName("open_now")
-    private final boolean openNow;
+    private final Boolean openNow;
 
     @SerializedName("periods")
     private final List<PeriodsItem> periods;
@@ -17,7 +17,7 @@ public class OpeningHours {
     @SerializedName("weekday_text")
     private final List<String> weekdayText;
 
-    public OpeningHours(boolean openNow, List<PeriodsItem> periods, List<String> weekdayText) {
+    public OpeningHours(Boolean openNow, List<PeriodsItem> periods, List<String> weekdayText) {
         this.openNow = openNow;
         this.periods = periods;
         this.weekdayText = weekdayText;

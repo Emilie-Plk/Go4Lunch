@@ -19,6 +19,7 @@
     <string name="detail_button_call">call</string>
     <string name="detail_button_like" translatable="false">like</string>
     <string name="detail_button_website">website</string>
+    <string name="detail_vegan_friendly_a11y">Vegan friendly</string>
     <string name="restaurant_item_food_image_a11y">Food image</string>
     <string name="detail_restaurant_chose_fab">Go?</string>
     <string name="list_workmate_name_joining">%s is joining!</string>

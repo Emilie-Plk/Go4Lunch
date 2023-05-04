@@ -4,9 +4,7 @@ import java.util.List;
 
 public abstract class NearbySearchWrapper {
 
-    public static class Loading extends NearbySearchWrapper {
-// TODO: handle Loading state
-    }
+    public static class Loading extends NearbySearchWrapper { }
 
     public static class Success extends NearbySearchWrapper {
         private final List<NearbySearchEntity> results;

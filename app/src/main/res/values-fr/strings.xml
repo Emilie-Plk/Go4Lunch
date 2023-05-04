@@ -2,16 +2,17 @@
 <resources>
     <string name="facebook_btn">Connexion avec Facebook</string>
     <string name="search">Rechercher</string>
-    <string name="list_view_bottom_nav">Vue liste</string>
     <string name="map_bottom_nav">Carte</string>
     <string name="workmates_bottom_nav">Collègues</string>
     <string name="list_avatar_workmate_a11y">Image de %s</string>
+    <string name="list_view_bottom_nav">Vue liste</string>
     <string name="list_workmate_send_message_a11y">Envoyer un message</string>
-    <string name="detail_button_call">Appeler</string>
-    <string name="detail_button_website">site web</string>
-    <string name="restaurant_item_food_image_a11y">Image de nourriture</string>
-    <string name="detail_restaurant_chose_fab">Y aller ?</string>
     <string name="list_workmate_name_joining">%s y va !</string>
     <string name="list_error_message_generic">Oups, quelque chose s\'est mal passé !\nRéessayez plus tard ! :)</string>
     <string name="list_error_message_permission">Oups, quelque chose s\'est mal passé ! Merci d\'activer votre GPS :)</string>
+    <string name="restaurant_item_food_image_a11y">Image de nourriture</string>
+    <string name="detail_restaurant_chose_fab">Y aller ?</string>
+    <string name="detail_button_call">Appeler</string>
+    <string name="detail_button_website">site web</string>
+    <string name="detail_vegan_friendly_a11y">Convient aux végétarien·ne·s</string>
 </resources>

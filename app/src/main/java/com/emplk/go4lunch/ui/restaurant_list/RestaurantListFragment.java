@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.emplk.go4lunch.databinding.RestaurantListFragmentBinding;
+import com.emplk.go4lunch.ui.restaurant_detail.RestaurantDetailActivity;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -61,8 +62,8 @@ public class RestaurantListFragment extends Fragment {
 
         RestaurantListAdapter adapter = new RestaurantListAdapter(new OnRestaurantClickedListener() {
             @Override
-            public void onRestaurantClicked(String id) {
-                Log.i(TAG, "Restaurant clicked! Id is:" + id);
+            public void onRestaurantClicked(String restaurantId) {
+                startActivity(RestaurantDetailActivity.navigate(requireContext(), restaurantId));
             }
         });
 

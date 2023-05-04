@@ -63,7 +63,8 @@ public class RestaurantListViewModel extends ViewModel {
         @NonNull NearbySearchRepository nearbySearchRepository,
         @NonNull GPSLocationRepository gpsLocationRepository,
         @NonNull PermissionChecker permissionChecker,
-        @NonNull Application application) {
+        @NonNull Application application
+    ) {
         this.nearbySearchRepository = nearbySearchRepository;
         this.permissionChecker = permissionChecker;
         this.gpsLocationRepository = gpsLocationRepository;
@@ -145,9 +146,9 @@ public class RestaurantListViewModel extends ViewModel {
                             nearbySearchEntity.getVicinity(),
                             getDistanceString(location.getLatitude(), location.getLongitude(), nearbySearchEntity.getLatitude(), nearbySearchEntity.getLongitude()),
                             "3",
-                            nearbySearchEntity.getOpeningHours().toString(),
-                            nearbySearchEntity.getOpeningHours(),
-                            getRestaurantPhotoReferenceUrl(nearbySearchEntity.getPhotoReferenceUrl()),
+                            "14h-16h",
+                            true,
+                            parseRestaurantPictureUrl(nearbySearchEntity.getPhotoReferenceUrl()),
                             convertFiveToThreeRating(nearbySearchEntity.getRating()
                             )
                         ));
@@ -166,7 +167,7 @@ public class RestaurantListViewModel extends ViewModel {
                 break;
             case NO_LOCATION:
                 result.add(new RestaurantListViewState.RestaurantListError(  // weird but ok
-                        application.getResources().getString(R.string.project_id),
+                        application.getResources().getString(R.string.list_error_message_generic),
                         AppCompatResources.getDrawable(application.getApplicationContext(), R.drawable.baseline_sad_face_24)
                     )
                 );
@@ -193,7 +194,7 @@ public class RestaurantListViewModel extends ViewModel {
 
     }
 
-    private String getRestaurantPhotoReferenceUrl(String photoReferenceUrl) {
+    private String parseRestaurantPictureUrl(String photoReferenceUrl) {
         if (photoReferenceUrl != null) {
             return String.format(application
                 .getApplicationContext()
@@ -255,11 +256,7 @@ public class RestaurantListViewModel extends ViewModel {
     }
 
     public float convertFiveToThreeRating(Float fiveRating) {
-        if (fiveRating == null) {
-            return 0.0f;
-        } else {
             float convertedRating = Math.round(fiveRating * 2) / 2f; // round to nearest 0.5
             return Math.min(3f, convertedRating / 5f * 3f); // convert 3 -> 5 with steps of 0.5
-        }
     }
 }

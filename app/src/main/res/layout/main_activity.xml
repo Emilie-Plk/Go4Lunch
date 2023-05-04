@@ -34,5 +34,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        app:itemActiveIndicatorStyle="@style/Theme.Go4Lunch.BottomNavBarIndicator"
         app:menu="@menu/bottom_menu_main" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

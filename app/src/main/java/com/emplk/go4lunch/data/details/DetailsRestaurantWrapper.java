@@ -1,21 +1,23 @@
 package com.emplk.go4lunch.data.details;
 
+import com.emplk.go4lunch.data.details.detailsRestaurantResponse.DetailsRestaurantResponse;
+
 import java.util.List;
 
 public abstract class DetailsRestaurantWrapper {
+
     public static class Loading extends DetailsRestaurantWrapper {
-// TODO: handle Loading state
     }
 
     public static class Success extends DetailsRestaurantWrapper {
-        private final DetailsRestaurantEntity result;
+        private final DetailsRestaurantResponse response;
 
-        public Success(DetailsRestaurantEntity result) {
-            this.result = result;
+        public Success(DetailsRestaurantResponse response) {
+            this.response = response;
         }
 
-        public DetailsRestaurantEntity getResult() {
-            return result;
+        public DetailsRestaurantResponse getResponse() {
+            return response;
         }
     }
 

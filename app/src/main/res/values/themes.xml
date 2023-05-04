@@ -54,6 +54,10 @@
         <item name="background">@color/pumpkin_orange</item>
     </style>
 
+    <style name="Theme.Go4Lunch.BottomNavBarIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/tinted_gray_translucent</item>
+    </style>
+
     <style name="Theme.Go4Lunch.Toolbar" parent="Widget.Material3.Toolbar">
         <item name="android:background">@color/crimson_rust</item>
     </style>
@@ -90,6 +94,10 @@
         <item name="iconTint">@color/crimson_rust</item>
         <item name="iconGravity">top</item>
         <item name="iconSize">26dp</item>
+    </style>
+
+    <style name="Theme.Go4Lunch.VeganFriendlyImageView">
+        <item name="android:background">@color/white</item>
     </style>
 
 

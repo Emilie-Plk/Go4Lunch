@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         MainPagerAdapter adapter = new MainPagerAdapter(MainActivity.this);
         binding.mainViewpagerContainer.setAdapter(adapter);
 
+
+
         BottomNavigationView bottomNavigationView = binding.mainBottomAppbar;
         bottomNavigationView.setSelectedItemId(R.id.map_bottom_bar);
 

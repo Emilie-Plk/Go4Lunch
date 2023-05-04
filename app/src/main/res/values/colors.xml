@@ -7,8 +7,7 @@
     <color name="teal_700">#FF018786</color>
 
 
-    <!--    App colors-->
-
+    <!--  App colors-->
     <color name="crimson_rust">#BA3B0A</color>
     <color name="pumpkin_orange">#E8772E</color>
     <color name="dirty_white">#FFF7F1</color>
@@ -18,6 +17,7 @@
     <color name="darker_gray">#1B1818</color>
     <color name="licorice_gray">#221A19</color>
     <color name="golden_yellow">#FFC823</color>
+    <color name="tinted_gray_translucent">#1B52443C</color>
 
     <!-- Dark Theme colors-->
     <color name="red_clay">#241b16</color>
