@@ -64,6 +64,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:20.5.0'
 
     // FACEBOOK AUTH
+    implementation 'com.facebook.android:facebook-android-sdk:[8,9)'
     implementation 'com.facebook.android:facebook-login:latest.release'
 
     // GOOGLE MAPS SDK

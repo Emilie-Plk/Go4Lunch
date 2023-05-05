@@ -6,7 +6,7 @@
     <string name="facebook_btn">Login with Facebook</string>
     <string name="facebook_app_id" translatable="false">447645630905453</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb447645630905453</string>
-    <string name="facebook_client_token" translatable="false">17ebf072bc95a952bd8d2d5d87a47d99</string>
+    <string name="facebook_client_token" translatable="false">4e996326bdf96fcffe2d5bf2f9579a6a</string>
     <string name="google_image_url" translatable="false">"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&amp;photo_reference=%1$s&amp;key=%2$s"</string>
 
     <!-- TODO: translatable resources -->

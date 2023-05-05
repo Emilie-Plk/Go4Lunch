@@ -2,6 +2,7 @@ package com.emplk.go4lunch.data.details.detailsRestaurantResponse;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -12,6 +13,7 @@ public class OpeningHours {
     private final Boolean openNow;
 
     @SerializedName("periods")
+    @Expose
     private final List<PeriodsItem> periods;
 
     @SerializedName("weekday_text")

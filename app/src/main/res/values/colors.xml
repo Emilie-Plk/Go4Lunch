@@ -10,6 +10,7 @@
     <!--  App colors-->
     <color name="crimson_rust">#BA3B0A</color>
     <color name="pumpkin_orange">#E8772E</color>
+    <color name="pumpkin_orange_translucent">#1EE49460</color>
     <color name="dirty_white">#FFF7F1</color>
     <color name="lemon_chiffon">#FBF2C0</color>
     <color name="reseda_green">#75704e</color>
@@ -28,7 +29,7 @@
 
 
     <color name="red_google">#EA4335</color>
-    <color name="blue_facebook">#4267B2</color>
+    <color name="blue_facebook">@color/com_facebook_blue</color>
     <color name="light_gray">#9e9e9e</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>

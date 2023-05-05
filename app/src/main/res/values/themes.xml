@@ -26,7 +26,7 @@
 
     <!--LOGIN ACTIVITY-->
 
-    <style name="Theme.Go4Lunch.LoginFacebookButton" parent="Widget.Material3.Button.TonalButton">
+    <style name="Theme.Go4Lunch.LoginFacebookButton" parent="Theme.Go4Lunch.LoginFacebookButton">
         <item name="backgroundTint">@color/blue_facebook</item>
         <item name="textAllCaps">true</item>
         <item name="android:textColor">@color/white</item>
