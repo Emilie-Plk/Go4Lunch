@@ -17,6 +17,17 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/fries_horizontal_tools" />
 
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/loading_state_loading_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        app:layout_constraintBottom_toBottomOf="@id/detail_restaurant_picture"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/detail_restaurant_vegan_friendly"
         style="@style/Theme.Go4Lunch.VeganFriendlyImageView"

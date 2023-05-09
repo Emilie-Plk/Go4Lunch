@@ -8,7 +8,6 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
@@ -16,7 +15,7 @@ import androidx.lifecycle.ViewModel;
 import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.data.details.DetailsRestaurantRepository;
 import com.emplk.go4lunch.data.details.DetailsRestaurantWrapper;
-import com.emplk.go4lunch.data.details.detailsRestaurantResponse.Result;
+import com.emplk.go4lunch.data.details.details_restaurant_response.Result;
 
 import javax.inject.Inject;
 
@@ -31,7 +30,7 @@ public class RestaurantDetailViewModel extends ViewModel {
     @NonNull
     private final Application application;
 
-    private final MediatorLiveData<RestaurantDetailViewState> restaurantDetailViewStateMediatorLiveData = new MediatorLiveData<>();
+    //  private final MediatorLiveData<RestaurantDetailViewState> restaurantDetailViewStateMediatorLiveData = new MediatorLiveData<>();
 
     @Inject
     public RestaurantDetailViewModel(
@@ -43,36 +42,45 @@ public class RestaurantDetailViewModel extends ViewModel {
 
     public LiveData<RestaurantDetailViewState> getRestaurantDetails(@NonNull String restaurantId) {
         return Transformations.switchMap(detailsRestaurantRepository.getRestaurantDetails(restaurantId, API_KEY), restaurantDetail -> {
-            MutableLiveData<RestaurantDetailViewState> restaurantDetailViewStateMutableLiveData = new MutableLiveData<>();
-            if (restaurantDetail instanceof DetailsRestaurantWrapper.Loading) {
-                restaurantDetailViewStateMutableLiveData.setValue(new RestaurantDetailViewState(
-                    "attends",
-                    "attends",
-                    "attends",
-                    "attends",
-                    0.5f,
-                    "attends",
-                    "attends",
-                    false,
-                    false,
-                    false
-                ));
-            }
+                MutableLiveData<RestaurantDetailViewState> restaurantDetailViewStateMutableLiveData = new MutableLiveData<>();
+                if (restaurantDetail instanceof DetailsRestaurantWrapper.Loading) {
+                    restaurantDetailViewStateMutableLiveData.setValue(new RestaurantDetailViewState(
+                            restaurantId,
+                            "",
+                            "",
+                            "",
+                            0f,
+                            "",
+                            "",
+                            false,
+                            false,
+                            false,
+                            true,
+                            false,
+                            false
+                        )
+                    );
+                }
 
                 if (restaurantDetail instanceof DetailsRestaurantWrapper.Success) {
                     Result response = ((DetailsRestaurantWrapper.Success) restaurantDetail).getResponse().getResult();
                     restaurantDetailViewStateMutableLiveData.setValue(new RestaurantDetailViewState(
-                        response.getPlaceId(),
-                        response.getName(),
-                        response.getVicinity(),
-                        parseRestaurantPictureUrl(response.getPhotos().get(0).getPhotoReference()),
-                        convertFiveToThreeRating(response.getRating()),
-                        response.getInternationalPhoneNumber(),
-                        response.getWebsite(),
-                        true,
-                        false,
-                        response.isServesVegetarianFood()
-                    ));
+                            restaurantId,  // nullability mgmt is hell
+                            checkIfResponseFieldExist(response.getName()),  // still have a lint here Method invocation 'getName' may produce 'NullPointerException'
+                            checkIfResponseFieldExist(response.getVicinity()),
+                            parseRestaurantPictureUrl(response.getPhotos().get(0).getPhotoReference()),
+                            convertFiveToThreeRating(response.getRating()),
+                            response.getInternationalPhoneNumber(),
+                            response.getWebsite(),
+                            true,
+                            false,
+                            response.isServesVegetarianFood(),
+                            false,
+                            response.getInternationalPhoneNumber() != null,
+                            response.getWebsite() != null
+
+                        )
+                    );
                 }
                 return restaurantDetailViewStateMutableLiveData;
             }
@@ -80,8 +88,8 @@ public class RestaurantDetailViewModel extends ViewModel {
     }
 
     public float convertFiveToThreeRating(Float fiveRating) {
-            float convertedRating = Math.round(fiveRating * 2) / 2f; // round to nearest 0.5
-            return Math.min(3f, convertedRating / 5f * 3f); // convert 3 -> 5 with steps of 0.5
+        float convertedRating = Math.round(fiveRating * 2) / 2f; // round to nearest 0.5
+        return Math.min(3f, convertedRating / 5f * 3f); // convert 3 -> 5 with steps of 0.5
     }
 
     private String parseRestaurantPictureUrl(String photoReferenceUrl) {
@@ -92,6 +100,15 @@ public class RestaurantDetailViewModel extends ViewModel {
         } else {
             Uri uri = Uri.parse("android.resource://com.emplk.go4lunch/" + ResourcesCompat.getDrawable(application.getResources(), R.drawable.restaurant_table, null));
             return uri.toString();
+        }
+    }
+
+    private String checkIfResponseFieldExist(String input) {
+        String output = "Missing information";
+        if (input != null) {
+            return input;
+        } else {
+            return output;
         }
     }
 }

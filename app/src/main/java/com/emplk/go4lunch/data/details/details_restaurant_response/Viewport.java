@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.data.nearbySearchRestaurants.nearbySearchResponse;
+package com.emplk.go4lunch.data.details.details_restaurant_response;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -16,5 +16,14 @@ public class Viewport {
 
     public Northeast getNortheast() {
         return northeast;
+    }
+
+    @Override
+    public String toString() {
+        return
+            "Viewport{" +
+                "southwest = '" + southwest + '\'' +
+                ",northeast = '" + northeast + '\'' +
+                "}";
     }
 }

@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.data.nearbySearchRestaurants.nearbySearchResponse;
+package com.emplk.go4lunch.data.details.details_restaurant_response;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -16,5 +16,14 @@ public class Northeast {
 
     public Object getLat() {
         return lat;
+    }
+
+    @Override
+    public String toString() {
+        return
+            "Northeast{" +
+                "lng = '" + lng + '\'' +
+                ",lat = '" + lat + '\'' +
+                "}";
     }
 }

@@ -36,7 +36,16 @@ public class RestaurantDetailViewState {
     @Nullable
     private final Boolean isVeganFriendly;
 
-    public RestaurantDetailViewState(@NonNull String id, @NonNull String name, @NonNull String address, @Nullable String pictureUrl, @Nullable Float rating, @Nullable String phoneNumber, @Nullable String websiteUrl, @Nullable Boolean isLiked, @Nullable Boolean isAttending, @Nullable Boolean isVeganFriendly) {
+    @NonNull
+    private final Boolean isLoading;
+
+    @NonNull
+    private final Boolean isPhoneNumberAvailable;
+
+    @NonNull
+    private final Boolean isWebsiteAvailable;
+
+    public RestaurantDetailViewState(@NonNull String id, @NonNull String name, @NonNull String address, @Nullable String pictureUrl, @Nullable Float rating, @Nullable String phoneNumber, @Nullable String websiteUrl, @Nullable Boolean isLiked, @Nullable Boolean isAttending, @Nullable Boolean isVeganFriendly, @NonNull Boolean isLoading, @NonNull Boolean isPhoneNumberAvailable, @NonNull Boolean isWebsiteAvailable) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -47,6 +56,9 @@ public class RestaurantDetailViewState {
         this.isLiked = isLiked;
         this.isAttending = isAttending;
         this.isVeganFriendly = isVeganFriendly;
+        this.isLoading = isLoading;
+        this.isPhoneNumberAvailable = isPhoneNumberAvailable;
+        this.isWebsiteAvailable = isWebsiteAvailable;
     }
 
     @NonNull
@@ -85,12 +97,12 @@ public class RestaurantDetailViewState {
     }
 
     @Nullable
-    public Boolean getLiked() {
+    public Boolean isLiked() {
         return isLiked;
     }
 
     @Nullable
-    public Boolean getAttending() {
+    public Boolean isAttending() {
         return isAttending;
     }
 
@@ -99,17 +111,32 @@ public class RestaurantDetailViewState {
         return isVeganFriendly;
     }
 
+    @NonNull
+    public Boolean isLoading() {
+        return isLoading;
+    }
+
+    @NonNull
+    public Boolean isPhoneNumberAvailable() {
+        return isPhoneNumberAvailable;
+    }
+
+    @NonNull
+    public Boolean isWebsiteAvailable() {
+        return isWebsiteAvailable;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RestaurantDetailViewState that = (RestaurantDetailViewState) o;
-        return id.equals(that.id) && name.equals(that.name) && address.equals(that.address) && Objects.equals(pictureUrl, that.pictureUrl) && Objects.equals(rating, that.rating) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(websiteUrl, that.websiteUrl) && Objects.equals(isLiked, that.isLiked) && Objects.equals(isAttending, that.isAttending) && Objects.equals(isVeganFriendly, that.isVeganFriendly);
+        return id.equals(that.id) && name.equals(that.name) && address.equals(that.address) && Objects.equals(pictureUrl, that.pictureUrl) && Objects.equals(rating, that.rating) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(websiteUrl, that.websiteUrl) && Objects.equals(isLiked, that.isLiked) && Objects.equals(isAttending, that.isAttending) && Objects.equals(isVeganFriendly, that.isVeganFriendly) && isLoading.equals(that.isLoading) && isPhoneNumberAvailable.equals(that.isPhoneNumberAvailable) && isWebsiteAvailable.equals(that.isWebsiteAvailable);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, address, pictureUrl, rating, phoneNumber, websiteUrl, isLiked, isAttending, isVeganFriendly);
+        return Objects.hash(id, name, address, pictureUrl, rating, phoneNumber, websiteUrl, isLiked, isAttending, isVeganFriendly, isLoading, isPhoneNumberAvailable, isWebsiteAvailable);
     }
 
     @NonNull
@@ -126,6 +153,9 @@ public class RestaurantDetailViewState {
             ", isLiked=" + isLiked +
             ", isAttending=" + isAttending +
             ", isVeganFriendly=" + isVeganFriendly +
+            ", isLoading=" + isLoading +
+            ", isPhoneNumberAvailable=" + isPhoneNumberAvailable +
+            ", isWebsiteAvailable=" + isWebsiteAvailable +
             '}';
     }
 }

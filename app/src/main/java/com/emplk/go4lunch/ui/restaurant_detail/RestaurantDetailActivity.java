@@ -52,6 +52,9 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                     binding.detailRestaurantAddress.setText(restaurantDetail.getAddress());
                     binding.detailRestaurantRatingBar.setRating(restaurantDetail.getRating());
                     binding.detailRestaurantVeganFriendly.setVisibility(Boolean.TRUE.equals(restaurantDetail.isVeganFriendly()) ? View.VISIBLE : View.INVISIBLE);
+                    binding.loadingStateLoadingBar.setVisibility(Boolean.TRUE.equals(restaurantDetail.isLoading()) ? View.VISIBLE : View.INVISIBLE);
+                    binding.detailRestaurantWebsiteButton.setEnabled(restaurantDetail.isWebsiteAvailable());
+                    binding.detailRestaurantCallButton.setEnabled(restaurantDetail.isPhoneNumberAvailable());
                     Glide.with(this)
                         .load(restaurantDetail.getPictureUrl())
                         .centerCrop()
@@ -62,6 +65,8 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                             startActivity(intent);
                         }
                     );
+
+                  //  @RequiresPermission(Manifest.permission.CALL_PHONE) => Need for permission first?
                     binding.detailRestaurantCallButton.setOnClickListener(v -> {
                             Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", restaurantDetail.getPhoneNumber(), null));
                             startActivity(intent);

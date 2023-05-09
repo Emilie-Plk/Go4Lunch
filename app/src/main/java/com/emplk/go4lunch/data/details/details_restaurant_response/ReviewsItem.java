@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.data.details.detailsRestaurantResponse;
+package com.emplk.go4lunch.data.details.details_restaurant_response;
 
 import com.google.gson.annotations.SerializedName;
 

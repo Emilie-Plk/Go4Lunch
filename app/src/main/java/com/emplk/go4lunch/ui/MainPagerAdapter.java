@@ -30,8 +30,7 @@ public class MainPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 0:
-                // return
-                break;
+                return WorkmateListFragment.newInstance(); // to be replaced by the Map Fragment
             case 1:
                 return RestaurantListFragment.newInstance();
             case 2:
@@ -39,7 +38,7 @@ public class MainPagerAdapter extends FragmentStateAdapter {
             default:
                 throw new IllegalArgumentException("Invalid position: " + position);
         }
-        return WorkmateListFragment.newInstance();
+
     }
 
     @Override

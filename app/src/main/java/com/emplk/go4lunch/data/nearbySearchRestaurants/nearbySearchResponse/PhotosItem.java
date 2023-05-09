@@ -14,7 +14,6 @@ public class PhotosItem {
     @SerializedName("photo_reference")
     private final String photoReference;
 
-
     @SerializedName("width")
     private final int width;
 

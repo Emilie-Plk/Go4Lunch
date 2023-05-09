@@ -1,10 +1,7 @@
 package com.emplk.go4lunch.ui.restaurant_list;
 
-import static android.content.ContentValues.TAG;
-
 import android.Manifest;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +69,8 @@ public class RestaurantListFragment extends Fragment {
 
         viewModel.getRestaurantItemViewStateListLiveData()
             .observe(getViewLifecycleOwner(),
-                adapter::submitList);
+                list -> adapter.submitList(list)
+            );
     }
 
     private void setUpViewModel() {

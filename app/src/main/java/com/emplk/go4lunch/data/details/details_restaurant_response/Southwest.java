@@ -1,8 +1,8 @@
-package com.emplk.go4lunch.data.details.detailsRestaurantResponse;
+package com.emplk.go4lunch.data.details.details_restaurant_response;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Northeast {
+public class Southwest {
 
     @SerializedName("lng")
     private Object lng;
@@ -21,7 +21,7 @@ public class Northeast {
     @Override
     public String toString() {
         return
-            "Northeast{" +
+            "Southwest{" +
                 "lng = '" + lng + '\'' +
                 ",lat = '" + lat + '\'' +
                 "}";

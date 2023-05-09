@@ -1,8 +1,6 @@
 package com.emplk.go4lunch.data.details;
 
-import com.emplk.go4lunch.data.details.detailsRestaurantResponse.DetailsRestaurantResponse;
-
-import java.util.List;
+import com.emplk.go4lunch.data.details.details_restaurant_response.DetailsRestaurantResponse;
 
 public abstract class DetailsRestaurantWrapper {
 

@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.data.details.detailsRestaurantResponse;
+package com.emplk.go4lunch.data.details.details_restaurant_response;
 
 import androidx.annotation.NonNull;
 
@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Objects;
 
-public class Open {
+public class Close {
 
     @SerializedName("time")
     private final String time;
@@ -14,7 +14,7 @@ public class Open {
     @SerializedName("day")
     private final Integer day;
 
-    public Open(String time, Integer day) {
+    public Close(String time, int day) {
         this.time = time;
         this.day = day;
     }
@@ -31,8 +31,8 @@ public class Open {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Open open = (Open) o;
-        return Objects.equals(time, open.time) && Objects.equals(day, open.day);
+        Close close = (Close) o;
+        return Objects.equals(time, close.time) && Objects.equals(day, close.day);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class Open {
     @Override
     public String toString() {
         return
-            "Open{" +
+            "Close{" +
                 "time = '" + time + '\'' +
                 ",day = '" + day + '\'' +
                 "}";

@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.data.GPSlocation;
+package com.emplk.go4lunch.data.gps_location;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;

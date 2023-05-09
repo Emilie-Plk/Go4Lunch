@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.emplk.go4lunch.GoogleMapsApi;
-import com.emplk.go4lunch.data.details.detailsRestaurantResponse.DetailsRestaurantResponse;
+import com.emplk.go4lunch.data.details.details_restaurant_response.DetailsRestaurantResponse;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

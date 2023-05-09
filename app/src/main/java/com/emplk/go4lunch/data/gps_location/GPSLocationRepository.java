@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.data.GPSlocation;
+package com.emplk.go4lunch.data.gps_location;
 
 import android.location.Location;
 import android.os.Looper;
@@ -29,7 +29,7 @@ public class GPSLocationRepository {
     @NonNull
     private final MutableLiveData<Location> locationMutableLiveData = new MutableLiveData<>(null);
 
-    private LocationCallback locationCallback;
+    private LocationCallback locationCallback; // should it be final?
 
     @Inject
     public GPSLocationRepository(@NonNull FusedLocationProviderClient fusedLocationProviderClient) {
@@ -47,11 +47,6 @@ public class GPSLocationRepository {
                 @Override
                 public void onLocationResult(@NonNull LocationResult locationResult) {
                     Location location = locationResult.getLastLocation();
-                    /* BigDecimal latitude = BigDecimal.valueOf(location.getLatitude()).setScale(5, RoundingMode.HALF_UP);
-                    BigDecimal longitude = BigDecimal.valueOf(location.getLongitude()).setScale(5, RoundingMode.HALF_UP);
-                    Location roundedLocation = new Location(location);
-                    roundedLocation.setLatitude(latitude.doubleValue());
-                    roundedLocation.setLongitude(longitude.doubleValue());*/  // TODO: I wanted to limit the API calls if the user just walked for 10m or so...
                     locationMutableLiveData.setValue(location);
                 }
             };
@@ -69,7 +64,6 @@ public class GPSLocationRepository {
             Looper.getMainLooper()
         );
     }
-
 
     public void stopLocationRequest() {
         if (locationCallback != null) {

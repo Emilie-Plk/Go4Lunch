@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.DI;
+package com.emplk.go4lunch.di;
 
 import android.content.Context;
 
@@ -55,7 +55,6 @@ public class AppModule {
 
     @Provides
     @Singleton
-    // I mean why do it here and not inside my repo?
     public FusedLocationProviderClient provideFusedLocationProviderClient(@ApplicationContext Context context) {
         return LocationServices.getFusedLocationProviderClient(context);
     }

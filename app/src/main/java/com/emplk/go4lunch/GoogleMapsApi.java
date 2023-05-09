@@ -1,6 +1,6 @@
 package com.emplk.go4lunch;
 
-import com.emplk.go4lunch.data.details.detailsRestaurantResponse.DetailsRestaurantResponse;
+import com.emplk.go4lunch.data.details.details_restaurant_response.DetailsRestaurantResponse;
 import com.emplk.go4lunch.data.nearbySearchRestaurants.nearbySearchResponse.NearbySearchResponse;
 
 import retrofit2.Call;
