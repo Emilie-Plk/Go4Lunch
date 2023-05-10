@@ -161,102 +161,127 @@ public class Result {
         this.placeId = placeId;
         this.servesVegetarianFood = servesVegetarianFood;
     }
+
     @Nullable
     public Integer getUtcOffset() {
         return utcOffset;
     }
+
     @Nullable
     public String getFormattedAddress() {
         return formattedAddress;
     }
+
     @Nullable
     public List<String> getTypes() {
         return types;
     }
+
     @Nullable
     public String getWebsite() {
         return website;
     }
+
     @Nullable
     public String getBusinessStatus() {
         return businessStatus;
     }
+
     @Nullable
     public String getIcon() {
         return icon;
     }
+
     @Nullable
     public Float getRating() {
         return rating;
     }
+
     @Nullable
     public String getIconBackgroundColor() {
         return iconBackgroundColor;
     }
+
     @Nullable
     public List<AddressComponentsItem> getAddressComponents() {
         return addressComponents;
     }
+
     @Nullable
     public List<PhotosItem> getPhotos() {
         return photos;
     }
+
     @Nullable
     public String getUrl() {
         return url;
     }
+
     @Nullable
     public String getReference() {
         return reference;
     }
+
     @Nullable
     public Integer getUserRatingsTotal() {
         return userRatingsTotal;
     }
+
     @Nullable
     public List<ReviewsItem> getReviews() {
         return reviews;
     }
+
     @Nullable
     public String getName() {
         return name;
     }
+
     @Nullable
     public OpeningHours getOpeningHours() {
         return openingHours;
     }
+
     @Nullable
     public Geometry getGeometry() {
         return geometry;
     }
+
     @Nullable
     public String getIconMaskBaseUri() {
         return iconMaskBaseUri;
     }
+
     @Nullable
     public String getVicinity() {
         return vicinity;
     }
+
     @Nullable
     public String getAdrAddress() {
         return adrAddress;
     }
+
     @Nullable
     public PlusCode getPlusCode() {
         return plusCode;
     }
+
     @Nullable
     public String getFormattedPhoneNumber() {
         return formattedPhoneNumber;
     }
+
     @Nullable
     public String getInternationalPhoneNumber() {
         return internationalPhoneNumber;
     }
+
     @Nullable
     public String getPlaceId() {
         return placeId;
     }
+
     @Nullable
     public Boolean isServesVegetarianFood() {
         return servesVegetarianFood;

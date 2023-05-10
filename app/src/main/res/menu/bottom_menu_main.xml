@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/bottom_bar_map"
         android:title="@string/map_bottom_nav"
-        android:icon="@drawable/baseline_map_24"
-        />
+        android:icon="@drawable/baseline_map_24" />
 
     <item
         android:id="@+id/bottom_bar_restaurant_list"
         android:title="@string/list_view_bottom_nav"
-        android:icon="@drawable/baseline_format_list_bulleted_24"
-        />
+        android:icon="@drawable/baseline_format_list_bulleted_24" />
 
     <item
         android:id="@+id/bottom_bar_workmate_list"
         android:title="@string/workmates_bottom_nav"
-        android:icon="@drawable/baseline_people_24"
-        />
+        android:icon="@drawable/baseline_people_24" />
 </menu>

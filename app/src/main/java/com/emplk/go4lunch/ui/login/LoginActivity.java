@@ -88,7 +88,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onCancel() {
-Log.i(TAG, "ON CHANCEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEL");
+                Log.i(TAG, "ON CHANCEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEL");
             }
 
             @Override

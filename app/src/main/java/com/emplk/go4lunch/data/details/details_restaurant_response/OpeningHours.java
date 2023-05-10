@@ -3,7 +3,6 @@ package com.emplk.go4lunch.data.details.details_restaurant_response;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;

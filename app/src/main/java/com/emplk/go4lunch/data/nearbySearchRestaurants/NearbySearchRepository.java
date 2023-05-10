@@ -103,7 +103,7 @@ public class NearbySearchRepository {
                 String placeId = result.getPlaceId();
                 String name = result.getName();
                 String vicinity = result.getVicinity();
-                String photoUrl = null; // TODO: image placeholder here or in the VM?
+                String photoUrl = null;
                 if (result.getPhotos() != null && !result.getPhotos().isEmpty() && result.getPhotos().get(0) != null) {
                     photoUrl = result.getPhotos().get(0).getPhotoReference();
                 }

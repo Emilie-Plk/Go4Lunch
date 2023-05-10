@@ -6,10 +6,9 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
-       android:id="@+id/loading_state_loading_bar"
+        android:id="@+id/loading_state_loading_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminate="true"
-        />
+        android:indeterminate="true" />
 
 </LinearLayout>

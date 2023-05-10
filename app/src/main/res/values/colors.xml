@@ -25,13 +25,11 @@
     <color name="detail_btn_enabled">@color/crimson_rust</color>
 
 
-
     <!-- Dark Theme colors-->
     <color name="red_clay">#241b16</color>
     <color name="tinted_gray">#52443c</color>
     <color name="light_peach">#eba98f</color>
     <color name="pale_licorice">#665e5a</color>
-
 
 
     <color name="red_google">#EA4335</color>
