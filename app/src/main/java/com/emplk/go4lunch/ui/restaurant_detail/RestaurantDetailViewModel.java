@@ -1,12 +1,13 @@
 package com.emplk.go4lunch.ui.restaurant_detail;
 
+
 import static com.emplk.go4lunch.BuildConfig.API_KEY;
 
 import android.app.Application;
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.res.ResourcesCompat;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -15,7 +16,10 @@ import androidx.lifecycle.ViewModel;
 import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.data.details.DetailsRestaurantRepository;
 import com.emplk.go4lunch.data.details.DetailsRestaurantWrapper;
+import com.emplk.go4lunch.data.details.details_restaurant_response.PhotosItem;
 import com.emplk.go4lunch.data.details.details_restaurant_response.Result;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -46,7 +50,7 @@ public class RestaurantDetailViewModel extends ViewModel {
                 if (restaurantDetail instanceof DetailsRestaurantWrapper.Loading) {
                     restaurantDetailViewStateMutableLiveData.setValue(new RestaurantDetailViewState(
                             restaurantId,
-                            "",
+                            "",    // ugly...
                             "",
                             "",
                             0f,
@@ -55,7 +59,7 @@ public class RestaurantDetailViewModel extends ViewModel {
                             false,
                             false,
                             false,
-                            true,
+                            true,    // ...but I need it for this somehow
                             false,
                             false
                         )
@@ -66,9 +70,9 @@ public class RestaurantDetailViewModel extends ViewModel {
                     Result response = ((DetailsRestaurantWrapper.Success) restaurantDetail).getResponse().getResult();
                     restaurantDetailViewStateMutableLiveData.setValue(new RestaurantDetailViewState(
                             restaurantId,  // nullability mgmt is hell
-                            checkIfResponseFieldExist(response.getName()),  // still have a lint here Method invocation 'getName' may produce 'NullPointerException'
+                            checkIfResponseFieldExist(response.getName()),
                             checkIfResponseFieldExist(response.getVicinity()),
-                            parseRestaurantPictureUrl(response.getPhotos().get(0).getPhotoReference()),
+                            parseRestaurantPictureUrl(response.getPhotos()),
                             convertFiveToThreeRating(response.getRating()),
                             response.getInternationalPhoneNumber(),
                             response.getWebsite(),
@@ -78,7 +82,6 @@ public class RestaurantDetailViewModel extends ViewModel {
                             false,
                             response.getInternationalPhoneNumber() != null,
                             response.getWebsite() != null
-
                         )
                     );
                 }
@@ -92,23 +95,22 @@ public class RestaurantDetailViewModel extends ViewModel {
         return Math.min(3f, convertedRating / 5f * 3f); // convert 3 -> 5 with steps of 0.5
     }
 
-    private String parseRestaurantPictureUrl(String photoReferenceUrl) {
-        if (photoReferenceUrl != null) {
+    private String parseRestaurantPictureUrl(@Nullable List<PhotosItem> photoReferenceUrl) {
+        if (photoReferenceUrl != null && !photoReferenceUrl.isEmpty()) {
             return String.format(application
                 .getApplicationContext()
-                .getString(R.string.google_image_url), photoReferenceUrl, API_KEY);
+                .getString(R.string.google_image_url), photoReferenceUrl.get(0).getPhotoReference(), API_KEY);
         } else {
-            Uri uri = Uri.parse("android.resource://com.emplk.go4lunch/" + ResourcesCompat.getDrawable(application.getResources(), R.drawable.restaurant_table, null));
+            Uri uri = Uri.parse("android.resource://com.emplk.go4lunch/" + R.drawable.restaurant_table);
             return uri.toString();
         }
     }
 
-    private String checkIfResponseFieldExist(String input) {
+    private String checkIfResponseFieldExist(@Nullable String input) {
         String output = "Missing information";
-        if (input != null) {
-            return input;
-        } else {
-            return output;
+        if (input != null && !input.isEmpty()) {
+            output = input;
         }
+        return output;
     }
 }

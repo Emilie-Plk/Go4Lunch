@@ -10,15 +10,21 @@
     <!--  App colors-->
     <color name="crimson_rust">#BA3B0A</color>
     <color name="pumpkin_orange">#E8772E</color>
-    <color name="pumpkin_orange_translucent">#1EE49460</color>
+    <color name="light_orange">#E3CBBB</color>
+    <color name="light_peach_translucent">#37EBA98F</color>
+    <color name="pumpkin_orange_translucent">#1EDC9A81</color>
     <color name="dirty_white">#FFF7F1</color>
     <color name="lemon_chiffon">#FBF2C0</color>
     <color name="reseda_green">#75704e</color>
     <color name="green_teal">#42D8AE</color>
-    <color name="darker_gray">#1B1818</color>
+    <color name="grayish_black">#1B1818</color>
     <color name="licorice_gray">#221A19</color>
     <color name="golden_yellow">#FFC823</color>
     <color name="tinted_gray_translucent">#1B52443C</color>
+    <color name="detail_btn_disabled">@color/darker_gray</color>
+    <color name="detail_btn_enabled">@color/crimson_rust</color>
+
+
 
     <!-- Dark Theme colors-->
     <color name="red_clay">#241b16</color>
@@ -31,6 +37,7 @@
     <color name="red_google">#EA4335</color>
     <color name="blue_facebook">@color/com_facebook_blue</color>
     <color name="light_gray">#9e9e9e</color>
+    <color name="darker_gray">#8A8A8A</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>

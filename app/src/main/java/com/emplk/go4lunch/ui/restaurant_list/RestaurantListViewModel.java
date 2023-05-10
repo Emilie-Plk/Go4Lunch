@@ -56,6 +56,7 @@ public class RestaurantListViewModel extends ViewModel {
 
     private final MutableLiveData<Boolean> hasGpsPermissionLiveData = new MutableLiveData<>();
 
+
     @Inject
     public RestaurantListViewModel(
         @NonNull NearbySearchRepository nearbySearchRepository,
@@ -122,11 +123,9 @@ public class RestaurantListViewModel extends ViewModel {
             if (nearbySearchWrapper instanceof NearbySearchWrapper.Success) {
                 if (((NearbySearchWrapper.Success) nearbySearchWrapper).getResults().isEmpty() ||
                     ((NearbySearchWrapper.Success) nearbySearchWrapper).getResults() == null) {
-                    result.add(
-                        new RestaurantListViewState.RestaurantListError(
-                            "Oops, no found restaurant in this area!",
-                            null
-                        )
+                    setErrorState(
+                        "Oops, no found restaurant in this area!",
+                        null
                     );
                     restaurantListMediatorLiveData.setValue(result);
                 } else {
@@ -135,7 +134,6 @@ public class RestaurantListViewModel extends ViewModel {
                             new RestaurantListViewState.RestaurantList(
                                 nearbySearchEntity.getPlaceId(),
                                 nearbySearchEntity.getRestaurantName(),
-                                formatCuisine(nearbySearchEntity.getCuisine()),
                                 nearbySearchEntity.getVicinity(),
                                 getDistanceString(location.getLatitude(), location.getLongitude(), nearbySearchEntity.getLatitude(), nearbySearchEntity.getLongitude()),
                                 "3",
@@ -144,7 +142,8 @@ public class RestaurantListViewModel extends ViewModel {
                                 parseRestaurantPictureUrl(nearbySearchEntity.getPhotoReferenceUrl()),
                                 convertFiveToThreeRating(nearbySearchEntity.getRating()
                                 )
-                            ));
+                            )
+                        );
                         restaurantListMediatorLiveData.setValue(result);
                     }
                 }
@@ -159,11 +158,10 @@ public class RestaurantListViewModel extends ViewModel {
 
             if (nearbySearchWrapper instanceof NearbySearchWrapper.Error) {
                 ((NearbySearchWrapper.Error) nearbySearchWrapper).getThrowable().printStackTrace();
-                result.add(
-                    new RestaurantListViewState.RestaurantListError(
-                        application.getResources().getString(R.string.list_error_message_generic),
-                        AppCompatResources.getDrawable(application.getApplicationContext(), R.drawable.baseline_sad_face_24)
-                    ));
+                setErrorState(
+                    application.getResources().getString(R.string.list_error_message_generic),
+                    AppCompatResources.getDrawable(application.getApplicationContext(), R.drawable.baseline_sad_face_24)
+                );
                 restaurantListMediatorLiveData.setValue(result);
             }
         }
@@ -197,10 +195,6 @@ public class RestaurantListViewModel extends ViewModel {
         }
     }
 
-    private String formatCuisine(String cuisine) {
-        return cuisine.substring(0, 1).toUpperCase() + cuisine.substring(1);
-    }
-
     private String getDistanceString(double userLat, double userLong, Float lat, Float longit) {
         Location userLocation = new Location("userLocation");
         userLocation.setLatitude(userLat);
@@ -222,7 +216,7 @@ public class RestaurantListViewModel extends ViewModel {
         return Math.min(3f, convertedRating / 5f * 3f); // convert 3 -> 5 with steps of 0.5
     }
 
-    private void setErrorState(String message, Drawable drawable) {
+    private void setErrorState(@NonNull String message, @Nullable Drawable drawable) {
         List<RestaurantListViewState> result = new ArrayList<>();
         result.add(new RestaurantListViewState.RestaurantListError(message, drawable));
         restaurantListMediatorLiveData.setValue(result);

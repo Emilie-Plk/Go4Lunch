@@ -57,9 +57,6 @@ public abstract class RestaurantListViewState {
         private final String name;
 
         @NonNull
-        private final String cuisine;
-
-        @NonNull
         private final String address;
 
         @NonNull
@@ -83,7 +80,6 @@ public abstract class RestaurantListViewState {
         public RestaurantList(
             @NonNull String id,
             @NonNull String name,
-            @NonNull String cuisine,
             @NonNull String address,
             @NonNull String distance,
             @NonNull String attendants,
@@ -95,7 +91,6 @@ public abstract class RestaurantListViewState {
             super(Type.DISPLAY_RESTAURANT_LIST);
             this.id = id;
             this.name = name;
-            this.cuisine = cuisine;
             this.address = address;
             this.distance = distance;
             this.attendants = attendants;
@@ -113,11 +108,6 @@ public abstract class RestaurantListViewState {
         @NonNull
         public String getName() {
             return name;
-        }
-
-        @NonNull
-        public String getCuisine() {
-            return cuisine;
         }
 
         @NonNull
@@ -160,21 +150,20 @@ public abstract class RestaurantListViewState {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             RestaurantList that = (RestaurantList) o;
-            return id.equals(that.id) && name.equals(that.name) && cuisine.equals(that.cuisine) && address.equals(that.address) && distance.equals(that.distance) && attendants.equals(that.attendants) && openingHours.equals(that.openingHours) && isOpen.equals(that.isOpen) && pictureUrl.equals(that.pictureUrl) && rating.equals(that.rating);
+            return id.equals(that.id) && name.equals(that.name) && address.equals(that.address) && distance.equals(that.distance) && attendants.equals(that.attendants) && openingHours.equals(that.openingHours) && isOpen.equals(that.isOpen) && pictureUrl.equals(that.pictureUrl) && rating.equals(that.rating);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(id, name, cuisine, address, distance, attendants, openingHours, isOpen, pictureUrl, rating);
+            return Objects.hash(id, name, address, distance, attendants, openingHours, isOpen, pictureUrl, rating);
         }
 
         @NonNull
         @Override
         public String toString() {
-            return "RestaurantListViewState{" +
+            return "RestaurantList{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", cuisine='" + cuisine + '\'' +
                 ", address='" + address + '\'' +
                 ", distance='" + distance + '\'' +
                 ", attendants='" + attendants + '\'' +

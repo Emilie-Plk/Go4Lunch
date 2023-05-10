@@ -10,6 +10,7 @@
         android:id="@+id/detail_restaurant_picture"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:contentDescription="@string/detail_food_picture_a11y"
         android:scaleType="centerCrop"
         app:layout_constraintDimensionRatio="16:9"
         app:layout_constraintEnd_toEndOf="parent"
@@ -76,13 +77,14 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Five Guys" />
 
-        <RatingBar
+        <androidx.appcompat.widget.AppCompatRatingBar
             android:id="@+id/detail_restaurant_rating_bar"
             style="@style/Theme.Go4Lunch.RatingBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="1dp"
             android:layout_marginEnd="12dp"
+            android:theme="@style/RatingBar"
             app:layout_constraintBottom_toBottomOf="@id/detail_restaurant_name"
             app:layout_constraintEnd_toStartOf="@id/detail_restaurant_chose_fab"
             app:layout_constraintStart_toEndOf="@id/detail_restaurant_name"

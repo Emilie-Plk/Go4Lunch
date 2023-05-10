@@ -14,8 +14,9 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="RatingBar" parent="Widget.AppCompat.RatingBar.Small">
-        <item name="android:progressTint">@color/golden_yellow</item>
+    <style name="Theme.Go4Lunch.RatingBarDark" parent="Theme.AppCompat">
+        <item name="colorAccent">@color/golden_yellow</item>
+        <item name="colorControlNormal">@color/golden_yellow</item>
     </style>
 
 

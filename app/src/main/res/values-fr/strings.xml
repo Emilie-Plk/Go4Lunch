@@ -15,4 +15,5 @@
     <string name="detail_button_call">Appeler</string>
     <string name="detail_button_website">site web</string>
     <string name="detail_vegan_friendly_a11y">Convient aux végétarien·ne·s</string>
+    <string name="detail_food_picture_a11y">Image de nourriture</string>
 </resources>

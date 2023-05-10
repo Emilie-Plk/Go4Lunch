@@ -29,18 +29,6 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Aluma" />
 
-        <TextView
-            android:id="@+id/list_restaurant_cuisine"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:ellipsize="end"
-            android:maxLines="1"
-            app:layout_constraintBottom_toTopOf="@+id/list_restaurant_address"
-            app:layout_constraintEnd_toStartOf="@+id/list_restaurant_attendants"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/list_restaurant_name"
-            tools:text="Lebanese" />
 
         <TextView
             android:id="@+id/list_restaurant_address"
@@ -52,7 +40,7 @@
             app:layout_constraintBottom_toTopOf="@id/list_restaurant_opening_hours"
             app:layout_constraintEnd_toStartOf="@+id/list_restaurant_attendants"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/list_restaurant_cuisine"
+            app:layout_constraintTop_toBottomOf="@+id/list_restaurant_name"
             tools:text="151 rue Saint-Maur" />
 
         <TextView
@@ -100,13 +88,14 @@
             app:layout_constraintTop_toBottomOf="@+id/list_restaurant_distance"
             tools:text="(1)" />
 
-        <RatingBar
+        <androidx.appcompat.widget.AppCompatRatingBar
             android:id="@+id/list_restaurant_rating"
             style="@style/Theme.Go4Lunch.RatingBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:isIndicator="true"
+            android:theme="@style/RatingBar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/list_restaurant_picture"
             app:layout_constraintTop_toBottomOf="@+id/list_restaurant_attendants"

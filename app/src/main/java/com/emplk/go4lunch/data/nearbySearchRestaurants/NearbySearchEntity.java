@@ -17,8 +17,6 @@ public class NearbySearchEntity {
     @Nullable
     private final String photoReferenceUrl;
 
-    @Nullable
-    private final String cuisine;
 
     @Nullable
     private final Float rating;
@@ -38,7 +36,6 @@ public class NearbySearchEntity {
         @NonNull String restaurantName,
         @NonNull String vicinity,
         @Nullable String photoReferenceUrl,
-        @Nullable String cuisine,
         @Nullable Float rating,
         @NonNull Float latitude,
         @NonNull Float longitude,
@@ -48,7 +45,6 @@ public class NearbySearchEntity {
         this.restaurantName = restaurantName;
         this.vicinity = vicinity;
         this.photoReferenceUrl = photoReferenceUrl;
-        this.cuisine = cuisine;
         this.rating = rating;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -76,11 +72,6 @@ public class NearbySearchEntity {
     }
 
     @Nullable
-    public String getCuisine() {
-        return cuisine;
-    }
-
-    @Nullable
     public Float getRating() {
         return rating;
     }
@@ -105,12 +96,12 @@ public class NearbySearchEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         NearbySearchEntity that = (NearbySearchEntity) o;
-        return placeId.equals(that.placeId) && restaurantName.equals(that.restaurantName) && vicinity.equals(that.vicinity) && Objects.equals(photoReferenceUrl, that.photoReferenceUrl) && Objects.equals(cuisine, that.cuisine) && Objects.equals(rating, that.rating) && latitude.equals(that.latitude) && longitude.equals(that.longitude) && Objects.equals(openingHours, that.openingHours);
+        return placeId.equals(that.placeId) && restaurantName.equals(that.restaurantName) && vicinity.equals(that.vicinity) && Objects.equals(photoReferenceUrl, that.photoReferenceUrl) && Objects.equals(rating, that.rating) && latitude.equals(that.latitude) && longitude.equals(that.longitude) && Objects.equals(openingHours, that.openingHours);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(placeId, restaurantName, vicinity, photoReferenceUrl, cuisine, rating, latitude, longitude, openingHours);
+        return Objects.hash(placeId, restaurantName, vicinity, photoReferenceUrl, rating, latitude, longitude, openingHours);
     }
 
     @NonNull
@@ -121,7 +112,6 @@ public class NearbySearchEntity {
             ", restaurantName='" + restaurantName + '\'' +
             ", vicinity='" + vicinity + '\'' +
             ", photoReferenceUrl='" + photoReferenceUrl + '\'' +
-            ", cuisine='" + cuisine + '\'' +
             ", rating=" + rating +
             ", latitude=" + latitude +
             ", longitude=" + longitude +

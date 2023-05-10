@@ -3,19 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/map_bottom_bar"
+        android:id="@+id/bottom_bar_map"
         android:title="@string/map_bottom_nav"
         android:icon="@drawable/baseline_map_24"
         />
 
     <item
-        android:id="@+id/restaurant_list_bottom_bar"
+        android:id="@+id/bottom_bar_restaurant_list"
         android:title="@string/list_view_bottom_nav"
         android:icon="@drawable/baseline_format_list_bulleted_24"
         />
 
     <item
-        android:id="@+id/workmate_list_bottom_bar"
+        android:id="@+id/bottom_bar_workmate_list"
         android:title="@string/workmates_bottom_nav"
         android:icon="@drawable/baseline_people_24"
         />

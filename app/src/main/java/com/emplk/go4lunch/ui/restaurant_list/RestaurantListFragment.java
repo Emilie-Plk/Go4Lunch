@@ -43,16 +43,9 @@ public class RestaurantListFragment extends Fragment {
 
         setUpViewModel();
         initRecyclerView();
-        getGPSLocationPermission();
     }
 
-    private void getGPSLocationPermission() {
-        ActivityCompat.requestPermissions(
-            requireActivity(),
-            new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
-            0
-        );
-    }
+
 
     private void initRecyclerView() {
         RecyclerView recyclerView = binding.getRoot();

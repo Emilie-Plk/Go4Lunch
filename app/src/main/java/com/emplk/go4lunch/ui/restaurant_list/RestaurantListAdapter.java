@@ -85,7 +85,6 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
             itemView.setOnClickListener(v -> listener.onRestaurantClicked(itemViewState.getId()));
 
             binding.listRestaurantName.setText(itemViewState.getName());
-            binding.listRestaurantCuisine.setText(itemViewState.getCuisine());
             binding.listRestaurantAddress.setText(itemViewState.getAddress());
             binding.listRestaurantOpeningHours.setText(itemViewState.getOpeningHours());
 
