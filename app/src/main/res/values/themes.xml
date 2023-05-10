@@ -68,6 +68,10 @@
         <item name="color">@color/dirty_white</item>
     </style>
 
+    <style name="Theme.Go4Lunch.SearchView" parent="Widget.AppCompat.SearchView">
+
+    </style>
+
     <!--RESTAURANT LIST -->
 
     <style name="Theme.Go4Lunch.RatingBar" parent="Widget.AppCompat.RatingBar.Small">
