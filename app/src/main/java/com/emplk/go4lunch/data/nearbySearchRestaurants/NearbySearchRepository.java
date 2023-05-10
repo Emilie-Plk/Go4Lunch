@@ -95,25 +95,25 @@ public class NearbySearchRepository {
 
     private List<NearbySearchEntity> fromNearbySearchResponse(@Nullable NearbySearchResponse response) {
         List<NearbySearchEntity> results = new ArrayList<>();
-        if (response.getResults() == null) {
+        if (response == null || response.getResults() == null) {
             return new ArrayList<>();
         }
-        if (response != null && response.getResults() != null) {
-            for (ResultsItem result : response.getResults()) {
-                String placeId = result.getPlaceId();
-                String name = result.getName();
-                String vicinity = result.getVicinity();
-                String photoUrl = null;
-                if (result.getPhotos() != null && !result.getPhotos().isEmpty() && result.getPhotos().get(0) != null) {
-                    photoUrl = result.getPhotos().get(0).getPhotoReference();
-                }
-                Float rating = result.getRating();
-                Float latitude = result.getGeometry().getLocation().getLat();
-                Float longitude = result.getGeometry().getLocation().getLng();
-                Boolean openingHours = null;
-                if (result.getOpeningHours() != null && result.getOpeningHours().isOpenNow() != null) {
-                    openingHours = result.getOpeningHours().isOpenNow();
-                }
+        for (ResultsItem result : response.getResults()) {
+            String placeId = result.getPlaceId();
+            String name = result.getName();
+            String vicinity = result.getVicinity();
+            String photoUrl = null;
+            if (result.getPhotos() != null && !result.getPhotos().isEmpty() && result.getPhotos().get(0) != null) {
+                photoUrl = result.getPhotos().get(0).getPhotoReference();
+            }
+            Float rating = result.getRating();
+            Float latitude = result.getGeometry().getLocation().getLat();
+            Float longitude = result.getGeometry().getLocation().getLng();
+            Boolean openingHours = null;
+            if (result.getOpeningHours() != null && result.getOpeningHours().isOpenNow() != null) {
+                openingHours = result.getOpeningHours().isOpenNow();
+            }
+            if (placeId != null && name != null) {
                 NearbySearchEntity searchResult = new NearbySearchEntity(
                     placeId,
                     name,
@@ -122,7 +122,8 @@ public class NearbySearchRepository {
                     rating,
                     latitude,
                     longitude,
-                    openingHours);
+                    openingHours
+                );
                 results.add(searchResult);
             }
         }

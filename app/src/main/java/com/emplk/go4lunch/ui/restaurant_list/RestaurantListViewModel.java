@@ -195,7 +195,7 @@ public class RestaurantListViewModel extends ViewModel {
         }
     }
 
-    private String getDistanceString(double userLat, double userLong, Float lat, Float longit) {
+    private String getDistanceString(double userLat, double userLong, @Nullable Float lat,@Nullable Float longit) {
         Location userLocation = new Location("userLocation");
         userLocation.setLatitude(userLat);
         userLocation.setLongitude(userLong);
