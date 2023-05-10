@@ -64,6 +64,15 @@
         <meta-data
             android:name="com.facebook.sdk.ClientToken"
             android:value="@string/facebook_client_token" />
+
+        <receiver
+            android:name=".data.gps_provider.GpsProviderBroadcastReceiver"
+            android:exported="true"
+            >
+            <intent-filter>
+                <action android:name="android.location.PROVIDERS_CHANGED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
