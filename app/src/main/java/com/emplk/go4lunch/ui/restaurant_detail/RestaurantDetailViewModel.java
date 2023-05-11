@@ -1,0 +1,116 @@
+package com.emplk.go4lunch.ui.restaurant_detail;
+
+
+import static com.emplk.go4lunch.BuildConfig.API_KEY;
+
+import android.app.Application;
+import android.net.Uri;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
+import androidx.lifecycle.ViewModel;
+
+import com.emplk.go4lunch.R;
+import com.emplk.go4lunch.data.details.DetailsRestaurantRepository;
+import com.emplk.go4lunch.data.details.DetailsRestaurantWrapper;
+import com.emplk.go4lunch.data.details.details_restaurant_response.PhotosItem;
+import com.emplk.go4lunch.data.details.details_restaurant_response.Result;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
+public class RestaurantDetailViewModel extends ViewModel {
+
+    @NonNull
+    private final DetailsRestaurantRepository detailsRestaurantRepository;
+
+    @NonNull
+    private final Application application;
+
+    //  private final MediatorLiveData<RestaurantDetailViewState> restaurantDetailViewStateMediatorLiveData = new MediatorLiveData<>();
+
+    @Inject
+    public RestaurantDetailViewModel(
+        @NonNull DetailsRestaurantRepository detailsRestaurantRepository,
+        @NonNull Application application) {
+        this.detailsRestaurantRepository = detailsRestaurantRepository;
+        this.application = application;
+    }
+
+    public LiveData<RestaurantDetailViewState> getRestaurantDetails(@NonNull String restaurantId) {
+        return Transformations.switchMap(detailsRestaurantRepository.getRestaurantDetails(restaurantId, API_KEY), restaurantDetail -> {
+                MutableLiveData<RestaurantDetailViewState> restaurantDetailViewStateMutableLiveData = new MutableLiveData<>();
+                if (restaurantDetail instanceof DetailsRestaurantWrapper.Loading) {
+                    restaurantDetailViewStateMutableLiveData.setValue(new RestaurantDetailViewState(
+                            restaurantId,
+                            "",    // ugly...
+                            "",
+                            "",
+                            0f,
+                            "",
+                            "",
+                            false,
+                            false,
+                            false,
+                            true,    // ...but I need it for this somehow
+                            false,
+                            false
+                        )
+                    );
+                }
+
+                if (restaurantDetail instanceof DetailsRestaurantWrapper.Success) {
+                    Result response = ((DetailsRestaurantWrapper.Success) restaurantDetail).getResponse().getResult();
+                    restaurantDetailViewStateMutableLiveData.setValue(new RestaurantDetailViewState(
+                            restaurantId,  // nullability mgmt is hell
+                            checkIfResponseFieldExist(response.getName()),
+                            checkIfResponseFieldExist(response.getVicinity()),
+                            parseRestaurantPictureUrl(response.getPhotos()),
+                            convertFiveToThreeRating(response.getRating()),
+                            response.getInternationalPhoneNumber(),
+                            response.getWebsite(),
+                            true,
+                            false,
+                            response.isServesVegetarianFood(),
+                            false,
+                            response.getInternationalPhoneNumber() != null,
+                            response.getWebsite() != null
+                        )
+                    );
+                }
+                return restaurantDetailViewStateMutableLiveData;
+            }
+        );
+    }
+
+    public float convertFiveToThreeRating(Float fiveRating) {
+        float convertedRating = Math.round(fiveRating * 2) / 2f; // round to nearest 0.5
+        return Math.min(3f, convertedRating / 5f * 3f); // convert 3 -> 5 with steps of 0.5
+    }
+
+    private String parseRestaurantPictureUrl(@Nullable List<PhotosItem> photoReferenceUrl) {
+        if (photoReferenceUrl != null && !photoReferenceUrl.isEmpty()) {
+            return String.format(application
+                .getApplicationContext()
+                .getString(R.string.google_image_url), photoReferenceUrl.get(0).getPhotoReference(), API_KEY);
+        } else {
+            Uri uri = Uri.parse("android.resource://com.emplk.go4lunch/" + R.drawable.restaurant_table);
+            return uri.toString();
+        }
+    }
+
+    private String checkIfResponseFieldExist(@Nullable String input) {
+        String output = "Missing information";
+        if (input != null && !input.isEmpty()) {
+            output = input;
+        }
+        return output;
+    }
+}

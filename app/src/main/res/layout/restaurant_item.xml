@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Theme.Go4Lunch.RestaurantList.CardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginEnd="8dp"
+    app:cardUseCompatPadding="true">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
+
+        <TextView
+            android:id="@+id/list_restaurant_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:maxLines="2"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/list_restaurant_distance"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Aluma" />
+
+
+        <TextView
+            android:id="@+id/list_restaurant_address"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            app:layout_constraintBottom_toTopOf="@id/list_restaurant_opening_hours"
+            app:layout_constraintEnd_toStartOf="@+id/list_restaurant_attendants"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/list_restaurant_name"
+            tools:text="151 rue Saint-Maur" />
+
+        <TextView
+            android:id="@+id/list_restaurant_opening_hours"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/list_restaurant_rating"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Open until 3pm" />
+
+        <ImageView
+            android:id="@+id/list_restaurant_picture"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="8dp"
+            android:contentDescription="@string/restaurant_item_food_image_a11y"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/fries_horizontal_tools" />
+
+        <TextView
+            android:id="@+id/list_restaurant_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/list_restaurant_attendants"
+            app:layout_constraintEnd_toStartOf="@id/list_restaurant_picture"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="400m" />
+
+        <TextView
+            android:id="@+id/list_restaurant_attendants"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            app:drawableStartCompat="@drawable/baseline_person_24"
+            app:layout_constraintBottom_toTopOf="@+id/list_restaurant_rating"
+            app:layout_constraintEnd_toStartOf="@id/list_restaurant_picture"
+            app:layout_constraintTop_toBottomOf="@+id/list_restaurant_distance"
+            tools:text="(1)" />
+
+        <androidx.appcompat.widget.AppCompatRatingBar
+            android:id="@+id/list_restaurant_rating"
+            style="@style/Theme.Go4Lunch.RatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:isIndicator="true"
+            android:theme="@style/RatingBar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/list_restaurant_picture"
+            app:layout_constraintTop_toBottomOf="@+id/list_restaurant_attendants"
+            tools:rating="2.5" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

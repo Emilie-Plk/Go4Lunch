@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/light_peach_translucent">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/navigation_header_app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/logo_no_background"
+        app:layout_constraintBottom_toTopOf="@+id/navigation_header_guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/navigation_header_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/navigation_header_user_profile_picture"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="12dp"
+        android:importantForAccessibility="no"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/navigation_header_guideline"
+        tools:src="@drawable/pochita_pp" />
+
+    <TextView
+        android:id="@+id/navigation_header_user_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/navigation_header_user_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/navigation_header_user_profile_picture"
+        app:layout_constraintTop_toTopOf="@id/navigation_header_user_profile_picture"
+        tools:text="Michel Patulacci" />
+
+    <TextView
+        android:id="@+id/navigation_header_user_email"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintBottom_toBottomOf="@id/navigation_header_user_profile_picture"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/navigation_header_user_profile_picture"
+        app:layout_constraintTop_toBottomOf="@id/navigation_header_user_name"
+        tools:text="michel.patulacci@caramail.fr" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
