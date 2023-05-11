@@ -2,19 +2,23 @@ package com.emplk.go4lunch.ui;
 
 import static android.content.ContentValues.TAG;
 
-import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.MainActivityBinding;
 import com.emplk.go4lunch.ui.login.LoginActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -43,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         currentUser = firebaseAuth.getCurrentUser();
 
-        getGPSLocationPermission();
 
         MainPagerAdapter adapter = new MainPagerAdapter(MainActivity.this);
         binding.mainViewpagerContainer.setAdapter(adapter);
@@ -75,16 +78,16 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
+    @SuppressLint("NonConstantResourceId")
     private void initNavigationDrawer() {
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.mainDrawerLayout, binding.mainToolbar, R.string.open_nav, R.string.close_nav);
         binding.mainDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        binding.mainNavigationView.bringToFront();
 
-        binding.mainDrawerLayout.setStatusBarBackground(R.color.crimson_rust);
-
-        binding.mainNavigationView.setNavigationItemSelectedListener(item -> {
+        binding.mainNavigationView.setNavigationItemSelectedListener(
+            item -> {
                 switch (item.getItemId()) {
                     case R.id.nav_your_lunch:
                         Log.i(TAG, "Clicked on 'Your lunch' nav item");
@@ -92,10 +95,16 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_settings:
                         Log.i(TAG, "Clicked on 'Settings' nav item");
                         break;
+                    case R.id.nav_gps_permission:
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", getPackageName(), null);
+                        intent.setData(uri);
+                        startActivity(intent);
+                        break;
                     case R.id.nav_logout:
                         firebaseAuth.signOut();
                         Log.i(TAG, "Clicked on 'Logout' nav item");
-                        startActivity(new Intent(this, LoginActivity.class));
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
                         break;
                 }
                 return true;
@@ -103,13 +112,6 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-    private void getGPSLocationPermission() {
-        ActivityCompat.requestPermissions(
-            this,
-            new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
-            0
-        );
-    }
 
     @Override
     protected void onDestroy() {

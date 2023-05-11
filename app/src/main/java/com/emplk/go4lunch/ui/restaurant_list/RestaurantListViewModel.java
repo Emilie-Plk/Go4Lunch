@@ -201,6 +201,7 @@ public class RestaurantListViewModel extends ViewModel {
         userLocation.setLongitude(userLong);
 
         Location restaurantLocation = new Location("restaurantLocation");
+
         restaurantLocation.setLatitude(lat);
         restaurantLocation.setLongitude(longit);
 

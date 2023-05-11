@@ -29,6 +29,7 @@
     <string name="detail_food_picture_a11y">Food picture</string>
     <string name="nav_drawer_lunch">Your lunch</string>
     <string name="nav_drawer_settings">Settings</string>
+    <string name="nav_drawer_gps_permission">Manage GPS permission</string>
     <string name="nav_drawer_logout">Logout</string>
     <string name="open_nav">Open Navigation Drawer</string>
     <string name="close_nav">Close Navigation Drawer</string>
