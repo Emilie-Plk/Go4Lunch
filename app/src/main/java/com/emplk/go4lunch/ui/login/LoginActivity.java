@@ -21,7 +21,7 @@ import androidx.core.content.ContextCompat;
 
 import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.LoginActivityBinding;
-import com.emplk.go4lunch.ui.MainActivity;
+import com.emplk.go4lunch.ui.main.MainActivity;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;

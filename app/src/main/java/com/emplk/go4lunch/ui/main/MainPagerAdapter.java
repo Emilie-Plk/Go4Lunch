@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.ui;
+package com.emplk.go4lunch.ui.main;
 
 import android.content.Context;
 
