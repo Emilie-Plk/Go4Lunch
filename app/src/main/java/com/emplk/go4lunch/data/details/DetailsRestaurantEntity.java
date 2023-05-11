@@ -10,6 +10,7 @@ public class DetailsRestaurantEntity {
     private final String placeId;
     @NonNull
     private final String restaurantName;
+
     @NonNull
     private final String vicinity;
 
@@ -17,13 +18,7 @@ public class DetailsRestaurantEntity {
     private final String photoReferenceUrl;
 
     @Nullable
-    private final String cuisine;
-
-    @Nullable
     private final Float rating;
-/*
-    @Nullable
-    private final String openingHours;*/
 
     @Nullable
     private final String phoneNumber;
@@ -31,30 +26,33 @@ public class DetailsRestaurantEntity {
     @Nullable
     private final String websiteUrl;
 
+    @Nullable
+    private final Boolean isVeganFriendly;
+
     public DetailsRestaurantEntity(
         @NonNull String placeId,
         @NonNull String restaurantName,
         @NonNull String vicinity,
         @Nullable String photoReferenceUrl,
-        @Nullable String cuisine,
         @Nullable Float rating,
         @Nullable String phoneNumber,
-        @Nullable String websiteUrl
-    ) {
+        @Nullable String websiteUrl,
+        @Nullable Boolean isVeganFriendly) {
         this.placeId = placeId;
         this.restaurantName = restaurantName;
         this.vicinity = vicinity;
         this.photoReferenceUrl = photoReferenceUrl;
-        this.cuisine = cuisine;
         this.rating = rating;
         this.phoneNumber = phoneNumber;
         this.websiteUrl = websiteUrl;
+        this.isVeganFriendly = isVeganFriendly;
     }
 
     @NonNull
     public String getPlaceId() {
         return placeId;
     }
+
 
     @NonNull
     public String getRestaurantName() {
@@ -72,11 +70,6 @@ public class DetailsRestaurantEntity {
     }
 
     @Nullable
-    public String getCuisine() {
-        return cuisine;
-    }
-
-    @Nullable
     public Float getRating() {
         return rating;
     }
@@ -91,17 +84,22 @@ public class DetailsRestaurantEntity {
         return websiteUrl;
     }
 
+    @Nullable
+    public Boolean getVeganFriendly() {
+        return isVeganFriendly;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DetailsRestaurantEntity that = (DetailsRestaurantEntity) o;
-        return placeId.equals(that.placeId) && restaurantName.equals(that.restaurantName) && vicinity.equals(that.vicinity) && Objects.equals(photoReferenceUrl, that.photoReferenceUrl) && Objects.equals(cuisine, that.cuisine) && Objects.equals(rating, that.rating) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(websiteUrl, that.websiteUrl);
+        return placeId.equals(that.placeId) && restaurantName.equals(that.restaurantName) && vicinity.equals(that.vicinity) && Objects.equals(photoReferenceUrl, that.photoReferenceUrl) && Objects.equals(rating, that.rating) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(websiteUrl, that.websiteUrl) && Objects.equals(isVeganFriendly, that.isVeganFriendly);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(placeId, restaurantName, vicinity, photoReferenceUrl, cuisine, rating, phoneNumber, websiteUrl);
+        return Objects.hash(placeId, restaurantName, vicinity, photoReferenceUrl, rating, phoneNumber, websiteUrl, isVeganFriendly);
     }
 
     @NonNull
@@ -112,10 +110,10 @@ public class DetailsRestaurantEntity {
             ", restaurantName='" + restaurantName + '\'' +
             ", vicinity='" + vicinity + '\'' +
             ", photoReferenceUrl='" + photoReferenceUrl + '\'' +
-            ", cuisine='" + cuisine + '\'' +
             ", rating=" + rating +
             ", phoneNumber='" + phoneNumber + '\'' +
             ", websiteUrl='" + websiteUrl + '\'' +
+            ", isVeganFriendly=" + isVeganFriendly +
             '}';
     }
 }

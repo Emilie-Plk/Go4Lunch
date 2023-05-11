@@ -14,12 +14,9 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.R;
+import com.emplk.go4lunch.data.details.DetailsRestaurantEntity;
 import com.emplk.go4lunch.data.details.DetailsRestaurantRepository;
 import com.emplk.go4lunch.data.details.DetailsRestaurantWrapper;
-import com.emplk.go4lunch.data.details.details_restaurant_response.PhotosItem;
-import com.emplk.go4lunch.data.details.details_restaurant_response.Result;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -67,21 +64,22 @@ public class RestaurantDetailViewModel extends ViewModel {
                 }
 
                 if (restaurantDetail instanceof DetailsRestaurantWrapper.Success) {
-                    Result response = ((DetailsRestaurantWrapper.Success) restaurantDetail).getResponse().getResult();
-                    restaurantDetailViewStateMutableLiveData.setValue(new RestaurantDetailViewState(
-                            restaurantId,  // nullability mgmt is hell
-                            checkIfResponseFieldExist(response.getName()),
+                    DetailsRestaurantEntity response = ((DetailsRestaurantWrapper.Success) restaurantDetail).getResponse();
+                    restaurantDetailViewStateMutableLiveData.setValue(
+                        new RestaurantDetailViewState(
+                            restaurantId,
+                            checkIfResponseFieldExist(response.getRestaurantName()),
                             checkIfResponseFieldExist(response.getVicinity()),
-                            parseRestaurantPictureUrl(response.getPhotos()),
+                            parseRestaurantPictureUrl(response.getPhotoReferenceUrl()),
                             convertFiveToThreeRating(response.getRating()),
-                            response.getInternationalPhoneNumber(),
-                            response.getWebsite(),
+                            response.getPhoneNumber(),
+                            response.getWebsiteUrl(),
                             true,
                             false,
-                            response.isServesVegetarianFood(),
+                            response.getVeganFriendly(),
                             false,
-                            response.getInternationalPhoneNumber() != null,
-                            response.getWebsite() != null
+                            response.getPhoneNumber() != null,
+                            response.getWebsiteUrl() != null
                         )
                     );
                 }
@@ -90,16 +88,15 @@ public class RestaurantDetailViewModel extends ViewModel {
         );
     }
 
-    public float convertFiveToThreeRating(Float fiveRating) {
-        float convertedRating = Math.round(fiveRating * 2) / 2f; // round to nearest 0.5
-        return Math.min(3f, convertedRating / 5f * 3f); // convert 3 -> 5 with steps of 0.5
+    public float convertFiveToThreeRating(@Nullable Float fiveRating) {
+        return fiveRating == null ? 0f : Math.round(fiveRating * 2) / 2f;
     }
 
-    private String parseRestaurantPictureUrl(@Nullable List<PhotosItem> photoReferenceUrl) {
+    private String parseRestaurantPictureUrl(@Nullable String photoReferenceUrl) {
         if (photoReferenceUrl != null && !photoReferenceUrl.isEmpty()) {
             return String.format(application
                 .getApplicationContext()
-                .getString(R.string.google_image_url), photoReferenceUrl.get(0).getPhotoReference(), API_KEY);
+                .getString(R.string.google_image_url), photoReferenceUrl, API_KEY);
         } else {
             Uri uri = Uri.parse("android.resource://com.emplk.go4lunch/" + R.drawable.restaurant_table);
             return uri.toString();
@@ -107,10 +104,6 @@ public class RestaurantDetailViewModel extends ViewModel {
     }
 
     private String checkIfResponseFieldExist(@Nullable String input) {
-        String output = "Missing information";
-        if (input != null && !input.isEmpty()) {
-            output = input;
-        }
-        return output;
+        return input != null && !input.isEmpty() ? input : application.getString(R.string.detail_missing_information);
     }
 }

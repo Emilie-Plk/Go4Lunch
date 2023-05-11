@@ -101,6 +101,8 @@
             android:layout_marginEnd="12dp"
             android:ellipsize="end"
             android:maxLines="2"
+            android:layout_marginBottom="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/detail_restaurant_chose_fab"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/detail_restaurant_name"

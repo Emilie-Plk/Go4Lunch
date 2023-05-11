@@ -31,7 +31,6 @@ public class NearbySearchRepository {
     public NearbySearchRepository(GoogleMapsApi googleMapsApi) {
         this.googleMapsApi = googleMapsApi;
         nearbySearchCache = new LruCache<>(200);
-
     }
 
 

@@ -12,7 +12,6 @@ public class RestaurantDetailViewState {
 
     @NonNull
     private final String name;
-
     @NonNull
     private final String address;
 
@@ -45,7 +44,21 @@ public class RestaurantDetailViewState {
     @NonNull
     private final Boolean isWebsiteAvailable;
 
-    public RestaurantDetailViewState(@NonNull String id, @NonNull String name, @NonNull String address, @Nullable String pictureUrl, @Nullable Float rating, @Nullable String phoneNumber, @Nullable String websiteUrl, @Nullable Boolean isLiked, @Nullable Boolean isAttending, @Nullable Boolean isVeganFriendly, @NonNull Boolean isLoading, @NonNull Boolean isPhoneNumberAvailable, @NonNull Boolean isWebsiteAvailable) {
+    public RestaurantDetailViewState(
+        @NonNull String id,
+        @NonNull String name,
+        @NonNull String address,
+        @Nullable String pictureUrl,
+        @Nullable Float rating,
+        @Nullable String phoneNumber,
+        @Nullable String websiteUrl,
+        @Nullable Boolean isLiked,
+        @Nullable Boolean isAttending,
+        @Nullable Boolean isVeganFriendly,
+        @NonNull Boolean isLoading,
+        @NonNull Boolean isPhoneNumberAvailable,
+        @NonNull Boolean isWebsiteAvailable
+    ) {
         this.id = id;
         this.name = name;
         this.address = address;

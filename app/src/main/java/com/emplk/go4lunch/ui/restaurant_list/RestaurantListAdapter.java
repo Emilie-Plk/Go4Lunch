@@ -93,7 +93,7 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
                 .into(binding.listRestaurantPicture);
 
             binding.listRestaurantDistance.setText(itemViewState.getDistance());
-            binding.listRestaurantAttendants.setText(itemViewState.getDistance());
+            binding.listRestaurantAttendants.setText(itemViewState.getAttendants());
             binding.listRestaurantRating.setRating(itemViewState.getRating());
         }
     }
