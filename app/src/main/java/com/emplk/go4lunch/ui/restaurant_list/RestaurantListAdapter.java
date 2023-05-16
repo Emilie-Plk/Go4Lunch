@@ -1,6 +1,7 @@
 package com.emplk.go4lunch.ui.restaurant_list;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -94,7 +95,10 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
 
             binding.listRestaurantDistance.setText(itemViewState.getDistance());
             binding.listRestaurantAttendants.setText(itemViewState.getAttendants());
+            binding.listRestaurantRating.setVisibility(itemViewState.getIsRatingBarVisible() ? View.VISIBLE : View.INVISIBLE);
             binding.listRestaurantRating.setRating(itemViewState.getRating());
+
+
         }
     }
 

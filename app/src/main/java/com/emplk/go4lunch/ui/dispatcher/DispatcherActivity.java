@@ -20,15 +20,19 @@ public class DispatcherActivity extends AppCompatActivity {
 
         DispatcherViewModel viewModel = new ViewModelProvider(this).get(DispatcherViewModel.class);
 
-        viewModel.isPermissionGranted().observe(this, isPermissionGranted -> { // I'd like to also check if user is logged in or not
-                if (Boolean.TRUE.equals(isPermissionGranted)) {
-                    startActivity(new Intent(DispatcherActivity.this, LoginActivity.class)
-                    );
-                } else {
-                    startActivity(new Intent(DispatcherActivity.this, OnBoardingActivity.class)
-                    );
+        viewModel.getDispatcherViewAction().observe(this, dispatcherViewAction -> {
+                switch (dispatcherViewAction) {
+                    case ONBOARDING_ACTIVITY:
+                        startActivity(new Intent(DispatcherActivity.this, OnBoardingActivity.class));
+                        finish();
+                        break;
+                    case LOGIN_ACTIVITY:
+                        startActivity(new Intent(DispatcherActivity.this, LoginActivity.class));
+                        finish();
+                        break;
                 }
             }
         );
     }
+
 }

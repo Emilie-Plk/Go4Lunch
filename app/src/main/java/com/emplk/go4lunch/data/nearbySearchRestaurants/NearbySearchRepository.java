@@ -37,44 +37,50 @@ public class NearbySearchRepository {
     public LiveData<NearbySearchWrapper> getNearbyRestaurants(
         @NonNull String location,
         @NonNull String type,
-        @Nullable String keyword,
         @NonNull String rankBy,
         @NonNull String key
     ) {
         MutableLiveData<NearbySearchWrapper> resultMutableLiveData = new MutableLiveData<>();
         LocationKey cacheKey = generateCacheKey(location, rankBy);
 
+
         List<NearbySearchEntity> cachedNearbySearchEntityList = nearbySearchCache.get(cacheKey);
 
         if (cachedNearbySearchEntityList == null) {
-
             resultMutableLiveData.setValue(new NearbySearchWrapper.Loading());
-            googleMapsApi.getNearby(location, type, keyword, rankBy, key).enqueue(
-                new Callback<NearbySearchResponse>() {
-                    @Override
-                    public void onResponse(
-                        @NonNull Call<NearbySearchResponse> call,
-                        @NonNull Response<NearbySearchResponse> response
-                    ) {
-                        if (response.isSuccessful() &&
-                            response.body() != null && response.body().getStatus() != null &&
-                            response.body().getStatus().equals("OK")
+            googleMapsApi.getNearby(
+                    location,
+                    type,
+                    rankBy,
+                    key
+                )
+                .enqueue(
+                    new Callback<NearbySearchResponse>() {
+                        @Override
+                        public void onResponse(
+                            @NonNull Call<NearbySearchResponse> call,
+                            @NonNull Response<NearbySearchResponse> response
                         ) {
-                            List<NearbySearchEntity> nearbySearchEntityList = fromNearbySearchResponse(response.body());
-                            nearbySearchCache.put(cacheKey, nearbySearchEntityList);
-                            resultMutableLiveData.setValue(new NearbySearchWrapper.Success(nearbySearchEntityList));
+                            if (response.isSuccessful() &&
+                                response.body() != null &&
+                                response.body().getStatus() != null &&
+                                response.body().getStatus().equals("OK")
+                            ) {
+                                List<NearbySearchEntity> nearbySearchEntityList = fromNearbySearchResponse(response.body());
+                                nearbySearchCache.put(cacheKey, nearbySearchEntityList);
+                                resultMutableLiveData.setValue(new NearbySearchWrapper.Success(nearbySearchEntityList));
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(
+                            @NonNull Call<NearbySearchResponse> call,
+                            @NonNull Throwable t
+                        ) {
+                            resultMutableLiveData.setValue(new NearbySearchWrapper.Error(t));
                         }
                     }
-
-                    @Override
-                    public void onFailure(
-                        @NonNull Call<NearbySearchResponse> call,
-                        @NonNull Throwable t
-                    ) {
-                        resultMutableLiveData.setValue(new NearbySearchWrapper.Error(t));
-                    }
-                }
-            );
+                );
         } else {
             resultMutableLiveData.setValue(new NearbySearchWrapper.Success(cachedNearbySearchEntityList));
         }

@@ -14,16 +14,15 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.data.gps_location.GPSLocationRepository;
-import com.emplk.go4lunch.data.gps_location.PermissionChecker;
 import com.emplk.go4lunch.data.nearbySearchRestaurants.NearbySearchEntity;
 import com.emplk.go4lunch.data.nearbySearchRestaurants.NearbySearchRepository;
 import com.emplk.go4lunch.data.nearbySearchRestaurants.NearbySearchWrapper;
+import com.emplk.go4lunch.data.permission.GPSPermissionRepository;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -46,7 +45,7 @@ public class RestaurantListViewModel extends ViewModel {
     private final GPSLocationRepository gpsLocationRepository;
 
     @NonNull
-    private final PermissionChecker permissionChecker;
+    private final GPSPermissionRepository gpsPermissionRepository;
 
     @NonNull
     private final Application application;
@@ -54,31 +53,32 @@ public class RestaurantListViewModel extends ViewModel {
 
     private final MediatorLiveData<List<RestaurantListViewState>> restaurantListMediatorLiveData = new MediatorLiveData<>();
 
-    private final MutableLiveData<Boolean> hasGpsPermissionLiveData = new MutableLiveData<>();
+    private final LiveData<Boolean> hasGpsPermissionLiveData;
 
 
     @Inject
     public RestaurantListViewModel(
         @NonNull NearbySearchRepository nearbySearchRepository,
         @NonNull GPSLocationRepository gpsLocationRepository,
-        @NonNull PermissionChecker permissionChecker,
+        @NonNull GPSPermissionRepository gpsPermissionRepository,
         @NonNull Application application
     ) {
         this.nearbySearchRepository = nearbySearchRepository;
-        this.permissionChecker = permissionChecker;
         this.gpsLocationRepository = gpsLocationRepository;
+        this.gpsPermissionRepository = gpsPermissionRepository;
         this.application = application;
 
         LiveData<Location> locationLiveData = gpsLocationRepository.getLocationLiveData();
+
+        hasGpsPermissionLiveData = gpsPermissionRepository.hasGPSPermission();
 
         LiveData<NearbySearchWrapper> nearbySearchWrapperLiveData = Transformations.switchMap(
             locationLiveData, new Function<Location, LiveData<NearbySearchWrapper>>() {
                 @Override
                 public LiveData<NearbySearchWrapper> apply(@Nullable Location location) {
-                    if (location != null) {   // without with null check I get an NPE for location! bc it needs time?
+                    if (location != null) {
                         return nearbySearchRepository.getNearbyRestaurants(
                             location.getLatitude() + "," + location.getLongitude(),
-                            "restaurant",
                             "restaurant",
                             "distance",
                             API_KEY
@@ -86,11 +86,7 @@ public class RestaurantListViewModel extends ViewModel {
                     }
                     return null;
                 }
-            });
-
-        restaurantListMediatorLiveData.addSource(locationLiveData, location ->
-            combine(hasGpsPermissionLiveData.getValue(), location, nearbySearchWrapperLiveData.getValue()
-            )
+            }
         );
 
         restaurantListMediatorLiveData.addSource(hasGpsPermissionLiveData, hasGpsPermission ->
@@ -98,11 +94,15 @@ public class RestaurantListViewModel extends ViewModel {
             )
         );
 
+        restaurantListMediatorLiveData.addSource(locationLiveData, location ->
+            combine(hasGpsPermissionLiveData.getValue(), location, nearbySearchWrapperLiveData.getValue()
+            )
+        );
+
         restaurantListMediatorLiveData.addSource(nearbySearchWrapperLiveData, nearbySearchWrapper ->
             combine(hasGpsPermissionLiveData.getValue(), locationLiveData.getValue(), nearbySearchWrapper
             )
         );
-
     }
 
     private void combine(
@@ -116,7 +116,6 @@ public class RestaurantListViewModel extends ViewModel {
             if (hasGpsPermission != null && !hasGpsPermission) {
                 setErrorState("Please provide GPS permission to continue!", AppCompatResources.getDrawable(application.getApplicationContext(), R.drawable.baseline_sad_face_24));
             }
-            return;
         }
 
         if (nearbySearchWrapper != null) {
@@ -127,7 +126,6 @@ public class RestaurantListViewModel extends ViewModel {
                         "Oops, no found restaurant in this area!",
                         null
                     );
-                    restaurantListMediatorLiveData.setValue(result);
                 } else {
                     for (NearbySearchEntity nearbySearchEntity : ((NearbySearchWrapper.Success) nearbySearchWrapper).getResults()) {
                         result.add(
@@ -140,11 +138,11 @@ public class RestaurantListViewModel extends ViewModel {
                                 "14h-16h",
                                 true,
                                 parseRestaurantPictureUrl(nearbySearchEntity.getPhotoReferenceUrl()),
+                                isRatingBarVisible(nearbySearchEntity.getRating()),
                                 convertFiveToThreeRating(nearbySearchEntity.getRating()
                                 )
                             )
                         );
-                        restaurantListMediatorLiveData.setValue(result);
                     }
                 }
             }
@@ -153,7 +151,6 @@ public class RestaurantListViewModel extends ViewModel {
                 result.add(
                     new RestaurantListViewState.Loading()
                 );
-                restaurantListMediatorLiveData.setValue(result);
             }
 
             if (nearbySearchWrapper instanceof NearbySearchWrapper.Error) {
@@ -162,9 +159,13 @@ public class RestaurantListViewModel extends ViewModel {
                     application.getResources().getString(R.string.list_error_message_generic),
                     AppCompatResources.getDrawable(application.getApplicationContext(), R.drawable.baseline_sad_face_24)
                 );
-                restaurantListMediatorLiveData.setValue(result);
             }
         }
+        restaurantListMediatorLiveData.setValue(result);
+    }
+
+    private boolean isRatingBarVisible(@Nullable Float rating) {
+        return rating != null && rating > 0F;
     }
 
 
@@ -184,32 +185,30 @@ public class RestaurantListViewModel extends ViewModel {
     }
 
     @SuppressLint("MissingPermission")
-    public void refresh() {
-        boolean hasGpsPermission = permissionChecker.hasLocationPermission();
-        hasGpsPermissionLiveData.setValue(hasGpsPermission);
-
-        if (hasGpsPermission) {
-            gpsLocationRepository.startLocationRequest();
-        } else {
-            gpsLocationRepository.stopLocationRequest();
-        }
+    public void setLocationRequest() {
+        gpsLocationRepository.startLocationRequest();
     }
 
-    private String getDistanceString(double userLat, double userLong, Float lat, Float longit) {
-        Location userLocation = new Location("userLocation");
-        userLocation.setLatitude(userLat);
-        userLocation.setLongitude(userLong);
+    private String getDistanceString(
+        @Nullable Double userLat,
+        @Nullable Double userLong,
+        @Nullable Float lat,
+        @Nullable Float longit) {
+        if (userLat != null && userLong != null && lat != null && longit != null) {
+            Location userLocation = new Location("userLocation");
+            userLocation.setLatitude(userLat);
+            userLocation.setLongitude(userLong);
 
-        Location restaurantLocation = new Location("restaurantLocation");
+            Location restaurantLocation = new Location("restaurantLocation");
 
-        restaurantLocation.setLatitude(lat);
-        restaurantLocation.setLongitude(longit);
+            restaurantLocation.setLatitude(lat);
+            restaurantLocation.setLongitude(longit);
 
-        float distance = userLocation.distanceTo(restaurantLocation);
-        DecimalFormat decimalFormat = new DecimalFormat("#.#");
-        decimalFormat.setRoundingMode(RoundingMode.DOWN);
-
-        return decimalFormat.format(distance).split("\\.")[0] + "m";
+            float distance = userLocation.distanceTo(restaurantLocation);
+            DecimalFormat decimalFormat = new DecimalFormat("#.#");
+            decimalFormat.setRoundingMode(RoundingMode.DOWN);
+            return decimalFormat.format(distance).split("\\.")[0] + "m";
+        } else return "Error";
     }
 
     private float convertFiveToThreeRating(Float fiveRating) {

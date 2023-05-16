@@ -7,7 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.emplk.go4lunch.data.permission.PermissionRepository;
+import com.emplk.go4lunch.data.permission.GPSPermissionRepository;
 
 import javax.inject.Inject;
 
@@ -19,7 +19,7 @@ public class MainApplication extends Application implements Application.Activity
     private static Application application;
 
     @Inject
-    PermissionRepository permissionRepository;
+    GPSPermissionRepository gpsPermissionRepository;
 
     @Override
     public void onCreate() {
@@ -32,7 +32,6 @@ public class MainApplication extends Application implements Application.Activity
 
     @Override
     public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
-
     }
 
     @Override
@@ -42,7 +41,7 @@ public class MainApplication extends Application implements Application.Activity
 
     @Override
     public void onActivityResumed(@NonNull Activity activity) {
-        permissionRepository.refreshPermission();
+      //  gpsPermissionRepository.refreshGPSPermission();
     }
 
     @Override

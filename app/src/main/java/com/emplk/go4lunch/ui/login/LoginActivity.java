@@ -2,22 +2,15 @@ package com.emplk.go4lunch.ui.login;
 
 import static android.content.ContentValues.TAG;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.LoginActivityBinding;
@@ -43,6 +36,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -84,8 +78,6 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(LoginActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
 
-        getGPSLocationPermission();
-
         callbackManager = CallbackManager.Factory.create();
 
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -107,39 +99,9 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         binding.facebookLoginBtn.setOnClickListener(v -> {
-                LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile"));
+                LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Collections.singletonList("public_profile"));
             }
         );
-    }
-
-    private void getGPSLocationPermission() {
-
-        // Check if the user has granted the permission.
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            // If the user has not granted the permission, explain why your app needs it.
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                // Display a dialog explaining why the app needs the permission.
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Permission Required");
-                builder.setMessage("This app works best with your permission to GPS location. If you want to provide this permission, please click on 'Change settings' to grand it");
-                builder.setPositiveButton("Change settings", (dialog, which) -> {
-                    // Open the app settings.
-                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                    Uri uri = Uri.fromParts("package", getPackageName(), null);
-                    intent.setData(uri);
-                    startActivity(intent);
-                });
-                builder.setNegativeButton("Cancel", (dialog, which) -> {
-                    // Do nothing.
-                });
-                builder.show();
-            } else {
-
-                // If the user has not granted the permission and you don't want to explain why, request the permission.
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 255);
-            }
-        }
     }
 
 

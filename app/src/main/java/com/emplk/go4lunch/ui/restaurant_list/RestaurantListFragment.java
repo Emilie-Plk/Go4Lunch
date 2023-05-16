@@ -70,8 +70,7 @@ public class RestaurantListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        viewModel.refresh();
+        viewModel.setLocationRequest();
     }
 
     @Override
