@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.data.permission.GPSPermissionRepository;
@@ -33,7 +34,17 @@ public class OnBoardingViewModel extends ViewModel {
     ) {
         this.gpsPermissionRepository = gpsPermissionRepository;
 
-        hasGpsPermissionLiveData = gpsPermissionRepository.hasGPSPermission();
+        hasGpsPermissionLiveData = Transformations.switchMap(
+            gpsPermissionRepository.hasGPSPermission(), permission -> {
+                MutableLiveData<Boolean> result = new MutableLiveData<>();
+                if (Boolean.TRUE.equals(permission)) {
+                    result.setValue(true);
+                } else {
+                    result.setValue(false);
+                }
+                return result;
+            }
+        );
 
         onBoardingViewActionMediatorLiveData.addSource(hasGpsPermissionLiveData, permission -> {
                 combine(permission, userPermissionMutableLiveData.getValue());
@@ -44,6 +55,10 @@ public class OnBoardingViewModel extends ViewModel {
                 combine(hasGpsPermissionLiveData.getValue(), userPermission);
             }
         );
+    }
+
+    public LiveData<OnBoardingViewAction> getOnBoardingViewAction() {
+        return onBoardingViewActionMediatorLiveData;
     }
 
     private void combine(
@@ -62,12 +77,15 @@ public class OnBoardingViewModel extends ViewModel {
             onBoardingViewActionMediatorLiveData.setValue(OnBoardingViewAction.MAIN_WITH_GPS_PERMISSION);
         } else if (Boolean.TRUE.equals(!repositoryPermission) && Boolean.TRUE.equals(!userPermission)) {
             onBoardingViewActionMediatorLiveData.setValue(OnBoardingViewAction.MAIN_WITHOUT_GPS_PERMISSION);
+        } if ((!repositoryPermission && userPermission) || (repositoryPermission && !userPermission)) {
+           onBoardingViewActionMediatorLiveData.setValue(OnBoardingViewAction.ONBOARDING);
         }
     }
 
-    public LiveData<OnBoardingViewAction> getOnBoardingViewAction() {
-        return onBoardingViewActionMediatorLiveData;
+    public void refreshGPSPermission() {
+        gpsPermissionRepository.refreshGPSPermission();
     }
+
 
     public void setUserPermissionChoice(boolean userPermission) {
         userPermissionMutableLiveData.setValue(userPermission);

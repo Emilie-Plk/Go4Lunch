@@ -45,23 +45,28 @@ public class OnBoardingActivity extends AppCompatActivity {
                         Toast.makeText(this, "MainActivity without GPS Permission granted", Toast.LENGTH_SHORT).show();
                         finish();
                         break;
+                    case ONBOARDING:
+                        Toast.makeText(this, "Please chose a GPS permission", Toast.LENGTH_SHORT).show();
+                        break;
                 }
             }
         );
 
-        binding.onboardingAllowButton.setOnClickListener(v ->
-            requestGPSPermission()
+        binding.onboardingAllowButton.setOnClickListener(v -> {
+                requestGPSPermission();
+            }
         );
 
-        binding.onboardingDeclineButton.setOnClickListener(v ->
-            showRequestPermissionRationale()
+        binding.onboardingDeclineButton.setOnClickListener(v -> {
+                showRequestPermissionRationale();
+            }
         );
 
     }
 
     private void requestGPSPermission() {
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 0);
-        viewModel.setUserPermissionChoice(true);
+        viewModel.setUserPermissionChoice(true); // what is the user clicks on "decline" ??
     }
 
     private void showRequestPermissionRationale() {
