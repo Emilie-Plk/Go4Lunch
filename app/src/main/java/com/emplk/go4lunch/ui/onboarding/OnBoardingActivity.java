@@ -54,9 +54,7 @@ public class OnBoardingActivity extends AppCompatActivity {
         );
 
         binding.onboardingDeclineButton.setOnClickListener(v ->
-            {
-                showRequestPermissionRationale();
-            }
+            showRequestPermissionRationale()
         );
 
     }

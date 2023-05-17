@@ -113,6 +113,12 @@
         <item name="iconSize">26dp</item>
     </style>
 
+    <style name="Theme.Go4Lunch.DetailRestaurantToolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="navigationIconTint">@color/pumpkin_orange</item>
+    </style>
+
+
     <style name="Theme.Go4Lunch.VeganFriendlyImageView">
         <item name="android:background">@color/white</item>
     </style>

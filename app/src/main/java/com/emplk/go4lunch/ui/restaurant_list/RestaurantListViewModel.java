@@ -4,7 +4,6 @@ import static com.emplk.go4lunch.BuildConfig.API_KEY;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 
@@ -84,6 +83,7 @@ public class RestaurantListViewModel extends ViewModel {
                             API_KEY
                         );
                     }
+
                     return null;
                 }
             }
@@ -114,53 +114,64 @@ public class RestaurantListViewModel extends ViewModel {
 
         if (location == null) {
             if (hasGpsPermission != null && !hasGpsPermission) {
-                setErrorState("Please provide GPS permission to continue!", AppCompatResources.getDrawable(application.getApplicationContext(), R.drawable.baseline_sad_face_24));
-            }
-        }
-
-        if (nearbySearchWrapper != null) {
-            if (nearbySearchWrapper instanceof NearbySearchWrapper.Success) {
-                if (((NearbySearchWrapper.Success) nearbySearchWrapper).getResults().isEmpty() ||
-                    ((NearbySearchWrapper.Success) nearbySearchWrapper).getResults() == null) {
-                    setErrorState(
-                        "Oops, no found restaurant in this area!",
-                        null
-                    );
-                } else {
-                    for (NearbySearchEntity nearbySearchEntity : ((NearbySearchWrapper.Success) nearbySearchWrapper).getResults()) {
-                        result.add(
-                            new RestaurantListViewState.RestaurantList(
-                                nearbySearchEntity.getPlaceId(),
-                                nearbySearchEntity.getRestaurantName(),
-                                nearbySearchEntity.getVicinity(),
-                                getDistanceString(location.getLatitude(), location.getLongitude(), nearbySearchEntity.getLatitude(), nearbySearchEntity.getLongitude()),
-                                "3",
-                                "14h-16h",
-                                true,
-                                parseRestaurantPictureUrl(nearbySearchEntity.getPhotoReferenceUrl()),
-                                isRatingBarVisible(nearbySearchEntity.getRating()),
-                                convertFiveToThreeRating(nearbySearchEntity.getRating()
-                                )
-                            )
-                        );
-                    }
-                }
-            }
-
-            if (nearbySearchWrapper instanceof NearbySearchWrapper.Loading) {
                 result.add(
-                    new RestaurantListViewState.Loading()
+                    new RestaurantListViewState.RestaurantListError(
+                        "Please provide GPS permission\nin the Settings or look for\na location in the search bar!",
+                        AppCompatResources.getDrawable(application.getApplicationContext(), R.drawable.baseline_not_listed_location_24)
+                    )
                 );
+                restaurantListMediatorLiveData.setValue(result);
             }
-
-            if (nearbySearchWrapper instanceof NearbySearchWrapper.Error) {
-                ((NearbySearchWrapper.Error) nearbySearchWrapper).getThrowable().printStackTrace();
-                setErrorState(
-                    application.getResources().getString(R.string.list_error_message_generic),
-                    AppCompatResources.getDrawable(application.getApplicationContext(), R.drawable.baseline_sad_face_24)
-                );
-            }
+            return;
         }
+
+        if (nearbySearchWrapper == null) {
+            result.add(
+                new RestaurantListViewState.RestaurantListError(
+                    "Something went wrong!\nPlease try again later.",
+                    AppCompatResources.getDrawable(application.getApplicationContext(), R.drawable.baseline_error_outline_24)
+                )
+            );
+            return;
+        } else if (nearbySearchWrapper instanceof NearbySearchWrapper.Loading) {
+            result.add(
+                new RestaurantListViewState.Loading()
+            );
+        } else if (nearbySearchWrapper instanceof NearbySearchWrapper.NoResults) {
+            result.add(
+                new RestaurantListViewState.RestaurantListError(
+                    "Oops, no results found in your area!",
+                    AppCompatResources.getDrawable(application.getApplicationContext(), R.drawable.baseline_mood_bad_24)
+                )
+            );
+        } else if (nearbySearchWrapper instanceof NearbySearchWrapper.Success) {
+            for (NearbySearchEntity nearbySearchEntity : ((NearbySearchWrapper.Success) nearbySearchWrapper).getResults()) {
+                result.add(
+                    new RestaurantListViewState.RestaurantList(
+                        nearbySearchEntity.getPlaceId(),
+                        nearbySearchEntity.getRestaurantName(),
+                        nearbySearchEntity.getVicinity(),
+                        getDistanceString(location.getLatitude(), location.getLongitude(), nearbySearchEntity.getLatitude(), nearbySearchEntity.getLongitude()),
+                        "3",
+                        "14h-16h",
+                        true,
+                        parseRestaurantPictureUrl(nearbySearchEntity.getPhotoReferenceUrl()),
+                        isRatingBarVisible(nearbySearchEntity.getRating()),
+                        convertFiveToThreeRating(nearbySearchEntity.getRating()
+                        )
+                    )
+                );
+            }
+        } else if (nearbySearchWrapper instanceof NearbySearchWrapper.RequestError) {
+            ((NearbySearchWrapper.RequestError) nearbySearchWrapper).getThrowable().printStackTrace();
+            result.add(
+                new RestaurantListViewState.RestaurantListError(
+                    application.getResources().getString(R.string.list_error_message_generic),
+                    AppCompatResources.getDrawable(application.getApplicationContext(), R.drawable.baseline_network_off_24)
+                )
+            );
+        }
+
         restaurantListMediatorLiveData.setValue(result);
     }
 
@@ -192,9 +203,10 @@ public class RestaurantListViewModel extends ViewModel {
     private String getDistanceString(
         @Nullable Double userLat,
         @Nullable Double userLong,
-        @Nullable Float lat,
-        @Nullable Float longit) {
-        if (userLat != null && userLong != null && lat != null && longit != null) {
+        @NonNull Float lat,
+        @NonNull Float longit
+    ) {
+        if (userLat != null && userLong != null) {
             Location userLocation = new Location("userLocation");
             userLocation.setLatitude(userLat);
             userLocation.setLongitude(userLong);
@@ -211,14 +223,12 @@ public class RestaurantListViewModel extends ViewModel {
         } else return "Error";
     }
 
-    private float convertFiveToThreeRating(Float fiveRating) {
-        float convertedRating = Math.round(fiveRating * 2) / 2f; // round to nearest 0.5
-        return Math.min(3f, convertedRating / 5f * 3f); // convert 3 -> 5 with steps of 0.5
-    }
-
-    private void setErrorState(@NonNull String message, @Nullable Drawable drawable) {
-        List<RestaurantListViewState> result = new ArrayList<>();
-        result.add(new RestaurantListViewState.RestaurantListError(message, drawable));
-        restaurantListMediatorLiveData.setValue(result);
+    private float convertFiveToThreeRating(@Nullable Float fiveRating) {
+        if (fiveRating == null) {
+            return 0f;
+        } else {
+            float convertedRating = Math.round(fiveRating * 2) / 2f; // round to nearest 0.5
+            return Math.min(3f, convertedRating / 5f * 3f); // convert 3 -> 5 with steps of 0.5
+        }
     }
 }

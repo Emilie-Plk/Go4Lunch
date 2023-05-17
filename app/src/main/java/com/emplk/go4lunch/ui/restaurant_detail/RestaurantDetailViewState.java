@@ -18,7 +18,7 @@ public class RestaurantDetailViewState {
     @Nullable
     private final String pictureUrl;
 
-    @Nullable
+    @NonNull
     private final Float rating;
 
     @Nullable
@@ -27,7 +27,7 @@ public class RestaurantDetailViewState {
     @Nullable
     private final String websiteUrl;
 
-    @Nullable
+    @NonNull
     private final Boolean isLiked;
 
     @Nullable
@@ -49,10 +49,10 @@ public class RestaurantDetailViewState {
         @NonNull String name,
         @NonNull String address,
         @Nullable String pictureUrl,
-        @Nullable Float rating,
+        @NonNull Float rating,
         @Nullable String phoneNumber,
         @Nullable String websiteUrl,
-        @Nullable Boolean isLiked,
+        @NonNull Boolean isLiked,
         @Nullable Boolean isAttending,
         @Nullable Boolean isVeganFriendly,
         @NonNull Boolean isLoading,
@@ -94,7 +94,7 @@ public class RestaurantDetailViewState {
         return pictureUrl;
     }
 
-    @Nullable
+    @NonNull
     public Float getRating() {
         return rating;
     }
@@ -109,7 +109,7 @@ public class RestaurantDetailViewState {
         return websiteUrl;
     }
 
-    @Nullable
+    @NonNull
     public Boolean isLiked() {
         return isLiked;
     }

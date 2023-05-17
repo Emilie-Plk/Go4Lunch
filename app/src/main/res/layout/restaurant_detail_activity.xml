@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context="com.emplk.go4lunch.ui.restaurant_detail.RestaurantDetailActivity">
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/detail_restaurant_toolbar"
+        android:layout_width="match_parent"
+       style="@style/Theme.Go4Lunch.DetailRestaurantToolbar"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:translationZ="2dp"
+        />
+
     <ImageView
         android:id="@+id/detail_restaurant_picture"
         android:layout_width="0dp"

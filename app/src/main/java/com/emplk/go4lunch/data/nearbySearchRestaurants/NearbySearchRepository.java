@@ -69,6 +69,13 @@ public class NearbySearchRepository {
                                 List<NearbySearchEntity> nearbySearchEntityList = fromNearbySearchResponse(response.body());
                                 nearbySearchCache.put(cacheKey, nearbySearchEntityList);
                                 resultMutableLiveData.setValue(new NearbySearchWrapper.Success(nearbySearchEntityList));
+                            } else if (response.isSuccessful() &&
+                                response.body() != null &&
+                                response.body().getStatus() != null &&
+                                response.body().getStatus().equals("ZERO_RESULTS")) {
+                                List<NearbySearchEntity> emptyList = new ArrayList<>();
+                                nearbySearchCache.put(cacheKey, emptyList);
+                                resultMutableLiveData.setValue(new NearbySearchWrapper.NoResults());
                             }
                         }
 
@@ -77,7 +84,7 @@ public class NearbySearchRepository {
                             @NonNull Call<NearbySearchResponse> call,
                             @NonNull Throwable t
                         ) {
-                            resultMutableLiveData.setValue(new NearbySearchWrapper.Error(t));
+                            resultMutableLiveData.setValue(new NearbySearchWrapper.RequestError(t));
                         }
                     }
                 );
@@ -100,35 +107,48 @@ public class NearbySearchRepository {
 
     private List<NearbySearchEntity> fromNearbySearchResponse(@Nullable NearbySearchResponse response) {
         List<NearbySearchEntity> results = new ArrayList<>();
-        if (response.getResults() == null) {
-            return new ArrayList<>();
-        }
+
         if (response != null && response.getResults() != null) {
             for (ResultsItem result : response.getResults()) {
                 String placeId = result.getPlaceId();
                 String name = result.getName();
                 String vicinity = result.getVicinity();
                 String photoUrl = null;
-                if (result.getPhotos() != null && !result.getPhotos().isEmpty() && result.getPhotos().get(0) != null) {
+                if (result.getPhotos() != null &&
+                    !result.getPhotos().isEmpty() &&
+                    result.getPhotos().get(0) != null) {
                     photoUrl = result.getPhotos().get(0).getPhotoReference();
                 }
                 Float rating = result.getRating();
-                Float latitude = result.getGeometry().getLocation().getLat();
-                Float longitude = result.getGeometry().getLocation().getLng();
+
+                Float latitude = null;
+                Float longitude = null;
+                if (result.getGeometry() != null && result.getGeometry().getLocation() != null) {
+                    latitude = result.getGeometry().getLocation().getLat();
+                    longitude = result.getGeometry().getLocation().getLng();
+                }
+
                 Boolean openingHours = null;
                 if (result.getOpeningHours() != null && result.getOpeningHours().isOpenNow() != null) {
                     openingHours = result.getOpeningHours().isOpenNow();
                 }
-                NearbySearchEntity searchResult = new NearbySearchEntity(
-                    placeId,
-                    name,
-                    vicinity,
-                    photoUrl,
-                    rating,
-                    latitude,
-                    longitude,
-                    openingHours);
-                results.add(searchResult);
+                if (placeId != null &&
+                    name != null &&
+                    vicinity != null &&
+                    latitude != null &&
+                    longitude != null
+                ) {
+                    NearbySearchEntity searchResult = new NearbySearchEntity(
+                        placeId,
+                        name,
+                        vicinity,
+                        photoUrl,
+                        rating,
+                        latitude,
+                        longitude,
+                        openingHours);
+                    results.add(searchResult);
+                }
             }
         }
         return results;

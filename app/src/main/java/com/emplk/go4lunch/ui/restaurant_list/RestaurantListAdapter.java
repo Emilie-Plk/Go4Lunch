@@ -41,8 +41,7 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
                     RestaurantItemBinding.inflate(
                         LayoutInflater.from(parent.getContext()), parent, false
                     )
-                )
-                    ;
+                );
             case ERROR_STATE:
                 return new ErrorViewHolder(
                     RestaurantListErrorStateBinding.inflate(

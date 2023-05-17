@@ -19,10 +19,13 @@ public abstract class NearbySearchWrapper {
         }
     }
 
-    public static class Error extends NearbySearchWrapper {
+    public static class NoResults extends NearbySearchWrapper {
+    }
+
+    public static class RequestError extends NearbySearchWrapper {
         private final Throwable throwable;
 
-        public Error(Throwable throwable) {
+        public RequestError(Throwable throwable) {
             this.throwable = throwable;
         }
 

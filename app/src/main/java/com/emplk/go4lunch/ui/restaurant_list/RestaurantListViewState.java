@@ -168,6 +168,7 @@ public abstract class RestaurantListViewState {
             return Objects.hash(id, name, address, distance, attendants, openingHours, isOpen, pictureUrl, isRatingBarVisible, rating);
         }
 
+        @NonNull
         @Override
         public String toString() {
             return "RestaurantList{" +

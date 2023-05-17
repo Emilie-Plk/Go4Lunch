@@ -21,6 +21,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
         android:importantForAccessibility="no"
-        tools:src="@drawable/baseline_sad_face_24" />
+        tools:src="@drawable/baseline_mood_bad_24" />
 
 </LinearLayout>

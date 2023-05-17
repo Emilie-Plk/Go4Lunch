@@ -38,6 +38,12 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        setSupportActionBar(binding.detailRestaurantToolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(null);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         restaurantId = getIntent().getStringExtra(KEY_RESTAURANT_ID);
 
         viewModel = new ViewModelProvider(this).get(RestaurantDetailViewModel.class);
