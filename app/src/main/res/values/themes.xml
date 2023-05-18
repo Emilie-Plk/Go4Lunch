@@ -61,6 +61,7 @@
 
     <style name="Theme.Go4Lunch.Toolbar" parent="Widget.Material3.Toolbar">
         <item name="android:background">@color/crimson_rust</item>
+        <item name="titleTextColor">@color/dirty_white</item>
     </style>
 
     <style name="Theme.Go4Lunch.DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">

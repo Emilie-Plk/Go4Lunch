@@ -33,6 +33,10 @@ public class GPSPermissionRepository {
     }
 
     public void refreshGPSPermission() {
-        permissionLiveData.setValue(ContextCompat.checkSelfPermission(application.getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED);
+        permissionLiveData.setValue(
+            ContextCompat.checkSelfPermission(
+                application.getApplicationContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        );
     }
 }

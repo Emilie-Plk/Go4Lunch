@@ -10,6 +10,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.ui.restaurant_list.RestaurantListFragment;
+import com.emplk.go4lunch.ui.restaurant_map.MapFragment;
 import com.emplk.go4lunch.ui.workmate_list.WorkmateListFragment;
 
 public class MainPagerAdapter extends FragmentStateAdapter {
@@ -30,7 +31,7 @@ public class MainPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 0:
-                return WorkmateListFragment.newInstance(); // to be replaced by the Map Fragment
+                return MapFragment.newInstance(); // to be replaced by the Map Fragment
             case 1:
                 return RestaurantListFragment.newInstance();
             case 2:

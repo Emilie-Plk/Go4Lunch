@@ -1,5 +1,6 @@
 package com.emplk.go4lunch.data.gps_location;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 import android.location.Location;
@@ -42,7 +43,7 @@ public class GPSLocationRepository {
         return locationMutableLiveData;
     }
 
-    @RequiresPermission(ACCESS_FINE_LOCATION)
+    @RequiresPermission(anyOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
     public void startLocationRequest() {
         if (locationCallback == null) {
             locationCallback = new LocationCallback() {

@@ -8,16 +8,20 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.MainActivityBinding;
+import com.emplk.go4lunch.databinding.MainNavigationHeaderBinding;
 import com.emplk.go4lunch.ui.login.LoginActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -26,9 +30,9 @@ public class MainActivity extends AppCompatActivity {
 
     private MainActivityBinding binding;
 
-    private FirebaseAuth firebaseAuth;
+    private MainViewModel viewModel;
 
-    private FirebaseUser currentUser;
+    private MainNavigationHeaderBinding navigationHeaderBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +42,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.mainToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        View headerView = binding.mainNavigationView.getHeaderView(0);
+        navigationHeaderBinding = MainNavigationHeaderBinding.bind(headerView);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        currentUser = firebaseAuth.getCurrentUser();
-
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         MainPagerAdapter adapter = new MainPagerAdapter(MainActivity.this);
         binding.mainViewpagerContainer.setAdapter(adapter);
@@ -51,6 +54,20 @@ public class MainActivity extends AppCompatActivity {
         initBottomNavigationBar();
 
         initNavigationDrawer();
+
+
+        viewModel.getCurrentUserLiveData().observe(this, firebaseUser -> {
+                Glide.with(this)
+                    .load(firebaseUser.getPhotoUrl())
+                    .transform(new CenterCrop(), new RoundedCorners(25))
+                    .into(navigationHeaderBinding.navigationHeaderUserProfilePicture);
+
+                navigationHeaderBinding.navigationHeaderUserEmail.setText(firebaseUser.getEmail());
+                navigationHeaderBinding.navigationHeaderUserName.setText(firebaseUser.getDisplayName());
+            }
+        );
+
+
     }
 
 
@@ -81,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
         binding.mainDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+
         binding.mainNavigationView.bringToFront();
 
         binding.mainNavigationView.setNavigationItemSelectedListener(
@@ -99,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                         break;
                     case R.id.nav_logout:
-                        firebaseAuth.signOut();
+                        viewModel.signOut();
                         Log.i(TAG, "Clicked on 'Logout' nav item");
                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
                         break;
@@ -107,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         );
+
     }
 
 

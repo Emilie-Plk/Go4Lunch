@@ -41,7 +41,7 @@ public class MainApplication extends Application implements Application.Activity
 
     @Override
     public void onActivityResumed(@NonNull Activity activity) {
-      //  gpsPermissionRepository.refreshGPSPermission();
+        //  gpsPermissionRepository.refreshGPSPermission();
     }
 
     @Override
