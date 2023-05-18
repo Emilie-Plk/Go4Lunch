@@ -34,7 +34,7 @@ public class AuthRepository {
     }
 
 
-    public LiveData<FirebaseUserEntity> getCurrentUser() {
+    public LiveData<FirebaseUserEntity> getCurrentUserLiveData() {
         if (firebaseAuth.getCurrentUser() != null) {
             String uid = firebaseAuth.getCurrentUser().getUid();
             String email = firebaseAuth.getCurrentUser().getEmail();

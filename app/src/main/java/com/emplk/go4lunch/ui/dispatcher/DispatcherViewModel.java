@@ -38,10 +38,8 @@ public class DispatcherViewModel extends ViewModel {
         this.gpsPermissionRepository = gpsPermissionRepository;
         this.authRepository = authRepository;
 
-        firebaseUserEntityLiveData = authRepository.getCurrentUser();
+        firebaseUserEntityLiveData = authRepository.getCurrentUserLiveData();
         hasGPSPermissionLiveData = gpsPermissionRepository.hasGPSPermission();
-
-        gpsPermissionRepository.refreshGPSPermission();
 
         dispatcherViewActionMediatorLiveData.addSource(hasGPSPermissionLiveData, permission -> {
                 combine(permission, firebaseUserEntityLiveData.getValue());

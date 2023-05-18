@@ -7,6 +7,8 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.emplk.go4lunch.data.auth.AuthRepository;
+import com.emplk.go4lunch.data.auth.FirebaseUserEntity;
 import com.emplk.go4lunch.data.permission.GPSPermissionRepository;
 import com.emplk.go4lunch.ui.dispatcher.OnBoardingViewAction;
 
@@ -17,31 +19,22 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class OnBoardingViewModel extends ViewModel {
 
-    @NonNull
-    private final GPSPermissionRepository gpsPermissionRepository;
-
-    private final MutableLiveData<Boolean> hasChosenPermission = new MutableLiveData<>(false);
-
-    private final LiveData<Boolean> hasGpsPermissionLiveData;
-
+    private final MutableLiveData<Boolean> isGpsPermissionAskedLiveData = new MutableLiveData<>(false);
 
     private final MediatorLiveData<OnBoardingViewAction> onBoardingViewActionMediatorLiveData = new MediatorLiveData<>();
-
 
     @Inject
     public OnBoardingViewModel(
         @NonNull GPSPermissionRepository gpsPermissionRepository
     ) {
-        this.gpsPermissionRepository = gpsPermissionRepository;
-
-        hasGpsPermissionLiveData = gpsPermissionRepository.hasGPSPermission();
+        LiveData<Boolean> hasGpsPermissionLiveData = gpsPermissionRepository.hasGPSPermission();
 
         onBoardingViewActionMediatorLiveData.addSource(hasGpsPermissionLiveData, permission -> {
-                combine(permission, hasChosenPermission.getValue());
+                combine(permission, isGpsPermissionAskedLiveData.getValue());
             }
         );
 
-        onBoardingViewActionMediatorLiveData.addSource(hasChosenPermission, userPermission -> {
+        onBoardingViewActionMediatorLiveData.addSource(isGpsPermissionAskedLiveData, userPermission -> {
                 combine(hasGpsPermissionLiveData.getValue(), userPermission);
             }
         );
@@ -52,22 +45,27 @@ public class OnBoardingViewModel extends ViewModel {
     }
 
     private void combine(
-        @Nullable Boolean repositoryPermission,
-        @Nullable Boolean hasChosenPermission
+        @Nullable Boolean hasGps,
+        @Nullable Boolean isGpsPermissionAsked
     ) {
-        if (Boolean.FALSE.equals(hasChosenPermission)) {
+        if (hasGps == null || isGpsPermissionAsked == null) {
             return;
         }
 
-        if (Boolean.TRUE.equals(repositoryPermission)) {
-            onBoardingViewActionMediatorLiveData.setValue(OnBoardingViewAction.MAIN_WITH_GPS_PERMISSION);
+        if (hasGps) {
+            onBoardingViewActionMediatorLiveData.setValue(OnBoardingViewAction.CONTINUE);
+        } else if (isGpsPermissionAsked) {
+            onBoardingViewActionMediatorLiveData.setValue(OnBoardingViewAction.SHOW_RATIONALE);
         } else {
-            onBoardingViewActionMediatorLiveData.setValue(OnBoardingViewAction.MAIN_WITHOUT_GPS_PERMISSION);
+            onBoardingViewActionMediatorLiveData.setValue(OnBoardingViewAction.ASK_GPS_PERMISSION);
         }
     }
 
+    public void onPermissionResult() {
+        isGpsPermissionAskedLiveData.setValue(true);
+    }
 
-    public LiveData<Boolean> isShowRationale() {
-        return hasGpsPermissionLiveData;
+    public void onAllowClicked(boolean shouldShowRequestPermissionRationale) {
+        // TODO Emilie
     }
 }

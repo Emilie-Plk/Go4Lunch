@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -18,7 +19,7 @@ public class GPSPermissionRepository {
     @NonNull
     private final Application application;
 
-    final MutableLiveData<Boolean> permissionLiveData;
+    private final MutableLiveData<Boolean> permissionLiveData;
 
     @Inject
     public GPSPermissionRepository(
@@ -26,17 +27,20 @@ public class GPSPermissionRepository {
     ) {
         this.application = application;
         permissionLiveData = new MutableLiveData<>();
+
+        refreshGPSPermission();
     }
 
     public LiveData<Boolean> hasGPSPermission() {
-        return permissionLiveData;
+        return Transformations.distinctUntilChanged(permissionLiveData);
     }
 
     public void refreshGPSPermission() {
         permissionLiveData.setValue(
             ContextCompat.checkSelfPermission(
                 application.getApplicationContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
         );
     }
 }
