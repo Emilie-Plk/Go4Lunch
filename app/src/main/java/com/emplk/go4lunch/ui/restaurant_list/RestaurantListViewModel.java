@@ -10,7 +10,6 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Transformations;
@@ -69,27 +68,24 @@ public class RestaurantListViewModel extends ViewModel {
 
         LiveData<Location> locationLiveData = gpsLocationRepository.getLocationLiveData();
 
-        hasGpsPermissionLiveData = gpsPermissionRepository.hasGPSPermission();
+        hasGpsPermissionLiveData = gpsPermissionRepository.hasGPSPermissionLiveData();
 
         LiveData<NearbySearchWrapper> nearbySearchWrapperLiveData = Transformations.switchMap(
-            locationLiveData, new Function<Location, LiveData<NearbySearchWrapper>>() {
-                @Override
-                public LiveData<NearbySearchWrapper> apply(@Nullable Location location) {
-                    if (location != null) {
-                        return nearbySearchRepository.getNearbyRestaurants(
-                            location.getLatitude() + "," + location.getLongitude(),
-                            "restaurant",
-                            "distance",
-                            API_KEY
-                        );
-                    }
-
+            locationLiveData, location -> {
+                if (location != null) {
+                    return nearbySearchRepository.getNearbyRestaurants(
+                        location.getLatitude() + "," + location.getLongitude(),
+                        "restaurant",
+                        "distance",
+                        API_KEY
+                    );
+                } else {
                     return null;
                 }
             }
         );
-
         restaurantListMediatorLiveData.addSource(hasGpsPermissionLiveData, hasGpsPermission ->
+
             combine(hasGpsPermission, locationLiveData.getValue(), nearbySearchWrapperLiveData.getValue()
             )
         );
@@ -100,6 +96,7 @@ public class RestaurantListViewModel extends ViewModel {
         );
 
         restaurantListMediatorLiveData.addSource(nearbySearchWrapperLiveData, nearbySearchWrapper ->
+
             combine(hasGpsPermissionLiveData.getValue(), locationLiveData.getValue(), nearbySearchWrapper
             )
         );

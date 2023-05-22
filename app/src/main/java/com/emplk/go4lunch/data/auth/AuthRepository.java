@@ -25,16 +25,12 @@ public class AuthRepository {
         this.firebaseAuth = firebaseAuth;
     }
 
-    public boolean isUserLogged() {
-        return firebaseAuth.getCurrentUser() != null;
-    }
-
     public void signOut() {
         firebaseAuth.signOut();
     }
 
 
-    public LiveData<FirebaseUserEntity> getCurrentUser() {
+    public LiveData<FirebaseUserEntity> getCurrentUserLiveData() {
         if (firebaseAuth.getCurrentUser() != null) {
             String uid = firebaseAuth.getCurrentUser().getUid();
             String email = firebaseAuth.getCurrentUser().getEmail();

@@ -32,10 +32,9 @@ public class MainActivity extends AppCompatActivity {
 
     private MainViewModel viewModel;
 
-    private MainNavigationHeaderBinding navigationHeaderBinding;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        MainNavigationHeaderBinding navigationHeaderBinding;
         super.onCreate(savedInstanceState);
 
         binding = MainActivityBinding.inflate(getLayoutInflater());
@@ -66,11 +65,9 @@ public class MainActivity extends AppCompatActivity {
                 navigationHeaderBinding.navigationHeaderUserName.setText(firebaseUser.getDisplayName());
             }
         );
-
-
     }
 
-
+    @SuppressLint("NonConstantResourceId")
     private void initBottomNavigationBar() {
         BottomNavigationView bottomNavigationView = binding.mainBottomAppbar;
         bottomNavigationView.setSelectedItemId(R.id.bottom_bar_map);
@@ -125,9 +122,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         );
-
     }
-
 
     @Override
     protected void onDestroy() {

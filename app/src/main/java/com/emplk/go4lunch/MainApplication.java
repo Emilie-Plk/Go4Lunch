@@ -16,17 +16,12 @@ import dagger.hilt.android.HiltAndroidApp;
 @HiltAndroidApp
 public class MainApplication extends Application implements Application.ActivityLifecycleCallbacks {
 
-    private static Application application;
-
     @Inject
     GPSPermissionRepository gpsPermissionRepository;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
-        application = this;
-
         registerActivityLifecycleCallbacks(this);
     }
 
@@ -41,7 +36,7 @@ public class MainApplication extends Application implements Application.Activity
 
     @Override
     public void onActivityResumed(@NonNull Activity activity) {
-        //  gpsPermissionRepository.refreshGPSPermission();
+        gpsPermissionRepository.refreshGPSPermission();
     }
 
     @Override

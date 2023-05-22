@@ -23,15 +23,15 @@ public class DispatcherActivity extends AppCompatActivity {
 
         viewModel.getDispatcherViewActionMediatorLiveData().observe(this, dispatcherViewAction -> {
                 switch (dispatcherViewAction) {
-                    case ONBOARDING_ACTIVITY:
+                    case GO_TO_ONBOARDING_ACTIVITY:
                         startActivity(new Intent(DispatcherActivity.this, OnBoardingActivity.class));
                         finish();
                         break;
-                    case LOGIN_ACTIVITY:
+                    case GO_TO_LOGIN_ACTIVITY:
                         startActivity(new Intent(DispatcherActivity.this, LoginActivity.class));
                         finish();
                         break;
-                    case MAIN_ACTIVITY:
+                    case GO_TO_MAIN_ACTIVITY:
                         startActivity(new Intent(DispatcherActivity.this, MainActivity.class));
                         finish();
                         break;

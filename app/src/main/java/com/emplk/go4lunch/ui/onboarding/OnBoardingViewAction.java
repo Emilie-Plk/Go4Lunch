@@ -1,6 +1,9 @@
-package com.emplk.go4lunch.ui.dispatcher;
+package com.emplk.go4lunch.ui.onboarding;
 
 public enum OnBoardingViewAction {
-    MAIN_WITHOUT_GPS_PERMISSION,
-    MAIN_WITH_GPS_PERMISSION
+    CONTINUE_TO_AUTHENTICATION,
+    ASK_GPS_PERMISSION,
+    SHOW_RATIONALE,
+    GO_APP_SETTINGS
+
 }

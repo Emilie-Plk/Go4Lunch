@@ -23,7 +23,7 @@ import javax.inject.Singleton;
 @Singleton
 public class GPSLocationRepository {
 
-    private static final int LOCATION_REQUEST_INTERVAL_MS = 30000;
+    private static final int LOCATION_REQUEST_INTERVAL_MS = 20_000;
     private static final int SMALLEST_DISPLACEMENT_THRESHOLD_METER = 100;
 
     @NonNull

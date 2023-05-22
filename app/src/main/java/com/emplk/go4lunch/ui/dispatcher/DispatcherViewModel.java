@@ -38,8 +38,8 @@ public class DispatcherViewModel extends ViewModel {
         this.gpsPermissionRepository = gpsPermissionRepository;
         this.authRepository = authRepository;
 
-        firebaseUserEntityLiveData = authRepository.getCurrentUser();
-        hasGPSPermissionLiveData = gpsPermissionRepository.hasGPSPermission();
+        firebaseUserEntityLiveData = authRepository.getCurrentUserLiveData();
+        hasGPSPermissionLiveData = gpsPermissionRepository.hasGPSPermissionLiveData();
 
         gpsPermissionRepository.refreshGPSPermission();
 
@@ -60,11 +60,11 @@ public class DispatcherViewModel extends ViewModel {
     ) {
 
         if (Boolean.FALSE.equals(permission)) {
-            dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.ONBOARDING_ACTIVITY);
+            dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_ONBOARDING_ACTIVITY);
         } else if (firebaseUser == null) {
-            dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.LOGIN_ACTIVITY);
+            dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_LOGIN_ACTIVITY);
         } else {
-            dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.MAIN_ACTIVITY);
+            dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_MAIN_ACTIVITY);
         }
     }
 
@@ -73,11 +73,11 @@ public class DispatcherViewModel extends ViewModel {
     }
 
     public LiveData<DispatcherViewAction> getDispatcherViewAction() {
-        return Transformations.switchMap(gpsPermissionRepository.hasGPSPermission(), permission -> {
+        return Transformations.switchMap(gpsPermissionRepository.hasGPSPermissionLiveData(), permission -> {
             if (Boolean.TRUE.equals(permission)) {
-                dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.LOGIN_ACTIVITY);
+                dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_LOGIN_ACTIVITY);
             } else {
-                dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.ONBOARDING_ACTIVITY);
+                dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_ONBOARDING_ACTIVITY);
             }
             return dispatcherViewActionMediatorLiveData;
         });

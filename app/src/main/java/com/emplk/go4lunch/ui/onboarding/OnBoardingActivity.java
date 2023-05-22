@@ -3,7 +3,9 @@ package com.emplk.go4lunch.ui.onboarding;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -12,8 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.OnboardingActivityBinding;
-import com.emplk.go4lunch.ui.login.LoginActivity;
+import com.emplk.go4lunch.ui.dispatcher.DispatcherActivity;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -24,7 +27,7 @@ public class OnBoardingActivity extends AppCompatActivity {
 
     private OnBoardingViewModel viewModel;
 
-    private ActivityResultLauncher<String> permissionLauncher;
+    private ActivityResultLauncher<String[]> permissionLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,70 +38,62 @@ public class OnBoardingActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(OnBoardingViewModel.class);
 
         permissionLauncher = registerForActivityResult(
-            new ActivityResultContracts.RequestPermission(), result ->
-            {
-                if (Boolean.TRUE.equals(result)) {
-                    startMainActivityWithPermissions();
-                } else {
-                    startMainActivityWithoutPermissions();
+            new ActivityResultContracts.RequestMultiplePermissions(), result -> {
+                viewModel.onPermissionResult();
+            }
+        );
+
+        viewModel.getOnBoardingViewAction().observe(this, viewAction -> {
+                switch (viewAction) {
+                    case CONTINUE_TO_AUTHENTICATION:
+                        continueWithPermissions();
+                        break;
+                    case ASK_GPS_PERMISSION:
+                        binding.onboardingAllowButton.setOnClickListener(v ->
+                            permissionLauncher.launch(new String[]{
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                            }));
+
+                        break;
+                    case SHOW_RATIONALE:
+                        showRequestPermissionRationale();
+                        break;
+                    case GO_APP_SETTINGS:
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", getPackageName(), null);
+                        intent.setData(uri);
+                        startActivity(intent);
+                        break;
                 }
             }
         );
 
-
-        viewModel.isShowRationale().observe(this, isShowRationale -> {
-                if (Boolean.TRUE.equals(!isShowRationale)) {
-                    showRequestPermissionRationale();
-                }
-            }
-        );
-
-        binding.onboardingAllowButton.setOnClickListener(v -> {
-                permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
-            }
-        );
-
-        binding.onboardingDeclineButton.setOnClickListener(v -> {
-                startMainActivityWithoutPermissions();
-            }
-        );
+        binding.onboardingAllowButton.setOnClickListener(v -> viewModel.onAllowClicked(
+                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            )
+        )
+        ;
     }
-
 
     private void showRequestPermissionRationale() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(
-            this,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        )
-        ) {
-            new AlertDialog.Builder(this)
-                .setTitle("Permission required")
-                .setMessage("This app works best with your permission to GPS location. If you want to provide this permission, please click on 'Change settings' to grant it")
-                .setPositiveButton("accept", (dialog, which) -> {
-                        permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
-                    }
-                )
-                .setNegativeButton("cancel", (dialog, which) -> {
-                        startMainActivityWithoutPermissions();
-                    }
-                )
-                .create()
-                .show();
-        }
+        new AlertDialog.Builder(this)
+            .setTitle("Permission required")
+            .setMessage(R.string.showRationaleGPSPermissionMessage)
+            .setPositiveButton(R.string.change_settings_dialog_button, (dialog, which) -> {
+                    viewModel.onChangeAppSettingsClicked();
+                }
+            )
+            .setCancelable(false)
+            .create()
+            .show();
     }
 
-    private void startMainActivityWithPermissions() {
-        startActivity(new Intent(OnBoardingActivity.this, LoginActivity.class)
+    private void continueWithPermissions() {
+        startActivity(new Intent(OnBoardingActivity.this, DispatcherActivity.class)
         );
-        Toast.makeText(this, "MainActivity with GPS Permission granted", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Continuing with GPS Permission granted", Toast.LENGTH_SHORT).show();
         finish();
     }
 
-
-    private void startMainActivityWithoutPermissions() {
-        startActivity(new Intent(OnBoardingActivity.this, LoginActivity.class)
-        );
-        Toast.makeText(this, "MainActivity without GPS Permission granted", Toast.LENGTH_SHORT).show();
-        finish();
-    }
 }

@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.data.permission.GPSPermissionRepository;
-import com.emplk.go4lunch.ui.dispatcher.OnBoardingViewAction;
+import com.emplk.go4lunch.ui.utils.SingleLiveEvent;
 
 import javax.inject.Inject;
 
@@ -17,32 +17,58 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class OnBoardingViewModel extends ViewModel {
 
-    @NonNull
-    private final GPSPermissionRepository gpsPermissionRepository;
+    private final MutableLiveData<Boolean> hasGPSPermissionBeenAskedMutableLiveData = new MutableLiveData<>(false);
 
-    private final MutableLiveData<Boolean> hasChosenPermission = new MutableLiveData<>(false);
-
-    private final LiveData<Boolean> hasGpsPermissionLiveData;
-
+    private final MutableLiveData<Boolean> isShowRationaleMutableLiveData = new MutableLiveData<>();
 
     private final MediatorLiveData<OnBoardingViewAction> onBoardingViewActionMediatorLiveData = new MediatorLiveData<>();
 
+    private final SingleLiveEvent<Boolean> isChangeAppSettingsClickedSingleLiveEvent = new SingleLiveEvent<>();
 
     @Inject
     public OnBoardingViewModel(
         @NonNull GPSPermissionRepository gpsPermissionRepository
     ) {
-        this.gpsPermissionRepository = gpsPermissionRepository;
+        LiveData<Boolean> hasGpsPermissionLiveData = gpsPermissionRepository.hasGPSPermissionLiveData();
 
-        hasGpsPermissionLiveData = gpsPermissionRepository.hasGPSPermission();
 
         onBoardingViewActionMediatorLiveData.addSource(hasGpsPermissionLiveData, permission -> {
-                combine(permission, hasChosenPermission.getValue());
+                combine(
+                    permission,
+                    hasGPSPermissionBeenAskedMutableLiveData.getValue(),
+                    isShowRationaleMutableLiveData.getValue(),
+                    isChangeAppSettingsClickedSingleLiveEvent.getValue()
+                );
             }
         );
 
-        onBoardingViewActionMediatorLiveData.addSource(hasChosenPermission, userPermission -> {
-                combine(hasGpsPermissionLiveData.getValue(), userPermission);
+        onBoardingViewActionMediatorLiveData.addSource(hasGPSPermissionBeenAskedMutableLiveData, userPermission -> {
+                combine(
+                    hasGpsPermissionLiveData.getValue(),
+                    userPermission,
+                    isShowRationaleMutableLiveData.getValue(),
+                    isChangeAppSettingsClickedSingleLiveEvent.getValue()
+                );
+            }
+        );
+
+        onBoardingViewActionMediatorLiveData.addSource(isShowRationaleMutableLiveData, showRationale -> {
+                combine(
+                    hasGpsPermissionLiveData.getValue(),
+                    hasGPSPermissionBeenAskedMutableLiveData.getValue(),
+                    showRationale,
+                    isChangeAppSettingsClickedSingleLiveEvent.getValue()
+                );
+            }
+        );
+
+        onBoardingViewActionMediatorLiveData.addSource(isChangeAppSettingsClickedSingleLiveEvent, changeAppSettings -> {
+                combine(
+                    hasGpsPermissionLiveData.getValue(),
+                    hasGPSPermissionBeenAskedMutableLiveData.getValue(),
+                    isShowRationaleMutableLiveData.getValue(),
+                    changeAppSettings
+                );
             }
         );
     }
@@ -52,22 +78,38 @@ public class OnBoardingViewModel extends ViewModel {
     }
 
     private void combine(
-        @Nullable Boolean repositoryPermission,
-        @Nullable Boolean hasChosenPermission
-    ) {
-        if (Boolean.FALSE.equals(hasChosenPermission)) {
+        @Nullable Boolean hasGPSPermission,
+        @Nullable Boolean hasGPSPermissionBeenAsked,
+        @Nullable Boolean isShowRationale,
+        @Nullable Boolean changeAppSettings) {
+        if (hasGPSPermission == null || hasGPSPermissionBeenAsked == null) {
             return;
         }
 
-        if (Boolean.TRUE.equals(repositoryPermission)) {
-            onBoardingViewActionMediatorLiveData.setValue(OnBoardingViewAction.MAIN_WITH_GPS_PERMISSION);
+        boolean showRationale = isShowRationale != null;
+
+        boolean changeAppSettingsClicked = changeAppSettings != null && changeAppSettings;
+
+        if (hasGPSPermission) {
+            onBoardingViewActionMediatorLiveData.setValue(OnBoardingViewAction.CONTINUE_TO_AUTHENTICATION);
+        } else if (changeAppSettingsClicked) {
+            onBoardingViewActionMediatorLiveData.setValue(OnBoardingViewAction.GO_APP_SETTINGS);
+        } else if (hasGPSPermissionBeenAsked || showRationale) {
+            onBoardingViewActionMediatorLiveData.setValue(OnBoardingViewAction.SHOW_RATIONALE);
         } else {
-            onBoardingViewActionMediatorLiveData.setValue(OnBoardingViewAction.MAIN_WITHOUT_GPS_PERMISSION);
+            onBoardingViewActionMediatorLiveData.setValue(OnBoardingViewAction.ASK_GPS_PERMISSION);
         }
     }
 
+    public void onPermissionResult() {
+        hasGPSPermissionBeenAskedMutableLiveData.setValue(true);
+    }
 
-    public LiveData<Boolean> isShowRationale() {
-        return hasGpsPermissionLiveData;
+    public void onAllowClicked(boolean shouldShowRequestPermissionRationale) {
+        isShowRationaleMutableLiveData.setValue(shouldShowRequestPermissionRationale);
+    }
+
+    public void onChangeAppSettingsClicked() {
+        isChangeAppSettingsClickedSingleLiveEvent.setValue(true);
     }
 }

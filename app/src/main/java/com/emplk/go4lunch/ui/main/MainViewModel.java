@@ -21,7 +21,7 @@ public class MainViewModel extends ViewModel {
     @Inject
     public MainViewModel(@NonNull AuthRepository authRepository) {
         this.authRepository = authRepository;
-        firebaseUserEntityLiveData = authRepository.getCurrentUser();
+        firebaseUserEntityLiveData = authRepository.getCurrentUserLiveData();
     }
 
     public LiveData<FirebaseUserEntity> getCurrentUserLiveData() {

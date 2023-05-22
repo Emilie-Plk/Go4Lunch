@@ -34,9 +34,11 @@
     <string name="open_nav">Open Navigation Drawer</string>
     <string name="close_nav">Close Navigation Drawer</string>
     <string name="detail_missing_information">Missing information</string>
-    <string name="title_activity_maps">MapsActivity</string>
+    <string name="title_activity_maps" translatable="false">MapsActivity</string>
     <string name="onboarding_privacy_message">Don\'t worry, we value your privacy \nand won\'t share your data!</string>
     <string name="onboarding_decline_button">No, thank you</string>
     <string name="onboarding_allow_button">Yes, please</string>
     <string name="onboarding_welcome_tv">Welcome!\nFor a better experience, \nGo4Lunch needs your GPS location</string>
+    <string name="showRationaleGPSPermissionMessage">This app works best with your permission to GPS location. If you want to provide this permission, please click on \'Change settings\' to grant it</string>
+    <string name="change_settings_dialog_button">change settings</string>
 </resources>
