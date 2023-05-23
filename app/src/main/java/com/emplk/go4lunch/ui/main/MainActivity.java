@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
                         viewModel.signOut();
                         Log.i(TAG, "Clicked on 'Logout' nav item");
                         startActivity(new Intent(MainActivity.this, DispatcherActivity.class));
+                        finish();
                         break;
                 }
                 return true;

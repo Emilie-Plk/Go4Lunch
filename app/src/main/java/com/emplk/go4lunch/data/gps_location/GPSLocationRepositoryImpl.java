@@ -11,6 +11,7 @@ import androidx.annotation.RequiresPermission;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.emplk.go4lunch.domain.GPS_location.GPSLocationRepository;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -21,7 +22,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class GPSLocationRepository {
+public class GPSLocationRepositoryImpl implements GPSLocationRepository {
 
     private static final int LOCATION_REQUEST_INTERVAL_MS = 20_000;
     private static final int SMALLEST_DISPLACEMENT_THRESHOLD_METER = 100;
@@ -32,10 +33,10 @@ public class GPSLocationRepository {
     @NonNull
     private final MutableLiveData<Location> locationMutableLiveData = new MutableLiveData<>(null);
 
-    private LocationCallback locationCallback; // should it be final?
+    private LocationCallback locationCallback; // shouldn't be final?
 
     @Inject
-    public GPSLocationRepository(@NonNull FusedLocationProviderClient fusedLocationProviderClient) {
+    public GPSLocationRepositoryImpl(@NonNull FusedLocationProviderClient fusedLocationProviderClient) {
         this.fusedLocationProviderClient = fusedLocationProviderClient;
     }
 
@@ -43,6 +44,7 @@ public class GPSLocationRepository {
         return locationMutableLiveData;
     }
 
+    @Override
     @RequiresPermission(anyOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
     public void startLocationRequest() {
         if (locationCallback == null) {
@@ -68,6 +70,7 @@ public class GPSLocationRepository {
         );
     }
 
+    @Override
     public void stopLocationRequest() {
         if (locationCallback != null) {
             fusedLocationProviderClient.removeLocationUpdates(locationCallback);

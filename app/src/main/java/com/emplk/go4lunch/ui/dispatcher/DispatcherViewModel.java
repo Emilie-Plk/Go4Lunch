@@ -7,9 +7,9 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
-import com.emplk.go4lunch.data.authentication.AuthRepository;
-import com.emplk.go4lunch.data.authentication.FirebaseUserEntity;
+import com.emplk.go4lunch.data.authentication.AuthRepositoryImpl;
 import com.emplk.go4lunch.data.permission.GPSPermissionRepository;
+import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 
 import javax.inject.Inject;
 
@@ -22,18 +22,18 @@ public class DispatcherViewModel extends ViewModel {
     private final GPSPermissionRepository gpsPermissionRepository;
 
     @NonNull
-    private final AuthRepository authRepository;   //TODO: wtf puis-je le virer ?
+    private final AuthRepositoryImpl authRepository;   //TODO: wtf puis-je le virer ?
 
     private final MediatorLiveData<DispatcherViewAction> dispatcherViewActionMediatorLiveData = new MediatorLiveData<>();
 
-    private final LiveData<FirebaseUserEntity> firebaseUserEntityLiveData;
+    private final LiveData<LoggedUserEntity> firebaseUserEntityLiveData;
     private final LiveData<Boolean> hasGPSPermissionLiveData;
 
 
     @Inject
     public DispatcherViewModel(
         @NonNull GPSPermissionRepository gpsPermissionRepository,
-        @NonNull AuthRepository authRepository
+        @NonNull AuthRepositoryImpl authRepository
     ) {
         this.gpsPermissionRepository = gpsPermissionRepository;
         this.authRepository = authRepository;
@@ -56,15 +56,18 @@ public class DispatcherViewModel extends ViewModel {
 
     private void combine(
         @Nullable Boolean permission,
-        @Nullable FirebaseUserEntity firebaseUser
+        @Nullable LoggedUserEntity firebaseUser
     ) {
+        if (permission == null) {
+            return;
+        }
 
-        if (Boolean.FALSE.equals(permission)) {
-            dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_ONBOARDING_ACTIVITY);
+        if (permission) {
+            dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_MAIN_ACTIVITY);
         } else if (firebaseUser == null) {
             dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_LOGIN_ACTIVITY);
         } else {
-            dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_MAIN_ACTIVITY);
+            dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_ONBOARDING_ACTIVITY);
         }
     }
 

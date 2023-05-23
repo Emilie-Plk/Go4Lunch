@@ -16,7 +16,7 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.R;
-import com.emplk.go4lunch.data.gps_location.GPSLocationRepository;
+import com.emplk.go4lunch.data.gps_location.GPSLocationRepositoryImpl;
 import com.emplk.go4lunch.data.nearbySearchRestaurants.NearbySearchEntity;
 import com.emplk.go4lunch.data.nearbySearchRestaurants.NearbySearchRepository;
 import com.emplk.go4lunch.data.nearbySearchRestaurants.NearbySearchWrapper;
@@ -40,7 +40,7 @@ public class RestaurantListViewModel extends ViewModel {
     private final NearbySearchRepository nearbySearchRepository;
 
     @NonNull
-    private final GPSLocationRepository gpsLocationRepository;
+    private final GPSLocationRepositoryImpl gpsLocationRepository;
 
     @NonNull
     private final GPSPermissionRepository gpsPermissionRepository;
@@ -57,7 +57,7 @@ public class RestaurantListViewModel extends ViewModel {
     @Inject
     public RestaurantListViewModel(
         @NonNull NearbySearchRepository nearbySearchRepository,
-        @NonNull GPSLocationRepository gpsLocationRepository,
+        @NonNull GPSLocationRepositoryImpl gpsLocationRepository,
         @NonNull GPSPermissionRepository gpsPermissionRepository,
         @NonNull Application application
     ) {

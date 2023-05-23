@@ -1,11 +1,11 @@
-package com.emplk.go4lunch.data.authentication;
+package com.emplk.go4lunch.domain.authentication;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.Objects;
 
-public class FirebaseUserEntity {
+public class LoggedUserEntity {
 
     @NonNull
     private final String uid;
@@ -19,7 +19,7 @@ public class FirebaseUserEntity {
     @Nullable
     private final String photoUrl;
 
-    public FirebaseUserEntity(
+    public LoggedUserEntity(
         @NonNull String uid,
         @NonNull String email,
         @NonNull String displayName,
@@ -55,7 +55,7 @@ public class FirebaseUserEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        FirebaseUserEntity that = (FirebaseUserEntity) o;
+        LoggedUserEntity that = (LoggedUserEntity) o;
         return uid.equals(that.uid) && email.equals(that.email) && displayName.equals(that.displayName) && Objects.equals(photoUrl, that.photoUrl);
     }
 
@@ -67,7 +67,7 @@ public class FirebaseUserEntity {
     @NonNull
     @Override
     public String toString() {
-        return "FirebaseUserEntity{" +
+        return "LoggedUserEntity{" +
             "uid='" + uid + '\'' +
             ", email='" + email + '\'' +
             ", displayName='" + displayName + '\'' +

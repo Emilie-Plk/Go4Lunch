@@ -7,30 +7,28 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.emplk.go4lunch.R;
+import com.emplk.go4lunch.domain.authentication.AuthRepository;
+import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.google.firebase.auth.FirebaseAuth;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class AuthRepository {
+public class AuthRepositoryImpl implements AuthRepository {
 
     private final FirebaseAuth firebaseAuth;
-    private final MutableLiveData<FirebaseUserEntity> firebaseUserEntityMutableLiveData = new MutableLiveData<>();
+    private final MutableLiveData<LoggedUserEntity> firebaseUserEntityMutableLiveData = new MutableLiveData<>();
 
     @Inject
-    public AuthRepository(
+    public AuthRepositoryImpl(
         @NonNull FirebaseAuth firebaseAuth
     ) {
         this.firebaseAuth = firebaseAuth;
     }
 
-    public void signOut() {
-        firebaseAuth.signOut();
-    }
-
-
-    public LiveData<FirebaseUserEntity> getCurrentUserLiveData() {
+    @Override
+    public LiveData<LoggedUserEntity> getCurrentUserLiveData() {
         if (firebaseAuth.getCurrentUser() != null) {
             String uid = firebaseAuth.getCurrentUser().getUid();
             String email = firebaseAuth.getCurrentUser().getEmail();
@@ -45,7 +43,7 @@ public class AuthRepository {
             }
             if (email != null && displayName != null) {
                 firebaseUserEntityMutableLiveData.setValue(
-                    new FirebaseUserEntity(
+                    new LoggedUserEntity(
                         uid,
                         email,
                         displayName,
@@ -55,5 +53,10 @@ public class AuthRepository {
             }
         }
         return firebaseUserEntityMutableLiveData;
+    }
+
+    @Override
+    public void signOut() {
+        firebaseAuth.signOut();
     }
 }

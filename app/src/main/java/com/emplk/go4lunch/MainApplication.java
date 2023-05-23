@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.emplk.go4lunch.data.broadcast_receiver.GPSStatusRepository;
 import com.emplk.go4lunch.data.permission.GPSPermissionRepository;
 
 import javax.inject.Inject;
@@ -19,6 +20,9 @@ public class MainApplication extends Application implements Application.Activity
     @Inject
     GPSPermissionRepository gpsPermissionRepository;
 
+    @Inject
+    GPSStatusRepository gpsStatusRepository;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -27,6 +31,7 @@ public class MainApplication extends Application implements Application.Activity
 
     @Override
     public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+
     }
 
     @Override
@@ -37,7 +42,6 @@ public class MainApplication extends Application implements Application.Activity
     @Override
     public void onActivityResumed(@NonNull Activity activity) {
         gpsPermissionRepository.refreshGPSPermission();
-        // maybe observe my Broadcast receiver here
     }
 
     @Override
@@ -57,6 +61,6 @@ public class MainApplication extends Application implements Application.Activity
 
     @Override
     public void onActivityDestroyed(@NonNull Activity activity) {
-
+      //  gpsStatusRepository.unregisterReceiver();
     }
 }

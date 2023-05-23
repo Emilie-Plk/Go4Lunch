@@ -2,7 +2,7 @@ package com.emplk.go4lunch.domain.authentication;
 
 import androidx.annotation.NonNull;
 
-import com.emplk.go4lunch.data.authentication.AuthRepository;
+import com.emplk.go4lunch.data.authentication.AuthRepositoryImpl;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -10,10 +10,10 @@ import javax.inject.Singleton;
 @Singleton
 public class LogoutUserUseCase {
     @NonNull
-    private final AuthRepository authenticationRepository;
+    private final AuthRepositoryImpl authenticationRepository;
 
     @Inject
-    public LogoutUserUseCase(@NonNull AuthRepository authenticationRepository) {
+    public LogoutUserUseCase(@NonNull AuthRepositoryImpl authenticationRepository) {
         this.authenticationRepository = authenticationRepository;
     }
 
