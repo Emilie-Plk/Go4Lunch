@@ -58,8 +58,8 @@ public class RestaurantListFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         viewModel.getRestaurantItemViewStateListLiveData()
-            .observe(getViewLifecycleOwner(),
-                list -> adapter.submitList(list)
+            .observe(getViewLifecycleOwner(), list ->
+                adapter.submitList(list)
             );
     }
 
