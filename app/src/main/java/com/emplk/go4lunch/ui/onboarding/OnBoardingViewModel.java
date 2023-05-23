@@ -88,7 +88,7 @@ public class OnBoardingViewModel extends ViewModel {
 
         boolean showRationale = isShowRationale != null;
 
-        boolean changeAppSettingsClicked = changeAppSettings != null && changeAppSettings;
+        boolean changeAppSettingsClicked = changeAppSettings != null;
 
         if (hasGPSPermission) {
             onBoardingViewActionMediatorLiveData.setValue(OnBoardingViewAction.CONTINUE_TO_AUTHENTICATION);

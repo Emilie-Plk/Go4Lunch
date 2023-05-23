@@ -23,8 +23,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class OnBoardingActivity extends AppCompatActivity {
 
-    private OnboardingActivityBinding binding;
-
     private OnBoardingViewModel viewModel;
 
     private ActivityResultLauncher<String[]> permissionLauncher;
@@ -32,13 +30,14 @@ public class OnBoardingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = OnboardingActivityBinding.inflate(getLayoutInflater());
+        OnboardingActivityBinding binding = OnboardingActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         viewModel = new ViewModelProvider(this).get(OnBoardingViewModel.class);
 
         permissionLauncher = registerForActivityResult(
-            new ActivityResultContracts.RequestMultiplePermissions(), result -> {
+            new ActivityResultContracts.RequestMultiplePermissions(),
+            result -> {
                 viewModel.onPermissionResult();
             }
         );
@@ -49,12 +48,11 @@ public class OnBoardingActivity extends AppCompatActivity {
                         continueWithPermissions();
                         break;
                     case ASK_GPS_PERMISSION:
-                        binding.onboardingAllowButton.setOnClickListener(v ->
-                            permissionLauncher.launch(new String[]{
+                        permissionLauncher.launch(new String[]{
                                 Manifest.permission.ACCESS_FINE_LOCATION,
                                 Manifest.permission.ACCESS_COARSE_LOCATION
-                            }));
-
+                            }
+                        );
                         break;
                     case SHOW_RATIONALE:
                         showRequestPermissionRationale();
@@ -69,11 +67,12 @@ public class OnBoardingActivity extends AppCompatActivity {
             }
         );
 
-        binding.onboardingAllowButton.setOnClickListener(v -> viewModel.onAllowClicked(
-                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)
-            )
-        )
-        ;
+        binding.onboardingAllowButton.setOnClickListener(v -> {
+            viewModel.onAllowClicked(
+                    ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                );
+            }
+        );
     }
 
     private void showRequestPermissionRationale() {
@@ -90,10 +89,8 @@ public class OnBoardingActivity extends AppCompatActivity {
     }
 
     private void continueWithPermissions() {
-        startActivity(new Intent(OnBoardingActivity.this, DispatcherActivity.class)
-        );
+        startActivity(new Intent(OnBoardingActivity.this, DispatcherActivity.class));
         Toast.makeText(this, "Continuing with GPS Permission granted", Toast.LENGTH_SHORT).show();
         finish();
     }
-
 }
