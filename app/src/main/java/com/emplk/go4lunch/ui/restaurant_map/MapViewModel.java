@@ -22,7 +22,6 @@ public class MapViewModel extends ViewModel {
 
     private final MediatorLiveData<MapViewState> mapViewStateMediatorLiveData = new MediatorLiveData<>();
 
-
     @Inject
     public MapViewModel(
         @NonNull GPSLocationRepositoryImpl gpsLocationRepository

@@ -4,11 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
-import com.emplk.go4lunch.data.authentication.AuthRepositoryImpl;
 import com.emplk.go4lunch.data.permission.GPSPermissionRepository;
+import com.emplk.go4lunch.domain.authentication.GetCurrentUserUseCase;
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 
 import javax.inject.Inject;
@@ -18,30 +17,17 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class DispatcherViewModel extends ViewModel {
 
-    @NonNull
-    private final GPSPermissionRepository gpsPermissionRepository;
-
-    @NonNull
-    private final AuthRepositoryImpl authRepository;   //TODO: wtf puis-je le virer ?
-
     private final MediatorLiveData<DispatcherViewAction> dispatcherViewActionMediatorLiveData = new MediatorLiveData<>();
-
-    private final LiveData<LoggedUserEntity> firebaseUserEntityLiveData;
-    private final LiveData<Boolean> hasGPSPermissionLiveData;
-
 
     @Inject
     public DispatcherViewModel(
         @NonNull GPSPermissionRepository gpsPermissionRepository,
-        @NonNull AuthRepositoryImpl authRepository
+        @NonNull GetCurrentUserUseCase getCurrentUserUseCase
     ) {
-        this.gpsPermissionRepository = gpsPermissionRepository;
-        this.authRepository = authRepository;
 
-        firebaseUserEntityLiveData = authRepository.getCurrentUserLiveData();
-        hasGPSPermissionLiveData = gpsPermissionRepository.hasGPSPermissionLiveData();
+        LiveData<Boolean> hasGPSPermissionLiveData = gpsPermissionRepository.hasGPSPermissionLiveData();
 
-        gpsPermissionRepository.refreshGPSPermission();
+        LiveData<LoggedUserEntity> firebaseUserEntityLiveData = getCurrentUserUseCase.invoke();
 
         dispatcherViewActionMediatorLiveData.addSource(hasGPSPermissionLiveData, permission -> {
                 combine(permission, firebaseUserEntityLiveData.getValue());
@@ -64,8 +50,9 @@ public class DispatcherViewModel extends ViewModel {
 
         if (permission) {
             dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_MAIN_ACTIVITY);
-        } else if (firebaseUser == null) {
-            dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_LOGIN_ACTIVITY);
+            if (firebaseUser == null) {
+                dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_LOGIN_ACTIVITY);
+            }
         } else {
             dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_ONBOARDING_ACTIVITY);
         }
@@ -73,16 +60,5 @@ public class DispatcherViewModel extends ViewModel {
 
     public MediatorLiveData<DispatcherViewAction> getDispatcherViewActionMediatorLiveData() {
         return dispatcherViewActionMediatorLiveData;
-    }
-
-    public LiveData<DispatcherViewAction> getDispatcherViewAction() {
-        return Transformations.switchMap(gpsPermissionRepository.hasGPSPermissionLiveData(), permission -> {
-            if (Boolean.TRUE.equals(permission)) {
-                dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_LOGIN_ACTIVITY);
-            } else {
-                dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_ONBOARDING_ACTIVITY);
-            }
-            return dispatcherViewActionMediatorLiveData;
-        });
     }
 }

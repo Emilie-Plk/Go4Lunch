@@ -68,7 +68,7 @@ public class OnBoardingActivity extends AppCompatActivity {
         );
 
         binding.onboardingAllowButton.setOnClickListener(v -> {
-            viewModel.onAllowClicked(
+                viewModel.onAllowClicked(
                     ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 );
             }
