@@ -20,6 +20,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.MainActivityBinding;
 import com.emplk.go4lunch.databinding.MainNavigationHeaderBinding;
+import com.emplk.go4lunch.ui.dispatcher.DispatcherActivity;
 import com.emplk.go4lunch.ui.login.LoginActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -116,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_logout:
                         viewModel.signOut();
                         Log.i(TAG, "Clicked on 'Logout' nav item");
-                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        startActivity(new Intent(MainActivity.this, DispatcherActivity.class));
                         break;
                 }
                 return true;

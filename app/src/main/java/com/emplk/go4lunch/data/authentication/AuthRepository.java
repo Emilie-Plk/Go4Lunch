@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.data.auth;
+package com.emplk.go4lunch.data.authentication;
 
 import android.net.Uri;
 

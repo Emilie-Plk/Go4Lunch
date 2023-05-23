@@ -7,8 +7,8 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
-import com.emplk.go4lunch.data.auth.AuthRepository;
-import com.emplk.go4lunch.data.auth.FirebaseUserEntity;
+import com.emplk.go4lunch.data.authentication.AuthRepository;
+import com.emplk.go4lunch.data.authentication.FirebaseUserEntity;
 import com.emplk.go4lunch.data.permission.GPSPermissionRepository;
 
 import javax.inject.Inject;

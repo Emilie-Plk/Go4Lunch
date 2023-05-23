@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.data.auth;
+package com.emplk.go4lunch.data.authentication;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

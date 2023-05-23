@@ -37,6 +37,7 @@ public class MainApplication extends Application implements Application.Activity
     @Override
     public void onActivityResumed(@NonNull Activity activity) {
         gpsPermissionRepository.refreshGPSPermission();
+        // maybe observe my Broadcast receiver here
     }
 
     @Override

@@ -4,8 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.emplk.go4lunch.data.auth.AuthRepository;
-import com.emplk.go4lunch.data.auth.FirebaseUserEntity;
+import com.emplk.go4lunch.data.authentication.FirebaseUserEntity;
+import com.emplk.go4lunch.domain.authentication.GetCurrentUserUseCase;
+import com.emplk.go4lunch.domain.authentication.LogoutUserUseCase;
 
 import javax.inject.Inject;
 
@@ -14,22 +15,27 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class MainViewModel extends ViewModel {
 
-    private final AuthRepository authRepository;
+    @NonNull
+    private final GetCurrentUserUseCase getCurrentUserUseCase;
 
-    private final LiveData<FirebaseUserEntity> firebaseUserEntityLiveData;
+    @NonNull
+    private final LogoutUserUseCase logoutUserUseCase;
 
     @Inject
-    public MainViewModel(@NonNull AuthRepository authRepository) {
-        this.authRepository = authRepository;
-        firebaseUserEntityLiveData = authRepository.getCurrentUserLiveData();
+    public MainViewModel(
+        @NonNull GetCurrentUserUseCase getCurrentUserUseCase,
+        @NonNull LogoutUserUseCase logoutUserUseCase
+    ) {
+        this.getCurrentUserUseCase = getCurrentUserUseCase;
+        this.logoutUserUseCase = logoutUserUseCase;
     }
 
     public LiveData<FirebaseUserEntity> getCurrentUserLiveData() {
-        return firebaseUserEntityLiveData;
+        return getCurrentUserUseCase.invoke();
     }
 
     public void signOut() {
-        authRepository.signOut();
+        logoutUserUseCase.invoke();
     }
 }
 
