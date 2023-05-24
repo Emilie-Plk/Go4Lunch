@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.emplk.go4lunch.ui.workmate_list.WorkmateListFragment">
+    tools:context="com.emplk.go4lunch.domain.ui.workmate_list.WorkmateListFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

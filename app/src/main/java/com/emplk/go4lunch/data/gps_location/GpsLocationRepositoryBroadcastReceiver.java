@@ -59,7 +59,6 @@ public class GpsLocationRepositoryBroadcastReceiver extends BroadcastReceiver im
                 GpsLocationEntity gpsLocationEntity = new GpsLocationEntity(location.getLatitude(), location.getLongitude());
                 gpsLocationEntityMutableLiveData.setValue(gpsLocationEntity);
             }
-// TODO: manage the null
         }
     };
 
@@ -91,7 +90,7 @@ public class GpsLocationRepositoryBroadcastReceiver extends BroadcastReceiver im
     }
 
     @Override
-    public LiveData<Boolean> isGpsEnabled() {
+    public LiveData<Boolean> isGpsEnabledLiveData() {
         return isGpsEnabledMutableLiveData;
     }
 

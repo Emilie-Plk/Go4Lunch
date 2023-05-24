@@ -9,6 +9,8 @@ public interface GpsLocationRepository {
 
     LiveData<GpsLocationEntity> getLocationLiveData();
 
-    LiveData<Boolean> isGpsEnabled();
+    LiveData<Boolean> isGpsEnabledLiveData();
+
+    LiveData<GpsResponse> getGpsResponseLiveData();
 
 }
