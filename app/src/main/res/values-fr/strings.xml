@@ -9,7 +9,7 @@
     <string name="list_workmate_send_message_a11y">Envoyer un message</string>
     <string name="list_workmate_name_joining">%s y va !</string>
     <string name="list_error_message_generic">Oups, quelque chose s\'est mal passé !\nRéessayez plus tard ! :)</string>
-    <string name="list_error_message_permission">Oups, quelque chose s\'est mal passé ! Merci d\'activer votre GPS :)</string>
+    <string name="list_error_message_permission">Oups, quelque chose s\'est mal passé ! Merci d\'activer votre Gps :)</string>
     <string name="restaurant_item_food_image_a11y">Image de nourriture</string>
     <string name="detail_restaurant_chose_fab">Y aller ?</string>
     <string name="detail_button_call">Appeler</string>
@@ -18,7 +18,7 @@
     <string name="detail_food_picture_a11y">Image de nourriture</string>
     <string name="nav_drawer_lunch">Votre déjeuner</string>
     <string name="nav_drawer_settings">Paramètres</string>
-    <string name="nav_drawer_gps_permission">Gérer la permission GPS</string>
+    <string name="nav_drawer_gps_permission">Gérer la permission Gps</string>
     <string name="nav_drawer_logout">Se déconnecter</string>
     <string name="open_nav">Ouvrir le menu latéral</string>
     <string name="close_nav">Fermer le menu latéral</string>
@@ -26,5 +26,5 @@
     <string name="onboarding_privacy_message">Vos informations sont précieuses,\\nnous ne partageons pas vos données.</string>
     <string name="onboarding_decline_button">Non merci</string>
     <string name="onboarding_allow_button">D\'accord</string>
-    <string name="onboarding_welcome_tv">Bienvenue !\\nPour une meilleure expérience, nous vous\\nrecommandons d\'activer le GPS.</string>
+    <string name="onboarding_welcome_tv">Bienvenue !\\nPour une meilleure expérience, nous vous\\nrecommandons d\'activer le Gps.</string>
 </resources>

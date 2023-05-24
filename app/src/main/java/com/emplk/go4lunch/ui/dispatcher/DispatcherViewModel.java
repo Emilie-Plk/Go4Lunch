@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.emplk.go4lunch.data.permission.GPSPermissionRepository;
+import com.emplk.go4lunch.data.permission.GpsPermissionRepository;
 import com.emplk.go4lunch.domain.authentication.GetCurrentUserUseCase;
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 
@@ -21,21 +21,21 @@ public class DispatcherViewModel extends ViewModel {
 
     @Inject
     public DispatcherViewModel(
-        @NonNull GPSPermissionRepository gpsPermissionRepository,
+        @NonNull GpsPermissionRepository gpsPermissionRepository,
         @NonNull GetCurrentUserUseCase getCurrentUserUseCase
     ) {
 
-        LiveData<Boolean> hasGPSPermissionLiveData = gpsPermissionRepository.hasGPSPermissionLiveData();
+        LiveData<Boolean> hasGpsPermissionLiveData = gpsPermissionRepository.hasGpsPermissionLiveData();
 
         LiveData<LoggedUserEntity> firebaseUserEntityLiveData = getCurrentUserUseCase.invoke();
 
-        dispatcherViewActionMediatorLiveData.addSource(hasGPSPermissionLiveData, permission -> {
+        dispatcherViewActionMediatorLiveData.addSource(hasGpsPermissionLiveData, permission -> {
                 combine(permission, firebaseUserEntityLiveData.getValue());
             }
         );
 
         dispatcherViewActionMediatorLiveData.addSource(firebaseUserEntityLiveData, firebaseUserEntity -> {
-                combine(hasGPSPermissionLiveData.getValue(), firebaseUserEntity);
+                combine(hasGpsPermissionLiveData.getValue(), firebaseUserEntity);
             }
         );
     }

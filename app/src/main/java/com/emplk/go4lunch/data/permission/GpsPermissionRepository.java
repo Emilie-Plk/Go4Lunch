@@ -1,7 +1,7 @@
 package com.emplk.go4lunch.data.permission;
 
 import android.Manifest;
-import android.app.Application;
+import android.content.Context;
 import android.content.pm.PackageManager;
 
 import androidx.annotation.NonNull;
@@ -13,30 +13,32 @@ import androidx.lifecycle.Transformations;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import dagger.hilt.android.qualifiers.ApplicationContext;
+
 @Singleton
-public class GPSPermissionRepository {
+public class GpsPermissionRepository {
 
     @NonNull
-    private final Application application;
+    private final Context context;
 
     final MutableLiveData<Boolean> permissionLiveData;
 
     @Inject
-    public GPSPermissionRepository(
-        @NonNull Application application
+    public GpsPermissionRepository(
+        @NonNull @ApplicationContext Context context
     ) {
-        this.application = application;
+        this.context = context;
         permissionLiveData = new MutableLiveData<>();
     }
 
-    public LiveData<Boolean> hasGPSPermissionLiveData() {
+    public LiveData<Boolean> hasGpsPermissionLiveData() {
         return Transformations.distinctUntilChanged(permissionLiveData);
     }
 
-    public void refreshGPSPermission() {
+    public void refreshGpsPermission() {
         permissionLiveData.setValue(
             ContextCompat.checkSelfPermission(
-                application.getApplicationContext(),
+                context,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
         );
     }

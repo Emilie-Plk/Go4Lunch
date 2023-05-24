@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.RestaurantDetailActivityBinding;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -63,11 +64,13 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                     binding.loadingStateLoadingBar.setVisibility(Boolean.TRUE.equals(restaurantDetail.isLoading()) ? View.VISIBLE : View.INVISIBLE);
                     binding.detailRestaurantWebsiteButton.setEnabled(restaurantDetail.isWebsiteAvailable());
                     binding.detailRestaurantCallButton.setEnabled(restaurantDetail.isPhoneNumberAvailable());
+
                     Glide.with(this)
                         .load(restaurantDetail.getPictureUrl())
                         .centerCrop()
+                        .error(R.drawable.restaurant_table)
                         .into(binding.detailRestaurantPicture);
-                    // I want to have a placeholder in case the restaurantDetail.getPictureUrl is null
+
                     binding.detailRestaurantWebsiteButton.setOnClickListener(v -> {
                             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurantDetail.getWebsiteUrl()));
                             startActivity(intent);

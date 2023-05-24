@@ -47,7 +47,7 @@ public class OnBoardingActivity extends AppCompatActivity {
                     case CONTINUE_TO_AUTHENTICATION:
                         continueWithPermissions();
                         break;
-                    case ASK_GPS_PERMISSION:
+                    case ASK_Gps_PERMISSION:
                         permissionLauncher.launch(new String[]{
                                 Manifest.permission.ACCESS_FINE_LOCATION,
                                 Manifest.permission.ACCESS_COARSE_LOCATION
@@ -78,7 +78,7 @@ public class OnBoardingActivity extends AppCompatActivity {
     private void showRequestPermissionRationale() {
         new AlertDialog.Builder(this)
             .setTitle("Permission required")
-            .setMessage(R.string.showRationaleGPSPermissionMessage)
+            .setMessage(R.string.showRationaleGpsPermissionMessage)
             .setPositiveButton(R.string.change_settings_dialog_button, (dialog, which) -> {
                     viewModel.onChangeAppSettingsClicked();
                 }
@@ -90,7 +90,7 @@ public class OnBoardingActivity extends AppCompatActivity {
 
     private void continueWithPermissions() {
         startActivity(new Intent(OnBoardingActivity.this, DispatcherActivity.class));
-        Toast.makeText(this, "Continuing with GPS Permission granted", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Continuing with Gps Permission granted", Toast.LENGTH_SHORT).show();
         finish();
     }
 }

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.LoadingStateBinding;
 import com.emplk.go4lunch.databinding.RestaurantItemBinding;
 import com.emplk.go4lunch.databinding.RestaurantListErrorStateBinding;
@@ -89,6 +90,7 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
 
             Glide.with(itemView.getContext())
                 .load(itemViewState.getPictureUrl())
+                .error(R.drawable.restaurant_table)
                 .transform(new CenterCrop(), new RoundedCorners(25))
                 .into(binding.listRestaurantPicture);
 

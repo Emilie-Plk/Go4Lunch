@@ -7,8 +7,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.emplk.go4lunch.data.broadcast_receiver.GPSBroadcastReceiver;
-import com.emplk.go4lunch.data.permission.GPSPermissionRepository;
+import com.emplk.go4lunch.data.gps_location.GpsLocationRepositoryBroadcastReceiver;
+import com.emplk.go4lunch.data.permission.GpsPermissionRepository;
 
 import javax.inject.Inject;
 
@@ -18,10 +18,13 @@ import dagger.hilt.android.HiltAndroidApp;
 public class MainApplication extends Application implements Application.ActivityLifecycleCallbacks {
 
     @Inject
-    GPSPermissionRepository gpsPermissionRepository;
+    GpsPermissionRepository gpsPermissionRepository;
 
     @Inject
-    GPSBroadcastReceiver gpsBroadcastReceiver;
+    GpsLocationRepositoryBroadcastReceiver gpsLocationRepositoryBroadcastReceiver;
+
+    int activityCount;
+
 
     @Override
     public void onCreate() {
@@ -41,17 +44,20 @@ public class MainApplication extends Application implements Application.Activity
 
     @Override
     public void onActivityResumed(@NonNull Activity activity) {
-        gpsPermissionRepository.refreshGPSPermission();
+        activityCount++;
+        gpsPermissionRepository.refreshGpsPermission();
     }
 
     @Override
     public void onActivityPaused(@NonNull Activity activity) {
-
     }
 
     @Override
     public void onActivityStopped(@NonNull Activity activity) {
-
+        activityCount--;
+        if (activityCount == 0) {
+            gpsLocationRepositoryBroadcastReceiver.stopLocationRequest();
+        }
     }
 
     @Override

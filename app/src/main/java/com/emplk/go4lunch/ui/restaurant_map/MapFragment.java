@@ -7,10 +7,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -34,10 +36,21 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        viewModel.getLocationLiveData().observe(this, mapViewState -> {
+        viewModel.getMapViewStateLiveData().observe(this, mapViewState -> {
                 LatLng latLng = mapViewState.getLatLng();
+                float zoomLevel = 15f;
                 googleMap.addMarker(new MarkerOptions().position(latLng).title("Marker in your area"));
-                googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                // Create a CameraPosition object with the target location and desired zoom level
+                CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(latLng)
+                    .zoom(zoomLevel)
+                    .build();
+
+                // Create a CameraUpdate object to move and zoom the camera to the desired position
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+
+                // Move and zoom the camera to the desired position
+                googleMap.animateCamera(cameraUpdate);
             }
         );
     }
