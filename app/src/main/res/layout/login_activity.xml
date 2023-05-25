@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/pumpkin_orange_translucent"
-    tools:context="com.emplk.go4lunch.domain.ui.login.LoginActivity">
+    tools:context="com.emplk.go4lunch.ui.login.LoginActivity">
 
     <ImageView
         android:id="@+id/login_big_logo"

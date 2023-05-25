@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
 public class GetCurrentUserUseCase {
     @NonNull
     private final AuthRepository authRepository;

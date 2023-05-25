@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
 public class LogoutUserUseCase {
     @NonNull
     private final AuthRepository authRepository;

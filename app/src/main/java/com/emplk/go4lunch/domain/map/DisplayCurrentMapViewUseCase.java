@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
 import com.emplk.go4lunch.domain.location.GetCurrentLocationUseCase;
-import com.emplk.go4lunch.domain.ui.restaurant_map.MapViewState;
+import com.emplk.go4lunch.ui.restaurant_map.MapViewState;
 import com.google.android.gms.maps.model.LatLng;
 
 import javax.inject.Inject;
