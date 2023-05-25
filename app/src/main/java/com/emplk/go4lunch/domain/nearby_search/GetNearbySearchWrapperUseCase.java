@@ -37,6 +37,5 @@ public class GetNearbySearchWrapperUseCase {
                     API_KEY);
             }
         );
-
     }
 }

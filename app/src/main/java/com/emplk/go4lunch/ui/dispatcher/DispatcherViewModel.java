@@ -6,9 +6,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.emplk.go4lunch.data.permission.GpsPermissionRepositoryImpl;
 import com.emplk.go4lunch.domain.authentication.GetCurrentUserUseCase;
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
+import com.emplk.go4lunch.domain.location.StartLocationRequestUseCase;
 import com.emplk.go4lunch.domain.permission.GetGpsPermissionUseCase;
 
 import javax.inject.Inject;
@@ -20,11 +20,14 @@ public class DispatcherViewModel extends ViewModel {
 
     private final MediatorLiveData<DispatcherViewAction> dispatcherViewActionMediatorLiveData = new MediatorLiveData<>();
 
+    private final StartLocationRequestUseCase startLocationRequestUseCase;
+
     @Inject
     public DispatcherViewModel(
         @NonNull GetGpsPermissionUseCase getGpsPermissionUseCase,
-        @NonNull GetCurrentUserUseCase getCurrentUserUseCase
-    ) {
+        @NonNull GetCurrentUserUseCase getCurrentUserUseCase,
+        StartLocationRequestUseCase startLocationRequestUseCase) {
+        this.startLocationRequestUseCase = startLocationRequestUseCase;
 
         LiveData<Boolean> hasGpsPermissionLiveData = getGpsPermissionUseCase.invoke();
 
@@ -50,6 +53,7 @@ public class DispatcherViewModel extends ViewModel {
         }
 
         if (permission) {
+            startLocationRequestUseCase.invoke();
             dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_MAIN_ACTIVITY);
             if (firebaseUser == null) {
                 dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_LOGIN_ACTIVITY);

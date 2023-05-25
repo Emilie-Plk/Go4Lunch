@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 public class GetCurrentUserUseCase {
     @NonNull

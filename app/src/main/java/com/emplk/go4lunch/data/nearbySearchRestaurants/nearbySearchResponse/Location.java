@@ -1,7 +1,6 @@
 package com.emplk.go4lunch.data.nearbySearchRestaurants.nearbySearchResponse;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -10,25 +9,25 @@ import java.util.Objects;
 public class Location {
 
     @SerializedName("lng")
-    @Nullable
-    private final Float lng;
+    @NonNull
+    private final Double lng;
 
     @SerializedName("lat")
-    @Nullable
-    private final Float lat;
+    @NonNull
+    private final Double lat;
 
-    public Location(@Nullable Float lng, @Nullable Float lat) {
+    public Location(@NonNull Double lng, @NonNull Double lat) {
         this.lng = lng;
         this.lat = lat;
     }
 
-    @Nullable
-    public Float getLng() {
+    @NonNull
+    public Double getLng() {
         return lng;
     }
 
-    @Nullable
-    public Float getLat() {
+    @NonNull
+    public Double getLat() {
         return lat;
     }
 

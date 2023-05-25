@@ -8,10 +8,10 @@ public abstract class GpsResponse {
 
     public static class Success extends GpsResponse {
         @Nullable
-        public final GpsLocationEntity gpsLocationEntity;
+        public final LocationEntity locationEntity;
 
-        public Success(@Nullable GpsLocationEntity gpsLocationEntity) {
-            this.gpsLocationEntity = gpsLocationEntity;
+        public Success(@Nullable LocationEntity locationEntity) {
+            this.locationEntity = locationEntity;
         }
 
         @Override
@@ -19,18 +19,18 @@ public abstract class GpsResponse {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Success success = (Success) o;
-            return Objects.equals(gpsLocationEntity, success.gpsLocationEntity);
+            return Objects.equals(locationEntity, success.locationEntity);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(gpsLocationEntity);
+            return Objects.hash(locationEntity);
         }
 
         @Override
         public String toString() {
             return "Success{" +
-                "gpsLocationEntity=" + gpsLocationEntity +
+                "locationEntity=" + locationEntity +
                 '}';
         }
     }

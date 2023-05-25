@@ -3,7 +3,6 @@ package com.emplk.go4lunch.domain.authentication;
 import androidx.annotation.NonNull;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 public class LogoutUserUseCase {
     @NonNull

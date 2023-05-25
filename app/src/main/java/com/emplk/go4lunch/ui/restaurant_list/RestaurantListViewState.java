@@ -1,7 +1,5 @@
 package com.emplk.go4lunch.ui.restaurant_list;
 
-import android.graphics.drawable.Drawable;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -190,10 +188,14 @@ public abstract class RestaurantListViewState {
         @NonNull
         private final String errorMessage;
 
-        @Nullable
-        private final Drawable errorDrawable;  // int or Drawable?
 
-        public RestaurantListError(@NonNull String errorMessage, @Nullable Drawable errorDrawable) {
+        @NonNull
+        private final ErrorDrawable errorDrawable;
+
+        public RestaurantListError(
+            @NonNull String errorMessage,
+            @NonNull ErrorDrawable errorDrawable
+        ) {
             super(Type.ERROR_STATE);
             this.errorMessage = errorMessage;
             this.errorDrawable = errorDrawable;
@@ -204,8 +206,8 @@ public abstract class RestaurantListViewState {
             return errorMessage;
         }
 
-        @Nullable
-        public Drawable getErrorDrawable() {
+        @NonNull
+        public ErrorDrawable getErrorDrawable() {
             return errorDrawable;
         }
 
@@ -214,7 +216,7 @@ public abstract class RestaurantListViewState {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             RestaurantListError that = (RestaurantListError) o;
-            return errorMessage.equals(that.errorMessage) && Objects.equals(errorDrawable, that.errorDrawable);
+            return errorDrawable == that.errorDrawable && errorMessage.equals(that.errorMessage);
         }
 
         @Override

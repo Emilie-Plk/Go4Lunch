@@ -7,7 +7,7 @@ public interface GpsLocationRepository {
 
     void stopLocationRequest();
 
-    LiveData<GpsLocationEntity> getLocationLiveData();
+    LiveData<LocationEntity> getLocationLiveData();
 
     LiveData<Boolean> isGpsEnabledLiveData();
 

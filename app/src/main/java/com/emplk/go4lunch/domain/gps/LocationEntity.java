@@ -1,31 +1,30 @@
 package com.emplk.go4lunch.domain.gps;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import java.util.Objects;
 
-public class GpsLocationEntity {
+public class LocationEntity {
 
-    @Nullable
+    @NonNull
     private final Double latitude;
-    @Nullable
+    @NonNull
     private final Double longitude;
 
-    public GpsLocationEntity(
-        @Nullable Double latitude,
-        @Nullable Double longitude
+    public LocationEntity(
+        @NonNull Double latitude,
+        @NonNull Double longitude
     ) {
         this.latitude = latitude;
         this.longitude = longitude;
     }
 
-    @Nullable
+    @NonNull
     public Double getLatitude() {
         return latitude;
     }
 
-    @Nullable
+    @NonNull
     public Double getLongitude() {
         return longitude;
     }
@@ -34,7 +33,7 @@ public class GpsLocationEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        GpsLocationEntity that = (GpsLocationEntity) o;
+        LocationEntity that = (LocationEntity) o;
         return Objects.equals(latitude, that.latitude) && Objects.equals(longitude, that.longitude);
     }
 
@@ -46,7 +45,7 @@ public class GpsLocationEntity {
     @NonNull
     @Override
     public String toString() {
-        return "GpsLocationEntity{" +
+        return "LocationEntity{" +
             "latitude=" + latitude +
             ", longitude=" + longitude +
             '}';

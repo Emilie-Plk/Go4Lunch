@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class GetGpsResponseUseCase {
 
     @NonNull

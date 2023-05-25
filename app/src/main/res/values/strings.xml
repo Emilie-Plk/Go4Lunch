@@ -41,4 +41,6 @@
     <string name="onboarding_welcome_tv">Welcome!\nFor a better experience, \nGo4Lunch needs your Gps location</string>
     <string name="showRationaleGpsPermissionMessage">This app works best with your permission to Gps location. If you want to provide this permission, please click on \'Change settings\' to grant it</string>
     <string name="change_settings_dialog_button">change settings</string>
+    <string name="list_error_message_no_results">Oops, no results found in your area!</string>
+    <string name="list_error_message_no_gps">Please provide Gps permission\nin the Settings or look for\na location in the search bar!</string>
 </resources>

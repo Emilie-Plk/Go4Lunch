@@ -114,7 +114,22 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
 
         public void bind(@NonNull RestaurantListViewState.RestaurantListError item) {
             binding.restaurantListErrorTitle.setText(item.getErrorMessage());
-            binding.restaurantListErrorImage.setImageDrawable(item.getErrorDrawable());
+
+            int drawableError;
+            switch (item.getErrorDrawable()) {
+                case NO_GPS_FOUND:
+                    drawableError = R.drawable.baseline_not_listed_location_24;
+                    break;
+                case NO_RESULT_FOUND:
+                    drawableError = R.drawable.baseline_mood_bad_24;
+                    break;
+                case REQUEST_FAILURE:
+                    drawableError = R.drawable.baseline_network_off_24;
+                    break;
+                default:
+                    drawableError = R.drawable.baseline_error_outline_24;
+            }
+            binding.restaurantListErrorImage.setImageResource(drawableError);
         }
     }
 

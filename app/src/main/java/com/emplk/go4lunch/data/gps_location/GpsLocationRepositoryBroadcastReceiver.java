@@ -21,9 +21,9 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import com.emplk.go4lunch.domain.gps.GpsLocationEntity;
 import com.emplk.go4lunch.domain.gps.GpsLocationRepository;
 import com.emplk.go4lunch.domain.gps.GpsResponse;
+import com.emplk.go4lunch.domain.gps.LocationEntity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -45,7 +45,7 @@ public class GpsLocationRepositoryBroadcastReceiver extends BroadcastReceiver im
     private final FusedLocationProviderClient fusedLocationProviderClient;
 
     @NonNull
-    private final MutableLiveData<GpsLocationEntity> gpsLocationEntityMutableLiveData = new MutableLiveData<>();
+    private final MutableLiveData<LocationEntity> gpsLocationEntityMutableLiveData = new MutableLiveData<>();
 
     @NonNull
     private final MutableLiveData<Boolean> isGpsEnabledMutableLiveData = new MutableLiveData<>();
@@ -56,8 +56,8 @@ public class GpsLocationRepositoryBroadcastReceiver extends BroadcastReceiver im
             Log.d(TAG, "onLocationResult() called with: locationResult " + locationResult.getLastLocation());
             Location location = locationResult.getLastLocation();
             if (location != null) {
-                GpsLocationEntity gpsLocationEntity = new GpsLocationEntity(location.getLatitude(), location.getLongitude());
-                gpsLocationEntityMutableLiveData.setValue(gpsLocationEntity);
+                LocationEntity locationEntity = new LocationEntity(location.getLatitude(), location.getLongitude());
+                gpsLocationEntityMutableLiveData.setValue(locationEntity);
             }
         }
     };
@@ -80,11 +80,11 @@ public class GpsLocationRepositoryBroadcastReceiver extends BroadcastReceiver im
 
     @SuppressLint("MissingPermission")
     @Override
-    public LiveData<GpsLocationEntity> getLocationLiveData() {
+    public LiveData<LocationEntity> getLocationLiveData() {
        /* if (fusedLocationProviderClient.getLastLocation()) {
             Location location = fusedLocationProviderClient.getLastLocation().getResult();
-            GpsLocationEntity gpsLocationEntity = new GpsLocationEntity(location.getLatitude(), location.getLongitude());
-            gpsLocationEntityMutableLiveData.setValue(gpsLocationEntity);
+            LocationEntity locationEntity = new LocationEntity(location.getLatitude(), location.getLongitude());
+            gpsLocationEntityMutableLiveData.setValue(locationEntity);
         }*/
         return gpsLocationEntityMutableLiveData;
     }
@@ -100,7 +100,6 @@ public class GpsLocationRepositoryBroadcastReceiver extends BroadcastReceiver im
             @Override
             public void onChanged(Object object) {
                 GpsResponse gpsResponse;
-
                 if (isGpsEnabledMutableLiveData.getValue() != null && !isGpsEnabledMutableLiveData.getValue()) {
                     gpsResponse = new GpsResponse.GpsProviderDisabled();
                 } else {
@@ -137,11 +136,9 @@ public class GpsLocationRepositoryBroadcastReceiver extends BroadcastReceiver im
         @NonNull Context context,
         @NonNull Intent intent
     ) {
-        if (Intent.ACTION_PROVIDER_CHANGED.equals(intent.getAction())) {
-            if (locationManager != null) {
-                boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-                isGpsEnabledMutableLiveData.setValue(isGpsEnabled);
-            }
+        if (Intent.ACTION_PROVIDER_CHANGED.equals(intent.getAction()) && (locationManager != null)) {
+            boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            isGpsEnabledMutableLiveData.setValue(isGpsEnabled);
         }
     }
 

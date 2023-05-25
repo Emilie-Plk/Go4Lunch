@@ -6,9 +6,9 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.emplk.go4lunch.ui.onboarding.OnBoardingActivity;
 import com.emplk.go4lunch.ui.login.LoginActivity;
 import com.emplk.go4lunch.ui.main.MainActivity;
+import com.emplk.go4lunch.ui.onboarding.OnBoardingActivity;
 
 import dagger.hilt.android.AndroidEntryPoint;
 

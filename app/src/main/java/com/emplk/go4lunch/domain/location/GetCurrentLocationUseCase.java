@@ -2,8 +2,8 @@ package com.emplk.go4lunch.domain.location;
 
 import androidx.lifecycle.LiveData;
 
-import com.emplk.go4lunch.domain.gps.GpsLocationEntity;
 import com.emplk.go4lunch.domain.gps.GpsLocationRepository;
+import com.emplk.go4lunch.domain.gps.LocationEntity;
 
 import javax.inject.Inject;
 
@@ -16,7 +16,7 @@ public class GetCurrentLocationUseCase {
         this.gpsLocationRepository = gpsLocationRepository;
     }
 
-    public LiveData<GpsLocationEntity> invoke() {
-       return gpsLocationRepository.getLocationLiveData();
+    public LiveData<LocationEntity> invoke() {
+        return gpsLocationRepository.getLocationLiveData();
     }
 }

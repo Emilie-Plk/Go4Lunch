@@ -52,7 +52,8 @@ public class RestaurantListFragment extends Fragment {
             public void onRestaurantClicked(String restaurantId) {
                 startActivity(RestaurantDetailActivity.navigate(requireContext(), restaurantId));
             }
-        });
+        }
+        );
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -67,11 +68,6 @@ public class RestaurantListFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(RestaurantListViewModel.class);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        viewModel.refreshLocationRequest();
-    }
 
     @Override
     public void onDestroyView() {
