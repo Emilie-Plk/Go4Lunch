@@ -22,17 +22,13 @@ public class MainViewModel extends ViewModel {
     @NonNull
     private final LogoutUserUseCase logoutUserUseCase;
 
-    @NonNull
-    private final StartLocationRequestUseCase startLocationRequestUseCase;
-
     @Inject
     public MainViewModel(
         @NonNull GetCurrentUserUseCase getCurrentUserUseCase,
-        @NonNull LogoutUserUseCase logoutUserUseCase,
-        @NonNull StartLocationRequestUseCase startLocationRequestUseCase) {
+        @NonNull LogoutUserUseCase logoutUserUseCase
+    ) {
         this.getCurrentUserUseCase = getCurrentUserUseCase;
         this.logoutUserUseCase = logoutUserUseCase;
-        this.startLocationRequestUseCase = startLocationRequestUseCase;
     }
 
     public LiveData<LoggedUserEntity> getCurrentUserLiveData() {
@@ -41,10 +37,6 @@ public class MainViewModel extends ViewModel {
 
     public void signOut() {
         logoutUserUseCase.invoke();
-    }
-
-    public void startLocationRequest() {
-        startLocationRequestUseCase.invoke();
     }
 }
 

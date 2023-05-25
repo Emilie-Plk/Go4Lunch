@@ -3,7 +3,7 @@ package com.emplk.go4lunch.ui.restaurant_detail;
 
 import static com.emplk.go4lunch.BuildConfig.API_KEY;
 
-import android.app.Application;
+import android.content.res.Resources;
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
@@ -15,8 +15,9 @@ import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.data.details.DetailsRestaurantEntity;
-import com.emplk.go4lunch.data.details.DetailsRestaurantRepository;
+import com.emplk.go4lunch.data.details.DetailsRestaurantRepositoryGooglePlaces;
 import com.emplk.go4lunch.data.details.DetailsRestaurantWrapper;
+import com.emplk.go4lunch.domain.detail.GetDetailsRestaurantWrapperUseCase;
 
 import javax.inject.Inject;
 
@@ -26,23 +27,26 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class RestaurantDetailViewModel extends ViewModel {
 
     @NonNull
-    private final DetailsRestaurantRepository detailsRestaurantRepository;
+    private final DetailsRestaurantRepositoryGooglePlaces detailsRestaurantRepositoryGooglePlaces;
 
     @NonNull
-    private final Application application;
+    private final Resources resources;
 
     //  private final MediatorLiveData<RestaurantDetailViewState> restaurantDetailViewStateMediatorLiveData = new MediatorLiveData<>();
 
+    private final GetDetailsRestaurantWrapperUseCase getDetailsRestaurantWrapperUseCase;
     @Inject
     public RestaurantDetailViewModel(
-        @NonNull DetailsRestaurantRepository detailsRestaurantRepository,
-        @NonNull Application application) {
-        this.detailsRestaurantRepository = detailsRestaurantRepository;
-        this.application = application;
+        @NonNull DetailsRestaurantRepositoryGooglePlaces detailsRestaurantRepositoryGooglePlaces,
+        @NonNull Resources resources,
+        GetDetailsRestaurantWrapperUseCase getDetailsRestaurantWrapperUseCase) {
+        this.detailsRestaurantRepositoryGooglePlaces = detailsRestaurantRepositoryGooglePlaces;
+        this.resources = resources;
+        this.getDetailsRestaurantWrapperUseCase = getDetailsRestaurantWrapperUseCase;
     }
 
     public LiveData<RestaurantDetailViewState> getRestaurantDetails(@NonNull String restaurantId) {
-        return Transformations.switchMap(detailsRestaurantRepository.getRestaurantDetails(restaurantId, API_KEY), restaurantDetail -> {
+        return Transformations.switchMap(getDetailsRestaurantWrapperUseCase.invoke(restaurantId), restaurantDetail -> {
                 MutableLiveData<RestaurantDetailViewState> restaurantDetailViewStateMutableLiveData = new MutableLiveData<>();
                 if (restaurantDetail instanceof DetailsRestaurantWrapper.Loading) {
                     restaurantDetailViewStateMutableLiveData.setValue(new RestaurantDetailViewState(
@@ -94,9 +98,8 @@ public class RestaurantDetailViewModel extends ViewModel {
 
     private String parseRestaurantPictureUrl(@Nullable String photoReferenceUrl) {
         if (photoReferenceUrl != null && !photoReferenceUrl.isEmpty()) {
-            return String.format(application
-                .getApplicationContext()
-                .getString(R.string.google_image_url), photoReferenceUrl, API_KEY);
+            return resources
+                .getString(R.string.google_image_url, photoReferenceUrl, API_KEY);
         } else {
             Uri uri = Uri.parse("android.resource://com.emplk.go4lunch/" + R.drawable.restaurant_table);
             return uri.toString();
@@ -104,6 +107,6 @@ public class RestaurantDetailViewModel extends ViewModel {
     }
 
     private String checkIfResponseFieldExist(@Nullable String input) {
-        return input != null && !input.isEmpty() ? input : application.getString(R.string.detail_missing_information);
+        return input != null && !input.isEmpty() ? input : resources.getString(R.string.detail_missing_information);
     }
 }

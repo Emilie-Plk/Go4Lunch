@@ -1,0 +1,25 @@
+package com.emplk.go4lunch.domain.detail;
+
+import static com.emplk.go4lunch.BuildConfig.API_KEY;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+
+import com.emplk.go4lunch.data.details.DetailsRestaurantWrapper;
+
+import javax.inject.Inject;
+
+public class GetDetailsRestaurantWrapperUseCase {
+
+    @NonNull
+    private final DetailsRestaurantRepository detailsRestaurantRepository;
+
+    @Inject
+    public GetDetailsRestaurantWrapperUseCase(@NonNull DetailsRestaurantRepository detailsRestaurantRepository) {
+        this.detailsRestaurantRepository = detailsRestaurantRepository;
+    }
+
+    public LiveData<DetailsRestaurantWrapper> invoke(@NonNull String restaurantId) {
+        return detailsRestaurantRepository.getRestaurantDetails(restaurantId, API_KEY);
+    }
+}

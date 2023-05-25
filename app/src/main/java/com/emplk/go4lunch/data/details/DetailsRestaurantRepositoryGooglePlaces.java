@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.emplk.go4lunch.GoogleMapsApi;
 import com.emplk.go4lunch.data.details.details_restaurant_response.DetailsRestaurantResponse;
+import com.emplk.go4lunch.domain.detail.DetailsRestaurantRepository;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -18,7 +19,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 @Singleton
-public class DetailsRestaurantRepository {
+public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestaurantRepository {
 
     private final GoogleMapsApi googleMapsApi;
 
@@ -26,7 +27,7 @@ public class DetailsRestaurantRepository {
     private final LruCache<DetailsKey, DetailsRestaurantEntity> detailsCache;
 
     @Inject
-    public DetailsRestaurantRepository(GoogleMapsApi googleMapsApi) {
+    public DetailsRestaurantRepositoryGooglePlaces(GoogleMapsApi googleMapsApi) {
         this.googleMapsApi = googleMapsApi;
         detailsCache = new LruCache<>(200);
     }
