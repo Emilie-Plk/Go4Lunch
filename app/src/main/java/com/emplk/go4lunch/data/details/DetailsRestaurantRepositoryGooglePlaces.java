@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.emplk.go4lunch.GoogleMapsApi;
+import com.emplk.go4lunch.data.GoogleMapsApi;
 import com.emplk.go4lunch.data.details.details_restaurant_response.DetailsRestaurantResponse;
 import com.emplk.go4lunch.domain.detail.DetailsRestaurantEntity;
 import com.emplk.go4lunch.domain.detail.DetailsRestaurantRepository;

@@ -6,7 +6,7 @@ import android.content.res.Resources;
 
 import androidx.annotation.NonNull;
 
-import com.emplk.go4lunch.GoogleMapsApi;
+import com.emplk.go4lunch.data.GoogleMapsApi;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;

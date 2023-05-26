@@ -47,7 +47,7 @@ public class OnBoardingActivity extends AppCompatActivity {
                     case CONTINUE_TO_AUTHENTICATION:
                         continueWithPermissions();
                         break;
-                    case ASK_Gps_PERMISSION:
+                    case ASK_GPS_PERMISSION:
                         permissionLauncher.launch(new String[]{
                                 Manifest.permission.ACCESS_FINE_LOCATION,
                                 Manifest.permission.ACCESS_COARSE_LOCATION

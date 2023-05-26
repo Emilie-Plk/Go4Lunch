@@ -1,5 +1,7 @@
 package com.emplk.go4lunch.data.nearbySearchRestaurants;
 
+import com.emplk.go4lunch.domain.nearby_search.NearbySearchEntity;
+
 import java.util.List;
 
 public abstract class NearbySearchWrapper {

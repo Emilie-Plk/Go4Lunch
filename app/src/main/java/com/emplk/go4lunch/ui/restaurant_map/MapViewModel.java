@@ -6,9 +6,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
-import com.emplk.go4lunch.domain.gps.VerifyGpsEnabledUseCase;
+import com.emplk.go4lunch.domain.gps.IsGpsEnabledUseCase;
 import com.emplk.go4lunch.domain.location.GetCurrentLocationUseCase;
-import com.emplk.go4lunch.domain.location.StartLocationRequestUseCase;
 import com.google.android.gms.maps.model.LatLng;
 
 import javax.inject.Inject;
@@ -19,7 +18,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class MapViewModel extends ViewModel {
 
     @NonNull
-    private final VerifyGpsEnabledUseCase verifyGpsEnabledUseCase;
+    private final IsGpsEnabledUseCase isGpsEnabledUseCase;
 
     @NonNull
     private final GetCurrentLocationUseCase getCurrentLocationUseCase;
@@ -28,10 +27,10 @@ public class MapViewModel extends ViewModel {
 
     @Inject
     public MapViewModel(
-        @NonNull VerifyGpsEnabledUseCase verifyGpsEnabledUseCase,
+        @NonNull IsGpsEnabledUseCase isGpsEnabledUseCase,
         @NonNull GetCurrentLocationUseCase getCurrentLocationUseCase
     ) {
-        this.verifyGpsEnabledUseCase = verifyGpsEnabledUseCase;
+        this.isGpsEnabledUseCase = isGpsEnabledUseCase;
         this.getCurrentLocationUseCase = getCurrentLocationUseCase;
     }
 
@@ -47,7 +46,7 @@ public class MapViewModel extends ViewModel {
         );
     }
 
-    public LiveData<Boolean> isGpsEnabled() {
-        return verifyGpsEnabledUseCase.invoke();
-    }
+   /* public LiveData<Boolean> isGpsEnabled() {
+        return isGpsEnabledUseCase.invoke();
+    }*/
 }

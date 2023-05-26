@@ -7,7 +7,6 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.emplk.go4lunch.data.permission.GpsPermissionRepositoryImpl;
 import com.emplk.go4lunch.domain.permission.HasGpsPermissionUseCase;
 import com.emplk.go4lunch.ui.utils.SingleLiveEvent;
 
@@ -99,7 +98,7 @@ public class OnBoardingViewModel extends ViewModel {
         } else if (hasGpsPermissionBeenAsked || showRationale) {
             onBoardingViewActionMediatorLiveData.setValue(OnBoardingViewAction.SHOW_RATIONALE);
         } else {
-            onBoardingViewActionMediatorLiveData.setValue(OnBoardingViewAction.ASK_Gps_PERMISSION);
+            onBoardingViewActionMediatorLiveData.setValue(OnBoardingViewAction.ASK_GPS_PERMISSION);
         }
     }
 

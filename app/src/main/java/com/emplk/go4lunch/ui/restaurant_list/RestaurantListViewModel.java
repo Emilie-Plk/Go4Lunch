@@ -18,11 +18,12 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.R;
-import com.emplk.go4lunch.data.nearbySearchRestaurants.NearbySearchEntity;
 import com.emplk.go4lunch.data.nearbySearchRestaurants.NearbySearchWrapper;
+import com.emplk.go4lunch.domain.gps.IsGpsEnabledUseCase;
 import com.emplk.go4lunch.domain.gps.LocationEntity;
 import com.emplk.go4lunch.domain.location.GetCurrentLocationUseCase;
 import com.emplk.go4lunch.domain.nearby_search.GetNearbySearchWrapperUseCase;
+import com.emplk.go4lunch.domain.nearby_search.NearbySearchEntity;
 import com.emplk.go4lunch.domain.permission.HasGpsPermissionUseCase;
 
 import java.math.RoundingMode;
@@ -50,34 +51,43 @@ public class RestaurantListViewModel extends ViewModel {
         @NonNull GetNearbySearchWrapperUseCase getNearbySearchWrapperUseCase,
         @NonNull GetCurrentLocationUseCase getCurrentLocationUseCase,
         @NonNull HasGpsPermissionUseCase hasGpsPermissionUseCase,
+        @NonNull IsGpsEnabledUseCase isGpsEnabledUseCase,
         @NonNull Resources resources
     ) {
         this.resources = resources;
 
         LiveData<LocationEntity> locationLiveData = getCurrentLocationUseCase.invoke();
 
+        LiveData<Boolean> isGpsEnabledMutableLiveData = isGpsEnabledUseCase.invoke();
+
         hasGpsPermissionLiveData = hasGpsPermissionUseCase.invoke();
 
         LiveData<NearbySearchWrapper> nearbySearchWrapperLiveData = getNearbySearchWrapperUseCase.invoke();
 
         restaurantListMediatorLiveData.addSource(hasGpsPermissionLiveData, hasGpsPermission ->
-            combine(hasGpsPermission, locationLiveData.getValue(), nearbySearchWrapperLiveData.getValue()
+            combine(hasGpsPermission, isGpsEnabledMutableLiveData.getValue(), locationLiveData.getValue(), nearbySearchWrapperLiveData.getValue()
             )
         );
 
         restaurantListMediatorLiveData.addSource(locationLiveData, location ->
-            combine(hasGpsPermissionLiveData.getValue(), location, nearbySearchWrapperLiveData.getValue()
+            combine(hasGpsPermissionLiveData.getValue(), isGpsEnabledMutableLiveData.getValue(), location, nearbySearchWrapperLiveData.getValue()
             )
         );
 
         restaurantListMediatorLiveData.addSource(nearbySearchWrapperLiveData, nearbySearchWrapper ->
-            combine(hasGpsPermissionLiveData.getValue(), locationLiveData.getValue(), nearbySearchWrapper
+            combine(hasGpsPermissionLiveData.getValue(), isGpsEnabledMutableLiveData.getValue(), locationLiveData.getValue(), nearbySearchWrapper
+            )
+        );
+
+        restaurantListMediatorLiveData.addSource(isGpsEnabledMutableLiveData, isGpsEnabled ->
+            combine(hasGpsPermissionLiveData.getValue(), isGpsEnabled, locationLiveData.getValue(), nearbySearchWrapperLiveData.getValue()
             )
         );
     }
 
     private void combine(
         @Nullable Boolean hasGpsPermission,
+        @Nullable Boolean isGpsEnabled,
         @Nullable LocationEntity location,
         @Nullable NearbySearchWrapper nearbySearchWrapper
     ) {
@@ -93,6 +103,17 @@ public class RestaurantListViewModel extends ViewModel {
                 );
                 restaurantListMediatorLiveData.setValue(result);
             }
+            return;
+        }
+
+        if (isGpsEnabled != null && !isGpsEnabled) {
+            result.add(
+                new RestaurantListViewState.RestaurantListError(
+                    resources.getString(R.string.list_error_message_no_gps),
+                    NO_GPS_FOUND
+                )
+            );
+            restaurantListMediatorLiveData.setValue(result);
             return;
         }
 

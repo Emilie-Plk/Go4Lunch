@@ -1,6 +1,9 @@
-package com.emplk.go4lunch.domain.gps;
+package com.emplk.go4lunch.data.gps_location;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.emplk.go4lunch.domain.gps.LocationEntity;
 
 import java.util.Objects;
 
@@ -27,6 +30,7 @@ public abstract class GpsResponse {
             return Objects.hash(locationEntity);
         }
 
+        @NonNull
         @Override
         public String toString() {
             return "Success{" +
