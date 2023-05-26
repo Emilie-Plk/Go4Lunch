@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel;
 import com.emplk.go4lunch.domain.authentication.GetCurrentUserUseCase;
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.location.StartLocationRequestUseCase;
-import com.emplk.go4lunch.domain.permission.GetGpsPermissionUseCase;
+import com.emplk.go4lunch.domain.permission.HasGpsPermissionUseCase;
 
 import javax.inject.Inject;
 
@@ -24,12 +24,12 @@ public class DispatcherViewModel extends ViewModel {
 
     @Inject
     public DispatcherViewModel(
-        @NonNull GetGpsPermissionUseCase getGpsPermissionUseCase,
+        @NonNull HasGpsPermissionUseCase hasGpsPermissionUseCase,
         @NonNull GetCurrentUserUseCase getCurrentUserUseCase,
         StartLocationRequestUseCase startLocationRequestUseCase) {
         this.startLocationRequestUseCase = startLocationRequestUseCase;
 
-        LiveData<Boolean> hasGpsPermissionLiveData = getGpsPermissionUseCase.invoke();
+        LiveData<Boolean> hasGpsPermissionLiveData = hasGpsPermissionUseCase.invoke();
 
         LiveData<LoggedUserEntity> firebaseUserEntityLiveData = getCurrentUserUseCase.invoke();
 

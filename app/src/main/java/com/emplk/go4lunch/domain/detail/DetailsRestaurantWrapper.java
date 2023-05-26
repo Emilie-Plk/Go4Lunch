@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.data.details;
+package com.emplk.go4lunch.domain.detail;
 
 public abstract class DetailsRestaurantWrapper {
 

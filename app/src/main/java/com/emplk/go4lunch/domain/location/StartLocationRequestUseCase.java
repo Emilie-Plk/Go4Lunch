@@ -5,7 +5,9 @@ import androidx.annotation.NonNull;
 import com.emplk.go4lunch.domain.gps.GpsLocationRepository;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+@Singleton
 public class StartLocationRequestUseCase {
 
     @NonNull

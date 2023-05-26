@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.data.permission.GpsPermissionRepositoryImpl;
+import com.emplk.go4lunch.domain.permission.HasGpsPermissionUseCase;
 import com.emplk.go4lunch.ui.utils.SingleLiveEvent;
 
 import javax.inject.Inject;
@@ -25,12 +26,13 @@ public class OnBoardingViewModel extends ViewModel {
 
     private final SingleLiveEvent<Boolean> isChangeAppSettingsClickedSingleLiveEvent = new SingleLiveEvent<>();
 
+
+
     @Inject
     public OnBoardingViewModel(
-        @NonNull GpsPermissionRepositoryImpl gpsPermissionRepositoryImpl
-    ) {
-        LiveData<Boolean> hasGpsPermissionLiveData = gpsPermissionRepositoryImpl.hasGpsPermissionLiveData();
+        @NonNull HasGpsPermissionUseCase hasGpsPermissionUseCase) {
 
+        LiveData<Boolean> hasGpsPermissionLiveData = hasGpsPermissionUseCase.invoke();
 
         onBoardingViewActionMediatorLiveData.addSource(hasGpsPermissionLiveData, permission -> {
                 combine(

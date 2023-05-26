@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.data.details;
+package com.emplk.go4lunch.domain.detail;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,6 +8,7 @@ import java.util.Objects;
 public class DetailsRestaurantEntity {
     @NonNull
     private final String placeId;
+    
     @NonNull
     private final String restaurantName;
 

@@ -23,7 +23,7 @@ import com.emplk.go4lunch.data.nearbySearchRestaurants.NearbySearchWrapper;
 import com.emplk.go4lunch.domain.gps.LocationEntity;
 import com.emplk.go4lunch.domain.location.GetCurrentLocationUseCase;
 import com.emplk.go4lunch.domain.nearby_search.GetNearbySearchWrapperUseCase;
-import com.emplk.go4lunch.domain.permission.GetGpsPermissionUseCase;
+import com.emplk.go4lunch.domain.permission.HasGpsPermissionUseCase;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -49,14 +49,14 @@ public class RestaurantListViewModel extends ViewModel {
     public RestaurantListViewModel(
         @NonNull GetNearbySearchWrapperUseCase getNearbySearchWrapperUseCase,
         @NonNull GetCurrentLocationUseCase getCurrentLocationUseCase,
-        @NonNull GetGpsPermissionUseCase getGpsPermissionUseCase,
+        @NonNull HasGpsPermissionUseCase hasGpsPermissionUseCase,
         @NonNull Resources resources
     ) {
         this.resources = resources;
 
         LiveData<LocationEntity> locationLiveData = getCurrentLocationUseCase.invoke();
 
-        hasGpsPermissionLiveData = getGpsPermissionUseCase.invoke();
+        hasGpsPermissionLiveData = hasGpsPermissionUseCase.invoke();
 
         LiveData<NearbySearchWrapper> nearbySearchWrapperLiveData = getNearbySearchWrapperUseCase.invoke();
 

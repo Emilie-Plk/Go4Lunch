@@ -4,14 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
-public class GetGpsPermissionUseCase {
+@Singleton
+public class HasGpsPermissionUseCase {
 
     @NonNull
     private final GpsPermissionRepository gpsPermissionRepository;
 
     @Inject
-    public GetGpsPermissionUseCase(@NonNull GpsPermissionRepository gpsPermissionRepository) {
+    public HasGpsPermissionUseCase(@NonNull GpsPermissionRepository gpsPermissionRepository) {
         this.gpsPermissionRepository = gpsPermissionRepository;
     }
 

@@ -14,9 +14,9 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.R;
-import com.emplk.go4lunch.data.details.DetailsRestaurantEntity;
+import com.emplk.go4lunch.domain.detail.DetailsRestaurantEntity;
 import com.emplk.go4lunch.data.details.DetailsRestaurantRepositoryGooglePlaces;
-import com.emplk.go4lunch.data.details.DetailsRestaurantWrapper;
+import com.emplk.go4lunch.domain.detail.DetailsRestaurantWrapper;
 import com.emplk.go4lunch.domain.detail.GetDetailsRestaurantWrapperUseCase;
 
 import javax.inject.Inject;
