@@ -10,15 +10,12 @@ public class LocationKey {
 
     @NonNull
     private final LocationEntity locationEntity;
-    @NonNull
-    private final String rankBy;
+
 
     public LocationKey(
-        @NonNull LocationEntity locationEntity,
-        @NonNull String rankBy
+        @NonNull LocationEntity locationEntity
     ) {
         this.locationEntity = locationEntity;
-        this.rankBy = rankBy;
     }
 
     @Override
@@ -26,12 +23,12 @@ public class LocationKey {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LocationKey that = (LocationKey) o;
-        return locationEntity.equals(that.locationEntity) && rankBy.equals(that.rankBy);
+        return locationEntity.equals(that.locationEntity);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(locationEntity, rankBy);
+        return Objects.hash(locationEntity);
     }
 
     @NonNull
@@ -39,7 +36,6 @@ public class LocationKey {
     public String toString() {
         return "LocationKey{" +
             "locationEntity=" + locationEntity +
-            ", rankBy='" + rankBy + '\'' +
             '}';
     }
 }

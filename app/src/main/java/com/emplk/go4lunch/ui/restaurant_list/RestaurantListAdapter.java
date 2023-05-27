@@ -1,5 +1,6 @@
 package com.emplk.go4lunch.ui.restaurant_list;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,7 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
     private final OnRestaurantClickedListener listener;
 
     public RestaurantListAdapter(OnRestaurantClickedListener listener) {
-        super(new ListRestaurantItemCallback());
+        super(new RestaurantListViewHolder.ListRestaurantItemCallback());
         this.listener = listener;
     }
 
@@ -44,7 +45,7 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
                     )
                 );
             case ERROR_STATE:
-                return new ErrorViewHolder(
+                return new RestaurantListViewHolder.ErrorViewHolder(
                     RestaurantListErrorStateBinding.inflate(
                         LayoutInflater.from(parent.getContext()), parent, false
                     )
@@ -58,8 +59,8 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof RestaurantListViewHolder) {
             ((RestaurantListViewHolder) holder).bind((RestaurantListViewState.RestaurantList) getItem(position), listener);
-        } else if (holder instanceof ErrorViewHolder) {
-            ((ErrorViewHolder) holder).bind((RestaurantListViewState.RestaurantListError) getItem(position));
+        } else if (holder instanceof RestaurantListViewHolder.ErrorViewHolder) {
+            ((RestaurantListViewHolder.ErrorViewHolder) holder).bind((RestaurantListViewState.RestaurantListError) getItem(position));
         }
     }
 
@@ -86,7 +87,6 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
 
             binding.listRestaurantName.setText(itemViewState.getName());
             binding.listRestaurantAddress.setText(itemViewState.getAddress());
-            binding.listRestaurantOpeningHours.setText(itemViewState.getOpeningHours());
 
             Glide.with(itemView.getContext())
                 .load(itemViewState.getPictureUrl())
@@ -98,60 +98,62 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
             binding.listRestaurantAttendants.setText(itemViewState.getAttendants());
             binding.listRestaurantRating.setVisibility(itemViewState.getIsRatingBarVisible() ? View.VISIBLE : View.INVISIBLE);
             binding.listRestaurantRating.setRating(itemViewState.getRating());
-
-
-        }
-    }
-
-    public static class ErrorViewHolder extends RecyclerView.ViewHolder {
-
-        private final RestaurantListErrorStateBinding binding;
-
-        public ErrorViewHolder(RestaurantListErrorStateBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-        }
-
-        public void bind(@NonNull RestaurantListViewState.RestaurantListError item) {
-            binding.restaurantListErrorTitle.setText(item.getErrorMessage());
-
-            int drawableError;
-            switch (item.getErrorDrawable()) {
-                case NO_GPS_FOUND:
-                    drawableError = R.drawable.baseline_not_listed_location_24;
-                    break;
-                case NO_RESULT_FOUND:
-                    drawableError = R.drawable.baseline_mood_bad_24;
-                    break;
-                case REQUEST_FAILURE:
-                    drawableError = R.drawable.baseline_network_off_24;
-                    break;
-                default:
-                    drawableError = R.drawable.baseline_error_outline_24;
+            if (itemViewState.getRestaurantOpeningState() != RestaurantOpeningState.IS_NOT_DEFINED) {
+                binding.listRestaurantOpeningHours.setText(itemViewState.getRestaurantOpeningState().getText());
+                binding.listRestaurantOpeningHours.setTextColor(Color.parseColor(itemViewState.getRestaurantOpeningState().getColorString()));
             }
-            binding.restaurantListErrorImage.setImageResource(drawableError);
-        }
-    }
-
-
-    private static class ListRestaurantItemCallback extends DiffUtil.ItemCallback<RestaurantListViewState> {
-        @Override
-        public boolean areItemsTheSame(@NonNull RestaurantListViewState oldItem, @NonNull RestaurantListViewState newItem) {
-
-            boolean bothAreLoading = oldItem instanceof RestaurantListViewState.Loading && newItem instanceof RestaurantListViewState.Loading;
-            boolean bothAreRestaurantLists = oldItem instanceof RestaurantListViewState.RestaurantList && newItem instanceof RestaurantListViewState.RestaurantList;
-
-            return bothAreLoading ||
-                (bothAreRestaurantLists &&
-                    ((RestaurantListViewState.RestaurantList) oldItem).getId().equals(((RestaurantListViewState.RestaurantList) newItem).getId())
-                ) || (
-                oldItem instanceof RestaurantListViewState.RestaurantListError && newItem instanceof RestaurantListViewState.RestaurantListError);
-
         }
 
-        @Override
-        public boolean areContentsTheSame(@NonNull RestaurantListViewState oldItem, @NonNull RestaurantListViewState newItem) {
-            return oldItem.equals(newItem);
+        public static class ErrorViewHolder extends RecyclerView.ViewHolder {
+
+            private final RestaurantListErrorStateBinding binding;
+
+            public ErrorViewHolder(RestaurantListErrorStateBinding binding) {
+                super(binding.getRoot());
+                this.binding = binding;
+            }
+
+            public void bind(@NonNull RestaurantListViewState.RestaurantListError item) {
+                binding.restaurantListErrorTitle.setText(item.getErrorMessage());
+
+                int drawableError;
+                switch (item.getErrorDrawable()) {
+                    case NO_GPS_FOUND:
+                        drawableError = R.drawable.baseline_not_listed_location_24;
+                        break;
+                    case NO_RESULT_FOUND:
+                        drawableError = R.drawable.baseline_mood_bad_24;
+                        break;
+                    case REQUEST_FAILURE:
+                        drawableError = R.drawable.baseline_network_off_24;
+                        break;
+                    default:
+                        drawableError = R.drawable.baseline_error_outline_24;
+                }
+                binding.restaurantListErrorImage.setImageResource(drawableError);
+            }
+        }
+
+
+        private static class ListRestaurantItemCallback extends DiffUtil.ItemCallback<RestaurantListViewState> {
+            @Override
+            public boolean areItemsTheSame(@NonNull RestaurantListViewState oldItem, @NonNull RestaurantListViewState newItem) {
+
+                boolean bothAreLoading = oldItem instanceof RestaurantListViewState.Loading && newItem instanceof RestaurantListViewState.Loading;
+                boolean bothAreRestaurantLists = oldItem instanceof RestaurantListViewState.RestaurantList && newItem instanceof RestaurantListViewState.RestaurantList;
+
+                return bothAreLoading ||
+                    (bothAreRestaurantLists &&
+                        ((RestaurantListViewState.RestaurantList) oldItem).getId().equals(((RestaurantListViewState.RestaurantList) newItem).getId())
+                    ) || (
+                    oldItem instanceof RestaurantListViewState.RestaurantListError && newItem instanceof RestaurantListViewState.RestaurantListError);
+
+            }
+
+            @Override
+            public boolean areContentsTheSame(@NonNull RestaurantListViewState oldItem, @NonNull RestaurantListViewState newItem) {
+                return oldItem.equals(newItem);
+            }
         }
     }
 }

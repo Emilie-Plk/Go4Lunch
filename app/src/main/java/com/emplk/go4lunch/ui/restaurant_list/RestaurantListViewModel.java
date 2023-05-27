@@ -6,6 +6,9 @@ import static com.emplk.go4lunch.ui.restaurant_list.ErrorDrawable.NO_GPS_FOUND;
 import static com.emplk.go4lunch.ui.restaurant_list.ErrorDrawable.NO_RESULT_FOUND;
 import static com.emplk.go4lunch.ui.restaurant_list.ErrorDrawable.REQUEST_FAILURE;
 import static com.emplk.go4lunch.ui.restaurant_list.ErrorDrawable.UNKNOWN_ERROR;
+import static com.emplk.go4lunch.ui.restaurant_list.RestaurantOpeningState.IS_CLOSED;
+import static com.emplk.go4lunch.ui.restaurant_list.RestaurantOpeningState.IS_OPEN;
+import static com.emplk.go4lunch.ui.restaurant_list.RestaurantOpeningState.IS_NOT_DEFINED;
 
 import android.content.res.Resources;
 import android.location.Location;
@@ -18,7 +21,7 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.R;
-import com.emplk.go4lunch.data.nearbySearchRestaurants.NearbySearchWrapper;
+import com.emplk.go4lunch.domain.nearby_search.NearbySearchWrapper;
 import com.emplk.go4lunch.domain.gps.IsGpsEnabledUseCase;
 import com.emplk.go4lunch.domain.gps.LocationEntity;
 import com.emplk.go4lunch.domain.location.GetCurrentLocationUseCase;
@@ -147,8 +150,7 @@ public class RestaurantListViewModel extends ViewModel {
                         nearbySearchEntity.getVicinity(),
                         getDistanceString(location.getLatitude(), location.getLongitude(), nearbySearchEntity.getLocationEntity()),
                         "3",
-                        "14h-16h",
-                        true,
+                        formatOpeningStatus(nearbySearchEntity.isOpen()),
                         parseRestaurantPictureUrl(nearbySearchEntity.getPhotoReferenceUrl()),
                         isRatingBarVisible(nearbySearchEntity.getRating()),
                         convertFiveToThreeRating(nearbySearchEntity.getRating()
@@ -165,8 +167,17 @@ public class RestaurantListViewModel extends ViewModel {
                 )
             );
         }
-
         restaurantListMediatorLiveData.setValue(result);
+    }
+
+    private RestaurantOpeningState formatOpeningStatus(@Nullable Boolean isOpen) {
+        if (isOpen == null) {
+            return IS_NOT_DEFINED;
+        } else if (isOpen) {
+            return IS_OPEN;
+        } else {
+            return IS_CLOSED;
+        }
     }
 
     private boolean isRatingBarVisible(@Nullable Float rating) {

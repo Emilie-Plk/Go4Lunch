@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
-import com.emplk.go4lunch.data.nearbySearchRestaurants.NearbySearchWrapper;
 import com.emplk.go4lunch.domain.location.GetCurrentLocationUseCase;
 
 import javax.inject.Inject;

@@ -13,6 +13,7 @@ import com.emplk.go4lunch.data.nearbySearchRestaurants.nearbySearchResponse.Resu
 import com.emplk.go4lunch.domain.gps.LocationEntity;
 import com.emplk.go4lunch.domain.nearby_search.NearbySearchEntity;
 import com.emplk.go4lunch.domain.nearby_search.NearbySearchRepository;
+import com.emplk.go4lunch.domain.nearby_search.NearbySearchWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +27,13 @@ import retrofit2.Response;
 
 @Singleton
 public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepository {
+    @NonNull
     private final GoogleMapsApi googleMapsApi;
 
     private final LruCache<LocationKey, List<NearbySearchEntity>> nearbySearchCache;
 
     @Inject
-    public NearbySearchRepositoryGooglePlaces(GoogleMapsApi googleMapsApi) {
+    public NearbySearchRepositoryGooglePlaces(@NonNull GoogleMapsApi googleMapsApi) {
         this.googleMapsApi = googleMapsApi;
         nearbySearchCache = new LruCache<>(200);
     }
@@ -44,7 +46,7 @@ public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepositor
         @NonNull String key
     ) {
         MutableLiveData<NearbySearchWrapper> resultMutableLiveData = new MutableLiveData<>();
-        LocationKey cacheKey = generateCacheKey(location, rankBy);
+        LocationKey cacheKey = generateCacheKey(location);
 
         List<NearbySearchEntity> cachedNearbySearchEntityList = nearbySearchCache.get(cacheKey);
 
@@ -97,48 +99,62 @@ public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepositor
     }
 
     private LocationKey generateCacheKey(
-        String location,
-        @NonNull String rankBy
+        @NonNull String location
     ) {
         String[] coordinatesArr = location.split(",");
         Double latitude = Double.parseDouble(coordinatesArr[1]);
         Double longitude = Double.parseDouble(coordinatesArr[0]);
         LocationEntity locationEntity = new LocationEntity(latitude, longitude);
 
-        return new LocationKey(locationEntity, rankBy);
+        return new LocationKey(locationEntity);
     }
 
     private List<NearbySearchEntity> fromNearbySearchResponse(@Nullable NearbySearchResponse response) {
         List<NearbySearchEntity> results = new ArrayList<>();
 
         if (response != null && response.getResults() != null) {
+
             for (ResultsItem result : response.getResults()) {
                 String placeId = result.getPlaceId();
                 String name = result.getName();
                 String vicinity = result.getVicinity();
-                String photoUrl = null;
+
+                String photoUrl;
                 if (result.getPhotos() != null &&
                     !result.getPhotos().isEmpty() &&
                     result.getPhotos().get(0) != null) {
                     photoUrl = result.getPhotos().get(0).getPhotoReference();
+                } else {
+                    photoUrl = null;
                 }
-                Float rating = result.getRating();
 
-                Double latitude = null;
-                Double longitude = null;
+                Float rating;
+                if (result.getRating() != null) {
+                    rating = result.getRating();
+                } else {
+                    rating = null;
+                }
+
+                LocationEntity locationEntity;
                 if (result.getGeometry() != null && result.getGeometry().getLocation() != null) {
-                    latitude = result.getGeometry().getLocation().getLat();
-                    longitude = result.getGeometry().getLocation().getLng();
+                    Double latitude = result.getGeometry().getLocation().getLat();
+                    Double longitude = result.getGeometry().getLocation().getLng();
+                    locationEntity = new LocationEntity(latitude, longitude);
+                } else {
+                    locationEntity = null;
                 }
-                LocationEntity locationEntity = new LocationEntity(latitude, longitude);
 
-                Boolean openingHours = null;
+                Boolean openingHours;
                 if (result.getOpeningHours() != null && result.getOpeningHours().isOpenNow() != null) {
                     openingHours = result.getOpeningHours().isOpenNow();
+                } else {
+                    openingHours = null;
                 }
+
                 if (placeId != null &&
                     name != null &&
-                    vicinity != null
+                    vicinity != null &&
+                    locationEntity != null
                 ) {
                     NearbySearchEntity searchResult = new NearbySearchEntity(
                         placeId,

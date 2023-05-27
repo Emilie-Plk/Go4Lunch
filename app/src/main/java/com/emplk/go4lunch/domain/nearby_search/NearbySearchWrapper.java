@@ -1,6 +1,6 @@
-package com.emplk.go4lunch.data.nearbySearchRestaurants;
+package com.emplk.go4lunch.domain.nearby_search;
 
-import com.emplk.go4lunch.domain.nearby_search.NearbySearchEntity;
+import androidx.annotation.NonNull;
 
 import java.util.List;
 
@@ -10,12 +10,14 @@ public abstract class NearbySearchWrapper {
     }
 
     public static class Success extends NearbySearchWrapper {
+        @NonNull
         private final List<NearbySearchEntity> results;
 
-        public Success(List<NearbySearchEntity> results) {
+        public Success(@NonNull List<NearbySearchEntity> results) {
             this.results = results;
         }
 
+        @NonNull
         public List<NearbySearchEntity> getResults() {
             return results;
         }

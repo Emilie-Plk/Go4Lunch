@@ -64,10 +64,7 @@ public abstract class RestaurantListViewState {
         private final String attendants;
 
         @NonNull
-        private final String openingHours;
-
-        @NonNull
-        private final Boolean isOpen;
+        private final RestaurantOpeningState restaurantOpeningState;
 
         @NonNull
         private final String pictureUrl;
@@ -84,8 +81,7 @@ public abstract class RestaurantListViewState {
             @NonNull String address,
             @NonNull String distance,
             @NonNull String attendants,
-            @NonNull String openingHours,
-            @NonNull Boolean isOpen,
+            @NonNull RestaurantOpeningState restaurantOpeningState,
             @NonNull String pictureUrl,
             @NonNull Boolean isRatingBarVisible,
             @NonNull Float rating
@@ -96,8 +92,7 @@ public abstract class RestaurantListViewState {
             this.address = address;
             this.distance = distance;
             this.attendants = attendants;
-            this.openingHours = openingHours;
-            this.isOpen = isOpen;
+            this.restaurantOpeningState = restaurantOpeningState;
             this.pictureUrl = pictureUrl;
             this.isRatingBarVisible = isRatingBarVisible;
             this.rating = rating;
@@ -128,10 +123,6 @@ public abstract class RestaurantListViewState {
             return attendants;
         }
 
-        @NonNull
-        public String getOpeningHours() {
-            return openingHours;
-        }
 
         @NonNull
         public String getPictureUrl() {
@@ -149,8 +140,8 @@ public abstract class RestaurantListViewState {
         }
 
         @NonNull
-        public Boolean getOpen() {
-            return isOpen;
+        public RestaurantOpeningState getRestaurantOpeningState() {
+            return restaurantOpeningState;
         }
 
         @Override
@@ -158,12 +149,12 @@ public abstract class RestaurantListViewState {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             RestaurantList that = (RestaurantList) o;
-            return id.equals(that.id) && name.equals(that.name) && address.equals(that.address) && distance.equals(that.distance) && attendants.equals(that.attendants) && openingHours.equals(that.openingHours) && isOpen.equals(that.isOpen) && pictureUrl.equals(that.pictureUrl) && isRatingBarVisible.equals(that.isRatingBarVisible) && rating.equals(that.rating);
+            return id.equals(that.id) && name.equals(that.name) && address.equals(that.address) && distance.equals(that.distance) && attendants.equals(that.attendants) && restaurantOpeningState == that.restaurantOpeningState && pictureUrl.equals(that.pictureUrl) && isRatingBarVisible.equals(that.isRatingBarVisible) && rating.equals(that.rating);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(id, name, address, distance, attendants, openingHours, isOpen, pictureUrl, isRatingBarVisible, rating);
+            return Objects.hash(id, name, address, distance, attendants, restaurantOpeningState, pictureUrl, isRatingBarVisible, rating);
         }
 
         @NonNull
@@ -175,8 +166,7 @@ public abstract class RestaurantListViewState {
                 ", address='" + address + '\'' +
                 ", distance='" + distance + '\'' +
                 ", attendants='" + attendants + '\'' +
-                ", openingHours='" + openingHours + '\'' +
-                ", isOpen=" + isOpen +
+                ", restaurantOpeningState=" + restaurantOpeningState +
                 ", pictureUrl='" + pictureUrl + '\'' +
                 ", isRatingBarVisible=" + isRatingBarVisible +
                 ", rating=" + rating +

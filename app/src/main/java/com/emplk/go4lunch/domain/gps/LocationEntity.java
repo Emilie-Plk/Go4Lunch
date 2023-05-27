@@ -1,6 +1,7 @@
 package com.emplk.go4lunch.domain.gps;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.Objects;
 

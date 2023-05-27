@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
-import com.emplk.go4lunch.data.gps_location.GpsResponse;
+import com.emplk.go4lunch.domain.gps.GpsResponse;
 import com.emplk.go4lunch.domain.gps.GpsLocationRepository;
 import com.emplk.go4lunch.domain.gps.LocationEntity;
 

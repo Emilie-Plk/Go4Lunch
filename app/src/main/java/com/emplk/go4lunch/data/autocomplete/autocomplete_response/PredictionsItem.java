@@ -1,5 +1,7 @@
 package com.emplk.go4lunch.data.autocomplete.autocomplete_response;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 public class PredictionsItem{
@@ -39,6 +41,7 @@ public class PredictionsItem{
 		return placeId;
 	}
 
+	@NonNull
 	@Override
  	public String toString(){
 		return 

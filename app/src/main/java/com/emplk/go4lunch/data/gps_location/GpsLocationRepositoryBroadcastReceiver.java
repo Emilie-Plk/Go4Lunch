@@ -22,6 +22,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.emplk.go4lunch.domain.gps.GpsLocationRepository;
+import com.emplk.go4lunch.domain.gps.GpsResponse;
 import com.emplk.go4lunch.domain.gps.LocationEntity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;

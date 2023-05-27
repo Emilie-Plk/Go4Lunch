@@ -1,8 +1,10 @@
 package com.emplk.go4lunch.data.autocomplete.autocomplete_response;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
-public class AutocompleteResponse{
+public class AutocompleteSuggestionResponse {
 	private List<PredictionsItem> predictions;
 	private String status;
 
@@ -14,10 +16,11 @@ public class AutocompleteResponse{
 		return status;
 	}
 
+	@NonNull
 	@Override
  	public String toString(){
 		return 
-			"AutocompleteResponse{" + 
+			"AutocompleteSuggestionResponse{" +
 			"predictions = '" + predictions + '\'' + 
 			",status = '" + status + '\'' + 
 			"}";

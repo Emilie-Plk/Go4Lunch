@@ -68,7 +68,7 @@ public class RestaurantDetailViewModel extends ViewModel {
                 }
 
                 if (restaurantDetail instanceof DetailsRestaurantWrapper.Success) {
-                    DetailsRestaurantEntity response = ((DetailsRestaurantWrapper.Success) restaurantDetail).getResponse();
+                    DetailsRestaurantEntity response = ((DetailsRestaurantWrapper.Success) restaurantDetail).getDetailsRestaurantEntity();
                     restaurantDetailViewStateMutableLiveData.setValue(
                         new RestaurantDetailViewState(
                             restaurantId,

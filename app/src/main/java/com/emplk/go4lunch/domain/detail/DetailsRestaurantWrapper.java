@@ -1,19 +1,23 @@
 package com.emplk.go4lunch.domain.detail;
 
+import androidx.annotation.NonNull;
+
 public abstract class DetailsRestaurantWrapper {
 
     public static class Loading extends DetailsRestaurantWrapper {
     }
 
     public static class Success extends DetailsRestaurantWrapper {
-        private final DetailsRestaurantEntity response;
+        @NonNull
+        private final DetailsRestaurantEntity detailsRestaurantEntity;
 
-        public Success(DetailsRestaurantEntity response) {
-            this.response = response;
+        public Success(@NonNull DetailsRestaurantEntity detailsRestaurantEntity) {
+            this.detailsRestaurantEntity = detailsRestaurantEntity;
         }
 
-        public DetailsRestaurantEntity getResponse() {
-            return response;
+        @NonNull
+        public DetailsRestaurantEntity getDetailsRestaurantEntity() {
+            return detailsRestaurantEntity;
         }
     }
 
