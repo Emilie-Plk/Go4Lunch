@@ -30,12 +30,12 @@ public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepositor
     @NonNull
     private final GoogleMapsApi googleMapsApi;
 
-    private final LruCache<LocationKey, List<NearbySearchEntity>> nearbySearchCache;
+    private final LruCache<LocationKey, List<NearbySearchEntity>> nearbySearchLruCache;
 
     @Inject
     public NearbySearchRepositoryGooglePlaces(@NonNull GoogleMapsApi googleMapsApi) {
         this.googleMapsApi = googleMapsApi;
-        nearbySearchCache = new LruCache<>(200);
+        nearbySearchLruCache = new LruCache<>(200);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepositor
         MutableLiveData<NearbySearchWrapper> resultMutableLiveData = new MutableLiveData<>();
         LocationKey cacheKey = generateCacheKey(location);
 
-        List<NearbySearchEntity> cachedNearbySearchEntityList = nearbySearchCache.get(cacheKey);
+        List<NearbySearchEntity> cachedNearbySearchEntityList = nearbySearchLruCache.get(cacheKey);
 
         if (cachedNearbySearchEntityList == null) {
             resultMutableLiveData.setValue(new NearbySearchWrapper.Loading());
@@ -71,14 +71,15 @@ public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepositor
                                 response.body().getStatus().equals("OK")
                             ) {
                                 List<NearbySearchEntity> nearbySearchEntityList = fromNearbySearchResponse(response.body());
-                                nearbySearchCache.put(cacheKey, nearbySearchEntityList);
+                                nearbySearchLruCache.put(cacheKey, nearbySearchEntityList);
                                 resultMutableLiveData.setValue(new NearbySearchWrapper.Success(nearbySearchEntityList));
                             } else if (response.isSuccessful() &&
                                 response.body() != null &&
                                 response.body().getStatus() != null &&
-                                response.body().getStatus().equals("ZERO_RESULTS")) {
+                                response.body().getStatus().equals("ZERO_RESULTS")
+                            ) {
                                 List<NearbySearchEntity> emptyList = new ArrayList<>();
-                                nearbySearchCache.put(cacheKey, emptyList);
+                                nearbySearchLruCache.put(cacheKey, emptyList);
                                 resultMutableLiveData.setValue(new NearbySearchWrapper.NoResults());
                             }
                         }

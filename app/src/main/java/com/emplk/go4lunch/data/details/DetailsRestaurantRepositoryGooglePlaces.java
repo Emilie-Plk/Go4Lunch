@@ -26,12 +26,12 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
     private final GoogleMapsApi googleMapsApi;
 
     // TODO: maybe add a DiskLruCache with double hookup
-    private final LruCache<DetailsKey, DetailsRestaurantEntity> detailsCache;
+    private final LruCache<DetailsKey, DetailsRestaurantEntity> detailsLruCache;
 
     @Inject
     public DetailsRestaurantRepositoryGooglePlaces(GoogleMapsApi googleMapsApi) {
         this.googleMapsApi = googleMapsApi;
-        detailsCache = new LruCache<>(200);
+        detailsLruCache = new LruCache<>(200);
     }
 
     public LiveData<DetailsRestaurantWrapper> getRestaurantDetails(
@@ -41,7 +41,7 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
         MutableLiveData<DetailsRestaurantWrapper> resultMutableLiveData = new MutableLiveData<>();
         DetailsKey cacheKey = generateCacheKey(placeId);
 
-        DetailsRestaurantEntity cachedDetailsEntity = detailsCache.get(cacheKey);
+        DetailsRestaurantEntity cachedDetailsEntity = detailsLruCache.get(cacheKey);
 
         if (cachedDetailsEntity == null) {
             resultMutableLiveData.setValue(new DetailsRestaurantWrapper.Loading());
@@ -54,11 +54,12 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
                     ) {
                         DetailsRestaurantResponse body = response.body();
                         if (response.isSuccessful() &&
-                            body != null && body.getStatus() != null &&
+                            body != null &&
+                            body.getStatus() != null &&
                             body.getStatus().equals("OK")
                         ) {
                             DetailsRestaurantEntity detailsRestaurantEntity = fromDetailsResponse(response.body());
-                            detailsCache.put(cacheKey, detailsRestaurantEntity);
+                            detailsLruCache.put(cacheKey, detailsRestaurantEntity);
                             resultMutableLiveData.setValue(new DetailsRestaurantWrapper.Success(detailsRestaurantEntity));
                         }
                     }
@@ -102,37 +103,37 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
             vicinity = response.getResult().getVicinity();
         } else return null;
 
-        if (response.getResult().getPhotos() != null &&
-            response.getResult().getPhotos().get(0) != null &&
-            !response.getResult().getPhotos().get(0).getPhotoReference().isEmpty()) {
-            photoReference = response.getResult().getPhotos().get(0).getPhotoReference();
-        } else {
-            photoReference = null;
-        }
+            if (response.getResult().getPhotos() != null &&
+                response.getResult().getPhotos().get(0) != null &&
+                !response.getResult().getPhotos().get(0).getPhotoReference().isEmpty()) {
+                photoReference = response.getResult().getPhotos().get(0).getPhotoReference();
+            } else {
+                photoReference = null;
+            }
 
-        if (response.getResult().getRating() != null) {
-            rating = response.getResult().getRating();
-        } else {
-            rating = null;
-        }
+            if (response.getResult().getRating() != null) {
+                rating = response.getResult().getRating();
+            } else {
+                rating = null;
+            }
 
-        if (response.getResult().getFormattedPhoneNumber() != null) {
-            formattedPhoneNumber = response.getResult().getFormattedPhoneNumber();
-        } else {
-            formattedPhoneNumber = null;
-        }
+            if (response.getResult().getFormattedPhoneNumber() != null) {
+                formattedPhoneNumber = response.getResult().getFormattedPhoneNumber();
+            } else {
+                formattedPhoneNumber = null;
+            }
 
-        if (response.getResult().getWebsite() != null) {
-            website = response.getResult().getWebsite();
-        } else {
-            website = null;
-        }
+            if (response.getResult().getWebsite() != null) {
+                website = response.getResult().getWebsite();
+            } else {
+                website = null;
+            }
 
-        if (response.getResult().isServesVegetarianFood() != null) {
-            isVeganFriendly = response.getResult().isServesVegetarianFood();
-        } else {
-            isVeganFriendly = null;
-        }
+            if (response.getResult().isServesVegetarianFood() != null) {
+                isVeganFriendly = response.getResult().isServesVegetarianFood();
+            } else {
+                isVeganFriendly = null;
+            }
 
         return new DetailsRestaurantEntity(
             placeId,
