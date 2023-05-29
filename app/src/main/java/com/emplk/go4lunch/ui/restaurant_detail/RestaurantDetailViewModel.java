@@ -92,8 +92,13 @@ public class RestaurantDetailViewModel extends ViewModel {
         );
     }
 
-    public float convertFiveToThreeRating(@Nullable Float fiveRating) {
-        return fiveRating == null ? 0f : Math.round(fiveRating * 2) / 2f;
+    private Float convertFiveToThreeRating(@Nullable Float fiveRating) {
+        if (fiveRating == null) {
+            return 0f;
+        } else {
+            float convertedRating = Math.round(fiveRating * 2) / 2f;
+            return Math.min(3f, convertedRating / 5f * 3f);
+        }
     }
 
     private String parseRestaurantPictureUrl(@Nullable String photoReferenceUrl) {

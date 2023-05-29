@@ -77,7 +77,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                         }
                     );
 
-                    //  @RequiresPermission(Manifest.permission.CALL_PHONE) => Need for permission first?
                     binding.detailRestaurantCallButton.setOnClickListener(v -> {
                             Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", restaurantDetail.getPhoneNumber(), null));
                             startActivity(intent);

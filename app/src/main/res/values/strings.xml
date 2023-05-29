@@ -37,7 +37,7 @@
     <string name="title_activity_maps" translatable="false">MapsActivity</string>
     <string name="onboarding_privacy_message">Don\'t worry, we value your privacy \nand won\'t share your data!</string>
     <string name="onboarding_decline_button">No, thank you</string>
-    <string name="onboarding_allow_button">Yes, please</string>
+    <string name="onboarding_allow_button">Grant permission</string>
     <string name="onboarding_welcome_tv">Welcome!\nFor a better experience, \nGo4Lunch needs your Gps location</string>
     <string name="showRationaleGpsPermissionMessage">This app works best with your permission to Gps location. If you want to provide this permission, please click on \'Change settings\' to grant it</string>
     <string name="change_settings_dialog_button">change settings</string>

@@ -1,6 +1,6 @@
 package com.emplk.go4lunch.data;
 
-import com.emplk.go4lunch.data.autocomplete.autocomplete_response.AutocompleteSuggestionResponse;
+import com.emplk.go4lunch.data.autocomplete.autocomplete_response.AutocompleteSuggestionResponses;
 import com.emplk.go4lunch.data.details.details_restaurant_response.DetailsRestaurantResponse;
 import com.emplk.go4lunch.data.nearbySearchRestaurants.nearbySearchResponse.NearbySearchResponse;
 
@@ -24,7 +24,7 @@ public interface GoogleMapsApi {
     );
 
     @GET("autocomplete/json")
-    Call<AutocompleteSuggestionResponse> getAutocomplete(
+    Call<AutocompleteSuggestionResponses> getAutocomplete(
         @Query("input") String input,
         @Query("location") String location,
         @Query("radius") String radius,
