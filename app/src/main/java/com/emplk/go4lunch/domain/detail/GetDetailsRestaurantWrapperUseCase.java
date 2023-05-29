@@ -5,6 +5,8 @@ import static com.emplk.go4lunch.BuildConfig.API_KEY;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
+import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantWrapper;
+
 import javax.inject.Inject;
 
 public class GetDetailsRestaurantWrapperUseCase {

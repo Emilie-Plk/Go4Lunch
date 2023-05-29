@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.domain.nearby_search;
+package com.emplk.go4lunch.domain.nearby_search.entity;
 
 import androidx.annotation.NonNull;
 

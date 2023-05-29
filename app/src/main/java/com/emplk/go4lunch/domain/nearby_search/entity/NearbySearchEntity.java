@@ -1,59 +1,57 @@
-package com.emplk.go4lunch.domain.detail;
+package com.emplk.go4lunch.domain.nearby_search.entity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.emplk.go4lunch.domain.gps.entity.LocationEntity;
+
 import java.util.Objects;
 
-public class DetailsRestaurantEntity {
+public class NearbySearchEntity {
+
     @NonNull
     private final String placeId;
-    
     @NonNull
     private final String restaurantName;
-
     @NonNull
     private final String vicinity;
 
     @Nullable
     private final String photoReferenceUrl;
 
+
     @Nullable
     private final Float rating;
 
-    @Nullable
-    private final String phoneNumber;
+    @NonNull
+    private final LocationEntity locationEntity;
 
     @Nullable
-    private final String websiteUrl;
+    private final Boolean isOpen;
 
-    @Nullable
-    private final Boolean isVeganFriendly;
 
-    public DetailsRestaurantEntity(
+    public NearbySearchEntity(
         @NonNull String placeId,
         @NonNull String restaurantName,
         @NonNull String vicinity,
         @Nullable String photoReferenceUrl,
         @Nullable Float rating,
-        @Nullable String phoneNumber,
-        @Nullable String websiteUrl,
-        @Nullable Boolean isVeganFriendly) {
+        @NonNull LocationEntity locationEntity,
+        @Nullable Boolean isOpen
+    ) {
         this.placeId = placeId;
         this.restaurantName = restaurantName;
         this.vicinity = vicinity;
         this.photoReferenceUrl = photoReferenceUrl;
         this.rating = rating;
-        this.phoneNumber = phoneNumber;
-        this.websiteUrl = websiteUrl;
-        this.isVeganFriendly = isVeganFriendly;
+        this.locationEntity = locationEntity;
+        this.isOpen = isOpen;
     }
 
     @NonNull
     public String getPlaceId() {
         return placeId;
     }
-
 
     @NonNull
     public String getRestaurantName() {
@@ -75,46 +73,42 @@ public class DetailsRestaurantEntity {
         return rating;
     }
 
-    @Nullable
-    public String getPhoneNumber() {
-        return phoneNumber;
+    @NonNull
+    public LocationEntity getLocationEntity() {
+        return locationEntity;
     }
 
-    @Nullable
-    public String getWebsiteUrl() {
-        return websiteUrl;
-    }
 
     @Nullable
-    public Boolean getVeganFriendly() {
-        return isVeganFriendly;
+    public Boolean isOpen() {
+        return isOpen;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DetailsRestaurantEntity that = (DetailsRestaurantEntity) o;
-        return placeId.equals(that.placeId) && restaurantName.equals(that.restaurantName) && vicinity.equals(that.vicinity) && Objects.equals(photoReferenceUrl, that.photoReferenceUrl) && Objects.equals(rating, that.rating) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(websiteUrl, that.websiteUrl) && Objects.equals(isVeganFriendly, that.isVeganFriendly);
+        NearbySearchEntity that = (NearbySearchEntity) o;
+        return placeId.equals(that.placeId) && restaurantName.equals(that.restaurantName) && vicinity.equals(that.vicinity) && Objects.equals(photoReferenceUrl, that.photoReferenceUrl) && Objects.equals(rating, that.rating) && locationEntity.equals(that.locationEntity) && Objects.equals(isOpen, that.isOpen);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(placeId, restaurantName, vicinity, photoReferenceUrl, rating, phoneNumber, websiteUrl, isVeganFriendly);
+        return Objects.hash(placeId, restaurantName, vicinity, photoReferenceUrl, rating, locationEntity, isOpen);
     }
 
     @NonNull
     @Override
     public String toString() {
-        return "DetailsRestaurantEntity{" +
+        return "NearbySearchEntity{" +
             "placeId='" + placeId + '\'' +
             ", restaurantName='" + restaurantName + '\'' +
             ", vicinity='" + vicinity + '\'' +
             ", photoReferenceUrl='" + photoReferenceUrl + '\'' +
             ", rating=" + rating +
-            ", phoneNumber='" + phoneNumber + '\'' +
-            ", websiteUrl='" + websiteUrl + '\'' +
-            ", isVeganFriendly=" + isVeganFriendly +
+            ", locationEntity=" + locationEntity +
+            ", openingHours=" + isOpen +
             '}';
     }
 }
+

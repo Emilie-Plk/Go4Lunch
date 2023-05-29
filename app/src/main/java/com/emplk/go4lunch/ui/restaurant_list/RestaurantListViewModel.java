@@ -21,12 +21,12 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.R;
-import com.emplk.go4lunch.domain.nearby_search.NearbySearchWrapper;
+import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchWrapper;
 import com.emplk.go4lunch.domain.gps.IsGpsEnabledUseCase;
-import com.emplk.go4lunch.domain.gps.LocationEntity;
+import com.emplk.go4lunch.domain.gps.entity.LocationEntity;
 import com.emplk.go4lunch.domain.location.GetCurrentLocationUseCase;
 import com.emplk.go4lunch.domain.nearby_search.GetNearbySearchWrapperUseCase;
-import com.emplk.go4lunch.domain.nearby_search.NearbySearchEntity;
+import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
 import com.emplk.go4lunch.domain.permission.HasGpsPermissionUseCase;
 
 import java.math.RoundingMode;

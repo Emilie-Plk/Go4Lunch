@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.domain.autocomplete;
+package com.emplk.go4lunch.domain.autocomplete.entity;
 
 import androidx.annotation.NonNull;
 

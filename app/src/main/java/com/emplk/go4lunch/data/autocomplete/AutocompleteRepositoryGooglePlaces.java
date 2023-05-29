@@ -12,9 +12,9 @@ import com.emplk.go4lunch.data.autocomplete.autocomplete_response.AutocompleteSu
 import com.emplk.go4lunch.data.autocomplete.autocomplete_response.PredictionsItem;
 import com.emplk.go4lunch.data.nearbySearchRestaurants.LocationKey;
 import com.emplk.go4lunch.domain.autocomplete.AutocompleteRepository;
-import com.emplk.go4lunch.domain.autocomplete.AutocompleteWrapper;
-import com.emplk.go4lunch.domain.autocomplete.PredictionEntity;
-import com.emplk.go4lunch.domain.gps.LocationEntity;
+import com.emplk.go4lunch.domain.autocomplete.entity.AutocompleteWrapper;
+import com.emplk.go4lunch.domain.autocomplete.entity.PredictionEntity;
+import com.emplk.go4lunch.domain.gps.entity.LocationEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,8 +123,16 @@ public class AutocompleteRepositoryGooglePlaces implements AutocompleteRepositor
                     name = null;
                 }
 
+                String vicinity;
+                if (prediction.getStructuredFormatting() != null &&
+                prediction.getStructuredFormatting().getSecondaryText() != null) {
+                    vicinity = prediction.getStructuredFormatting().getSecondaryText();
+                } else {
+                    vicinity = null;
+                }
+
                 results.add(
-                    new PredictionEntity(placeId, name)
+                    new PredictionEntity(placeId, name, vicinity)
                 );
             }
         }

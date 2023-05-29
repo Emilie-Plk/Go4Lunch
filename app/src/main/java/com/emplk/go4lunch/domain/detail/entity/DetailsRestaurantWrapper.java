@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.domain.detail;
+package com.emplk.go4lunch.domain.detail.entity;
 
 import androidx.annotation.NonNull;
 

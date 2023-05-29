@@ -10,10 +10,10 @@ import androidx.lifecycle.MutableLiveData;
 import com.emplk.go4lunch.data.GoogleMapsApi;
 import com.emplk.go4lunch.data.nearbySearchRestaurants.nearbySearchResponse.NearbySearchResponse;
 import com.emplk.go4lunch.data.nearbySearchRestaurants.nearbySearchResponse.ResultsItem;
-import com.emplk.go4lunch.domain.gps.LocationEntity;
-import com.emplk.go4lunch.domain.nearby_search.NearbySearchEntity;
+import com.emplk.go4lunch.domain.gps.entity.LocationEntity;
 import com.emplk.go4lunch.domain.nearby_search.NearbySearchRepository;
-import com.emplk.go4lunch.domain.nearby_search.NearbySearchWrapper;
+import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
+import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchWrapper;
 
 import java.util.ArrayList;
 import java.util.List;

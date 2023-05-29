@@ -9,9 +9,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.emplk.go4lunch.data.GoogleMapsApi;
 import com.emplk.go4lunch.data.details.details_restaurant_response.DetailsRestaurantResponse;
-import com.emplk.go4lunch.domain.detail.DetailsRestaurantEntity;
 import com.emplk.go4lunch.domain.detail.DetailsRestaurantRepository;
-import com.emplk.go4lunch.domain.detail.DetailsRestaurantWrapper;
+import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantEntity;
+import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantWrapper;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -103,37 +103,37 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
             vicinity = response.getResult().getVicinity();
         } else return null;
 
-            if (response.getResult().getPhotos() != null &&
-                response.getResult().getPhotos().get(0) != null &&
-                !response.getResult().getPhotos().get(0).getPhotoReference().isEmpty()) {
-                photoReference = response.getResult().getPhotos().get(0).getPhotoReference();
-            } else {
-                photoReference = null;
-            }
+        if (response.getResult().getPhotos() != null &&
+            response.getResult().getPhotos().get(0) != null &&
+            !response.getResult().getPhotos().get(0).getPhotoReference().isEmpty()) {
+            photoReference = response.getResult().getPhotos().get(0).getPhotoReference();
+        } else {
+            photoReference = null;
+        }
 
-            if (response.getResult().getRating() != null) {
-                rating = response.getResult().getRating();
-            } else {
-                rating = null;
-            }
+        if (response.getResult().getRating() != null) {
+            rating = response.getResult().getRating();
+        } else {
+            rating = null;
+        }
 
-            if (response.getResult().getFormattedPhoneNumber() != null) {
-                formattedPhoneNumber = response.getResult().getFormattedPhoneNumber();
-            } else {
-                formattedPhoneNumber = null;
-            }
+        if (response.getResult().getFormattedPhoneNumber() != null) {
+            formattedPhoneNumber = response.getResult().getFormattedPhoneNumber();
+        } else {
+            formattedPhoneNumber = null;
+        }
 
-            if (response.getResult().getWebsite() != null) {
-                website = response.getResult().getWebsite();
-            } else {
-                website = null;
-            }
+        if (response.getResult().getWebsite() != null) {
+            website = response.getResult().getWebsite();
+        } else {
+            website = null;
+        }
 
-            if (response.getResult().isServesVegetarianFood() != null) {
-                isVeganFriendly = response.getResult().isServesVegetarianFood();
-            } else {
-                isVeganFriendly = null;
-            }
+        if (response.getResult().isServesVegetarianFood() != null) {
+            isVeganFriendly = response.getResult().isServesVegetarianFood();
+        } else {
+            isVeganFriendly = null;
+        }
 
         return new DetailsRestaurantEntity(
             placeId,

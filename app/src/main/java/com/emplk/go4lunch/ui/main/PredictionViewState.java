@@ -1,10 +1,11 @@
-package com.emplk.go4lunch.domain.autocomplete;
+package com.emplk.go4lunch.ui.main;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.Objects;
 
-public class PredictionEntity {
+public class PredictionViewState {
 
     @NonNull
     private final String placeId;
@@ -12,12 +13,17 @@ public class PredictionEntity {
     @NonNull
     private final String restaurantName;
 
-    public PredictionEntity(
+    @Nullable
+    private final String vicinity; // secondary text
+
+    public PredictionViewState(
         @NonNull String placeId,
-        @NonNull String restaurantName
+        @NonNull String restaurantName,
+        @Nullable String vicinity
     ) {
         this.placeId = placeId;
         this.restaurantName = restaurantName;
+        this.vicinity = vicinity;
     }
 
     @NonNull
@@ -30,25 +36,31 @@ public class PredictionEntity {
         return restaurantName;
     }
 
+    @Nullable
+    public String getVicinity() {
+        return vicinity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PredictionEntity that = (PredictionEntity) o;
-        return placeId.equals(that.placeId) && restaurantName.equals(that.restaurantName);
+        PredictionViewState that = (PredictionViewState) o;
+        return placeId.equals(that.placeId) && restaurantName.equals(that.restaurantName) && Objects.equals(vicinity, that.vicinity);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(placeId, restaurantName);
+        return Objects.hash(placeId, restaurantName, vicinity);
     }
 
     @NonNull
     @Override
     public String toString() {
-        return "PredictionEntity{" +
+        return "PredictionViewState{" +
             "placeId='" + placeId + '\'' +
             ", restaurantName='" + restaurantName + '\'' +
+            ", vicinity='" + vicinity + '\'' +
             '}';
     }
 }

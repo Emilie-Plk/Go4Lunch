@@ -2,7 +2,7 @@ package com.emplk.go4lunch.data.nearbySearchRestaurants;
 
 import androidx.annotation.NonNull;
 
-import com.emplk.go4lunch.domain.gps.LocationEntity;
+import com.emplk.go4lunch.domain.gps.entity.LocationEntity;
 
 import java.util.Objects;
 

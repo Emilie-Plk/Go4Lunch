@@ -4,9 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
-import com.emplk.go4lunch.domain.gps.GpsResponse;
+import com.emplk.go4lunch.domain.gps.entity.GpsResponse;
 import com.emplk.go4lunch.domain.gps.GpsLocationRepository;
-import com.emplk.go4lunch.domain.gps.LocationEntity;
+import com.emplk.go4lunch.domain.gps.entity.LocationEntity;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
