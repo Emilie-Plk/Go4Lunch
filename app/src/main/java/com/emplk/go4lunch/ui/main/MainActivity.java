@@ -10,10 +10,13 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
@@ -22,6 +25,9 @@ import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.MainActivityBinding;
 import com.emplk.go4lunch.databinding.MainNavigationHeaderBinding;
 import com.emplk.go4lunch.ui.dispatcher.DispatcherActivity;
+import com.emplk.go4lunch.ui.main.searchview.OnPredictionClickedListener;
+import com.emplk.go4lunch.ui.main.searchview.SearchViewAdapter;
+import com.emplk.go4lunch.ui.restaurant_detail.RestaurantDetailActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -29,13 +35,18 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
 
+    @NonNull
     private MainActivityBinding binding;
 
+    @NonNull
     private MainViewModel viewModel;
+
+    @NonNull
+    private SearchViewAdapter searchViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        MainNavigationHeaderBinding navigationHeaderBinding;
+
         super.onCreate(savedInstanceState);
 
         binding = MainActivityBinding.inflate(getLayoutInflater());
@@ -43,19 +54,27 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.mainToolbar);
 
-        View headerView = binding.mainNavigationView.getHeaderView(0);
-        navigationHeaderBinding = MainNavigationHeaderBinding.bind(headerView);
 
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         MainPagerAdapter adapter = new MainPagerAdapter(MainActivity.this);
         binding.mainViewpagerContainer.setAdapter(adapter);
 
+        setObservers();
+
         initBottomNavigationBar();
 
         initNavigationDrawer();
 
+        initSearchView();
+    }
 
+    private void setObservers() {
+
+        // MainNavigation Header
+        MainNavigationHeaderBinding navigationHeaderBinding;
+        View headerView = binding.mainNavigationView.getHeaderView(0);
+        navigationHeaderBinding = MainNavigationHeaderBinding.bind(headerView);
         viewModel.getCurrentUserLiveData().observe(this, firebaseUser -> {
                 Glide.with(this)
                     .load(firebaseUser.getPhotoUrl())
@@ -64,6 +83,59 @@ public class MainActivity extends AppCompatActivity {
 
                 navigationHeaderBinding.navigationHeaderUserEmail.setText(firebaseUser.getEmail());
                 navigationHeaderBinding.navigationHeaderUserName.setText(firebaseUser.getDisplayName());
+            }
+        );
+/*
+        viewModel.getPredictionViewStateLiveData().observe(this, predictionViewState -> {
+                if (predictionViewState != null) {
+                    searchViewAdapter.submitList(predictionViewState);
+                }
+            }
+        );*/
+    }
+
+    private void initSearchView() {
+
+        SearchView searchView = binding.mainToolbarSearchView;
+        searchView.clearFocus();
+
+        RecyclerView recyclerView = binding.mainSearchviewRecyclerview;
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setVisibility(View.GONE); // TODO: MVVMize this pls
+        searchViewAdapter = new SearchViewAdapter(new OnPredictionClickedListener() {
+            @Override
+            public void onPredictionClicked(@NonNull String placeId) {
+                startActivity(RestaurantDetailActivity.navigate(MainActivity.this, placeId));
+            }
+        }
+        );
+
+        recyclerView.setAdapter(searchViewAdapter);
+
+        searchView.setOnQueryTextListener(
+            new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    recyclerView.setVisibility(View.VISIBLE);
+                    viewModel.onUserSearchQuery(newText).observe(MainActivity.this, predictionViewState -> {
+                            if (predictionViewState != null) {
+                                searchViewAdapter.submitList(predictionViewState);
+                            }
+                        }
+                    );
+                    return false;
+                }
+            }
+        );
+
+        searchView.setOnCloseListener(() -> {
+                recyclerView.setVisibility(View.GONE);
+                return false;
             }
         );
     }
@@ -95,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.mainDrawerLayout, binding.mainToolbar, R.string.open_nav, R.string.close_nav);
         binding.mainDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
 
         binding.mainNavigationView.bringToFront();
 

@@ -49,7 +49,7 @@ public class RestaurantListFragment extends Fragment {
 
         RestaurantListAdapter adapter = new RestaurantListAdapter(new OnRestaurantClickedListener() {
             @Override
-            public void onRestaurantClicked(String restaurantId) {
+            public void onRestaurantClicked(@NonNull String restaurantId) {
                 startActivity(RestaurantDetailActivity.navigate(requireContext(), restaurantId));
             }
         }
@@ -59,8 +59,9 @@ public class RestaurantListFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         viewModel.getRestaurantItemViewStateListLiveData()
-            .observe(getViewLifecycleOwner(), list ->
-                adapter.submitList(list)
+            .observe(getViewLifecycleOwner(), list -> {
+                    adapter.submitList(list);
+                }
             );
     }
 

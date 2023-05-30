@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context="com.emplk.go4lunch.ui.main.MainActivity"
-    tools:openDrawer="start">
+
+    >
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/main_navigation_view"
@@ -44,9 +45,9 @@
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/main_toolbar"
                 style="@style/Theme.Go4Lunch.Toolbar"
-                app:title="@string/app_name"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize">
+                android:layout_height="?attr/actionBarSize"
+                app:title="@string/app_name">
 
                 <androidx.appcompat.widget.SearchView
                     android:id="@+id/main_toolbar_search_view"
@@ -57,7 +58,17 @@
                     app:searchIcon="@drawable/baseline_search_24" />
 
             </com.google.android.material.appbar.MaterialToolbar>
+
         </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/main_searchview_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize"
+            app:layout_constraintTop_toBottomOf="@+id/main_toolbar_layout"
+            app:layout_constraintEnd_toEndOf="@id/main_toolbar_layout"
+            tools:listitem="@layout/prediction_item" />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/main_viewpager_container"

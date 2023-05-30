@@ -3,6 +3,7 @@ package com.emplk.go4lunch.ui.main;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
@@ -14,8 +15,7 @@ import com.emplk.go4lunch.domain.autocomplete.GetAutocompleteWrapperUseCase;
 import com.emplk.go4lunch.domain.autocomplete.entity.AutocompleteWrapper;
 import com.emplk.go4lunch.domain.autocomplete.entity.PredictionEntity;
 import com.emplk.go4lunch.ui.main.searchview.PredictionViewState;
-import com.emplk.go4lunch.ui.main.searchview.SearchType;
-import com.emplk.go4lunch.ui.main.searchview.SearchViewState;
+import com.emplk.go4lunch.ui.main.searchview.SearchViewVisibilityState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,10 @@ public class MainViewModel extends ViewModel {
     private final GetAutocompleteWrapperUseCase getAutocompleteWrapperUseCase;
 
     @NonNull  // TODO: will use it to display/hide searchview bar
-    private final MutableLiveData<SearchViewState> searchViewStateMutableLiveData = new MutableLiveData<>();
+    private final MutableLiveData<List<SearchViewVisibilityState>> searchViewVisibilityStateMutableLiveData = new MutableLiveData<>();
+
+    @NonNull
+    private final MediatorLiveData<List<PredictionViewState>> predictionViewStateMediatorLiveData = new MediatorLiveData<>();
 
     @Inject
     public MainViewModel(
