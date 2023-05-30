@@ -2,9 +2,10 @@ package com.emplk.go4lunch.domain.location;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Transformations;
+import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.Observer;
 
-import com.emplk.go4lunch.domain.gps.entity.GpsResponse;
+import com.emplk.go4lunch.domain.gps.entity.LocationStateEntity;
 import com.emplk.go4lunch.domain.gps.GpsLocationRepository;
 import com.emplk.go4lunch.domain.gps.entity.LocationEntity;
 
@@ -13,7 +14,6 @@ import javax.inject.Singleton;
 
 @Singleton
 public class GetCurrentLocationUseCase {
-
 
     @NonNull
     private final GpsLocationRepository gpsLocationRepository;
@@ -24,11 +24,18 @@ public class GetCurrentLocationUseCase {
     }
 
     public LiveData<LocationEntity> invoke() {
-        return Transformations.map(gpsLocationRepository.getGpsResponseLiveData(), gpsResponse -> {
-            if (gpsResponse instanceof GpsResponse.Success) {
-                return ((GpsResponse.Success) gpsResponse).locationEntity;
+        MediatorLiveData<LocationEntity> mediatorLiveData = new MediatorLiveData<>();
+
+        mediatorLiveData.addSource(gpsLocationRepository.getLocationStateLiveData(), new Observer<LocationStateEntity>() {
+            @Override
+            public void onChanged(LocationStateEntity locationStateEntity) {
+                if (locationStateEntity instanceof LocationStateEntity.Success) {
+                    mediatorLiveData.setValue(((LocationStateEntity.Success) locationStateEntity).locationEntity);
+                }
+                // TODO: I need to manage the GpsProviderDisabled case
             }
-            return null; // TODO: I need to manage the GpsProviderDisabled case
         });
+
+        return mediatorLiveData;
     }
 }

@@ -12,7 +12,6 @@ import static com.emplk.go4lunch.ui.restaurant_list.RestaurantOpeningState.IS_NO
 
 import android.content.res.Resources;
 import android.location.Location;
-import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -68,23 +67,19 @@ public class RestaurantListViewModel extends ViewModel {
         LiveData<NearbySearchWrapper> nearbySearchWrapperLiveData = getNearbySearchWrapperUseCase.invoke();
 
         restaurantListMediatorLiveData.addSource(hasGpsPermissionLiveData, hasGpsPermission ->
-            combine(hasGpsPermission, isGpsEnabledMutableLiveData.getValue(), locationLiveData.getValue(), nearbySearchWrapperLiveData.getValue()
-            )
+            combine(hasGpsPermission, isGpsEnabledMutableLiveData.getValue(), locationLiveData.getValue(), nearbySearchWrapperLiveData.getValue())
         );
 
         restaurantListMediatorLiveData.addSource(locationLiveData, location ->
-            combine(hasGpsPermissionLiveData.getValue(), isGpsEnabledMutableLiveData.getValue(), location, nearbySearchWrapperLiveData.getValue()
-            )
+            combine(hasGpsPermissionLiveData.getValue(), isGpsEnabledMutableLiveData.getValue(), location, nearbySearchWrapperLiveData.getValue())
         );
 
         restaurantListMediatorLiveData.addSource(nearbySearchWrapperLiveData, nearbySearchWrapper ->
-            combine(hasGpsPermissionLiveData.getValue(), isGpsEnabledMutableLiveData.getValue(), locationLiveData.getValue(), nearbySearchWrapper
-            )
+            combine(hasGpsPermissionLiveData.getValue(), isGpsEnabledMutableLiveData.getValue(), locationLiveData.getValue(), nearbySearchWrapper)
         );
 
         restaurantListMediatorLiveData.addSource(isGpsEnabledMutableLiveData, isGpsEnabled ->
-            combine(hasGpsPermissionLiveData.getValue(), isGpsEnabled, locationLiveData.getValue(), nearbySearchWrapperLiveData.getValue()
-            )
+            combine(hasGpsPermissionLiveData.getValue(), isGpsEnabled, locationLiveData.getValue(), nearbySearchWrapperLiveData.getValue())
         );
     }
 
@@ -153,8 +148,7 @@ public class RestaurantListViewModel extends ViewModel {
                         formatOpeningStatus(nearbySearchEntity.isOpen()),
                         parseRestaurantPictureUrl(nearbySearchEntity.getPhotoReferenceUrl()),
                         isRatingBarVisible(nearbySearchEntity.getRating()),
-                        convertFiveToThreeRating(nearbySearchEntity.getRating()
-                        )
+                        convertFiveToThreeRating(nearbySearchEntity.getRating())
                     )
                 );
             }
@@ -190,11 +184,9 @@ public class RestaurantListViewModel extends ViewModel {
 
     private String parseRestaurantPictureUrl(String photoReferenceUrl) {
         if (photoReferenceUrl != null && !photoReferenceUrl.isEmpty()) {
-            return String.format(
-                resources.getString(R.string.google_image_url), photoReferenceUrl, API_KEY);
+            return resources.getString(R.string.google_image_url, photoReferenceUrl, API_KEY);
         } else {
-            Uri uri = Uri.parse("android.resource://com.emplk.go4lunch/" + R.drawable.restaurant_table);
-            return uri.toString();
+            return "android.resource://com.emplk.go4lunch/" + R.drawable.restaurant_table;
         }
     }
 

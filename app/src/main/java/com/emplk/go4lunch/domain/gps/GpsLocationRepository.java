@@ -2,7 +2,7 @@ package com.emplk.go4lunch.domain.gps;
 
 import androidx.lifecycle.LiveData;
 
-import com.emplk.go4lunch.domain.gps.entity.GpsResponse;
+import com.emplk.go4lunch.domain.gps.entity.LocationStateEntity;
 import com.emplk.go4lunch.domain.gps.entity.LocationEntity;
 
 public interface GpsLocationRepository {
@@ -10,10 +10,8 @@ public interface GpsLocationRepository {
 
     void stopLocationRequest();
 
-    LiveData<LocationEntity> getLocationLiveData();
-
     LiveData<Boolean> isGpsEnabledLiveData();
 
-    LiveData<GpsResponse> getGpsResponseLiveData();
+    LiveData<LocationStateEntity> getLocationStateLiveData();
 
 }

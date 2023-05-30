@@ -1,11 +1,11 @@
 package com.emplk.go4lunch.ui.restaurant_list;
 
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -92,6 +92,7 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
             Glide.with(itemView.getContext())
                 .load(itemViewState.getPictureUrl())
                 .error(R.drawable.restaurant_table)
+                .fallback(R.drawable.restaurant_table)
                 .transform(new CenterCrop(), new RoundedCorners(25))
                 .into(binding.listRestaurantPicture);
 
@@ -101,7 +102,12 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
             binding.listRestaurantRating.setRating(itemViewState.getRating());
             if (itemViewState.getRestaurantOpeningState() != RestaurantOpeningState.IS_NOT_DEFINED) {
                 binding.listRestaurantOpeningHours.setText(itemViewState.getRestaurantOpeningState().getText());
-                binding.listRestaurantOpeningHours.setTextColor(Color.parseColor(itemViewState.getRestaurantOpeningState().getColorString()));
+                binding.listRestaurantOpeningHours.setTextColor(
+                    ContextCompat.getColor(
+                        binding.listRestaurantOpeningHours.getContext(),
+                        itemViewState.getRestaurantOpeningState().getColorRes()
+                    )
+                );
             }
         }
 

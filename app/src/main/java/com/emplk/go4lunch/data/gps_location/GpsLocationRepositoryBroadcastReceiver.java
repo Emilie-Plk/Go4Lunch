@@ -4,7 +4,6 @@ import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
-import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -22,7 +21,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.emplk.go4lunch.domain.gps.GpsLocationRepository;
-import com.emplk.go4lunch.domain.gps.entity.GpsResponse;
+import com.emplk.go4lunch.domain.gps.entity.LocationStateEntity;
 import com.emplk.go4lunch.domain.gps.entity.LocationEntity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -78,34 +77,23 @@ public class GpsLocationRepositoryBroadcastReceiver extends BroadcastReceiver im
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     }
 
-    @SuppressLint("MissingPermission")
-    @Override
-    public LiveData<LocationEntity> getLocationLiveData() {
-       /* if (fusedLocationProviderClient.getLastLocation()) {
-            Location location = fusedLocationProviderClient.getLastLocation().getResult();
-            LocationEntity locationEntity = new LocationEntity(location.getLatitude(), location.getLongitude());
-            gpsLocationEntityMutableLiveData.setValue(locationEntity);
-        }*/
-        return gpsLocationEntityMutableLiveData;
-    }
-
     @Override
     public LiveData<Boolean> isGpsEnabledLiveData() {
         return isGpsEnabledMutableLiveData;
     }
 
-    public LiveData<GpsResponse> getGpsResponseLiveData() {
-        MediatorLiveData<GpsResponse> gpsResponseMediatorLiveData = new MediatorLiveData<>();
+    public LiveData<LocationStateEntity> getLocationStateLiveData() {
+        MediatorLiveData<LocationStateEntity> gpsResponseMediatorLiveData = new MediatorLiveData<>();
         Observer<Object> observer = new Observer<Object>() {
             @Override
             public void onChanged(Object object) {
-                GpsResponse gpsResponse;
+                LocationStateEntity locationStateEntity;
                 if (isGpsEnabledMutableLiveData.getValue() != null && !isGpsEnabledMutableLiveData.getValue()) {
-                    gpsResponse = new GpsResponse.GpsProviderDisabled();
+                    locationStateEntity = new LocationStateEntity.GpsProviderDisabled();
                 } else {
-                    gpsResponse = new GpsResponse.Success(gpsLocationEntityMutableLiveData.getValue());
+                    locationStateEntity = new LocationStateEntity.Success(gpsLocationEntityMutableLiveData.getValue());
                 }
-                gpsResponseMediatorLiveData.setValue(gpsResponse);
+                gpsResponseMediatorLiveData.setValue(locationStateEntity);
             }
         };
         gpsResponseMediatorLiveData.addSource(gpsLocationEntityMutableLiveData, observer);

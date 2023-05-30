@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
-import com.emplk.go4lunch.domain.gps.entity.GpsResponse;
+import com.emplk.go4lunch.domain.gps.entity.LocationStateEntity;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -21,8 +21,8 @@ public class IsGpsEnabledUseCase {
     }
 
     public LiveData<Boolean> invoke() {
-        return Transformations.map(gpsLocationRepository.getGpsResponseLiveData(), gpsResponse -> {
-                if (gpsResponse instanceof GpsResponse.GpsProviderDisabled) {
+        return Transformations.map(gpsLocationRepository.getLocationStateLiveData(), gpsResponse -> {
+                if (gpsResponse instanceof LocationStateEntity.GpsProviderDisabled) {
                     return false;
                 } else {
                     return true;
