@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.ui.main;
+package com.emplk.go4lunch.ui.main.searchview;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

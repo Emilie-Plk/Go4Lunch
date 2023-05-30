@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/prediction_item_holder">
+
+    <TextView
+        android:id="@+id/prediction_item_restaurant_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="4dp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/prediction_item_restaurant_vicinity"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Chez Mimi" />
+
+    <TextView
+        android:id="@+id/prediction_item_restaurant_vicinity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/prediction_item_restaurant_name"
+        app:layout_constraintTop_toBottomOf="@id/prediction_item_restaurant_name"
+        tools:text="15, rue de la Paix, 75017 Paris" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

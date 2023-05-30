@@ -20,9 +20,10 @@ import com.emplk.go4lunch.databinding.RestaurantListErrorStateBinding;
 
 public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, RecyclerView.ViewHolder> {
 
+    @NonNull
     private final OnRestaurantClickedListener listener;
 
-    public RestaurantListAdapter(OnRestaurantClickedListener listener) {
+    public RestaurantListAdapter(@NonNull OnRestaurantClickedListener listener) {
         super(new RestaurantListViewHolder.ListRestaurantItemCallback());
         this.listener = listener;
     }
