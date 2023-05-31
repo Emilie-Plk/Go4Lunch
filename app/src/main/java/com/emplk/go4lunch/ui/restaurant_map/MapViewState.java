@@ -2,20 +2,29 @@ package com.emplk.go4lunch.ui.restaurant_map;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.maps.model.LatLng;
+import com.emplk.go4lunch.ui.restaurant_map.map__marker.RestaurantMarkerViewStateItem;
+import com.emplk.go4lunch.ui.restaurant_map.map__marker.UserMarkerViewStateItem;
 
+import java.util.List;
 import java.util.Objects;
 
 public class MapViewState {
+/*
+    @NonNull
+    private final UserMarkerViewStateItem userMarkerViewStateItem;*/
 
-    private final LatLng latLng;
+    @NonNull
+    private final List<RestaurantMarkerViewStateItem> restaurantMarkerListViewStateItem;
 
-    public MapViewState(LatLng latLng) {
-        this.latLng = latLng;
+    public MapViewState(
+        @NonNull List<RestaurantMarkerViewStateItem> restaurantMarkerListViewStateItem
+    ) {
+        this.restaurantMarkerListViewStateItem = restaurantMarkerListViewStateItem;
     }
 
-    public LatLng getLatLng() {
-        return latLng;
+    @NonNull
+    public List<RestaurantMarkerViewStateItem> getRestaurantMarkerListViewStateItem() {
+        return restaurantMarkerListViewStateItem;
     }
 
     @Override
@@ -23,19 +32,20 @@ public class MapViewState {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MapViewState that = (MapViewState) o;
-        return Objects.equals(latLng, that.latLng);
+        return restaurantMarkerListViewStateItem.equals(that.restaurantMarkerListViewStateItem);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(latLng);
+        return Objects.hash(restaurantMarkerListViewStateItem);
     }
 
     @NonNull
     @Override
     public String toString() {
         return "MapViewState{" +
-            "latLng=" + latLng +
+            "restaurantMarkerListViewStateItem=" + restaurantMarkerListViewStateItem +
             '}';
     }
 }
+

@@ -118,8 +118,8 @@ public class GpsLocationRepositoryBroadcastReceiver extends BroadcastReceiver im
     @RequiresPermission(anyOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
     public void startLocationRequest() {
         LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, LOCATION_REQUEST_INTERVAL_MS)
-            .setMinUpdateIntervalMillis(SMALLEST_DISPLACEMENT_THRESHOLD_METER)
-            .setMinUpdateDistanceMeters(LOCATION_REQUEST_INTERVAL_MS)
+            .setMinUpdateIntervalMillis(LOCATION_REQUEST_INTERVAL_MS)
+            .setMinUpdateDistanceMeters(SMALLEST_DISPLACEMENT_THRESHOLD_METER)
             .build();
 
         fusedLocationProviderClient.removeLocationUpdates(locationCallback);

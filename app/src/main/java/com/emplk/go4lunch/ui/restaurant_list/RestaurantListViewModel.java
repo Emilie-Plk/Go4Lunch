@@ -142,7 +142,7 @@ public class RestaurantListViewModel extends ViewModel {
                 )
             );
         } else if (nearbySearchWrapper instanceof NearbySearchWrapper.Success) {
-            for (NearbySearchEntity nearbySearchEntity : ((NearbySearchWrapper.Success) nearbySearchWrapper).getResults()) {
+            for (NearbySearchEntity nearbySearchEntity : ((NearbySearchWrapper.Success) nearbySearchWrapper).getNearbySearchEntityList()) {
                 result.add(
                     new RestaurantListViewState.RestaurantList(
                         nearbySearchEntity.getPlaceId(),

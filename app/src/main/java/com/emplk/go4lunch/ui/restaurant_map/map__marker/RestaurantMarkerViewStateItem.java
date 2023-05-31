@@ -1,14 +1,12 @@
 package com.emplk.go4lunch.ui.restaurant_map.map__marker;
 
-import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Objects;
 
-public class MarkerViewStateItem {
+public class RestaurantMarkerViewStateItem {
     @NonNull
     private final String id;
 
@@ -19,24 +17,19 @@ public class MarkerViewStateItem {
     private final LatLng latLng;
 
     @NonNull
-    @ColorRes
-    private final int color;
+    private final MarkerState markerState;
 
-    @Nullable
-    private final Boolean isSelected;
 
-    public MarkerViewStateItem(
+    public RestaurantMarkerViewStateItem(
         @NonNull String id,
         @NonNull String name,
         @NonNull LatLng latLng,
-        int color,
-        @Nullable Boolean isSelected
+        @NonNull MarkerState markerState
     ) {
         this.id = id;
         this.name = name;
         this.latLng = latLng;
-        this.color = color;
-        this.isSelected = isSelected;
+        this.markerState = markerState;
     }
 
     @NonNull
@@ -54,37 +47,33 @@ public class MarkerViewStateItem {
         return latLng;
     }
 
-    public int getColor() {
-        return color;
-    }
 
-    @Nullable
-    public Boolean getSelected() {
-        return isSelected;
+    @NonNull
+    public MarkerState getMarkerState() {
+        return markerState;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MarkerViewStateItem that = (MarkerViewStateItem) o;
-        return color == that.color && id.equals(that.id) && name.equals(that.name) && latLng.equals(that.latLng) && Objects.equals(isSelected, that.isSelected);
+        RestaurantMarkerViewStateItem that = (RestaurantMarkerViewStateItem) o;
+        return id.equals(that.id) && name.equals(that.name) && latLng.equals(that.latLng) && markerState == that.markerState;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, latLng, color, isSelected);
+        return Objects.hash(id, name, latLng, markerState);
     }
 
     @NonNull
     @Override
     public String toString() {
-        return "MarkerViewStateItem{" +
+        return "RestaurantMarkerViewStateItem{" +
             "id='" + id + '\'' +
             ", name='" + name + '\'' +
             ", latLng=" + latLng +
-            ", color=" + color +
-            ", isSelected=" + isSelected +
+            ", markerState=" + markerState +
             '}';
     }
 }

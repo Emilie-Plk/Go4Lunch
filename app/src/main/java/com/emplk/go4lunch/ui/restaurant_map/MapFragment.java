@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.emplk.go4lunch.ui.restaurant_map.map__marker.RestaurantMarkerViewStateItem;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -46,27 +47,35 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        viewModel.getMapViewStateLiveData().observe(getViewLifecycleOwner(), mapViewState -> {
-                LatLng latLng = mapViewState.getLatLng();
+        viewModel.getUserCurrentLocation().observe(getViewLifecycleOwner(), userLocation -> {
+                LatLng latLng = new LatLng(userLocation.getLatitude(), userLocation.getLongitude());
                 float zoomLevel = 15f;
                 googleMap.addMarker(
                     new MarkerOptions()
                         .position(latLng)
-                        .title("Marker in your area")
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)
-                        )
+                        .title("You")
                 );
-                // Create a CameraPosition object with the target location and desired zoom level
+
                 CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(latLng)
                     .zoom(zoomLevel)
                     .build();
 
-                // Create a CameraUpdate object to move and zoom the camera to the desired position
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
 
-                // Move and zoom the camera to the desired position
                 googleMap.animateCamera(cameraUpdate);
+            }
+        );
+        viewModel.getMapViewState().observe(getViewLifecycleOwner(), mapViewState -> {
+                for (RestaurantMarkerViewStateItem item : mapViewState) {
+                    googleMap.addMarker(
+                        new MarkerOptions()
+                            .position(new LatLng(item.getLatLng().latitude, item.getLatLng().longitude))
+                            .title(item.getName())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)
+                            )
+                    );
+                }
             }
         );
     }

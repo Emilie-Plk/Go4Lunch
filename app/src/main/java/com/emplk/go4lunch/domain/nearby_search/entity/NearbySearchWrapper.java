@@ -18,7 +18,7 @@ public abstract class NearbySearchWrapper {
         }
 
         @NonNull
-        public List<NearbySearchEntity> getResults() {
+        public List<NearbySearchEntity> getNearbySearchEntityList() {
             return results;
         }
     }
