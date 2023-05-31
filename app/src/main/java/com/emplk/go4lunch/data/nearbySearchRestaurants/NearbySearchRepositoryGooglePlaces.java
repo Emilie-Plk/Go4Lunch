@@ -1,5 +1,6 @@
 package com.emplk.go4lunch.data.nearbySearchRestaurants;
 
+import android.util.Log;
 import android.util.LruCache;
 
 import androidx.annotation.NonNull;
@@ -35,7 +36,7 @@ public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepositor
     @Inject
     public NearbySearchRepositoryGooglePlaces(@NonNull GoogleMapsApi googleMapsApi) {
         this.googleMapsApi = googleMapsApi;
-        nearbySearchLruCache = new LruCache<>(200);
+        nearbySearchLruCache = new LruCache<>(400);
     }
 
     @Override
@@ -47,7 +48,7 @@ public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepositor
     ) {
         MutableLiveData<NearbySearchWrapper> resultMutableLiveData = new MutableLiveData<>();
         LocationKey cacheKey = generateCacheKey(location);
-
+        Log.d("NearbySearchRepository", "nearbySearchLruCache size is:" + nearbySearchLruCache.size());
         List<NearbySearchEntity> cachedNearbySearchEntityList = nearbySearchLruCache.get(cacheKey);
 
         if (cachedNearbySearchEntityList == null) {
@@ -110,6 +111,7 @@ public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepositor
         return new LocationKey(locationEntity);
     }
 
+    @NonNull
     private List<NearbySearchEntity> fromNearbySearchResponse(@Nullable NearbySearchResponse response) {
         List<NearbySearchEntity> results = new ArrayList<>();
 

@@ -1,5 +1,6 @@
 package com.emplk.go4lunch.data.details;
 
+import android.util.Log;
 import android.util.LruCache;
 
 import androidx.annotation.NonNull;
@@ -40,7 +41,7 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
     ) {
         MutableLiveData<DetailsRestaurantWrapper> resultMutableLiveData = new MutableLiveData<>();
         DetailsKey cacheKey = generateCacheKey(placeId);
-
+        Log.d("DetailsRestaurantRepo", "detailsLruCache size is:" + detailsLruCache.size());
         DetailsRestaurantEntity cachedDetailsEntity = detailsLruCache.get(cacheKey);
 
         if (cachedDetailsEntity == null) {
@@ -56,11 +57,18 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
                         if (response.isSuccessful() &&
                             body != null &&
                             body.getStatus() != null &&
-                            body.getStatus().equals("OK")
+                            body.getStatus().equals("OK") &&
+                            body.getResult() != null &&
+                            body.getResult().getPlaceId() != null &&
+                            body.getResult().getName() != null &&
+                            body.getResult().getVicinity() != null &&
+                            body.getResult().getPhotos() != null
                         ) {
                             DetailsRestaurantEntity detailsRestaurantEntity = fromDetailsResponse(response.body());
                             detailsLruCache.put(cacheKey, detailsRestaurantEntity);
                             resultMutableLiveData.setValue(new DetailsRestaurantWrapper.Success(detailsRestaurantEntity));
+                        } else {
+                            resultMutableLiveData.setValue(new DetailsRestaurantWrapper.Error(new Exception("Error while fetching details")));
                         }
                     }
 
@@ -83,7 +91,9 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
         return new DetailsKey(placeId);
     }
 
-    private DetailsRestaurantEntity fromDetailsResponse(@Nullable DetailsRestaurantResponse response) {
+    @NonNull
+    private DetailsRestaurantEntity fromDetailsResponse(@Nullable DetailsRestaurantResponse
+                                                            response) {
         String placeId;
         String name;
         String vicinity;
@@ -93,15 +103,10 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
         String website;
         Boolean isVeganFriendly;
 
-        if (response != null &&
-            response.getResult() != null
-            && response.getResult().getPlaceId() != null &&
-            response.getResult().getName() != null &&
-            response.getResult().getVicinity() != null) {
-            placeId = response.getResult().getPlaceId();
-            name = response.getResult().getName();
-            vicinity = response.getResult().getVicinity();
-        } else return null;
+        placeId = response.getResult().getPlaceId();  // why do I have a warning here?
+        name = response.getResult().getName();
+        vicinity = response.getResult().getVicinity();
+
 
         if (response.getResult().getPhotos() != null &&
             response.getResult().getPhotos().get(0) != null &&
@@ -144,6 +149,5 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
             formattedPhoneNumber,
             website,
             isVeganFriendly);
-
     }
 }

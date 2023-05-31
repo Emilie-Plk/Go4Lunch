@@ -35,13 +35,11 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
 
-    @NonNull
+
     private MainActivityBinding binding;
 
-    @NonNull
     private MainViewModel viewModel;
 
-    @NonNull
     private SearchViewAdapter searchViewAdapter;
 
     @Override
@@ -111,8 +109,8 @@ public class MainActivity extends AppCompatActivity {
         );
 
         recyclerView.setAdapter(searchViewAdapter);
-
-        searchView.setOnQueryTextListener(
+/*
+        searchView.setOnQueryTextListener(   //TODO: get this right later
             new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
@@ -132,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         );
+*/
 
         searchView.setOnCloseListener(() -> {
                 recyclerView.setVisibility(View.GONE);

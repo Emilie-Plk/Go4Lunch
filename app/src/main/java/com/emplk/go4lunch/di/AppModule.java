@@ -20,6 +20,7 @@ import dagger.Provides;
 import dagger.hilt.InstallIn;
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.components.SingletonComponent;
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -33,7 +34,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public Retrofit provideRetrofit() {
+    public Retrofit provideRetrofit(@NonNull Application application) {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
 
@@ -41,6 +42,7 @@ public class AppModule {
             .addInterceptor(interceptor)
             .connectTimeout(10, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.SECONDS)
+            .cache(new Cache(application.getCacheDir(), 1_024 * 1_024))
             .build();
 
         return new Retrofit.Builder()
