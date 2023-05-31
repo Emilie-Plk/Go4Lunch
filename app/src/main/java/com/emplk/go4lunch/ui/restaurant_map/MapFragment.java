@@ -34,15 +34,6 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(MapViewModel.class);
         getMapAsync(this);
-
-     /*   viewModel.isGpsEnabled().observe(getViewLifecycleOwner(), isEnabled -> {
-                if (!isEnabled) {
-                    Toast.makeText(requireContext(), "Please enable GPS", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(requireContext(), "GPS enabled", Toast.LENGTH_SHORT).show();
-                }
-            }
-        );*/
     }
 
     @Override

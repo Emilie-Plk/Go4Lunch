@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +30,9 @@ import com.emplk.go4lunch.ui.dispatcher.DispatcherActivity;
 import com.emplk.go4lunch.ui.main.searchview.OnPredictionClickedListener;
 import com.emplk.go4lunch.ui.main.searchview.SearchViewAdapter;
 import com.emplk.go4lunch.ui.restaurant_detail.RestaurantDetailActivity;
+import com.emplk.go4lunch.ui.restaurant_list.RestaurantListFragment;
+import com.emplk.go4lunch.ui.restaurant_map.MapFragment;
+import com.emplk.go4lunch.ui.workmate_list.WorkmateListFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -54,9 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
-
-        MainPagerAdapter adapter = new MainPagerAdapter(MainActivity.this);
-        binding.mainViewpagerContainer.setAdapter(adapter);
 
         setObservers();
 
@@ -90,7 +92,23 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         );*/
+
+        viewModel.getFragmentStateSingleLiveEvent().observe(this, fragmentState -> {
+                switch (fragmentState) {
+                    case MAP_FRAGMENT:
+                        replaceFragment(MapFragment.newInstance());
+                        break;
+                    case LIST_FRAGMENT:
+                        replaceFragment(RestaurantListFragment.newInstance());
+                        break;
+                    case WORKMATES_FRAGMENT:
+                        replaceFragment(WorkmateListFragment.newInstance());
+                        break;
+                }
+            }
+        );
     }
+
 
     private void initSearchView() {
 
@@ -147,13 +165,13 @@ public class MainActivity extends AppCompatActivity {
         binding.mainBottomAppbar.setOnItemSelectedListener(item -> {
                 switch (item.getItemId()) {
                     case R.id.bottom_bar_map:
-                        binding.mainViewpagerContainer.setCurrentItem(0, true);
+                        viewModel.onChangeFragmentView(FragmentState.MAP_FRAGMENT);
                         return true;
                     case R.id.bottom_bar_restaurant_list:
-                        binding.mainViewpagerContainer.setCurrentItem(1, true);
+                        viewModel.onChangeFragmentView(FragmentState.LIST_FRAGMENT);
                         return true;
                     case R.id.bottom_bar_workmate_list:
-                        binding.mainViewpagerContainer.setCurrentItem(2, true);
+                        viewModel.onChangeFragmentView(FragmentState.WORKMATES_FRAGMENT);
                         return true;
                 }
                 return false;
@@ -194,6 +212,12 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         );
+    }
+
+    private void replaceFragment(@NonNull Fragment fragment) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.main_frame_layout, fragment);
+        fragmentTransaction.commit();
     }
 
     @Override

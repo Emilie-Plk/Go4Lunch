@@ -70,8 +70,8 @@
             app:layout_constraintEnd_toEndOf="@id/main_toolbar_layout"
             tools:listitem="@layout/prediction_item" />
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/main_viewpager_container"
+        <FrameLayout
+            android:id="@+id/main_frame_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="?attr/actionBarSize"

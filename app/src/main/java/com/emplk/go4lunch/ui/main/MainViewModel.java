@@ -1,5 +1,7 @@
 package com.emplk.go4lunch.ui.main;
 
+import static com.emplk.go4lunch.ui.main.FragmentState.MAP_FRAGMENT;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
@@ -16,6 +18,7 @@ import com.emplk.go4lunch.domain.autocomplete.entity.AutocompleteWrapper;
 import com.emplk.go4lunch.domain.autocomplete.entity.PredictionEntity;
 import com.emplk.go4lunch.ui.main.searchview.PredictionViewState;
 import com.emplk.go4lunch.ui.main.searchview.SearchViewVisibilityState;
+import com.emplk.go4lunch.ui.utils.SingleLiveEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +45,10 @@ public class MainViewModel extends ViewModel {
     @NonNull
     private final MediatorLiveData<List<PredictionViewState>> predictionViewStateMediatorLiveData = new MediatorLiveData<>();
 
+
+    @NonNull
+    private final SingleLiveEvent<FragmentState> fragmentStateSingleLiveEvent = new SingleLiveEvent<>();
+
     @Inject
     public MainViewModel(
         @NonNull GetCurrentUserUseCase getCurrentUserUseCase,
@@ -50,6 +57,7 @@ public class MainViewModel extends ViewModel {
         this.getCurrentUserUseCase = getCurrentUserUseCase;
         this.logoutUserUseCase = logoutUserUseCase;
         this.getAutocompleteWrapperUseCase = getAutocompleteWrapperUseCase;
+        fragmentStateSingleLiveEvent.setValue(MAP_FRAGMENT);
     }
 
     public LiveData<LoggedUserEntity> getCurrentUserLiveData() {
@@ -90,6 +98,15 @@ public class MainViewModel extends ViewModel {
 
     public void signOut() {
         logoutUserUseCase.invoke();
+    }
+
+    @NonNull
+    public SingleLiveEvent<FragmentState> getFragmentStateSingleLiveEvent() {
+        return fragmentStateSingleLiveEvent;
+    }
+
+    public void onChangeFragmentView(@NonNull FragmentState fragmentState) {
+        fragmentStateSingleLiveEvent.setValue(fragmentState);
     }
 }
 
