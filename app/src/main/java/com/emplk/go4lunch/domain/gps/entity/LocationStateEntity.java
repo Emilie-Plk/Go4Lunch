@@ -5,9 +5,9 @@ import androidx.annotation.Nullable;
 
 import java.util.Objects;
 
-public abstract class GpsResponse {
+public abstract class LocationStateEntity {
 
-    public static class Success extends GpsResponse {
+    public static class Success extends LocationStateEntity {
         @Nullable
         public final LocationEntity locationEntity;
 
@@ -37,7 +37,7 @@ public abstract class GpsResponse {
         }
     }
 
-    public static class GpsProviderDisabled extends GpsResponse {
+    public static class GpsProviderDisabled extends LocationStateEntity {
 
     }
 }

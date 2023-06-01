@@ -30,12 +30,15 @@ public class GetNearbySearchWrapperUseCase {
     }
 
     public LiveData<NearbySearchWrapper> invoke() {
-        return Transformations.switchMap(getCurrentLocationUseCase.invoke(), gpsLocationEntity -> {
+        return Transformations.switchMap(
+            getCurrentLocationUseCase.invoke(),
+            gpsLocationEntity -> {
                 return nearbySearchRepository.getNearbyRestaurants(
                     gpsLocationEntity.getLatitude() + "," + gpsLocationEntity.getLongitude(),
                     "restaurant",
                     RADIUS,
-                    API_KEY);
+                    API_KEY
+                );
             }
         );
     }

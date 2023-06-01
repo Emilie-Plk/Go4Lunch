@@ -66,7 +66,7 @@ public abstract class RestaurantListViewState {
         @NonNull
         private final RestaurantOpeningState restaurantOpeningState;
 
-        @NonNull
+        @Nullable
         private final String pictureUrl;
 
         @NonNull
@@ -82,7 +82,7 @@ public abstract class RestaurantListViewState {
             @NonNull String distance,
             @NonNull String attendants,
             @NonNull RestaurantOpeningState restaurantOpeningState,
-            @NonNull String pictureUrl,
+            @Nullable String pictureUrl,
             @NonNull Boolean isRatingBarVisible,
             @NonNull Float rating
         ) {
@@ -124,7 +124,7 @@ public abstract class RestaurantListViewState {
         }
 
 
-        @NonNull
+        @Nullable
         public String getPictureUrl() {
             return pictureUrl;
         }

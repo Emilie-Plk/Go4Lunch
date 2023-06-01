@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -101,7 +102,12 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
             binding.listRestaurantRating.setRating(itemViewState.getRating());
             if (itemViewState.getRestaurantOpeningState() != RestaurantOpeningState.IS_NOT_DEFINED) {
                 binding.listRestaurantOpeningHours.setText(itemViewState.getRestaurantOpeningState().getText());
-                binding.listRestaurantOpeningHours.setTextColor(Color.parseColor(itemViewState.getRestaurantOpeningState().getColorString()));
+                binding.listRestaurantOpeningHours.setTextColor(
+                    ContextCompat.getColor(
+                        binding.listRestaurantOpeningHours.getContext(),
+                        itemViewState.getRestaurantOpeningState().getColorRes()
+                    )
+                );
             }
         }
 

@@ -23,6 +23,9 @@
     <color name="tinted_gray_translucent">#1B52443C</color>
     <color name="detail_btn_disabled">@color/darker_gray</color>
     <color name="detail_btn_enabled">@color/crimson_rust</color>
+    <color name="error_red">#e63946</color>
+    <color name="ok_green">#3D9C41</color>
+    <color name="transparent">#00000000</color>
 
 
     <!-- Dark Theme colors-->

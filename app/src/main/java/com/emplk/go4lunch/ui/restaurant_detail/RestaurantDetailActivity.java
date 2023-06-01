@@ -69,6 +69,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                         .load(restaurantDetail.getPictureUrl())
                         .centerCrop()
                         .error(R.drawable.restaurant_table)
+                        .fallback(R.drawable.restaurant_table)
                         .into(binding.detailRestaurantPicture);
 
                     binding.detailRestaurantWebsiteButton.setOnClickListener(v -> {
