@@ -3,7 +3,6 @@ package com.emplk.go4lunch.ui.restaurant_map;
 import androidx.annotation.NonNull;
 
 import com.emplk.go4lunch.ui.restaurant_map.map__marker.RestaurantMarkerViewStateItem;
-import com.emplk.go4lunch.ui.restaurant_map.map__marker.UserMarkerViewStateItem;
 
 import java.util.List;
 import java.util.Objects;

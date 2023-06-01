@@ -149,7 +149,7 @@ public abstract class RestaurantListViewState {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             RestaurantItem that = (RestaurantItem) o;
-            return id.equals(that.id) && name.equals(that.name) && address.equals(that.address) && distance.equals(that.distance) && attendants.equals(that.attendants) && restaurantOpeningState == that.restaurantOpeningState && pictureUrl.equals(that.pictureUrl) && isRatingBarVisible.equals(that.isRatingBarVisible) && rating.equals(that.rating);
+            return id.equals(that.id) && name.equals(that.name) && address.equals(that.address) && distance.equals(that.distance) && attendants.equals(that.attendants) && restaurantOpeningState == that.restaurantOpeningState && Objects.equals(pictureUrl, that.pictureUrl) && isRatingBarVisible.equals(that.isRatingBarVisible) && rating.equals(that.rating);
         }
 
         @Override

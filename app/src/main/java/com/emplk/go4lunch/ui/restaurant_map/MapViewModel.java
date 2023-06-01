@@ -14,7 +14,7 @@ import com.emplk.go4lunch.domain.location.GetCurrentLocationUseCase;
 import com.emplk.go4lunch.domain.nearby_search.GetNearbySearchWrapperUseCase;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchWrapper;
-import com.emplk.go4lunch.ui.restaurant_map.map__marker.MarkerState;
+import com.emplk.go4lunch.ui.restaurant_map.map__marker.MarkerStatusState;
 import com.emplk.go4lunch.ui.restaurant_map.map__marker.RestaurantMarkerViewStateItem;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -94,7 +94,7 @@ public class MapViewModel extends ViewModel {
                             nearbySearchEntity.getLocationEntity().getLatitude(),
                             nearbySearchEntity.getLocationEntity().getLongitude()
                         ),
-                        MarkerState.IS_FAVORITE // TODO: I need to create a new obj for this (fav/not fav by user)
+                        MarkerStatusState.IS_FAVORITE // TODO: I need to create a new obj for this (fav/not fav by user)
                     )
                 );
             }

@@ -1,6 +1,6 @@
 package com.emplk.go4lunch.ui.restaurant_map.map__marker;
 
-public enum MarkerState {
+public enum MarkerStatusState {
 
     IS_FAVORITE,
     IS_NOT_FAVORITE,

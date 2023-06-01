@@ -105,8 +105,7 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
                 binding.listRestaurantOpeningHours.setTextColor(
                     ContextCompat.getColor(
                         binding.listRestaurantOpeningHours.getContext(),
-                        itemViewState.getRestaurantOpeningState().getColorRes()
-                    )
+                        itemViewState.getRestaurantOpeningState().getColorRes())
                 );
             }
         }

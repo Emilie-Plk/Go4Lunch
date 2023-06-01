@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.ui.restaurant_map.map__marker.RestaurantMarkerViewStateItem;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -44,7 +45,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                 googleMap.addMarker(
                     new MarkerOptions()
                         .position(latLng)
-                        .title("You")
+                        .title(getString(R.string.map_user_maker_message))
                 );
 
                 CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -63,8 +64,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                         new MarkerOptions()
                             .position(new LatLng(item.getLatLng().latitude, item.getLatLng().longitude))
                             .title(item.getName())
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)
-                            )
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
                     );
                 }
             }

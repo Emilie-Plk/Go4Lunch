@@ -14,10 +14,9 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.R;
-import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantEntity;
-import com.emplk.go4lunch.data.details.DetailsRestaurantRepositoryGooglePlaces;
-import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantWrapper;
 import com.emplk.go4lunch.domain.detail.GetDetailsRestaurantWrapperUseCase;
+import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantEntity;
+import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantWrapper;
 
 import javax.inject.Inject;
 
@@ -26,8 +25,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class RestaurantDetailViewModel extends ViewModel {
 
-    @NonNull
-    private final DetailsRestaurantRepositoryGooglePlaces detailsRestaurantRepositoryGooglePlaces;
 
     @NonNull
     private final Resources resources;
@@ -35,14 +32,14 @@ public class RestaurantDetailViewModel extends ViewModel {
     //  private final MediatorLiveData<RestaurantDetailViewState> restaurantDetailViewStateMediatorLiveData = new MediatorLiveData<>();
 
     private final GetDetailsRestaurantWrapperUseCase getDetailsRestaurantWrapperUseCase;
+
     @Inject
     public RestaurantDetailViewModel(
-        @NonNull DetailsRestaurantRepositoryGooglePlaces detailsRestaurantRepositoryGooglePlaces,
-        @NonNull Resources resources,
-        GetDetailsRestaurantWrapperUseCase getDetailsRestaurantWrapperUseCase) {
-        this.detailsRestaurantRepositoryGooglePlaces = detailsRestaurantRepositoryGooglePlaces;
-        this.resources = resources;
+        GetDetailsRestaurantWrapperUseCase getDetailsRestaurantWrapperUseCase,
+        @NonNull Resources resources
+    ) {
         this.getDetailsRestaurantWrapperUseCase = getDetailsRestaurantWrapperUseCase;
+        this.resources = resources;
     }
 
     public LiveData<RestaurantDetailViewState> getRestaurantDetails(@NonNull String restaurantId) {

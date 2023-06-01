@@ -17,19 +17,19 @@ public class RestaurantMarkerViewStateItem {
     private final LatLng latLng;
 
     @NonNull
-    private final MarkerState markerState;
+    private final MarkerStatusState markerStatusState;
 
 
     public RestaurantMarkerViewStateItem(
         @NonNull String id,
         @NonNull String name,
         @NonNull LatLng latLng,
-        @NonNull MarkerState markerState
+        @NonNull MarkerStatusState markerStatusState
     ) {
         this.id = id;
         this.name = name;
         this.latLng = latLng;
-        this.markerState = markerState;
+        this.markerStatusState = markerStatusState;
     }
 
     @NonNull
@@ -49,8 +49,8 @@ public class RestaurantMarkerViewStateItem {
 
 
     @NonNull
-    public MarkerState getMarkerState() {
-        return markerState;
+    public MarkerStatusState getMarkerState() {
+        return markerStatusState;
     }
 
     @Override
@@ -58,12 +58,12 @@ public class RestaurantMarkerViewStateItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RestaurantMarkerViewStateItem that = (RestaurantMarkerViewStateItem) o;
-        return id.equals(that.id) && name.equals(that.name) && latLng.equals(that.latLng) && markerState == that.markerState;
+        return id.equals(that.id) && name.equals(that.name) && latLng.equals(that.latLng) && markerStatusState == that.markerStatusState;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, latLng, markerState);
+        return Objects.hash(id, name, latLng, markerStatusState);
     }
 
     @NonNull
@@ -73,7 +73,7 @@ public class RestaurantMarkerViewStateItem {
             "id='" + id + '\'' +
             ", name='" + name + '\'' +
             ", latLng=" + latLng +
-            ", markerState=" + markerState +
+            ", markerStatusState=" + markerStatusState +
             '}';
     }
 }

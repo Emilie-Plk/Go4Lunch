@@ -61,8 +61,7 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
                             body.getResult() != null &&
                             body.getResult().getPlaceId() != null &&
                             body.getResult().getName() != null &&
-                            body.getResult().getVicinity() != null &&
-                            body.getResult().getPhotos() != null
+                            body.getResult().getVicinity() != null
                         ) {
                             DetailsRestaurantEntity detailsRestaurantEntity = fromDetailsResponse(response.body());
                             detailsLruCache.put(cacheKey, detailsRestaurantEntity);

@@ -46,4 +46,5 @@
     <string name="list_restaurant_opening_text_open">Open</string>
     <string name="list_restaurant_opening_text_closed">Closed</string>
     <string name="list_restaurant_opening_text_undefined" translatable="false"> </string>
+    <string name="map_user_maker_message">Hello, there</string>
 </resources>
