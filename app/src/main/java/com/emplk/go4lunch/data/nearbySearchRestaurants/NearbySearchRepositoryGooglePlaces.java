@@ -43,7 +43,7 @@ public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepositor
     public LiveData<NearbySearchWrapper> getNearbyRestaurants(
         @NonNull String location,
         @NonNull String type,
-        @NonNull String rankBy,
+        int radius,
         @NonNull String key
     ) {
         MutableLiveData<NearbySearchWrapper> resultMutableLiveData = new MutableLiveData<>();
@@ -56,7 +56,7 @@ public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepositor
             googleMapsApi.getNearby(
                     location,
                     type,
-                    rankBy,
+                    radius,
                     key
                 )
                 .enqueue(

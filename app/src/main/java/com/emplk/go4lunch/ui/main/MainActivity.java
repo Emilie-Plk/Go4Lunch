@@ -111,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initSearchView() {
-
         SearchView searchView = binding.mainToolbarSearchView;
         searchView.clearFocus();
 
@@ -148,13 +147,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         );
-*/
 
         searchView.setOnCloseListener(() -> {
                 recyclerView.setVisibility(View.GONE);
                 return false;
             }
         );
+ */
     }
 
     @SuppressLint("NonConstantResourceId")

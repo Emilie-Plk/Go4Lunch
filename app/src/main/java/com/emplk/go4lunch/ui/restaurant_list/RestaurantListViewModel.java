@@ -7,8 +7,8 @@ import static com.emplk.go4lunch.ui.restaurant_list.ErrorDrawable.NO_RESULT_FOUN
 import static com.emplk.go4lunch.ui.restaurant_list.ErrorDrawable.REQUEST_FAILURE;
 import static com.emplk.go4lunch.ui.restaurant_list.ErrorDrawable.UNKNOWN_ERROR;
 import static com.emplk.go4lunch.ui.restaurant_list.RestaurantOpeningState.IS_CLOSED;
-import static com.emplk.go4lunch.ui.restaurant_list.RestaurantOpeningState.IS_OPEN;
 import static com.emplk.go4lunch.ui.restaurant_list.RestaurantOpeningState.IS_NOT_DEFINED;
+import static com.emplk.go4lunch.ui.restaurant_list.RestaurantOpeningState.IS_OPEN;
 
 import android.content.res.Resources;
 import android.location.Location;
@@ -21,12 +21,13 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.R;
-import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchWrapper;
 import com.emplk.go4lunch.domain.gps.IsGpsEnabledUseCase;
 import com.emplk.go4lunch.domain.gps.entity.LocationEntity;
 import com.emplk.go4lunch.domain.location.GetCurrentLocationUseCase;
 import com.emplk.go4lunch.domain.nearby_search.GetNearbySearchWrapperUseCase;
+import com.emplk.go4lunch.domain.nearby_search.SortNearbyRestaurantsUseCase;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
+import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchWrapper;
 import com.emplk.go4lunch.domain.permission.HasGpsPermissionUseCase;
 
 import java.math.RoundingMode;
@@ -45,6 +46,8 @@ public class RestaurantListViewModel extends ViewModel {
     private final Resources resources;
 
     private final MediatorLiveData<List<RestaurantListViewState>> restaurantListMediatorLiveData = new MediatorLiveData<>();
+    @NonNull
+    private final SortNearbyRestaurantsUseCase sortNearbyRestaurantsUseCase;
 
     private final LiveData<Boolean> hasGpsPermissionLiveData;
 
@@ -55,17 +58,20 @@ public class RestaurantListViewModel extends ViewModel {
         @NonNull GetCurrentLocationUseCase getCurrentLocationUseCase,
         @NonNull HasGpsPermissionUseCase hasGpsPermissionUseCase,
         @NonNull IsGpsEnabledUseCase isGpsEnabledUseCase,
-        @NonNull Resources resources
-    ) {
+        @NonNull Resources resources,
+        @NonNull SortNearbyRestaurantsUseCase sortNearbyRestaurantsUseCase) {
         this.resources = resources;
+        this.sortNearbyRestaurantsUseCase = sortNearbyRestaurantsUseCase;
 
         LiveData<LocationEntity> locationLiveData = getCurrentLocationUseCase.invoke();
 
         LiveData<Boolean> isGpsEnabledMutableLiveData = isGpsEnabledUseCase.invoke();
 
+
         hasGpsPermissionLiveData = hasGpsPermissionUseCase.invoke();
 
         LiveData<NearbySearchWrapper> nearbySearchWrapperLiveData = getNearbySearchWrapperUseCase.invoke();
+
 
         restaurantListMediatorLiveData.addSource(hasGpsPermissionLiveData, hasGpsPermission ->
             combine(hasGpsPermission, isGpsEnabledMutableLiveData.getValue(), locationLiveData.getValue(), nearbySearchWrapperLiveData.getValue()
@@ -86,6 +92,7 @@ public class RestaurantListViewModel extends ViewModel {
             combine(hasGpsPermissionLiveData.getValue(), isGpsEnabled, locationLiveData.getValue(), nearbySearchWrapperLiveData.getValue()
             )
         );
+
     }
 
     private void combine(
@@ -142,9 +149,10 @@ public class RestaurantListViewModel extends ViewModel {
                 )
             );
         } else if (nearbySearchWrapper instanceof NearbySearchWrapper.Success) {
-            for (NearbySearchEntity nearbySearchEntity : ((NearbySearchWrapper.Success) nearbySearchWrapper).getNearbySearchEntityList()) {
+            List<NearbySearchEntity> sortedRestaurantList = sortNearbyRestaurantsUseCase.invoke(((NearbySearchWrapper.Success) nearbySearchWrapper).getNearbySearchEntityList(), location);
+            for (NearbySearchEntity nearbySearchEntity : sortedRestaurantList) {
                 result.add(
-                    new RestaurantListViewState.RestaurantList(
+                    new RestaurantListViewState.RestaurantItem(
                         nearbySearchEntity.getPlaceId(),
                         nearbySearchEntity.getRestaurantName(),
                         nearbySearchEntity.getVicinity(),

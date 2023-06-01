@@ -13,6 +13,7 @@ import javax.inject.Inject;
 
 public class GetNearbySearchWrapperUseCase {
 
+    private static final int RADIUS = 1_500;
     @NonNull
     private final NearbySearchRepository nearbySearchRepository;
 
@@ -33,7 +34,7 @@ public class GetNearbySearchWrapperUseCase {
                 return nearbySearchRepository.getNearbyRestaurants(
                     gpsLocationEntity.getLatitude() + "," + gpsLocationEntity.getLongitude(),
                     "restaurant",
-                    "distance",
+                    RADIUS,
                     API_KEY);
             }
         );

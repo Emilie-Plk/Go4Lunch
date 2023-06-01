@@ -59,7 +59,7 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof RestaurantListViewHolder) {
-            ((RestaurantListViewHolder) holder).bind((RestaurantListViewState.RestaurantList) getItem(position), listener);
+            ((RestaurantListViewHolder) holder).bind((RestaurantListViewState.RestaurantItem) getItem(position), listener);
         } else if (holder instanceof RestaurantListViewHolder.ErrorViewHolder) {
             ((RestaurantListViewHolder.ErrorViewHolder) holder).bind((RestaurantListViewState.RestaurantListError) getItem(position));
         }
@@ -81,7 +81,7 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
         }
 
         public void bind(
-            @NonNull RestaurantListViewState.RestaurantList itemViewState,
+            @NonNull RestaurantListViewState.RestaurantItem itemViewState,
             @NonNull OnRestaurantClickedListener listener
         ) {
             itemView.setOnClickListener(v -> listener.onRestaurantClicked(itemViewState.getId()));
@@ -141,11 +141,11 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
             public boolean areItemsTheSame(@NonNull RestaurantListViewState oldItem, @NonNull RestaurantListViewState newItem) {
 
                 boolean bothAreLoading = oldItem instanceof RestaurantListViewState.Loading && newItem instanceof RestaurantListViewState.Loading;
-                boolean bothAreRestaurantLists = oldItem instanceof RestaurantListViewState.RestaurantList && newItem instanceof RestaurantListViewState.RestaurantList;
+                boolean bothAreRestaurantLists = oldItem instanceof RestaurantListViewState.RestaurantItem && newItem instanceof RestaurantListViewState.RestaurantItem;
 
                 return bothAreLoading ||
                     (bothAreRestaurantLists &&
-                        ((RestaurantListViewState.RestaurantList) oldItem).getId().equals(((RestaurantListViewState.RestaurantList) newItem).getId())
+                        ((RestaurantListViewState.RestaurantItem) oldItem).getId().equals(((RestaurantListViewState.RestaurantItem) newItem).getId())
                     ) || (
                     oldItem instanceof RestaurantListViewState.RestaurantListError && newItem instanceof RestaurantListViewState.RestaurantListError);
 

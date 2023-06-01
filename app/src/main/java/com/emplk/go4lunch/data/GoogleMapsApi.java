@@ -13,7 +13,7 @@ public interface GoogleMapsApi {
     Call<NearbySearchResponse> getNearby(
         @Query("location") String location,
         @Query("type") String type,
-        @Query("rankby") String rankBy,
+        @Query("radius") int radius,
         @Query("key") String apiKey
     );
 

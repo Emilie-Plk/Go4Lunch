@@ -47,7 +47,7 @@ public abstract class RestaurantListViewState {
         }
     }
 
-    public static class RestaurantList extends RestaurantListViewState {
+    public static class RestaurantItem extends RestaurantListViewState {
         @NonNull
         private final String id;
 
@@ -75,7 +75,7 @@ public abstract class RestaurantListViewState {
         @NonNull
         private final Float rating;
 
-        public RestaurantList(
+        public RestaurantItem(
             @NonNull String id,
             @NonNull String name,
             @NonNull String address,
@@ -148,7 +148,7 @@ public abstract class RestaurantListViewState {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            RestaurantList that = (RestaurantList) o;
+            RestaurantItem that = (RestaurantItem) o;
             return id.equals(that.id) && name.equals(that.name) && address.equals(that.address) && distance.equals(that.distance) && attendants.equals(that.attendants) && restaurantOpeningState == that.restaurantOpeningState && pictureUrl.equals(that.pictureUrl) && isRatingBarVisible.equals(that.isRatingBarVisible) && rating.equals(that.rating);
         }
 
@@ -160,7 +160,7 @@ public abstract class RestaurantListViewState {
         @NonNull
         @Override
         public String toString() {
-            return "RestaurantList{" +
+            return "RestaurantItem{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
