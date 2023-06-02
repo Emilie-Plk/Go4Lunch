@@ -10,6 +10,7 @@ import com.emplk.go4lunch.data.GoogleMapsApi;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.concurrent.TimeUnit;
 
@@ -70,6 +71,11 @@ public class AppModule {
         return FirebaseAuth.getInstance();
     }
 
+    @Provides
+    @Singleton
+    public FirebaseFirestore provideFirebaseFirestore() {
+        return FirebaseFirestore.getInstance();
+    }
 
     @Provides
     @Singleton

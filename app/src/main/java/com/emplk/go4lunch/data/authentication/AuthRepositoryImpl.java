@@ -30,7 +30,7 @@ public class AuthRepositoryImpl implements AuthRepository {
     @Override
     public LiveData<LoggedUserEntity> getCurrentUserLiveData() {
         if (firebaseAuth.getCurrentUser() != null) {
-            String uid = firebaseAuth.getCurrentUser().getUid();
+            String userId = firebaseAuth.getCurrentUser().getUid();
             String email = firebaseAuth.getCurrentUser().getEmail();
             String displayName = firebaseAuth.getCurrentUser().getDisplayName();
             String photoUrl;
@@ -44,7 +44,7 @@ public class AuthRepositoryImpl implements AuthRepository {
             if (email != null && displayName != null) {
                 firebaseUserEntityMutableLiveData.setValue(
                     new LoggedUserEntity(
-                        uid,
+                        userId,
                         email,
                         displayName,
                         photoUrl

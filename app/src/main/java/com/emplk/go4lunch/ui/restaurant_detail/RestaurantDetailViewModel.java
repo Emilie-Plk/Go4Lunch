@@ -31,11 +31,12 @@ public class RestaurantDetailViewModel extends ViewModel {
 
     //  private final MediatorLiveData<RestaurantDetailViewState> restaurantDetailViewStateMediatorLiveData = new MediatorLiveData<>();
 
+    @NonNull
     private final GetDetailsRestaurantWrapperUseCase getDetailsRestaurantWrapperUseCase;
 
     @Inject
     public RestaurantDetailViewModel(
-        GetDetailsRestaurantWrapperUseCase getDetailsRestaurantWrapperUseCase,
+        @NonNull GetDetailsRestaurantWrapperUseCase getDetailsRestaurantWrapperUseCase,
         @NonNull Resources resources
     ) {
         this.getDetailsRestaurantWrapperUseCase = getDetailsRestaurantWrapperUseCase;

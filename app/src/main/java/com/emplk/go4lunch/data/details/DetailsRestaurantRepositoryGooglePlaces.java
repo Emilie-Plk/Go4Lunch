@@ -63,7 +63,7 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
                             body.getResult().getName() != null &&
                             body.getResult().getVicinity() != null
                         ) {
-                            DetailsRestaurantEntity detailsRestaurantEntity = fromDetailsResponse(response.body());
+                            DetailsRestaurantEntity detailsRestaurantEntity = mapToDetailsRestaurantEntity(response.body());
                             detailsLruCache.put(cacheKey, detailsRestaurantEntity);
                             resultMutableLiveData.setValue(new DetailsRestaurantWrapper.Success(detailsRestaurantEntity));
                         } else {
@@ -91,7 +91,7 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
     }
 
     @NonNull
-    private DetailsRestaurantEntity fromDetailsResponse(@Nullable DetailsRestaurantResponse
+    private DetailsRestaurantEntity mapToDetailsRestaurantEntity(@Nullable DetailsRestaurantResponse
                                                             response) {
         String placeId;
         String name;

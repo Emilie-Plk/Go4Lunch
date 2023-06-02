@@ -8,7 +8,7 @@ import java.util.Objects;
 public class LoggedUserEntity {
 
     @NonNull
-    private final String uid;
+    private final String userId;
 
     @NonNull
     private final String email;
@@ -20,20 +20,20 @@ public class LoggedUserEntity {
     private final String photoUrl;
 
     public LoggedUserEntity(
-        @NonNull String uid,
+        @NonNull String userId,
         @NonNull String email,
         @NonNull String displayName,
         @Nullable String photoUrl
     ) {
-        this.uid = uid;
+        this.userId = userId;
         this.email = email;
         this.displayName = displayName;
         this.photoUrl = photoUrl;
     }
 
     @NonNull
-    public String getUid() {
-        return uid;
+    public String getUserId() {
+        return userId;
     }
 
     @NonNull
@@ -56,19 +56,19 @@ public class LoggedUserEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LoggedUserEntity that = (LoggedUserEntity) o;
-        return uid.equals(that.uid) && email.equals(that.email) && displayName.equals(that.displayName) && Objects.equals(photoUrl, that.photoUrl);
+        return userId.equals(that.userId) && email.equals(that.email) && displayName.equals(that.displayName) && Objects.equals(photoUrl, that.photoUrl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uid, email, displayName, photoUrl);
+        return Objects.hash(userId, email, displayName, photoUrl);
     }
 
     @NonNull
     @Override
     public String toString() {
         return "LoggedUserEntity{" +
-            "uid='" + uid + '\'' +
+            "userId='" + userId + '\'' +
             ", email='" + email + '\'' +
             ", displayName='" + displayName + '\'' +
             ", photoUrl='" + photoUrl + '\'' +

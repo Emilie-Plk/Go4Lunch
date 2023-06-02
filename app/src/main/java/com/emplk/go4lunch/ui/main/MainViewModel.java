@@ -16,6 +16,7 @@ import com.emplk.go4lunch.domain.authentication.LogoutUserUseCase;
 import com.emplk.go4lunch.domain.autocomplete.GetAutocompleteWrapperUseCase;
 import com.emplk.go4lunch.domain.autocomplete.entity.AutocompleteWrapper;
 import com.emplk.go4lunch.domain.autocomplete.entity.PredictionEntity;
+import com.emplk.go4lunch.domain.user.IsUserAlreadySavedInDatabaseUseCase;
 import com.emplk.go4lunch.ui.main.searchview.PredictionViewState;
 import com.emplk.go4lunch.ui.main.searchview.SearchViewVisibilityState;
 import com.emplk.go4lunch.ui.utils.SingleLiveEvent;
@@ -45,18 +46,21 @@ public class MainViewModel extends ViewModel {
     @NonNull
     private final MediatorLiveData<List<PredictionViewState>> predictionViewStateMediatorLiveData = new MediatorLiveData<>();
 
-
     @NonNull
     private final SingleLiveEvent<FragmentState> fragmentStateSingleLiveEvent = new SingleLiveEvent<>();
+
+    private final IsUserAlreadySavedInDatabaseUseCase isUserAlreadySavedInDatabaseUseCase;
 
     @Inject
     public MainViewModel(
         @NonNull GetCurrentUserUseCase getCurrentUserUseCase,
         @NonNull LogoutUserUseCase logoutUserUseCase,
-        @NonNull GetAutocompleteWrapperUseCase getAutocompleteWrapperUseCase) {
+        @NonNull GetAutocompleteWrapperUseCase getAutocompleteWrapperUseCase,
+        IsUserAlreadySavedInDatabaseUseCase isUserAlreadySavedInDatabaseUseCase) {
         this.getCurrentUserUseCase = getCurrentUserUseCase;
         this.logoutUserUseCase = logoutUserUseCase;
         this.getAutocompleteWrapperUseCase = getAutocompleteWrapperUseCase;
+        this.isUserAlreadySavedInDatabaseUseCase = isUserAlreadySavedInDatabaseUseCase;
         fragmentStateSingleLiveEvent.setValue(MAP_FRAGMENT);
     }
 

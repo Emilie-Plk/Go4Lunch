@@ -71,7 +71,7 @@ public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepositor
                                 response.body().getStatus() != null &&
                                 response.body().getStatus().equals("OK")
                             ) {
-                                List<NearbySearchEntity> nearbySearchEntityList = fromNearbySearchResponse(response.body());
+                                List<NearbySearchEntity> nearbySearchEntityList = mapToNearbySearchEntityList(response.body());
                                 nearbySearchLruCache.put(cacheKey, nearbySearchEntityList);
                                 resultMutableLiveData.setValue(new NearbySearchWrapper.Success(nearbySearchEntityList));
                             } else if (response.isSuccessful() &&
@@ -112,7 +112,7 @@ public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepositor
     }
 
     @NonNull
-    private List<NearbySearchEntity> fromNearbySearchResponse(@Nullable NearbySearchResponse response) {
+    private List<NearbySearchEntity> mapToNearbySearchEntityList(@Nullable NearbySearchResponse response) {
         List<NearbySearchEntity> results = new ArrayList<>();
 
         if (response != null && response.getResults() != null) {

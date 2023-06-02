@@ -19,14 +19,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class DispatcherViewModel extends ViewModel {
 
     private final MediatorLiveData<DispatcherViewAction> dispatcherViewActionMediatorLiveData = new MediatorLiveData<>();
-
+    @NonNull
     private final StartLocationRequestUseCase startLocationRequestUseCase;
 
     @Inject
     public DispatcherViewModel(
         @NonNull HasGpsPermissionUseCase hasGpsPermissionUseCase,
         @NonNull GetCurrentUserUseCase getCurrentUserUseCase,
-        StartLocationRequestUseCase startLocationRequestUseCase) {
+        @NonNull StartLocationRequestUseCase startLocationRequestUseCase
+    ) {
         this.startLocationRequestUseCase = startLocationRequestUseCase;
 
         LiveData<Boolean> hasGpsPermissionLiveData = hasGpsPermissionUseCase.invoke();

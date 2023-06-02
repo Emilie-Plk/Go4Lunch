@@ -73,7 +73,7 @@ public class AutocompleteRepositoryGooglePlaces implements AutocompleteRepositor
                                 response.body().getStatus() != null &&
                                 response.body().getStatus().equals("OK")
                             ) {
-                                List<PredictionEntity> predictionEntityList = fromAutocompleteResponse(response.body());
+                                List<PredictionEntity> predictionEntityList = mapToPredictionEntityList(response.body());
                                 userQueryLruCache.put(cacheKey, predictionEntityList);
                                 resultMutableLiveData.setValue(new AutocompleteWrapper.Success(predictionEntityList));
                             } else if (response.isSuccessful() &&
@@ -101,7 +101,7 @@ public class AutocompleteRepositoryGooglePlaces implements AutocompleteRepositor
         return resultMutableLiveData;
     }
 
-    private List<PredictionEntity> fromAutocompleteResponse(@Nullable AutocompleteSuggestionResponses response) {
+    private List<PredictionEntity> mapToPredictionEntityList(@Nullable AutocompleteSuggestionResponses response) {
         List<PredictionEntity> results = new ArrayList<>();
 
         if (response != null && response.getPredictions() != null) {
