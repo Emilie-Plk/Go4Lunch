@@ -102,7 +102,7 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
         String website;
         Boolean isVeganFriendly;
 
-        placeId = response.getResult().getPlaceId();  // why do I have a warning here?
+        placeId = response.getResult().getPlaceId();  // why do I have a warning here? I already checked for nulls
         name = response.getResult().getName();
         vicinity = response.getResult().getVicinity();
 

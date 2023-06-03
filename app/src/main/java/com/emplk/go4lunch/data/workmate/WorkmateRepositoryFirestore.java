@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.emplk.go4lunch.domain.user.ChosenRestaurantEntity;
 import com.emplk.go4lunch.domain.workmate.WorkmateEntity;
 import com.emplk.go4lunch.domain.workmate.WorkmateRepository;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -53,30 +52,15 @@ public class WorkmateRepositoryFirestore implements WorkmateRepository {
 
         for (WorkmateDto workmateDto : workmateDtoList) {
             String id = workmateDto.getUserId() != null ? workmateDto.getUserId() : "";
-            String displayName = workmateDto.getDisplayName() != null ? workmateDto.getDisplayName() : "";
-            String pictureUrl = workmateDto.getPictureUrl() != null ? workmateDto.getPictureUrl() : "";
-            boolean hasChosenRestaurant = workmateDto.getHasChosenRestaurant() != null ? workmateDto.getHasChosenRestaurant() : false;
+            String displayName = workmateDto.getUsername() != null ? workmateDto.getUsername() : "";
+            String pictureUrl = workmateDto.getPictureUrl() != null ? workmateDto.getPictureUrl() : null;
 
-            ChosenRestaurantEntity chosenRestaurantEntity;
-            if (workmateDto.getChosenRestaurantId() != null &&
-                workmateDto.getChosenRestaurantName() != null &&
-                workmateDto.getChosenRestaurantVicinity() != null
-            ) {
-                String chosenRestaurantId = workmateDto.getChosenRestaurantId();
-                String chosenRestaurantName = workmateDto.getChosenRestaurantName();
-                String chosenRestaurantVicinity = workmateDto.getChosenRestaurantVicinity();
-                chosenRestaurantEntity = new ChosenRestaurantEntity(chosenRestaurantId, chosenRestaurantName, chosenRestaurantVicinity);
-            } else {
-                chosenRestaurantEntity = null;
-            }
-
-            WorkmateEntity workmateEntity = new WorkmateEntity(
-                id,
-                displayName,
-                pictureUrl,
-                hasChosenRestaurant,
-                chosenRestaurantEntity
-            );
+            WorkmateEntity workmateEntity =
+                new WorkmateEntity(
+                    id,
+                    displayName,
+                    pictureUrl
+                );
             workmateEntityList.add(workmateEntity);
         }
         return workmateEntityList;

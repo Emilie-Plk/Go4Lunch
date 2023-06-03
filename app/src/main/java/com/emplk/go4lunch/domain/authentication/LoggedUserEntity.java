@@ -14,20 +14,20 @@ public class LoggedUserEntity {
     private final String email;
 
     @NonNull
-    private final String displayName;
+    private final String username;
 
     @Nullable
     private final String photoUrl;
 
     public LoggedUserEntity(
         @NonNull String userId,
-        @NonNull String email,
         @NonNull String displayName,
+        @NonNull String email,
         @Nullable String photoUrl
     ) {
         this.userId = userId;
+        this.username = displayName;
         this.email = email;
-        this.displayName = displayName;
         this.photoUrl = photoUrl;
     }
 
@@ -42,8 +42,8 @@ public class LoggedUserEntity {
     }
 
     @NonNull
-    public String getDisplayName() {
-        return displayName;
+    public String getUsername() {
+        return username;
     }
 
     @Nullable
@@ -56,12 +56,12 @@ public class LoggedUserEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LoggedUserEntity that = (LoggedUserEntity) o;
-        return userId.equals(that.userId) && email.equals(that.email) && displayName.equals(that.displayName) && Objects.equals(photoUrl, that.photoUrl);
+        return userId.equals(that.userId) && email.equals(that.email) && username.equals(that.username) && Objects.equals(photoUrl, that.photoUrl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, email, displayName, photoUrl);
+        return Objects.hash(userId, email, username, photoUrl);
     }
 
     @NonNull
@@ -70,7 +70,7 @@ public class LoggedUserEntity {
         return "LoggedUserEntity{" +
             "userId='" + userId + '\'' +
             ", email='" + email + '\'' +
-            ", displayName='" + displayName + '\'' +
+            ", username='" + username + '\'' +
             ", photoUrl='" + photoUrl + '\'' +
             '}';
     }

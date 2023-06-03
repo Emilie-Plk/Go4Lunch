@@ -3,59 +3,43 @@ package com.emplk.go4lunch.data.user;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.emplk.go4lunch.domain.user.RestaurantEntity;
+
 import java.util.List;
 import java.util.Objects;
 
 public class UserDto {
     @Nullable
-    private String userId;
+    private final String userId;
 
     @Nullable
-    private String displayName;
-    @Nullable
-    private String email;
+    private final String username;
 
     @Nullable
-    private String pictureUrl;
+    private final String email;
 
     @Nullable
-    private Boolean hasChosenRestaurant;
+    private final String pictureUrl;
 
     @Nullable
-    private String chosenRestaurantId;
-
-    @Nullable
-    private String chosenRestaurantName;
-
-    @Nullable
-    private String chosenRestaurantVicinity;
-
-    @Nullable
-    private List<String> favoriteRestaurantList;
+    private final List<RestaurantEntity> favorite_restaurant_list;
 
     public UserDto() {
+        this(null, null, null, null, null);
     }
 
     public UserDto(
         @Nullable String userId,
-        @Nullable String displayName,
+        @Nullable String username,
         @Nullable String email,
         @Nullable String pictureUrl,
-        @Nullable Boolean hasChosenRestaurant,
-        @Nullable String chosenRestaurantId,
-        @Nullable String chosenRestaurantName,
-        @Nullable String chosenRestaurantVicinity,
-        @Nullable List<String> favoriteRestaurantList
+        @Nullable List<RestaurantEntity> favorite_restaurant_list
     ) {
         this.userId = userId;
-        this.displayName = displayName;
+        this.username = username;
         this.email = email;
         this.pictureUrl = pictureUrl;
-        this.hasChosenRestaurant = hasChosenRestaurant;
-        this.chosenRestaurantId = chosenRestaurantId;
-        this.chosenRestaurantName = chosenRestaurantName;
-        this.chosenRestaurantVicinity = chosenRestaurantVicinity;
-        this.favoriteRestaurantList = favoriteRestaurantList;
+        this.favorite_restaurant_list = favorite_restaurant_list;
     }
 
     @Nullable
@@ -64,8 +48,8 @@ public class UserDto {
     }
 
     @Nullable
-    public String getDisplayName() {
-        return displayName;
+    public String getUsername() {
+        return username;
     }
 
     @Nullable
@@ -79,42 +63,21 @@ public class UserDto {
     }
 
     @Nullable
-    public Boolean getHasChosenRestaurant() {
-        return hasChosenRestaurant;
+    public List<RestaurantEntity> getFavorite_restaurant_list() {
+        return favorite_restaurant_list;
     }
-
-    @Nullable
-    public List<String> getFavoriteRestaurantList() {
-        return favoriteRestaurantList;
-    }
-
-    @Nullable
-    public String getChosenRestaurantId() {
-        return chosenRestaurantId;
-    }
-
-    @Nullable
-    public String getChosenRestaurantName() {
-        return chosenRestaurantName;
-    }
-
-    @Nullable
-    public String getChosenRestaurantVicinity() {
-        return chosenRestaurantVicinity;
-    }
-
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserDto userDto = (UserDto) o;
-        return Objects.equals(userId, userDto.userId) && Objects.equals(displayName, userDto.displayName) && Objects.equals(email, userDto.email) && Objects.equals(pictureUrl, userDto.pictureUrl) && Objects.equals(hasChosenRestaurant, userDto.hasChosenRestaurant) && Objects.equals(chosenRestaurantId, userDto.chosenRestaurantId) && Objects.equals(chosenRestaurantName, userDto.chosenRestaurantName) && Objects.equals(chosenRestaurantVicinity, userDto.chosenRestaurantVicinity) && Objects.equals(favoriteRestaurantList, userDto.favoriteRestaurantList);
+        return Objects.equals(userId, userDto.userId) && Objects.equals(username, userDto.username) && Objects.equals(email, userDto.email) && Objects.equals(pictureUrl, userDto.pictureUrl) && Objects.equals(favorite_restaurant_list, userDto.favorite_restaurant_list);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, displayName, email, pictureUrl, hasChosenRestaurant, chosenRestaurantId, chosenRestaurantName, chosenRestaurantVicinity, favoriteRestaurantList);
+        return Objects.hash(userId, username, email, pictureUrl, favorite_restaurant_list);
     }
 
     @NonNull
@@ -122,14 +85,10 @@ public class UserDto {
     public String toString() {
         return "UserDto{" +
             "userId='" + userId + '\'' +
-            ", displayName='" + displayName + '\'' +
+            ", username='" + username + '\'' +
             ", email='" + email + '\'' +
             ", pictureUrl='" + pictureUrl + '\'' +
-            ", hasChosenRestaurant=" + hasChosenRestaurant +
-            ", chosenRestaurantId='" + chosenRestaurantId + '\'' +
-            ", chosenRestaurantName='" + chosenRestaurantName + '\'' +
-            ", chosenRestaurantVicinity='" + chosenRestaurantVicinity + '\'' +
-            ", favoriteRestaurantList=" + favoriteRestaurantList +
+            ", favoriteRestaurantList=" + favorite_restaurant_list +
             '}';
     }
 }

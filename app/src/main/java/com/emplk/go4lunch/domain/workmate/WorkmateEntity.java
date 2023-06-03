@@ -3,8 +3,6 @@ package com.emplk.go4lunch.domain.workmate;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.emplk.go4lunch.domain.user.ChosenRestaurantEntity;
-
 import java.util.Objects;
 
 public class WorkmateEntity {
@@ -18,23 +16,15 @@ public class WorkmateEntity {
     @Nullable
     private final String pictureUrl;
 
-    private final boolean hasChosenRestaurant;
-
-    @Nullable
-    private final ChosenRestaurantEntity chosenRestaurantEntity;
 
     public WorkmateEntity(
         @NonNull String userId,
         @NonNull String displayName,
-        @Nullable String pictureUrl,
-        boolean hasChosenRestaurant,
-        @Nullable ChosenRestaurantEntity chosenRestaurantEntity
+        @Nullable String pictureUrl
     ) {
         this.userId = userId;
         this.displayName = displayName;
         this.pictureUrl = pictureUrl;
-        this.hasChosenRestaurant = hasChosenRestaurant;
-        this.chosenRestaurantEntity = chosenRestaurantEntity;
     }
 
     @NonNull
@@ -52,26 +42,17 @@ public class WorkmateEntity {
         return pictureUrl;
     }
 
-    public boolean isHasChosenRestaurant() {
-        return hasChosenRestaurant;
-    }
-
-    @Nullable
-    public ChosenRestaurantEntity getChosenRestaurantEntity() {
-        return chosenRestaurantEntity;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WorkmateEntity that = (WorkmateEntity) o;
-        return hasChosenRestaurant == that.hasChosenRestaurant && userId.equals(that.userId) && displayName.equals(that.displayName) && Objects.equals(pictureUrl, that.pictureUrl) && Objects.equals(chosenRestaurantEntity, that.chosenRestaurantEntity);
+        return userId.equals(that.userId) && displayName.equals(that.displayName) && Objects.equals(pictureUrl, that.pictureUrl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, displayName, pictureUrl, hasChosenRestaurant, chosenRestaurantEntity);
+        return Objects.hash(userId, displayName, pictureUrl);
     }
 
     @NonNull
@@ -81,8 +62,6 @@ public class WorkmateEntity {
             "userId='" + userId + '\'' +
             ", displayName='" + displayName + '\'' +
             ", pictureUrl='" + pictureUrl + '\'' +
-            ", hasChosenRestaurant=" + hasChosenRestaurant +
-            ", chosenRestaurantEntity=" + chosenRestaurantEntity +
             '}';
     }
 }

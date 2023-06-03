@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                     .into(navigationHeaderBinding.navigationHeaderUserProfilePicture);
 
                 navigationHeaderBinding.navigationHeaderUserEmail.setText(firebaseUser.getEmail());
-                navigationHeaderBinding.navigationHeaderUserName.setText(firebaseUser.getDisplayName());
+                navigationHeaderBinding.navigationHeaderUserName.setText(firebaseUser.getUsername());
             }
         );
 /*

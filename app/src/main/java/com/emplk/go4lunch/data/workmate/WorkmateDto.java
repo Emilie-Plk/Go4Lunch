@@ -7,46 +7,27 @@ import java.util.Objects;
 
 public class WorkmateDto {
     @Nullable
-    private String userId;
+    private final String userId;
 
     @Nullable
-    private String displayName;
+    private final String username;
 
     @Nullable
-    private String pictureUrl;
-
-    @Nullable
-    private Boolean hasChosenRestaurant;
-
-    @Nullable
-    private String chosenRestaurantId;
-
-    @Nullable
-    private String chosenRestaurantName;
-
-    @Nullable
-    private String chosenRestaurantVicinity;
+    private final String pictureUrl;
 
     // Empty constructor for Firestore serialization
     public WorkmateDto() {
+        this(null, null, null);
     }
 
     public WorkmateDto(
         @Nullable String userId,
-        @Nullable String displayName,
-        @Nullable String pictureUrl,
-        @Nullable Boolean hasChosenRestaurant,
-        @Nullable String chosenRestaurantId,
-        @Nullable String chosenRestaurantName,
-        @Nullable String chosenRestaurantVicinity
+        @Nullable String username,
+        @Nullable String pictureUrl
     ) {
         this.userId = userId;
-        this.displayName = displayName;
+        this.username = username;
         this.pictureUrl = pictureUrl;
-        this.hasChosenRestaurant = hasChosenRestaurant;
-        this.chosenRestaurantId = chosenRestaurantId;
-        this.chosenRestaurantName = chosenRestaurantName;
-        this.chosenRestaurantVicinity = chosenRestaurantVicinity;
     }
 
     @Nullable
@@ -55,8 +36,8 @@ public class WorkmateDto {
     }
 
     @Nullable
-    public String getDisplayName() {
-        return displayName;
+    public String getUsername() {
+        return username;
     }
 
     @Nullable
@@ -64,37 +45,17 @@ public class WorkmateDto {
         return pictureUrl;
     }
 
-    @Nullable
-    public Boolean getHasChosenRestaurant() {
-        return hasChosenRestaurant;
-    }
-
-    @Nullable
-    public String getChosenRestaurantId() {
-        return chosenRestaurantId;
-    }
-
-    @Nullable
-    public String getChosenRestaurantName() {
-        return chosenRestaurantName;
-    }
-
-    @Nullable
-    public String getChosenRestaurantVicinity() {
-        return chosenRestaurantVicinity;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WorkmateDto that = (WorkmateDto) o;
-        return Objects.equals(userId, that.userId) && Objects.equals(displayName, that.displayName) && Objects.equals(pictureUrl, that.pictureUrl) && Objects.equals(hasChosenRestaurant, that.hasChosenRestaurant) && Objects.equals(chosenRestaurantId, that.chosenRestaurantId) && Objects.equals(chosenRestaurantName, that.chosenRestaurantName) && Objects.equals(chosenRestaurantVicinity, that.chosenRestaurantVicinity);
+        return Objects.equals(userId, that.userId) && Objects.equals(username, that.username) && Objects.equals(pictureUrl, that.pictureUrl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, displayName, pictureUrl, hasChosenRestaurant, chosenRestaurantId, chosenRestaurantName, chosenRestaurantVicinity);
+        return Objects.hash(userId, username, pictureUrl);
     }
 
     @NonNull
@@ -102,12 +63,8 @@ public class WorkmateDto {
     public String toString() {
         return "WorkmateDto{" +
             "userId='" + userId + '\'' +
-            ", displayName='" + displayName + '\'' +
+            ", username='" + username + '\'' +
             ", pictureUrl='" + pictureUrl + '\'' +
-            ", hasChosenRestaurant=" + hasChosenRestaurant +
-            ", chosenRestaurantId='" + chosenRestaurantId + '\'' +
-            ", chosenRestaurantName='" + chosenRestaurantName + '\'' +
-            ", chosenRestaurantVicinity='" + chosenRestaurantVicinity + '\'' +
             '}';
     }
 }
