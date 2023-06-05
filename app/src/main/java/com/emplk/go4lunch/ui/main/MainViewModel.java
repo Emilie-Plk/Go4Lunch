@@ -16,7 +16,7 @@ import com.emplk.go4lunch.domain.authentication.LogoutUserUseCase;
 import com.emplk.go4lunch.domain.autocomplete.GetAutocompleteWrapperUseCase;
 import com.emplk.go4lunch.domain.autocomplete.entity.AutocompleteWrapper;
 import com.emplk.go4lunch.domain.autocomplete.entity.PredictionEntity;
-import com.emplk.go4lunch.domain.user.IsUserAlreadySavedInDatabaseUseCase;
+import com.emplk.go4lunch.domain.user.use_case.IsUserAlreadySavedInDatabaseUseCase;
 import com.emplk.go4lunch.ui.main.searchview.PredictionViewState;
 import com.emplk.go4lunch.ui.main.searchview.SearchViewVisibilityState;
 import com.emplk.go4lunch.ui.utils.SingleLiveEvent;

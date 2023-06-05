@@ -42,7 +42,6 @@ public class WorkmateRepositoryFirestore implements WorkmateRepository {
                     }
                 }
             );
-
         return workmateEntityListMutableLiveData;
     }
 

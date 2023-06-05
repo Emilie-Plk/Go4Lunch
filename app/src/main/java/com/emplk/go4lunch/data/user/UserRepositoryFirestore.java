@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.user.UserEntity;
 import com.emplk.go4lunch.domain.user.UserRepository;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -32,21 +33,36 @@ public class UserRepositoryFirestore implements UserRepository {
     @Override
     public void createUser(@Nullable UserEntity userEntity) {
         if (userEntity != null) {
-            firestore
+            DocumentReference userDocumentRef = firestore
                 .collection(USERS_COLLECTION)
-                .document(userEntity.getLoggedUserEntity().getUserId())
-                .set(userEntity)
-                .addOnSuccessListener(aVoid -> {
-                        // Document creation successful
-                        Log.i("UserRepositoryFirestore", "User document successfully created!");
-                    }
-                )
-                .addOnFailureListener(e -> {
-                        Log.e("UserRepositoryFirestore", "Error creating user document: ", e);
+                .document(userEntity.getLoggedUserEntity().getUserId());
+
+            userDocumentRef
+                .get()
+                .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document != null && document.exists()) {
+                                Log.i("UserRepositoryFirestore", "User document already exists!");
+                            } else {
+                                userDocumentRef.set(userEntity)
+                                    .addOnSuccessListener(aVoid -> {
+                                            Log.i("UserRepositoryFirestore", "User document successfully created!");
+                                        }
+                                    )
+                                    .addOnFailureListener(e -> {
+                                            Log.e("UserRepositoryFirestore", "Error creating user document: " + e);
+                                        }
+                                    );
+                            }
+                        } else {
+                            // Error occurred while checking if user document exists
+                            Log.e("UserRepositoryFirestore", "Error checking if user document exists: ", task.getException());
+                        }
                     }
                 );
         } else {
-            Log.e("UserRepositoryFirestore", "Error creating user document: userId is null");
+            Log.e("UserRepositoryFirestore", "Error creating user document: userEntity is null!");
         }
     }
 
@@ -58,21 +74,22 @@ public class UserRepositoryFirestore implements UserRepository {
                 .document(userEntity.getLoggedUserEntity().getUserId())
                 .get()
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document != null && document.exists()) {
-                            UserDto result = document.toObject(UserDto.class);
-                            UserEntity user = mapToUserEntity(result);
-                            userEntityMutableLiveData.setValue(user);
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document != null && document.exists()) {
+                                UserDto result = document.toObject(UserDto.class);
+                                UserEntity user = mapToUserEntity(result);
+                                userEntityMutableLiveData.setValue(user);
+                            } else {
+                                // User document not found
+                                userEntityMutableLiveData.setValue(null);
+                            }
                         } else {
-                            // User document not found
+                            // Error occurred while retrieving user document
                             userEntityMutableLiveData.setValue(null);
                         }
-                    } else {
-                        // Error occurred while retrieving user document
-                        userEntityMutableLiveData.setValue(null);
                     }
-                });
+                );
         } else {
             // if userId is null
             userEntityMutableLiveData.setValue(null);

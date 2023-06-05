@@ -1,10 +1,9 @@
 package com.emplk.go4lunch.domain.user.use_case;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.lifecycle.Transformations;
 
 import com.emplk.go4lunch.domain.authentication.GetCurrentUserUseCase;
-import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.user.UserEntity;
 import com.emplk.go4lunch.domain.user.UserRepository;
 
@@ -19,8 +18,9 @@ public class CreateUserUseCase {
     private final GetCurrentUserUseCase getCurrentUserUseCase;
 
     @Inject
-    public CreateUserUseCase(@NonNull UserRepository userRepository,
-                             @NonNull GetCurrentUserUseCase getCurrentUserUseCase
+    public CreateUserUseCase(
+        @NonNull UserRepository userRepository,
+        @NonNull GetCurrentUserUseCase getCurrentUserUseCase
     ) {
         this.userRepository = userRepository;
         this.getCurrentUserUseCase = getCurrentUserUseCase;
@@ -29,10 +29,10 @@ public class CreateUserUseCase {
     public void invoke() {
         userRepository.createUser(
             new UserEntity(
-                new LoggedUserEntity(
-                    getCurrentUserUseCase.invoke()
-                )
+                getCurrentUserUseCase.invoke(), // here I want to get the value (without .getValue())
+                null
             )
         );
+
     }
 }

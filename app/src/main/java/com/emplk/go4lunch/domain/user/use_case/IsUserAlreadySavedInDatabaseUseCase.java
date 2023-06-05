@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.domain.user;
+package com.emplk.go4lunch.domain.user.use_case;
 
 
 import androidx.annotation.NonNull;
@@ -19,15 +19,12 @@ public class IsUserAlreadySavedInDatabaseUseCase {
     private final FirebaseFirestore firestore;
 
     @Inject
-    public IsUserAlreadySavedInDatabaseUseCase(
-        @NonNull FirebaseFirestore firestore
-    ) {
+    public IsUserAlreadySavedInDatabaseUseCase(@NonNull FirebaseFirestore firestore) {
         this.firestore = firestore;
     }
 
     public LiveData<Boolean> invoke(@Nullable String userId) {
         MutableLiveData<Boolean> isExistLiveData = new MutableLiveData<>();
-
         if (userId == null) {
             return null;
         } else {
