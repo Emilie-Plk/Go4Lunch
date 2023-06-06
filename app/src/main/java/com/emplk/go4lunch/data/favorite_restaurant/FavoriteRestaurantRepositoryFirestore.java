@@ -6,12 +6,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.emplk.go4lunch.domain.favorite_restaurant.FavoriteRestaurantRepository;
-import com.emplk.go4lunch.domain.user.RestaurantEntity;
-import com.emplk.go4lunch.domain.user.UserEntity;
-import com.google.firebase.firestore.EventListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,71 +20,47 @@ import javax.inject.Singleton;
 @Singleton
 public class FavoriteRestaurantRepositoryFirestore implements FavoriteRestaurantRepository {
 
-    private final MutableLiveData<List<RestaurantEntity>> favoriteRestaurantEntityListMutableLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Map<String, Object>> favoriteRestaurantIdMapMutableLiveData = new MutableLiveData<>();
 
     private final static String USERS_COLLECTION = "users";
 
-    private final static String COLLECTION_PATH_FAVORITE_RESTAURANTS = "favorite_restaurants";
+    private final static String COLLECTION_PATH_FAVORITE_RESTAURANTS = "favorite_restaurant_ids";
     @NonNull
     private final FirebaseFirestore firestore;
 
     @Inject
-    public FavoriteRestaurantRepositoryFirestore(@NonNull FirebaseFirestore firestore) {
+    public FavoriteRestaurantRepositoryFirestore(
+        @NonNull FirebaseFirestore firestore
+    ) {
         this.firestore = firestore;
-    }
-
-
-    @Override
-    public LiveData<List<RestaurantEntity>> getUserFavoriteRestaurantList(@Nullable UserEntity userEntity) {
-        if (userEntity != null) {
-            firestore.collection(USERS_COLLECTION)
-                .document(userEntity.getLoggedUserEntity().getUserId())
-                .collection(COLLECTION_PATH_FAVORITE_RESTAURANTS)
-                .addSnapshotListener((queryDocumentSnapshots, e) -> {
-                        if (queryDocumentSnapshots != null) {
-                            favoriteRestaurantEntityListMutableLiveData.setValue(queryDocumentSnapshots.toObjects(RestaurantEntity.class));
-                        }
-                    }
-                );
-        }
-        return favoriteRestaurantEntityListMutableLiveData;
     }
 
     @Override
     public void addFavoriteRestaurant(
-        @Nullable UserEntity userEntity,
-        @NonNull RestaurantEntity restaurantEntity
+        @Nullable String userId,
+        @NonNull String restaurantId
     ) {
-        if (userEntity != null) {
+        if (userId != null) {
+            Map<String, Object> restaurantData = new HashMap<>();
             firestore.collection(USERS_COLLECTION)
-                .document(userEntity.getLoggedUserEntity().getUserId())
+                .document(userId)
                 .collection(COLLECTION_PATH_FAVORITE_RESTAURANTS)
-                .document(restaurantEntity.getPlaceId())
-                .set(restaurantEntity);
+                .document(restaurantId)
+                .set(restaurantData);
         }
     }
 
     @Override
     public void removeFavoriteRestaurant(
-        @Nullable UserEntity userEntity,
-        @NonNull RestaurantEntity restaurantEntity
+        @Nullable String userId,
+        @NonNull String restaurantId
     ) {
-        if (userEntity != null) {
+        if (userId != null) {
             firestore.collection(USERS_COLLECTION)
-                .document(userEntity.getLoggedUserEntity().getUserId())
+                .document(userId)
                 .collection(COLLECTION_PATH_FAVORITE_RESTAURANTS)
-                .document(restaurantEntity.getPlaceId())
+                .document(restaurantId)
                 .delete();
-        }
-    }
-
-// Callback method when the user favorite restaurant list is updated
-    private void onEvent(
-        QuerySnapshot queryDocumentSnapshots,
-        FirebaseFirestoreException e
-    ) {
-        if (queryDocumentSnapshots != null) {
-            favoriteRestaurantEntityListMutableLiveData.setValue(queryDocumentSnapshots.toObjects(RestaurantEntity.class));
         }
     }
 }

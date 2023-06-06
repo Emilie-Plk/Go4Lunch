@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.LoginActivityBinding;
@@ -44,6 +45,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private LoginActivityBinding binding;
 
+    private LoginActivityViewModel viewModel;
+
     private GoogleSignInClient googleSignInClient;
     private FirebaseAuth firebaseAuth;
 
@@ -58,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        viewModel = new ViewModelProvider(this).get(LoginActivityViewModel.class);
 
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -81,30 +85,31 @@ public class LoginActivity extends AppCompatActivity {
 
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
-            public void onSuccess(LoginResult loginResult) {
-                Log.i(TAG, "ON SUCCESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
+            public void onSuccess(@NonNull LoginResult loginResult) {
+                Log.i(TAG, "ON SUCCESS");
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
             @Override
             public void onCancel() {
-                Log.i(TAG, "ON CHANCEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEL");
+                Log.i(TAG, "ON CHANCEL");
             }
 
             @Override
-            public void onError(FacebookException error) {
-                Log.e(TAG, "ON ERROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOR");
+            public void onError(@NonNull FacebookException error) {
+                Log.e(TAG, "ON ERROR: " + error.getMessage());
             }
         });
 
         binding.facebookLoginBtn.setOnClickListener(v -> {
-                LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Collections.singletonList("public_profile"));
+                LoginManager.getInstance()
+                    .logInWithReadPermissions(LoginActivity.this, Collections.singletonList("public_profile"));
             }
         );
     }
 
 
-    private void handleFacebookAccessToken(AccessToken token) {
+    private void handleFacebookAccessToken(@NonNull AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
@@ -117,7 +122,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithCredential:success");
-                        //   FirebaseUser user = firebaseAuth.getCurrentUser();
+                        viewModel.onLoginComplete();
                         startActivity(new Intent(LoginActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 
                     } else {
@@ -132,7 +137,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(
+        int requestCode,
+        int resultCode,
+        @Nullable Intent data
+    ) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 100) {
             Task<GoogleSignInAccount> signInAccountTask = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -148,6 +157,7 @@ public class LoginActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 // Check condition
                                 if (task.isSuccessful()) {
+                                    viewModel.onLoginComplete();
                                     startActivity(new Intent(LoginActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                     Log.i(TAG, "Firebase auth successful");
                                 } else {

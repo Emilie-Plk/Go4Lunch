@@ -3,17 +3,15 @@ package com.emplk.go4lunch.data.user;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.emplk.go4lunch.domain.user.RestaurantEntity;
-
-import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class UserDto {
     @Nullable
-    private final String userId;
+    private final String id;
 
     @Nullable
-    private final String username;
+    private final String name;
 
     @Nullable
     private final String email;
@@ -22,34 +20,38 @@ public class UserDto {
     private final String pictureUrl;
 
     @Nullable
-    private final List<RestaurantEntity> favorite_restaurant_list;
+    private final Map<String, Object> favoriteRestaurantIds;
 
     public UserDto() {
-        this(null, null, null, null, null);
+        id = null;
+        name = null;
+        email = null;
+        pictureUrl = null;
+        favoriteRestaurantIds = null;
     }
 
     public UserDto(
-        @Nullable String userId,
-        @Nullable String username,
+        @Nullable String id,
+        @Nullable String name,
         @Nullable String email,
         @Nullable String pictureUrl,
-        @Nullable List<RestaurantEntity> favorite_restaurant_list
+        @Nullable Map<String, Object> favoriteRestaurantIds
     ) {
-        this.userId = userId;
-        this.username = username;
+        this.id = id;
+        this.name = name;
         this.email = email;
         this.pictureUrl = pictureUrl;
-        this.favorite_restaurant_list = favorite_restaurant_list;
+        this.favoriteRestaurantIds = favoriteRestaurantIds;
     }
 
     @Nullable
-    public String getUserId() {
-        return userId;
+    public String getId() {
+        return id;
     }
 
     @Nullable
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
     @Nullable
@@ -63,8 +65,8 @@ public class UserDto {
     }
 
     @Nullable
-    public List<RestaurantEntity> getFavorite_restaurant_list() {
-        return favorite_restaurant_list;
+    public Map<String, Object> getFavoriteRestaurantIds() {
+        return favoriteRestaurantIds;
     }
 
     @Override
@@ -72,23 +74,23 @@ public class UserDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserDto userDto = (UserDto) o;
-        return Objects.equals(userId, userDto.userId) && Objects.equals(username, userDto.username) && Objects.equals(email, userDto.email) && Objects.equals(pictureUrl, userDto.pictureUrl) && Objects.equals(favorite_restaurant_list, userDto.favorite_restaurant_list);
+        return Objects.equals(id, userDto.id) && Objects.equals(name, userDto.name) && Objects.equals(email, userDto.email) && Objects.equals(pictureUrl, userDto.pictureUrl) && Objects.equals(favoriteRestaurantIds, userDto.favoriteRestaurantIds);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, username, email, pictureUrl, favorite_restaurant_list);
+        return Objects.hash(id, name, email, pictureUrl, favoriteRestaurantIds);
     }
 
     @NonNull
     @Override
     public String toString() {
         return "UserDto{" +
-            "userId='" + userId + '\'' +
-            ", username='" + username + '\'' +
+            "id='" + id + '\'' +
+            ", username='" + name + '\'' +
             ", email='" + email + '\'' +
             ", pictureUrl='" + pictureUrl + '\'' +
-            ", favoriteRestaurantList=" + favorite_restaurant_list +
+            ", favoriteRestaurantIdMap=" + favoriteRestaurantIds +
             '}';
     }
 }

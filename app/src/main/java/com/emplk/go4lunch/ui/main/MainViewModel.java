@@ -10,13 +10,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
-import com.emplk.go4lunch.domain.authentication.GetCurrentUserUseCase;
-import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.authentication.LogoutUserUseCase;
 import com.emplk.go4lunch.domain.autocomplete.GetAutocompleteWrapperUseCase;
 import com.emplk.go4lunch.domain.autocomplete.entity.AutocompleteWrapper;
 import com.emplk.go4lunch.domain.autocomplete.entity.PredictionEntity;
-import com.emplk.go4lunch.domain.user.use_case.IsUserAlreadySavedInDatabaseUseCase;
+import com.emplk.go4lunch.domain.user.UserEntity;
+import com.emplk.go4lunch.domain.user.use_case.GetUserInfoUseCase;
 import com.emplk.go4lunch.ui.main.searchview.PredictionViewState;
 import com.emplk.go4lunch.ui.main.searchview.SearchViewVisibilityState;
 import com.emplk.go4lunch.ui.utils.SingleLiveEvent;
@@ -32,7 +31,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class MainViewModel extends ViewModel {
 
     @NonNull
-    private final GetCurrentUserUseCase getCurrentUserUseCase;
+    private final GetUserInfoUseCase getUserInfoUseCase;
 
     @NonNull
     private final LogoutUserUseCase logoutUserUseCase;
@@ -49,23 +48,21 @@ public class MainViewModel extends ViewModel {
     @NonNull
     private final SingleLiveEvent<FragmentState> fragmentStateSingleLiveEvent = new SingleLiveEvent<>();
 
-    private final IsUserAlreadySavedInDatabaseUseCase isUserAlreadySavedInDatabaseUseCase;
-
     @Inject
     public MainViewModel(
-        @NonNull GetCurrentUserUseCase getCurrentUserUseCase,
+        @NonNull GetUserInfoUseCase getUserInfoUseCase,
         @NonNull LogoutUserUseCase logoutUserUseCase,
-        @NonNull GetAutocompleteWrapperUseCase getAutocompleteWrapperUseCase,
-        IsUserAlreadySavedInDatabaseUseCase isUserAlreadySavedInDatabaseUseCase) {
-        this.getCurrentUserUseCase = getCurrentUserUseCase;
+        @NonNull GetAutocompleteWrapperUseCase getAutocompleteWrapperUseCase
+    ) {
+        this.getUserInfoUseCase = getUserInfoUseCase;
         this.logoutUserUseCase = logoutUserUseCase;
         this.getAutocompleteWrapperUseCase = getAutocompleteWrapperUseCase;
-        this.isUserAlreadySavedInDatabaseUseCase = isUserAlreadySavedInDatabaseUseCase;
+
         fragmentStateSingleLiveEvent.setValue(MAP_FRAGMENT);
     }
 
-    public LiveData<LoggedUserEntity> getCurrentUserLiveData() {
-        return getCurrentUserUseCase.invoke();
+    public LiveData<UserEntity> getUserInfoLiveData() {
+        return getUserInfoUseCase.invoke();
     }
 
     public LiveData<List<PredictionViewState>> onUserSearchQuery(@Nullable String input) {
@@ -96,9 +93,6 @@ public class MainViewModel extends ViewModel {
         }
         return predictionListViewStateMutableLiveData;
     }
-
-   /* private void combine(@Nullable String input, @NonNull SearchType searchType) {
-    }*/
 
     public void signOut() {
         logoutUserUseCase.invoke();

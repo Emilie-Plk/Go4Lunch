@@ -6,10 +6,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.emplk.go4lunch.domain.authentication.GetCurrentUserUseCase;
-import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.location.StartLocationRequestUseCase;
 import com.emplk.go4lunch.domain.permission.HasGpsPermissionUseCase;
+import com.emplk.go4lunch.domain.user.UserEntity;
+import com.emplk.go4lunch.domain.user.use_case.GetUserInfoUseCase;
+import com.emplk.go4lunch.domain.user.use_case.IsUserLoggedInUseCase;
 
 import javax.inject.Inject;
 
@@ -22,49 +23,57 @@ public class DispatcherViewModel extends ViewModel {
     @NonNull
     private final StartLocationRequestUseCase startLocationRequestUseCase;
 
+
     @Inject
     public DispatcherViewModel(
         @NonNull HasGpsPermissionUseCase hasGpsPermissionUseCase,
-        @NonNull GetCurrentUserUseCase getCurrentUserUseCase,
+        @NonNull IsUserLoggedInUseCase isUserLoggedInUseCase,
+        @NonNull GetUserInfoUseCase getUserInfoUseCase,
         @NonNull StartLocationRequestUseCase startLocationRequestUseCase
     ) {
         this.startLocationRequestUseCase = startLocationRequestUseCase;
 
-        LiveData<Boolean> hasGpsPermissionLiveData = hasGpsPermissionUseCase.invoke();
+        LiveData<Boolean> permissionLiveData = hasGpsPermissionUseCase.invoke();
+        LiveData<Boolean> isUserLoggedInLiveData = isUserLoggedInUseCase.invoke();
+        LiveData<UserEntity> getUserInfoLiveData = getUserInfoUseCase.invoke();
 
-        LiveData<LoggedUserEntity> firebaseUserEntityLiveData = getCurrentUserUseCase.invoke();
-
-        dispatcherViewActionMediatorLiveData.addSource(hasGpsPermissionLiveData, permission -> {
-                combine(permission, firebaseUserEntityLiveData.getValue());   // TODO: but that's ok if firebaseUserEntityLiveData.getValue() is null...
+        dispatcherViewActionMediatorLiveData.addSource(permissionLiveData, hasPermission -> {
+                combine(hasPermission, isUserLoggedInLiveData.getValue(), getUserInfoLiveData.getValue());
+            }
+        );
+        dispatcherViewActionMediatorLiveData.addSource(isUserLoggedInLiveData, isUserLoggedIn -> {
+                combine(permissionLiveData.getValue(), isUserLoggedIn, getUserInfoLiveData.getValue());
             }
         );
 
-        dispatcherViewActionMediatorLiveData.addSource(firebaseUserEntityLiveData, firebaseUserEntity -> {
-                combine(hasGpsPermissionLiveData.getValue(), firebaseUserEntity);
+        dispatcherViewActionMediatorLiveData.addSource(getUserInfoLiveData, userEntity -> {  // says the NPE is here
+                combine(permissionLiveData.getValue(), isUserLoggedInLiveData.getValue(), userEntity);
             }
         );
     }
 
     private void combine(
-        @Nullable Boolean permission,
-        @Nullable LoggedUserEntity firebaseUser
+        @Nullable Boolean hasPermission,
+        @Nullable Boolean isUserLoggedIn,
+        @Nullable UserEntity userEntity
     ) {
-        if (permission == null) {
+        if (hasPermission == null) {
             return;
         }
 
-        if (permission) {
+        if (hasPermission) {
             startLocationRequestUseCase.invoke();
-            dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_MAIN_ACTIVITY);
-            if (firebaseUser == null) {
+            if (isUserLoggedIn == null || !isUserLoggedIn || userEntity == null) {
                 dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_LOGIN_ACTIVITY);
+            } else {
+                dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_MAIN_ACTIVITY);
             }
         } else {
             dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_ONBOARDING_ACTIVITY);
         }
     }
 
-    public MediatorLiveData<DispatcherViewAction> getDispatcherViewActionMediatorLiveData() {
+    public LiveData<DispatcherViewAction> getDispatcherViewAction() {
         return dispatcherViewActionMediatorLiveData;
     }
 }

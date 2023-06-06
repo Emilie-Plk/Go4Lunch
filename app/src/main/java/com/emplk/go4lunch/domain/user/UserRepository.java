@@ -4,7 +4,8 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
 public interface UserRepository {
-    LiveData<UserEntity> getUser(@Nullable UserEntity userEntity);
+    LiveData<UserEntity> getUserEntityLiveData();
+
 
     void createUser(@Nullable UserEntity userEntity);
 }

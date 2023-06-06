@@ -27,7 +27,10 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     private String restaurantId;
 
 
-    public static Intent navigate(Context context, String restaurantId) {
+    public static Intent navigate(
+        Context context,
+        String restaurantId
+    ) {
         Intent intent = new Intent(context, RestaurantDetailActivity.class);
         intent.putExtra(KEY_RESTAURANT_ID, restaurantId);
         return intent;
@@ -51,11 +54,13 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(RestaurantDetailViewModel.class);
 
+        viewModel.getRestaurantId(restaurantId);
+
         setupObservers();
     }
 
     private void setupObservers() {
-        viewModel.getRestaurantDetails(restaurantId).observe(this, restaurantDetail -> {
+        viewModel.getDetailsRestaurantWrapper().observe(this, restaurantDetail -> {
                 if (restaurantDetail != null) {
                     binding.detailRestaurantName.setText(restaurantDetail.getName());
                     binding.detailRestaurantAddress.setText(restaurantDetail.getAddress());
@@ -64,6 +69,15 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                     binding.loadingStateLoadingBar.setVisibility(Boolean.TRUE.equals(restaurantDetail.isLoading()) ? View.VISIBLE : View.INVISIBLE);
                     binding.detailRestaurantWebsiteButton.setEnabled(restaurantDetail.isWebsiteAvailable());
                     binding.detailRestaurantCallButton.setEnabled(restaurantDetail.isPhoneNumberAvailable());
+                    binding.detailRestaurantLikeButton.setEnabled(restaurantDetail.isLiked());
+                    binding.detailRestaurantLikeButton.setOnClickListener(v -> {
+                            if (restaurantDetail.isLiked()) {
+                                viewModel.onRemoveFavoriteRestaurant(restaurantDetail.getId());
+                            } else {
+                                viewModel.onAddFavoriteRestaurant(restaurantDetail.getId());
+                            }
+                        }
+                    );
 
                     Glide.with(this)
                         .load(restaurantDetail.getPictureUrl())

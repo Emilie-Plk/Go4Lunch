@@ -21,7 +21,7 @@ public class DispatcherActivity extends AppCompatActivity {
 
         DispatcherViewModel viewModel = new ViewModelProvider(this).get(DispatcherViewModel.class);
 
-        viewModel.getDispatcherViewActionMediatorLiveData().observe(this, dispatcherViewAction -> {
+        viewModel.getDispatcherViewAction().observe(this, dispatcherViewAction -> {
                 switch (dispatcherViewAction) {
                     case GO_TO_ONBOARDING_ACTIVITY:
                         startActivity(new Intent(DispatcherActivity.this, OnBoardingActivity.class));

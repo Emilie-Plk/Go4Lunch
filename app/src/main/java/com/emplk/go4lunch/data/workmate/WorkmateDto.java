@@ -17,7 +17,9 @@ public class WorkmateDto {
 
     // Empty constructor for Firestore serialization
     public WorkmateDto() {
-        this(null, null, null);
+        userId = null;
+        username = null;
+        pictureUrl = null;
     }
 
     public WorkmateDto(

@@ -1,11 +1,10 @@
 package com.emplk.go4lunch.domain.user;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class UserEntity {
@@ -13,12 +12,12 @@ public class UserEntity {
     @NonNull
     private final LoggedUserEntity loggedUserEntity;
 
-    @Nullable
-    private final List<RestaurantEntity> favoriteRestaurantList;
+    @NonNull
+    private final Map<String, Object> favoriteRestaurantList;
 
     public UserEntity(
         @NonNull LoggedUserEntity loggedUserEntity,
-        @Nullable List<RestaurantEntity> favoriteRestaurantList
+        @NonNull Map<String, Object> favoriteRestaurantList
     ) {
         this.loggedUserEntity = loggedUserEntity;
         this.favoriteRestaurantList = favoriteRestaurantList;
@@ -29,8 +28,8 @@ public class UserEntity {
         return loggedUserEntity;
     }
 
-    @Nullable
-    public List<RestaurantEntity> getFavoriteRestaurantList() {
+    @NonNull
+    public Map<String, Object> getFavoriteRestaurantIds() {
         return favoriteRestaurantList;
     }
 

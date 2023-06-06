@@ -1,9 +1,11 @@
 package com.emplk.go4lunch.domain.user.use_case;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.Transformations;
+import android.util.Log;
 
-import com.emplk.go4lunch.domain.authentication.GetCurrentUserUseCase;
+import androidx.annotation.NonNull;
+
+import com.emplk.go4lunch.domain.authentication.GetCurrentLoggedUserUseCase;
+import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.user.UserEntity;
 import com.emplk.go4lunch.domain.user.UserRepository;
 
@@ -15,24 +17,33 @@ public class CreateUserUseCase {
     private final UserRepository userRepository;
 
     @NonNull
-    private final GetCurrentUserUseCase getCurrentUserUseCase;
+    private final GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase;
 
     @Inject
     public CreateUserUseCase(
         @NonNull UserRepository userRepository,
-        @NonNull GetCurrentUserUseCase getCurrentUserUseCase
+        @NonNull GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase
     ) {
         this.userRepository = userRepository;
-        this.getCurrentUserUseCase = getCurrentUserUseCase;
+        this.getCurrentLoggedUserUseCase = getCurrentLoggedUserUseCase;
     }
 
     public void invoke() {
-        userRepository.createUser(
-            new UserEntity(
-                getCurrentUserUseCase.invoke(), // here I want to get the value (without .getValue())
-                null
-            )
-        );
-
+        LoggedUserEntity loggedUserEntity = getCurrentLoggedUserUseCase.invoke();
+        if (loggedUserEntity != null) {
+            userRepository.createUser(
+                new UserEntity(
+                    new LoggedUserEntity(
+                        loggedUserEntity.getUserId(),
+                        loggedUserEntity.getEmail(),
+                        loggedUserEntity.getUsername(),
+                        loggedUserEntity.getPhotoUrl()
+                    ),
+                    null  // TODO: how to retrieve correctly this value?)
+                )
+            );
+        } else {
+            Log.e("CreateUserUseCase", "Error while getting current user");
+        }
     }
 }

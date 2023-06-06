@@ -10,12 +10,11 @@ import com.emplk.go4lunch.domain.user.UserEntity;
 
 
 import java.util.List;
+import java.util.Map;
 
 public interface FavoriteRestaurantRepository {
 
-    LiveData<List<RestaurantEntity>> getUserFavoriteRestaurantList(@Nullable UserEntity userEntity);
+    void addFavoriteRestaurant(@Nullable String userId, @NonNull String restaurantId);
 
-    void addFavoriteRestaurant(@Nullable UserEntity userEntity, @NonNull RestaurantEntity restaurantEntity);
-
-    void removeFavoriteRestaurant(@Nullable UserEntity userEntity, @NonNull RestaurantEntity restaurantEntity);
+    void removeFavoriteRestaurant(@Nullable String userId, @NonNull String restaurantId);
 }
