@@ -7,5 +7,8 @@ public interface AuthRepository {
     @Nullable
     LoggedUserEntity getCurrentLoggedUser();
 
+    @Nullable
+    String getCurrentLoggedUserId();
+
     void signOut();
 }

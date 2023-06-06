@@ -19,29 +19,23 @@ public class UserDto {
     @Nullable
     private final String pictureUrl;
 
-    @Nullable
-    private final Map<String, Object> favoriteRestaurantIds;
-
     public UserDto() {
         id = null;
         name = null;
         email = null;
         pictureUrl = null;
-        favoriteRestaurantIds = null;
     }
 
     public UserDto(
         @Nullable String id,
         @Nullable String name,
         @Nullable String email,
-        @Nullable String pictureUrl,
-        @Nullable Map<String, Object> favoriteRestaurantIds
+        @Nullable String pictureUrl
     ) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.pictureUrl = pictureUrl;
-        this.favoriteRestaurantIds = favoriteRestaurantIds;
     }
 
     @Nullable
@@ -64,22 +58,17 @@ public class UserDto {
         return pictureUrl;
     }
 
-    @Nullable
-    public Map<String, Object> getFavoriteRestaurantIds() {
-        return favoriteRestaurantIds;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserDto userDto = (UserDto) o;
-        return Objects.equals(id, userDto.id) && Objects.equals(name, userDto.name) && Objects.equals(email, userDto.email) && Objects.equals(pictureUrl, userDto.pictureUrl) && Objects.equals(favoriteRestaurantIds, userDto.favoriteRestaurantIds);
+        return Objects.equals(id, userDto.id) && Objects.equals(name, userDto.name) && Objects.equals(email, userDto.email) && Objects.equals(pictureUrl, userDto.pictureUrl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, pictureUrl, favoriteRestaurantIds);
+        return Objects.hash(id, name, email, pictureUrl);
     }
 
     @NonNull
@@ -90,7 +79,6 @@ public class UserDto {
             ", username='" + name + '\'' +
             ", email='" + email + '\'' +
             ", pictureUrl='" + pictureUrl + '\'' +
-            ", favoriteRestaurantIdMap=" + favoriteRestaurantIds +
             '}';
     }
 }

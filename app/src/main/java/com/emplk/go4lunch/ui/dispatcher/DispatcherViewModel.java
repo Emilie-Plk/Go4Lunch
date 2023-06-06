@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel;
 import com.emplk.go4lunch.domain.location.StartLocationRequestUseCase;
 import com.emplk.go4lunch.domain.permission.HasGpsPermissionUseCase;
 import com.emplk.go4lunch.domain.user.UserEntity;
-import com.emplk.go4lunch.domain.user.use_case.GetUserInfoUseCase;
+import com.emplk.go4lunch.domain.user.use_case.GetUserEntityUseCase;
 import com.emplk.go4lunch.domain.user.use_case.IsUserLoggedInUseCase;
 
 import javax.inject.Inject;
@@ -28,14 +28,14 @@ public class DispatcherViewModel extends ViewModel {
     public DispatcherViewModel(
         @NonNull HasGpsPermissionUseCase hasGpsPermissionUseCase,
         @NonNull IsUserLoggedInUseCase isUserLoggedInUseCase,
-        @NonNull GetUserInfoUseCase getUserInfoUseCase,
+        @NonNull GetUserEntityUseCase getUserEntityUseCase,
         @NonNull StartLocationRequestUseCase startLocationRequestUseCase
     ) {
         this.startLocationRequestUseCase = startLocationRequestUseCase;
 
         LiveData<Boolean> permissionLiveData = hasGpsPermissionUseCase.invoke();
         LiveData<Boolean> isUserLoggedInLiveData = isUserLoggedInUseCase.invoke();
-        LiveData<UserEntity> getUserInfoLiveData = getUserInfoUseCase.invoke();
+        LiveData<UserEntity> getUserInfoLiveData = getUserEntityUseCase.invoke();
 
         dispatcherViewActionMediatorLiveData.addSource(permissionLiveData, hasPermission -> {
                 combine(hasPermission, isUserLoggedInLiveData.getValue(), getUserInfoLiveData.getValue());

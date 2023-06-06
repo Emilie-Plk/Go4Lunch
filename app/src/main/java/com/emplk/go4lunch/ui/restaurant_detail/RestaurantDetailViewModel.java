@@ -22,7 +22,7 @@ import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantEntity;
 import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantWrapper;
 import com.emplk.go4lunch.domain.favorite_restaurant.AddFavoriteRestaurantUseCase;
 import com.emplk.go4lunch.domain.favorite_restaurant.RemoveFavoriteRestaurantUseCase;
-import com.emplk.go4lunch.domain.user.use_case.GetUserInfoUseCase;
+import com.emplk.go4lunch.domain.user.use_case.GetUserEntityUseCase;
 
 import javax.inject.Inject;
 
@@ -49,7 +49,7 @@ public class RestaurantDetailViewModel extends ViewModel {
     private final RemoveFavoriteRestaurantUseCase removeFavoriteRestaurantUseCase;
 
     @NonNull
-    private final GetUserInfoUseCase getUserInfoUseCase;
+    private final GetUserEntityUseCase getUserEntityUseCase;
 
     @NonNull
     private final GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase;
@@ -64,19 +64,19 @@ public class RestaurantDetailViewModel extends ViewModel {
         @NonNull Resources resources,
         @NonNull AddFavoriteRestaurantUseCase addFavoriteRestaurantUseCase,
         @NonNull RemoveFavoriteRestaurantUseCase removeFavoriteRestaurantUseCase,
-        @NonNull GetUserInfoUseCase getUserInfoUseCase,
+        @NonNull GetUserEntityUseCase getUserEntityUseCase,
         @NonNull GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase
     ) {
         this.getDetailsRestaurantWrapperUseCase = getDetailsRestaurantWrapperUseCase;
         this.resources = resources;
         this.addFavoriteRestaurantUseCase = addFavoriteRestaurantUseCase;
         this.removeFavoriteRestaurantUseCase = removeFavoriteRestaurantUseCase;
-        this.getUserInfoUseCase = getUserInfoUseCase;
+        this.getUserEntityUseCase = getUserEntityUseCase;
         this.getCurrentLoggedUserUseCase = getCurrentLoggedUserUseCase;
 
         loggedUserEntity = getCurrentLoggedUserUseCase.invoke();
 
-        LiveData<String> userIdLiveData = Transformations.map(getUserInfoUseCase.invoke(), userInfo -> {
+        LiveData<String> userIdLiveData = Transformations.map(getUserEntityUseCase.invoke(), userInfo -> {
                 if (userInfo != null) {
                     return userInfo.getLoggedUserEntity().getUserId();
                 }
@@ -89,7 +89,7 @@ public class RestaurantDetailViewModel extends ViewModel {
             }
         );
 
-        LiveData<Boolean> isRestaurantLikedLiveData = Transformations.switchMap(getUserInfoUseCase.invoke(), userInfo -> {
+        LiveData<Boolean> isRestaurantLikedLiveData = Transformations.switchMap(getUserEntityUseCase.invoke(), userInfo -> {
                 return Transformations.map(restaurantIdMutableLiveData, restaurantId -> {
                         if (restaurantId != null) {
                             return userInfo.getFavoriteRestaurantIds().containsKey(restaurantId);

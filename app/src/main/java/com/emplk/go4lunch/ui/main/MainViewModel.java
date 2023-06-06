@@ -15,7 +15,7 @@ import com.emplk.go4lunch.domain.autocomplete.GetAutocompleteWrapperUseCase;
 import com.emplk.go4lunch.domain.autocomplete.entity.AutocompleteWrapper;
 import com.emplk.go4lunch.domain.autocomplete.entity.PredictionEntity;
 import com.emplk.go4lunch.domain.user.UserEntity;
-import com.emplk.go4lunch.domain.user.use_case.GetUserInfoUseCase;
+import com.emplk.go4lunch.domain.user.use_case.GetUserEntityUseCase;
 import com.emplk.go4lunch.ui.main.searchview.PredictionViewState;
 import com.emplk.go4lunch.ui.main.searchview.SearchViewVisibilityState;
 import com.emplk.go4lunch.ui.utils.SingleLiveEvent;
@@ -31,7 +31,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class MainViewModel extends ViewModel {
 
     @NonNull
-    private final GetUserInfoUseCase getUserInfoUseCase;
+    private final GetUserEntityUseCase getUserEntityUseCase;
 
     @NonNull
     private final LogoutUserUseCase logoutUserUseCase;
@@ -50,11 +50,11 @@ public class MainViewModel extends ViewModel {
 
     @Inject
     public MainViewModel(
-        @NonNull GetUserInfoUseCase getUserInfoUseCase,
+        @NonNull GetUserEntityUseCase getUserEntityUseCase,
         @NonNull LogoutUserUseCase logoutUserUseCase,
         @NonNull GetAutocompleteWrapperUseCase getAutocompleteWrapperUseCase
     ) {
-        this.getUserInfoUseCase = getUserInfoUseCase;
+        this.getUserEntityUseCase = getUserEntityUseCase;
         this.logoutUserUseCase = logoutUserUseCase;
         this.getAutocompleteWrapperUseCase = getAutocompleteWrapperUseCase;
 
@@ -62,7 +62,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public LiveData<UserEntity> getUserInfoLiveData() {
-        return getUserInfoUseCase.invoke();
+        return getUserEntityUseCase.invoke();
     }
 
     public LiveData<List<PredictionViewState>> onUserSearchQuery(@Nullable String input) {
