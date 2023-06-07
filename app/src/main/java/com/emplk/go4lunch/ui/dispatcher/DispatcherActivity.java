@@ -1,8 +1,10 @@
 package com.emplk.go4lunch.ui.dispatcher;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -14,6 +16,11 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class DispatcherActivity extends AppCompatActivity {
+
+    public static Intent navigate(@NonNull Context context) {
+        return new Intent(context, DispatcherActivity.class);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

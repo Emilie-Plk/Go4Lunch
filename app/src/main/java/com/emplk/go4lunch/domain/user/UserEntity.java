@@ -1,10 +1,11 @@
 package com.emplk.go4lunch.domain.user;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 
-import java.util.Map;
+import java.util.List;
 import java.util.Objects;
 
 public class UserEntity {
@@ -13,14 +14,19 @@ public class UserEntity {
     private final LoggedUserEntity loggedUserEntity;
 
     @NonNull
-    private final Map<String, Object> favoriteRestaurantList;
+    private final List<String> favoriteRestaurantList;
+
+    @Nullable
+    private final String attendingRestaurantId;
 
     public UserEntity(
         @NonNull LoggedUserEntity loggedUserEntity,
-        @NonNull Map<String, Object> favoriteRestaurantList
+        @NonNull List<String> favoriteRestaurantList,
+        @Nullable String attendingRestaurantId
     ) {
         this.loggedUserEntity = loggedUserEntity;
         this.favoriteRestaurantList = favoriteRestaurantList;
+        this.attendingRestaurantId = attendingRestaurantId;
     }
 
     @NonNull
@@ -29,21 +35,26 @@ public class UserEntity {
     }
 
     @NonNull
-    public Map<String, Object> getFavoriteRestaurantIds() {
+    public List<String> getFavoriteRestaurantList() {
         return favoriteRestaurantList;
+    }
+
+    @Nullable
+    public String getAttendingRestaurantId() {
+        return attendingRestaurantId;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserEntity that = (UserEntity) o;
-        return loggedUserEntity.equals(that.loggedUserEntity) && Objects.equals(favoriteRestaurantList, that.favoriteRestaurantList);
+        UserEntity user = (UserEntity) o;
+        return loggedUserEntity.equals(user.loggedUserEntity) && favoriteRestaurantList.equals(user.favoriteRestaurantList) && Objects.equals(attendingRestaurantId, user.attendingRestaurantId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(loggedUserEntity, favoriteRestaurantList);
+        return Objects.hash(loggedUserEntity, favoriteRestaurantList, attendingRestaurantId);
     }
 
     @NonNull
@@ -52,6 +63,7 @@ public class UserEntity {
         return "UserEntity{" +
             "loggedUserEntity=" + loggedUserEntity +
             ", favoriteRestaurantList=" + favoriteRestaurantList +
+            ", attendingRestaurantId='" + attendingRestaurantId + '\'' +
             '}';
     }
 }

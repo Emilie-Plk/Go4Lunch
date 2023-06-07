@@ -2,11 +2,11 @@ package com.emplk.go4lunch.domain.workmate;
 
 import androidx.lifecycle.LiveData;
 
-import com.emplk.go4lunch.domain.user.UserEntity;
+import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 
 import java.util.List;
 
 public interface WorkmateRepository {
 
-    LiveData<List<WorkmateEntity>> getWorkmateList();
+    LiveData<List<LoggedUserEntity>> geLoggedUserEntityList();
 }

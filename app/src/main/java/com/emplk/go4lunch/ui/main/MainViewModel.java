@@ -10,12 +10,13 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
-import com.emplk.go4lunch.domain.authentication.LogoutUserUseCase;
+import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
+import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserLiveDataUseCase;
+import com.emplk.go4lunch.domain.authentication.use_case.IsUserLoggedInUseCase;
+import com.emplk.go4lunch.domain.authentication.use_case.LogoutUserUseCase;
 import com.emplk.go4lunch.domain.autocomplete.GetAutocompleteWrapperUseCase;
 import com.emplk.go4lunch.domain.autocomplete.entity.AutocompleteWrapper;
 import com.emplk.go4lunch.domain.autocomplete.entity.PredictionEntity;
-import com.emplk.go4lunch.domain.user.UserEntity;
-import com.emplk.go4lunch.domain.user.use_case.GetUserInfoUseCase;
 import com.emplk.go4lunch.ui.main.searchview.PredictionViewState;
 import com.emplk.go4lunch.ui.main.searchview.SearchViewVisibilityState;
 import com.emplk.go4lunch.ui.utils.SingleLiveEvent;
@@ -31,13 +32,16 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class MainViewModel extends ViewModel {
 
     @NonNull
-    private final GetUserInfoUseCase getUserInfoUseCase;
+    private final GetCurrentLoggedUserLiveDataUseCase getCurrentLoggedUserLiveDataUseCase;
 
     @NonNull
     private final LogoutUserUseCase logoutUserUseCase;
 
     @NonNull
     private final GetAutocompleteWrapperUseCase getAutocompleteWrapperUseCase;
+
+    @NonNull
+    private final IsUserLoggedInUseCase isUserLoggedInUseCase;
 
     @NonNull  // TODO: will use it to display/hide searchview bar
     private final MutableLiveData<List<SearchViewVisibilityState>> searchViewVisibilityStateMutableLiveData = new MutableLiveData<>();
@@ -50,19 +54,34 @@ public class MainViewModel extends ViewModel {
 
     @Inject
     public MainViewModel(
-        @NonNull GetUserInfoUseCase getUserInfoUseCase,
+        @NonNull GetCurrentLoggedUserLiveDataUseCase getCurrentLoggedUserLiveDataUseCase,
         @NonNull LogoutUserUseCase logoutUserUseCase,
-        @NonNull GetAutocompleteWrapperUseCase getAutocompleteWrapperUseCase
+        @NonNull GetAutocompleteWrapperUseCase getAutocompleteWrapperUseCase,
+        @NonNull IsUserLoggedInUseCase isUserLoggedInUseCase
     ) {
-        this.getUserInfoUseCase = getUserInfoUseCase;
+        this.getCurrentLoggedUserLiveDataUseCase = getCurrentLoggedUserLiveDataUseCase;
         this.logoutUserUseCase = logoutUserUseCase;
         this.getAutocompleteWrapperUseCase = getAutocompleteWrapperUseCase;
+        this.isUserLoggedInUseCase = isUserLoggedInUseCase;
 
         fragmentStateSingleLiveEvent.setValue(MAP_FRAGMENT);
     }
 
-    public LiveData<UserEntity> getUserInfoLiveData() {
-        return getUserInfoUseCase.invoke();
+    public LiveData<LoggedUserEntity> getUserInfoLiveData() { //TODO: just use the LoggedUserEntity
+        return getCurrentLoggedUserLiveDataUseCase.invoke();
+    }
+
+    public LiveData<UserLoggingState> onUserLogged() {
+        return Transformations.switchMap(isUserLoggedInUseCase.invoke(), isLogged -> {
+                MutableLiveData<UserLoggingState> userLoggingStateLiveData = new MutableLiveData<>();
+                if (isLogged) {
+                    userLoggingStateLiveData.setValue(UserLoggingState.IS_LOGGED);
+                } else {
+                    userLoggingStateLiveData.setValue(UserLoggingState.IS_NOT_LOGGED);
+                }
+                return userLoggingStateLiveData;
+            }
+        );
     }
 
     public LiveData<List<PredictionViewState>> onUserSearchQuery(@Nullable String input) {

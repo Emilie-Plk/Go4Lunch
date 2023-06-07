@@ -6,11 +6,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.emplk.go4lunch.domain.authentication.use_case.IsUserLoggedInUseCase;
 import com.emplk.go4lunch.domain.location.StartLocationRequestUseCase;
 import com.emplk.go4lunch.domain.permission.HasGpsPermissionUseCase;
 import com.emplk.go4lunch.domain.user.UserEntity;
-import com.emplk.go4lunch.domain.user.use_case.GetUserInfoUseCase;
-import com.emplk.go4lunch.domain.user.use_case.IsUserLoggedInUseCase;
+import com.emplk.go4lunch.domain.user.use_case.GetUserEntityUseCase;
 
 import javax.inject.Inject;
 
@@ -28,34 +28,28 @@ public class DispatcherViewModel extends ViewModel {
     public DispatcherViewModel(
         @NonNull HasGpsPermissionUseCase hasGpsPermissionUseCase,
         @NonNull IsUserLoggedInUseCase isUserLoggedInUseCase,
-        @NonNull GetUserInfoUseCase getUserInfoUseCase,
         @NonNull StartLocationRequestUseCase startLocationRequestUseCase
     ) {
         this.startLocationRequestUseCase = startLocationRequestUseCase;
 
         LiveData<Boolean> permissionLiveData = hasGpsPermissionUseCase.invoke();
         LiveData<Boolean> isUserLoggedInLiveData = isUserLoggedInUseCase.invoke();
-        LiveData<UserEntity> getUserInfoLiveData = getUserInfoUseCase.invoke();
+
 
         dispatcherViewActionMediatorLiveData.addSource(permissionLiveData, hasPermission -> {
-                combine(hasPermission, isUserLoggedInLiveData.getValue(), getUserInfoLiveData.getValue());
+                combine(hasPermission, isUserLoggedInLiveData.getValue());
             }
         );
         dispatcherViewActionMediatorLiveData.addSource(isUserLoggedInLiveData, isUserLoggedIn -> {
-                combine(permissionLiveData.getValue(), isUserLoggedIn, getUserInfoLiveData.getValue());
+                combine(permissionLiveData.getValue(), isUserLoggedIn);
             }
         );
 
-        dispatcherViewActionMediatorLiveData.addSource(getUserInfoLiveData, userEntity -> {  // says the NPE is here
-                combine(permissionLiveData.getValue(), isUserLoggedInLiveData.getValue(), userEntity);
-            }
-        );
     }
 
     private void combine(
         @Nullable Boolean hasPermission,
-        @Nullable Boolean isUserLoggedIn,
-        @Nullable UserEntity userEntity
+        @Nullable Boolean isUserLoggedIn
     ) {
         if (hasPermission == null) {
             return;
@@ -63,7 +57,7 @@ public class DispatcherViewModel extends ViewModel {
 
         if (hasPermission) {
             startLocationRequestUseCase.invoke();
-            if (isUserLoggedIn == null || !isUserLoggedIn || userEntity == null) {
+            if (isUserLoggedIn == null || !isUserLoggedIn) {
                 dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_LOGIN_ACTIVITY);
             } else {
                 dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_MAIN_ACTIVITY);

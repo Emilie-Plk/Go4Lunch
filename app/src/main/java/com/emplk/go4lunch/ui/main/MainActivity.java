@@ -77,14 +77,14 @@ public class MainActivity extends AppCompatActivity {
         navigationHeaderBinding = MainNavigationHeaderBinding.bind(headerView);
         viewModel.getUserInfoLiveData().observe(this, firebaseUser -> {
                 Glide.with(this)
-                    .load(firebaseUser.getLoggedUserEntity().getPhotoUrl())
+                    .load(firebaseUser.getPhotoUrl())
                     .fallback(R.drawable.baseline_person_24)
                     .error(R.drawable.baseline_person_24)
                     .transform(new CenterCrop(), new RoundedCorners(25))
                     .into(navigationHeaderBinding.navigationHeaderUserProfilePicture);
 
-                navigationHeaderBinding.navigationHeaderUserEmail.setText(firebaseUser.getLoggedUserEntity().getEmail());
-                navigationHeaderBinding.navigationHeaderUserName.setText(firebaseUser.getLoggedUserEntity().getUsername());
+                navigationHeaderBinding.navigationHeaderUserEmail.setText(firebaseUser.getEmail());
+                navigationHeaderBinding.navigationHeaderUserName.setText(firebaseUser.getUsername());
             }
         );
 /*
@@ -106,6 +106,16 @@ public class MainActivity extends AppCompatActivity {
                     case WORKMATES_FRAGMENT:
                         replaceFragment(WorkmateListFragment.newInstance());
                         break;
+                }
+            }
+        );
+
+        viewModel.onUserLogged().observe(this, loggingState -> {
+                if (loggingState == UserLoggingState.IS_LOGGED) {
+                    return;
+                } else if (loggingState == UserLoggingState.IS_NOT_LOGGED) {
+                    startActivity(DispatcherActivity.navigate(this));
+                    finish();
                 }
             }
         );

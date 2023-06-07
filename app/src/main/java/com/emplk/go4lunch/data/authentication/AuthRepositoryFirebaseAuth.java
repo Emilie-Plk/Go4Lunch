@@ -4,6 +4,8 @@ import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.emplk.go4lunch.R;
@@ -15,16 +17,26 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class AuthRepositoryImpl implements AuthRepository {
+public class AuthRepositoryFirebaseAuth implements AuthRepository {
 
     private final FirebaseAuth firebaseAuth;
-    private final MutableLiveData<LoggedUserEntity> firebaseUserEntityMutableLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isUserLoggedMutableLiveData = new MutableLiveData<>();
 
     @Inject
-    public AuthRepositoryImpl(
+    public AuthRepositoryFirebaseAuth(
         @NonNull FirebaseAuth firebaseAuth
     ) {
         this.firebaseAuth = firebaseAuth;
+
+        firebaseAuth.addAuthStateListener(
+            new FirebaseAuth.AuthStateListener() {
+                @Override
+                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                    boolean isUserLogged = firebaseAuth.getCurrentUser() != null;
+                    isUserLoggedMutableLiveData.setValue(isUserLogged);
+                }
+            }
+        );
     }
 
     @Override
@@ -49,8 +61,25 @@ public class AuthRepositoryImpl implements AuthRepository {
                 );
             }
         }
-        Log.e("AuthRepositoryImpl", "Error while getting current user");
+        Log.e("AuthRepository", "Error while getting current user");
         return null;
+    }
+
+    @Nullable
+    @Override
+    public String getCurrentLoggedUserId() {
+        String loggedUserId;
+        if (firebaseAuth.getCurrentUser() != null) {
+            loggedUserId = firebaseAuth.getCurrentUser().getUid();
+        } else {
+            loggedUserId = null;
+        }
+        return loggedUserId;
+    }
+
+    @Override
+    public LiveData<Boolean> isUserLoggedLiveData() {
+        return isUserLoggedMutableLiveData;
     }
 
     @Override

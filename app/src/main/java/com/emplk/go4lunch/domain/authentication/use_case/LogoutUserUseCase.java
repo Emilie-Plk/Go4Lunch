@@ -1,8 +1,8 @@
-package com.emplk.go4lunch.domain.authentication;
+package com.emplk.go4lunch.domain.authentication.use_case;
 
 import androidx.annotation.NonNull;
 
-import com.emplk.go4lunch.domain.user.use_case.GetUserInfoUseCase;
+import com.emplk.go4lunch.domain.authentication.AuthRepository;
 
 import javax.inject.Inject;
 

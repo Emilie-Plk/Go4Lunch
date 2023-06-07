@@ -20,11 +20,9 @@ import javax.inject.Singleton;
 @Singleton
 public class FavoriteRestaurantRepositoryFirestore implements FavoriteRestaurantRepository {
 
-    private final MutableLiveData<Map<String, Object>> favoriteRestaurantIdMapMutableLiveData = new MutableLiveData<>();
-
     private final static String USERS_COLLECTION = "users";
 
-    private final static String COLLECTION_PATH_FAVORITE_RESTAURANTS = "favorite_restaurant_ids";
+    private final static String COLLECTION_PATH_FAVORITE_RESTAURANTS = "favoriteRestaurantIds";
     @NonNull
     private final FirebaseFirestore firestore;
 
@@ -37,30 +35,27 @@ public class FavoriteRestaurantRepositoryFirestore implements FavoriteRestaurant
 
     @Override
     public void addFavoriteRestaurant(
-        @Nullable String userId,
+        @NonNull String userId,
         @NonNull String restaurantId
     ) {
-        if (userId != null) {
-            Map<String, Object> restaurantData = new HashMap<>();
+            Map<String, Object> restaurantMap = new HashMap<>();
+            restaurantMap.put("favoriteRestaurantId", restaurantId);
             firestore.collection(USERS_COLLECTION)
                 .document(userId)
                 .collection(COLLECTION_PATH_FAVORITE_RESTAURANTS)
                 .document(restaurantId)
-                .set(restaurantData);
-        }
+                .set(restaurantMap);
     }
 
     @Override
     public void removeFavoriteRestaurant(
-        @Nullable String userId,
+        @NonNull String userId,
         @NonNull String restaurantId
     ) {
-        if (userId != null) {
             firestore.collection(USERS_COLLECTION)
                 .document(userId)
                 .collection(COLLECTION_PATH_FAVORITE_RESTAURANTS)
                 .document(restaurantId)
                 .delete();
-        }
     }
 }

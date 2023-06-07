@@ -1,11 +1,15 @@
-package com.emplk.go4lunch.domain.authentication;
+package com.emplk.go4lunch.domain.authentication.use_case;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.emplk.go4lunch.domain.authentication.AuthRepository;
+import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
+
 import javax.inject.Inject;
 
 public class GetCurrentLoggedUserUseCase {
+
     @NonNull
     private final AuthRepository authRepository;
 

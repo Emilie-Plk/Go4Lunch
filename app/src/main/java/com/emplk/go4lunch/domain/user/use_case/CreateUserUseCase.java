@@ -4,9 +4,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.emplk.go4lunch.domain.authentication.GetCurrentLoggedUserUseCase;
+import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserLiveDataUseCase;
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
-import com.emplk.go4lunch.domain.user.UserEntity;
+import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserUseCase;
 import com.emplk.go4lunch.domain.user.UserRepository;
 
 import javax.inject.Inject;
@@ -31,16 +31,13 @@ public class CreateUserUseCase {
     public void invoke() {
         LoggedUserEntity loggedUserEntity = getCurrentLoggedUserUseCase.invoke();
         if (loggedUserEntity != null) {
-            userRepository.createUser(
-                new UserEntity(
+            userRepository.upsertLoggedUserEntity(
                     new LoggedUserEntity(
                         loggedUserEntity.getUserId(),
                         loggedUserEntity.getEmail(),
                         loggedUserEntity.getUsername(),
                         loggedUserEntity.getPhotoUrl()
-                    ),
-                    null  // TODO: how to retrieve correctly this value?)
-                )
+                    )
             );
         } else {
             Log.e("CreateUserUseCase", "Error while getting current user");

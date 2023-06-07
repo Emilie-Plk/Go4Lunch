@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.workmate.WorkmateEntity;
 import com.emplk.go4lunch.domain.workmate.WorkmateRepository;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,41 +28,43 @@ public class WorkmateRepositoryFirestore implements WorkmateRepository {
     }
 
     @Override
-    public LiveData<List<WorkmateEntity>> getWorkmateList() {
-        MutableLiveData<List<WorkmateEntity>> workmateEntityListMutableLiveData = new MutableLiveData<>();
+    public LiveData<List<LoggedUserEntity>> geLoggedUserEntityList() {
+        MutableLiveData<List<LoggedUserEntity>> loggedUserEntityListMutableLiveData = new MutableLiveData<>();
 
         firestore.collection(USERS_COLLECTION)
             .addSnapshotListener((value, error) -> {
                     if (value != null) {
                         List<WorkmateDto> workmateDtoList = value.toObjects(WorkmateDto.class);
-                        List<WorkmateEntity> workmateEntityList = mapToWorkmateEntityList(workmateDtoList);
-                        workmateEntityListMutableLiveData.setValue(workmateEntityList);
+                        List<LoggedUserEntity> loggedUserEntityList = mapToWorkmateEntityList(workmateDtoList);
+                        loggedUserEntityListMutableLiveData.setValue(loggedUserEntityList);
                     } else {
                         // TODO: Handle case where value is null
-                        workmateEntityListMutableLiveData.setValue(new ArrayList<>());
+                        loggedUserEntityListMutableLiveData.setValue(new ArrayList<>());
                     }
                 }
             );
-        return workmateEntityListMutableLiveData;
+        return loggedUserEntityListMutableLiveData;
     }
 
 
-    private List<WorkmateEntity> mapToWorkmateEntityList(List<WorkmateDto> workmateDtoList) {
-        List<WorkmateEntity> workmateEntityList = new ArrayList<>();
+    private List<LoggedUserEntity> mapToWorkmateEntityList(List<WorkmateDto> workmateDtoList) {
+        List<LoggedUserEntity> loggedUserEntityList = new ArrayList<>();
 
         for (WorkmateDto workmateDto : workmateDtoList) {
             String id = workmateDto.getUserId() != null ? workmateDto.getUserId() : "";
-            String displayName = workmateDto.getUsername() != null ? workmateDto.getUsername() : "";
+            String userName = workmateDto.getUsername() != null ? workmateDto.getUsername() : "";
+            String email = workmateDto.getEmail() != null ? workmateDto.getEmail() : "";
             String pictureUrl = workmateDto.getPictureUrl() != null ? workmateDto.getPictureUrl() : null;
 
-            WorkmateEntity workmateEntity =
-                new WorkmateEntity(
+            LoggedUserEntity loggedUserEntity =
+                new LoggedUserEntity(
                     id,
-                    displayName,
+                    userName,
+                    email,
                     pictureUrl
                 );
-            workmateEntityList.add(workmateEntity);
+            loggedUserEntityList.add(loggedUserEntity);
         }
-        return workmateEntityList;
+        return loggedUserEntityList;
     }
 }

@@ -1,6 +1,6 @@
 package com.emplk.go4lunch.di;
 
-import com.emplk.go4lunch.data.authentication.AuthRepositoryImpl;
+import com.emplk.go4lunch.data.authentication.AuthRepositoryFirebaseAuth;
 import com.emplk.go4lunch.data.autocomplete.AutocompleteRepositoryGooglePlaces;
 import com.emplk.go4lunch.data.details.DetailsRestaurantRepositoryGooglePlaces;
 import com.emplk.go4lunch.data.favorite_restaurant.FavoriteRestaurantRepositoryFirestore;
@@ -30,7 +30,7 @@ import dagger.hilt.components.SingletonComponent;
 public abstract class RepositoryModule {
     @Singleton
     @Binds
-    public abstract AuthRepository bindAuthRepository(AuthRepositoryImpl authRepository);
+    public abstract AuthRepository bindAuthRepository(AuthRepositoryFirebaseAuth authRepository);
 
     @Singleton
     @Binds

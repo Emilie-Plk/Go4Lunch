@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -28,8 +29,8 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
 
     public static Intent navigate(
-        Context context,
-        String restaurantId
+        @NonNull Context context,
+        @NonNull String restaurantId
     ) {
         Intent intent = new Intent(context, RestaurantDetailActivity.class);
         intent.putExtra(KEY_RESTAURANT_ID, restaurantId);
@@ -60,7 +61,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     }
 
     private void setupObservers() {
-        viewModel.getDetailsRestaurantWrapper().observe(this, restaurantDetail -> {
+        viewModel.getRestaurantDetails(restaurantId).observe(this, restaurantDetail -> {
                 if (restaurantDetail != null) {
                     binding.detailRestaurantName.setText(restaurantDetail.getName());
                     binding.detailRestaurantAddress.setText(restaurantDetail.getAddress());
