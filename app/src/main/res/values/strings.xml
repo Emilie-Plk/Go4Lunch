@@ -47,4 +47,6 @@
     <string name="list_restaurant_opening_text_closed">Closed</string>
     <string name="list_restaurant_opening_text_undefined" translatable="false"> </string>
     <string name="map_user_maker_message">Hello, there</string>
+    <string name="map_toast_message_error_gps">Please enable your GPS to continue!</string>
+
 </resources>

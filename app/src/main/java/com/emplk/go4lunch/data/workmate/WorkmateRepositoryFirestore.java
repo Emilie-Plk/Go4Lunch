@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
-import com.emplk.go4lunch.domain.workmate.WorkmateEntity;
 import com.emplk.go4lunch.domain.workmate.WorkmateRepository;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -18,7 +17,7 @@ import javax.inject.Singleton;
 @Singleton
 public class WorkmateRepositoryFirestore implements WorkmateRepository {
 
-    private static final String USERS_COLLECTION = "users";
+    private static final String USERS_WITH_RESTAURANT_CHOICE = "usersWithRestaurantChoice";
     @NonNull
     private final FirebaseFirestore firestore;
 
@@ -28,10 +27,10 @@ public class WorkmateRepositoryFirestore implements WorkmateRepository {
     }
 
     @Override
-    public LiveData<List<LoggedUserEntity>> geLoggedUserEntityList() {
+    public LiveData<List<LoggedUserEntity>> getLoggedUserListWithRestaurantChoiceLiveData() {
         MutableLiveData<List<LoggedUserEntity>> loggedUserEntityListMutableLiveData = new MutableLiveData<>();
 
-        firestore.collection(USERS_COLLECTION)
+        firestore.collection(USERS_WITH_RESTAURANT_CHOICE)
             .addSnapshotListener((value, error) -> {
                     if (value != null) {
                         List<WorkmateDto> workmateDtoList = value.toObjects(WorkmateDto.class);

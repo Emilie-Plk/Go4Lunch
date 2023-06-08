@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface WorkmateRepository {
 
-    LiveData<List<LoggedUserEntity>> geLoggedUserEntityList();
+    LiveData<List<LoggedUserEntity>> getLoggedUserListWithRestaurantChoiceLiveData();
 }

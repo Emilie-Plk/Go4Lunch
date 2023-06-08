@@ -121,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-
     private void initSearchView() {
         SearchView searchView = binding.mainToolbarSearchView;
         searchView.clearFocus();

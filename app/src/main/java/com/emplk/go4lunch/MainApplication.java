@@ -7,9 +7,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.emplk.go4lunch.data.gps_location.GpsLocationRepositoryBroadcastReceiver;
+import com.emplk.go4lunch.data.location.GpsLocationRepositoryBroadcastReceiver;
 import com.emplk.go4lunch.data.permission.GpsPermissionRepositoryImpl;
-import com.emplk.go4lunch.domain.authentication.use_case.IsUserLoggedInUseCase;
 
 import javax.inject.Inject;
 

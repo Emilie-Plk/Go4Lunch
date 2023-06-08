@@ -8,10 +8,10 @@ import java.util.Objects;
 public abstract class LocationStateEntity {
 
     public static class Success extends LocationStateEntity {
-        @Nullable
+        @NonNull
         public final LocationEntity locationEntity;
 
-        public Success(@Nullable LocationEntity locationEntity) {
+        public Success(@NonNull LocationEntity locationEntity) {
             this.locationEntity = locationEntity;
         }
 

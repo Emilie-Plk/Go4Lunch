@@ -1,7 +1,5 @@
 package com.emplk.go4lunch.ui.restaurant_map;
 
-import android.content.res.Resources;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
@@ -9,8 +7,8 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.domain.gps.IsGpsEnabledUseCase;
-import com.emplk.go4lunch.domain.gps.entity.LocationEntity;
-import com.emplk.go4lunch.domain.location.GetCurrentLocationUseCase;
+import com.emplk.go4lunch.domain.gps.entity.LocationStateEntity;
+import com.emplk.go4lunch.domain.location.GetCurrentLocationStateUseCase;
 import com.emplk.go4lunch.domain.nearby_search.GetNearbySearchWrapperUseCase;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchWrapper;
@@ -32,7 +30,7 @@ public class MapViewModel extends ViewModel {
     private final IsGpsEnabledUseCase isGpsEnabledUseCase;
 
     @NonNull
-    private final GetCurrentLocationUseCase getCurrentLocationUseCase;
+    private final GetCurrentLocationStateUseCase getCurrentLocationStateUseCase;
 
     @NonNull
     private final GetNearbySearchWrapperUseCase getNearbySearchWrapperUseCase;
@@ -42,32 +40,31 @@ public class MapViewModel extends ViewModel {
     @Inject
     public MapViewModel(
         @NonNull IsGpsEnabledUseCase isGpsEnabledUseCase,
-        @NonNull GetCurrentLocationUseCase getCurrentLocationUseCase,
-        @NonNull GetNearbySearchWrapperUseCase getNearbySearchWrapperUseCase,
-        @NonNull Resources resources
+        @NonNull GetCurrentLocationStateUseCase getCurrentLocationStateUseCase,
+        @NonNull GetNearbySearchWrapperUseCase getNearbySearchWrapperUseCase
     ) {
         this.isGpsEnabledUseCase = isGpsEnabledUseCase;
-        this.getCurrentLocationUseCase = getCurrentLocationUseCase;
+        this.getCurrentLocationStateUseCase = getCurrentLocationStateUseCase;
         this.getNearbySearchWrapperUseCase = getNearbySearchWrapperUseCase;
 
         LiveData<NearbySearchWrapper> nearbySearchWrapperLiveData = getNearbySearchWrapperUseCase.invoke();
-        LiveData<LocationEntity> locationEntityLiveData = getCurrentLocationUseCase.invoke();
+        LiveData<LocationStateEntity> locationStateEntityLiveData = getCurrentLocationStateUseCase.invoke();
         LiveData<Boolean> isGpsEnabledLiveData = isGpsEnabledUseCase.invoke();
 
         mapViewStateMediatorLiveData.addSource(isGpsEnabledLiveData, isGpsEnabled -> {
-                combine(isGpsEnabled, locationEntityLiveData.getValue(), nearbySearchWrapperLiveData.getValue()
+                combine(isGpsEnabled, locationStateEntityLiveData.getValue(), nearbySearchWrapperLiveData.getValue()
                 );
             }
         );
 
-        mapViewStateMediatorLiveData.addSource(locationEntityLiveData, locationEntity -> {
+        mapViewStateMediatorLiveData.addSource(locationStateEntityLiveData, locationEntity -> {
                 combine(isGpsEnabledLiveData.getValue(), locationEntity, nearbySearchWrapperLiveData.getValue()
                 );
             }
         );
 
         mapViewStateMediatorLiveData.addSource(nearbySearchWrapperLiveData, nearbySearchWrapper -> {
-                combine(isGpsEnabledLiveData.getValue(), locationEntityLiveData.getValue(), nearbySearchWrapper
+                combine(isGpsEnabledLiveData.getValue(), locationStateEntityLiveData.getValue(), nearbySearchWrapper
                 );
             }
         );
@@ -75,39 +72,46 @@ public class MapViewModel extends ViewModel {
 
     private void combine(
         @Nullable Boolean isGpsEnabled,
-        @Nullable LocationEntity location,
+        @Nullable LocationStateEntity locationStateEntity,
         @Nullable NearbySearchWrapper nearbySearchWrapper
     ) {
-        if (isGpsEnabled == null || location == null || nearbySearchWrapper == null) {
+        if (isGpsEnabled == null || nearbySearchWrapper == null) {
             return;
         }
 
         List<RestaurantMarkerViewStateItem> restaurantMarkerViewStateItems = new ArrayList<>();
-
-        if (nearbySearchWrapper instanceof NearbySearchWrapper.Success) {
-            for (NearbySearchEntity nearbySearchEntity : ((NearbySearchWrapper.Success) nearbySearchWrapper).getNearbySearchEntityList()) {
-                restaurantMarkerViewStateItems.add(
-                    new RestaurantMarkerViewStateItem(
-                        nearbySearchEntity.getPlaceId(),
-                        nearbySearchEntity.getRestaurantName(),
-                        new LatLng(
-                            nearbySearchEntity.getLocationEntity().getLatitude(),
-                            nearbySearchEntity.getLocationEntity().getLongitude()
-                        ),
-                        MarkerStatusState.IS_FAVORITE // TODO: I need to create a new obj for this (fav/not fav by user)
-                    )
-                );
+        if (locationStateEntity instanceof LocationStateEntity.Success) {
+            if (nearbySearchWrapper instanceof NearbySearchWrapper.Success) {
+                for (NearbySearchEntity nearbySearchEntity : ((NearbySearchWrapper.Success) nearbySearchWrapper).getNearbySearchEntityList()) {
+                    restaurantMarkerViewStateItems.add(
+                        new RestaurantMarkerViewStateItem(
+                            nearbySearchEntity.getPlaceId(),
+                            nearbySearchEntity.getRestaurantName(),
+                            new LatLng(
+                                nearbySearchEntity.getLocationEntity().getLatitude(),
+                                nearbySearchEntity.getLocationEntity().getLongitude()
+                            ),
+                            MarkerStatusState.IS_FAVORITE // TODO: I need to create a new obj for this (fav/not fav by user)
+                        )
+                    );
+                    mapViewStateMediatorLiveData.setValue(restaurantMarkerViewStateItems);
+                }
+            } else if (nearbySearchWrapper instanceof NearbySearchWrapper.Loading) {
+                return;
             }
+        } else if (locationStateEntity instanceof LocationStateEntity.GpsProviderDisabled) {
+            //maybe a SingleLiveEvent for toast, see what's happening in repo
+            return;
         }
-        mapViewStateMediatorLiveData.setValue(restaurantMarkerViewStateItems);
+
     }
 
     public LiveData<List<RestaurantMarkerViewStateItem>> getMapViewState() {
         return mapViewStateMediatorLiveData;
     }
 
-    public LiveData<LocationEntity> getUserCurrentLocation() {
-        return getCurrentLocationUseCase.invoke();
+    public LiveData<LocationStateEntity> getLocationState() {
+        return getCurrentLocationStateUseCase.invoke();
     }
 
 }

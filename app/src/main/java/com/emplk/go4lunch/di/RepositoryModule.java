@@ -4,7 +4,7 @@ import com.emplk.go4lunch.data.authentication.AuthRepositoryFirebaseAuth;
 import com.emplk.go4lunch.data.autocomplete.AutocompleteRepositoryGooglePlaces;
 import com.emplk.go4lunch.data.details.DetailsRestaurantRepositoryGooglePlaces;
 import com.emplk.go4lunch.data.favorite_restaurant.FavoriteRestaurantRepositoryFirestore;
-import com.emplk.go4lunch.data.gps_location.GpsLocationRepositoryBroadcastReceiver;
+import com.emplk.go4lunch.data.location.GpsLocationRepositoryBroadcastReceiver;
 import com.emplk.go4lunch.data.nearbySearchRestaurants.NearbySearchRepositoryGooglePlaces;
 import com.emplk.go4lunch.data.permission.GpsPermissionRepositoryImpl;
 import com.emplk.go4lunch.data.user.UserRepositoryFirestore;
