@@ -1,6 +1,5 @@
 package com.emplk.go4lunch.ui.restaurant_list;
 
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +30,10 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(
+        @NonNull ViewGroup parent,
+        int viewType
+    ) {
         switch (RestaurantListViewState.Type.values()[viewType]) {
             case LOADING_STATE:
                 return new RecyclerView.ViewHolder(
@@ -58,7 +60,10 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(
+        @NonNull RecyclerView.ViewHolder holder,
+        int position
+    ) {
         if (holder instanceof RestaurantListViewHolder) {
             ((RestaurantListViewHolder) holder).bind((RestaurantListViewState.RestaurantItem) getItem(position), listener);
         } else if (holder instanceof RestaurantListViewHolder.ErrorViewHolder) {
@@ -143,7 +148,10 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
 
         private static class ListRestaurantItemCallback extends DiffUtil.ItemCallback<RestaurantListViewState> {
             @Override
-            public boolean areItemsTheSame(@NonNull RestaurantListViewState oldItem, @NonNull RestaurantListViewState newItem) {
+            public boolean areItemsTheSame(
+                @NonNull RestaurantListViewState oldItem,
+                @NonNull RestaurantListViewState newItem
+            ) {
 
                 boolean bothAreLoading = oldItem instanceof RestaurantListViewState.Loading && newItem instanceof RestaurantListViewState.Loading;
                 boolean bothAreRestaurantLists = oldItem instanceof RestaurantListViewState.RestaurantItem && newItem instanceof RestaurantListViewState.RestaurantItem;
@@ -157,7 +165,10 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewState, 
             }
 
             @Override
-            public boolean areContentsTheSame(@NonNull RestaurantListViewState oldItem, @NonNull RestaurantListViewState newItem) {
+            public boolean areContentsTheSame(
+                @NonNull RestaurantListViewState oldItem,
+                @NonNull RestaurantListViewState newItem
+            ) {
                 return oldItem.equals(newItem);
             }
         }

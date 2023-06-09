@@ -128,13 +128,13 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = binding.mainSearchviewRecyclerview;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setVisibility(View.GONE); // TODO: MVVMize this pls
-        searchViewAdapter = new SearchViewAdapter(new OnPredictionClickedListener() {
+       /* searchViewAdapter = new SearchViewAdapter(new OnPredictionClickedListener() {
             @Override
             public void onPredictionClicked(@NonNull String placeId) {
                 startActivity(RestaurantDetailActivity.navigate(MainActivity.this, placeId));
             }
         }
-        );
+        );*/
 
         recyclerView.setAdapter(searchViewAdapter);
 /*

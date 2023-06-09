@@ -49,7 +49,9 @@ public class RestaurantListFragment extends Fragment {
 
         RestaurantListAdapter adapter = new RestaurantListAdapter(new OnRestaurantClickedListener() {
             @Override
-            public void onRestaurantClicked(@NonNull String restaurantId) {
+            public void onRestaurantClicked(
+                @NonNull String restaurantId
+            ) {
                 startActivity(RestaurantDetailActivity.navigate(requireContext(), restaurantId));
             }
         }

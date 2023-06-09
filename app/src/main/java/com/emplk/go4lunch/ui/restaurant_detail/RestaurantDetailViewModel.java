@@ -23,7 +23,6 @@ import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantWrapper;
 import com.emplk.go4lunch.domain.favorite_restaurant.AddFavoriteRestaurantUseCase;
 import com.emplk.go4lunch.domain.favorite_restaurant.IsRestaurantUserFavoriteUseCase;
 import com.emplk.go4lunch.domain.favorite_restaurant.RemoveFavoriteRestaurantUseCase;
-import com.emplk.go4lunch.domain.user.RestaurantEntity;
 import com.emplk.go4lunch.domain.user.use_case.AddUserRestaurantChoiceUseCase;
 import com.emplk.go4lunch.domain.user.use_case.RemoveUserRestaurantChoiceUseCase;
 import com.emplk.go4lunch.ui.utils.RestaurantFavoriteState;
@@ -40,8 +39,6 @@ public class RestaurantDetailViewModel extends ViewModel {
     private final Resources resources;
 
     private final MediatorLiveData<RestaurantDetailViewState> restaurantDetailViewStateMediatorLiveData = new MediatorLiveData<>();
-
-    private final MutableLiveData<String> restaurantIdMutableLiveData = new MutableLiveData<>();
 
     private final MutableLiveData<RestaurantFavoriteState> restaurantFavoriteStateMutableLiveData = new MutableLiveData<>();
 
@@ -110,10 +107,6 @@ public class RestaurantDetailViewModel extends ViewModel {
             }
         );
 
-        restaurantDetailViewStateMediatorLiveData.addSource(isRestaurantLikedLiveData, isRestaurantLiked -> {
-                combine(detailsRestaurantWrapperLiveData.getValue(), isRestaurantLiked);
-            }
-        );
     }
 
     private void combine(
@@ -174,12 +167,6 @@ public class RestaurantDetailViewModel extends ViewModel {
         }
     }
 
-    LiveData<Boolean> isRestaurantFavoriteLiveData = new MutableLiveData<>();
-
-    public LiveData<Boolean> isRestoFav() {
-        return isRestaurantUserFavoriteUseCase.invoke(restaurantId);
-    }
-
     public LiveData<RestaurantDetailViewState> getRestaurantDetails() {
         return restaurantDetailViewStateMediatorLiveData;
     }
@@ -212,9 +199,6 @@ public class RestaurantDetailViewModel extends ViewModel {
         return input != null && !input.isEmpty() ? input : resources.getString(R.string.detail_missing_information);
     }
 
-    public void getRestaurantId(@NonNull String restaurantId) {
-        restaurantIdMutableLiveData.setValue(restaurantId);
-    }
 
     public void onAddFavoriteRestaurant() {
         addFavoriteRestaurantUseCase.invoke(restaurantId);
@@ -225,10 +209,11 @@ public class RestaurantDetailViewModel extends ViewModel {
         removeFavoriteRestaurantUseCase.invoke(restaurantId);
     }
 
-    public void onAddUserRestaurantChoice() {
-        addUserRestaurantChoiceUseCase.invoke(// HOW TO GET RESTAURANT ENTITY HERE  );
+    public void onAddUserRestaurantChoice(@NonNull String restaurantName, @NonNull String vicinity, @NonNull String photoReferenceUrl) {
+        addUserRestaurantChoiceUseCase.invoke(restaurantId, restaurantName, vicinity, photoReferenceUrl);
     }
 
     public void onRemoveUserRestaurantChoice() {
-        removeUserRestaurantChoiceUseCase.invoke(restaurantId);
+        removeUserRestaurantChoiceUseCase.invoke();
+    }
 }

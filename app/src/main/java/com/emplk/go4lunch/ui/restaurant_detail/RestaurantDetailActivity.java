@@ -5,7 +5,6 @@ import static com.emplk.go4lunch.ui.utils.RestaurantFavoriteState.IS_NOT_FAVORIT
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -61,15 +60,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     }
 
     private void setupObservers() {
-
-        viewModel.isRestoFav().observe(this, isFav -> {
-                if (isFav) {
-                    binding.detailRestaurantLikeButton.setIconTint(ColorStateList.valueOf(getResources().getColor(R.color.red_clay)));
-                    // ENUM TO MANAGE STATE FAV STAR + ACTION
-                }
-            }
-        );
-
         viewModel.getRestaurantFavoriteState().observe(this, restaurantFavoriteState -> {
                 if (restaurantFavoriteState == IS_FAVORITE) {
                     binding.detailRestaurantLikeButton.setIcon(ContextCompat.getDrawable(
@@ -114,6 +104,13 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                             Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", restaurantDetail.getPhoneNumber(), null));
                             startActivity(intent);
                         }
+                    );
+
+                    binding.detailRestaurantChoseFab.setOnClickListener(v -> viewModel.onAddUserRestaurantChoice(
+                            restaurantDetail.getName(),
+                            restaurantDetail.getAddress(),
+                            restaurantDetail.getPictureUrl()
+                        )
                     );
                 }
             }

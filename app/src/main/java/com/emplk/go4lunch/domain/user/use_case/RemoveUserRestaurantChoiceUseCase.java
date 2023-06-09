@@ -25,7 +25,7 @@ public class RemoveUserRestaurantChoiceUseCase {
     }
 
     public void invoke() {
-        userRepository.removeUserRestaurantChoice(
+        userRepository.deleteUserRestaurantChoice(
             getCurrentLoggedUserUseCase.invoke()
         );
     }

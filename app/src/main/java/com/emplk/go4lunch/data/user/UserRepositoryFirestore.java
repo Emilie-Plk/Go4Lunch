@@ -22,7 +22,7 @@ public class UserRepositoryFirestore implements UserRepository {
 
     private static final String USERS_COLLECTION = "users";
 
-    private static final String USERS_WITH_RESTAURANT_CHOICE = "UserRepositoryFirestore";
+    private static final String USERS_WITH_RESTAURANT_CHOICE = "usersWithRestaurantChoice";
     @NonNull
     private final FirebaseFirestore firestore;
 
@@ -85,24 +85,26 @@ public class UserRepositoryFirestore implements UserRepository {
     }
 
     @Override
-    public void addUserRestaurantChoice(
+    public void upsertUserRestaurantChoice(
         @Nullable LoggedUserEntity loggedUserEntity,
         @NonNull RestaurantEntity restaurantEntity
     ) {
         if (loggedUserEntity != null) {
-            DocumentReference userDocumentRef = firestore
-                .collection(USERS_WITH_RESTAURANT_CHOICE)
-                .document(loggedUserEntity.getUserId());
+            DocumentReference userWithRestaurantChoiceDocumentRef =
+                firestore
+                    .collection(USERS_WITH_RESTAURANT_CHOICE)
+                    .document(loggedUserEntity.getUserId());
 
-            userDocumentRef
+            userWithRestaurantChoiceDocumentRef
                 .set(
                     new UserWithRestaurantChoiceDto(
                         loggedUserEntity.getUserId(),
                         loggedUserEntity.getUsername(),
-                        loggedUserEntity.getEmail(),
                         loggedUserEntity.getPhotoUrl(),
                         restaurantEntity.getPlaceId(),
-                        restaurantEntity.getName()
+                        restaurantEntity.getName(),
+                        restaurantEntity.getVicinity(),
+                        restaurantEntity.getPhotoUrl()
                     )
                 )
                 .addOnSuccessListener(aVoid -> {
@@ -119,7 +121,7 @@ public class UserRepositoryFirestore implements UserRepository {
     }
 
     @Override
-    public void removeUserRestaurantChoice(@Nullable LoggedUserEntity loggedUserEntity) {
+    public void deleteUserRestaurantChoice(@Nullable LoggedUserEntity loggedUserEntity) {
         if (loggedUserEntity != null) {
             DocumentReference userDocumentRef = firestore
                 .collection(USERS_WITH_RESTAURANT_CHOICE)
@@ -141,24 +143,30 @@ public class UserRepositoryFirestore implements UserRepository {
     }
 
     @Override
-    public LiveData<RestaurantEntity> getUserRestaurantChoiceLiveData(@NonNull String userId) {
+    public LiveData<RestaurantEntity> getUserRestaurantChoiceLiveData(@Nullable LoggedUserEntity loggedUserEntity) {
         MutableLiveData<RestaurantEntity> restaurantEntityMutableLiveData = new MutableLiveData<>();
 
-        firestore.collection(USERS_WITH_RESTAURANT_CHOICE)
-            .document(userId)
-            .addSnapshotListener((documentSnapshot, error) -> {
-                    if (error != null) {
-                        Log.e("UserRepositoryFirestore", "Error fetching user document: " + error);
-                        restaurantEntityMutableLiveData.setValue(null);
-                        return;
+        if (loggedUserEntity != null) {
+            firestore
+                .collection(USERS_WITH_RESTAURANT_CHOICE)
+                .document(loggedUserEntity.getUserId())
+                .addSnapshotListener((documentSnapshot, error) -> {
+                        if (error != null) {
+                            Log.e("UserRepositoryFirestore", "Error fetching user with restaurant choice document: " + error);
+                            restaurantEntityMutableLiveData.setValue(null);
+                            return;
+                        }
+                        if (documentSnapshot != null) {
+                            UserWithRestaurantChoiceDto userWithRestaurantChoiceDto = documentSnapshot.toObject(UserWithRestaurantChoiceDto.class);
+                            RestaurantEntity restaurantEntity = mapToRestaurantEntity(userWithRestaurantChoiceDto);
+                            restaurantEntityMutableLiveData.setValue(restaurantEntity);
+                        }
                     }
-                    if (documentSnapshot != null) {
-                        UserWithRestaurantChoiceDto userWithRestaurantChoiceDto = documentSnapshot.toObject(UserWithRestaurantChoiceDto.class);
-                        RestaurantEntity restaurantEntity = mapToRestaurantEntity(userWithRestaurantChoiceDto);
-                        restaurantEntityMutableLiveData.setValue(restaurantEntity);
-                    }
-                }
-            );
+                );
+        } else {
+            Log.e("UserRepositoryFirestore", "Error fetching user with restaurant choice document: userEntity is null!");
+            restaurantEntityMutableLiveData.setValue(null);
+        }
         return restaurantEntityMutableLiveData;
     }
 
