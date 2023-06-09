@@ -84,22 +84,23 @@ public class LoginActivity extends AppCompatActivity {
         callbackManager = CallbackManager.Factory.create();
 
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(@NonNull LoginResult loginResult) {
-                Log.i(TAG, "ON SUCCESS");
-                handleFacebookAccessToken(loginResult.getAccessToken());
-            }
+                @Override
+                public void onSuccess(@NonNull LoginResult loginResult) {
+                    Log.i(TAG, "ON SUCCESS");
+                    handleFacebookAccessToken(loginResult.getAccessToken());
+                }
 
-            @Override
-            public void onCancel() {
-                Log.i(TAG, "ON CHANCEL");
-            }
+                @Override
+                public void onCancel() {
+                    Log.i(TAG, "ON CANCEL");
+                }
 
-            @Override
-            public void onError(@NonNull FacebookException error) {
-                Log.e(TAG, "ON ERROR: " + error.getMessage());
+                @Override
+                public void onError(@NonNull FacebookException error) {
+                    Log.e(TAG, "ON ERROR: " + error.getMessage());
+                }
             }
-        });
+        );
 
         binding.facebookLoginBtn.setOnClickListener(v -> {
                 LoginManager.getInstance()
@@ -115,25 +116,26 @@ public class LoginActivity extends AppCompatActivity {
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-
-                    if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "signInWithCredential:success");
-                        viewModel.onLoginComplete();
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
                         startActivity(new Intent(LoginActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithCredential:failure", task.getException());
-                        Toast.makeText(LoginActivity.this, "Authentication failed.",
-                            Toast.LENGTH_SHORT).show();
-                        //updateUI(null);
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithCredential:success");
+                            viewModel.onLoginComplete();
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
+                            //updateUI(null);
+                        }
                     }
                 }
-            });
+            );
     }
 
     @Override
@@ -153,18 +155,19 @@ public class LoginActivity extends AppCompatActivity {
                         AuthCredential authCredential = GoogleAuthProvider.getCredential(googleSignInAccount.getIdToken(), null);
                         // Check credential
                         firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                // Check condition
-                                if (task.isSuccessful()) {
-                                    viewModel.onLoginComplete();
-                                    startActivity(new Intent(LoginActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                                    Log.i(TAG, "Firebase auth successful");
-                                } else {
-                                    Log.e("Firebase auth error: ", task.getException().getMessage());
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    // Check condition
+                                    if (task.isSuccessful()) {
+                                        viewModel.onLoginComplete();
+                                        startActivity(new Intent(LoginActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                        Log.i(TAG, "Firebase auth successful");
+                                    } else {
+                                        Log.e("Firebase auth error: ", task.getException().getMessage());
+                                    }
                                 }
                             }
-                        });
+                        );
                     }
                 } catch (ApiException e) {
                     e.printStackTrace();

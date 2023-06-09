@@ -1,6 +1,9 @@
 package com.emplk.go4lunch.domain.favorite_restaurant;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+
+import java.util.Set;
 
 public interface FavoriteRestaurantRepository {
 
@@ -13,4 +16,6 @@ public interface FavoriteRestaurantRepository {
         @NonNull String userId,
         @NonNull String restaurantId
     );
+
+    LiveData<Set<String>> getUserFavoriteRestaurantIdsLiveData(@NonNull String userId);
 }

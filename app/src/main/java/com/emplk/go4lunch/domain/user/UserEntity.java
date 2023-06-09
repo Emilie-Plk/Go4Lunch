@@ -5,8 +5,8 @@ import androidx.annotation.Nullable;
 
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public class UserEntity {
 
@@ -14,18 +14,18 @@ public class UserEntity {
     private final LoggedUserEntity loggedUserEntity;
 
     @NonNull
-    private final List<String> favoriteRestaurantList;
+    private final Set<String> favoriteRestaurantSet;
 
     @Nullable
     private final String attendingRestaurantId;
 
     public UserEntity(
         @NonNull LoggedUserEntity loggedUserEntity,
-        @NonNull List<String> favoriteRestaurantList,
+        @NonNull Set<String> favoriteRestaurantSet,
         @Nullable String attendingRestaurantId
     ) {
         this.loggedUserEntity = loggedUserEntity;
-        this.favoriteRestaurantList = favoriteRestaurantList;
+        this.favoriteRestaurantSet = favoriteRestaurantSet;
         this.attendingRestaurantId = attendingRestaurantId;
     }
 
@@ -35,8 +35,8 @@ public class UserEntity {
     }
 
     @NonNull
-    public List<String> getFavoriteRestaurantList() {
-        return favoriteRestaurantList;
+    public Set<String> getFavoriteRestaurantSet() {
+        return favoriteRestaurantSet;
     }
 
     @Nullable
@@ -49,12 +49,12 @@ public class UserEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserEntity user = (UserEntity) o;
-        return loggedUserEntity.equals(user.loggedUserEntity) && favoriteRestaurantList.equals(user.favoriteRestaurantList) && Objects.equals(attendingRestaurantId, user.attendingRestaurantId);
+        return loggedUserEntity.equals(user.loggedUserEntity) && favoriteRestaurantSet.equals(user.favoriteRestaurantSet) && Objects.equals(attendingRestaurantId, user.attendingRestaurantId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(loggedUserEntity, favoriteRestaurantList, attendingRestaurantId);
+        return Objects.hash(loggedUserEntity, favoriteRestaurantSet, attendingRestaurantId);
     }
 
     @NonNull
@@ -62,7 +62,7 @@ public class UserEntity {
     public String toString() {
         return "UserEntity{" +
             "loggedUserEntity=" + loggedUserEntity +
-            ", favoriteRestaurantList=" + favoriteRestaurantList +
+            ", favoriteRestaurantSet=" + favoriteRestaurantSet +
             ", attendingRestaurantId='" + attendingRestaurantId + '\'' +
             '}';
     }

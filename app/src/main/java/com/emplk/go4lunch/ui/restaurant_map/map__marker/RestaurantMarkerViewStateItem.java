@@ -2,6 +2,7 @@ package com.emplk.go4lunch.ui.restaurant_map.map__marker;
 
 import androidx.annotation.NonNull;
 
+import com.emplk.go4lunch.ui.utils.RestaurantFavoriteState;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Objects;
@@ -17,19 +18,19 @@ public class RestaurantMarkerViewStateItem {
     private final LatLng latLng;
 
     @NonNull
-    private final MarkerStatusState markerStatusState;
+    private final RestaurantFavoriteState restaurantFavoriteState;
 
 
     public RestaurantMarkerViewStateItem(
         @NonNull String id,
         @NonNull String name,
         @NonNull LatLng latLng,
-        @NonNull MarkerStatusState markerStatusState
+        @NonNull RestaurantFavoriteState restaurantFavoriteState
     ) {
         this.id = id;
         this.name = name;
         this.latLng = latLng;
-        this.markerStatusState = markerStatusState;
+        this.restaurantFavoriteState = restaurantFavoriteState;
     }
 
     @NonNull
@@ -49,8 +50,8 @@ public class RestaurantMarkerViewStateItem {
 
 
     @NonNull
-    public MarkerStatusState getMarkerState() {
-        return markerStatusState;
+    public RestaurantFavoriteState getMarkerState() {
+        return restaurantFavoriteState;
     }
 
     @Override
@@ -58,12 +59,12 @@ public class RestaurantMarkerViewStateItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RestaurantMarkerViewStateItem that = (RestaurantMarkerViewStateItem) o;
-        return id.equals(that.id) && name.equals(that.name) && latLng.equals(that.latLng) && markerStatusState == that.markerStatusState;
+        return id.equals(that.id) && name.equals(that.name) && latLng.equals(that.latLng) && restaurantFavoriteState == that.restaurantFavoriteState;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, latLng, markerStatusState);
+        return Objects.hash(id, name, latLng, restaurantFavoriteState);
     }
 
     @NonNull
@@ -73,7 +74,7 @@ public class RestaurantMarkerViewStateItem {
             "id='" + id + '\'' +
             ", name='" + name + '\'' +
             ", latLng=" + latLng +
-            ", markerStatusState=" + markerStatusState +
+            ", restaurantFavoriteState=" + restaurantFavoriteState +
             '}';
     }
 }

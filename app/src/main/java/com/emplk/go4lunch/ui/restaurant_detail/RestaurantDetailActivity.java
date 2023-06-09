@@ -1,7 +1,11 @@
 package com.emplk.go4lunch.ui.restaurant_detail;
 
+import static com.emplk.go4lunch.ui.utils.RestaurantFavoriteState.IS_FAVORITE;
+import static com.emplk.go4lunch.ui.utils.RestaurantFavoriteState.IS_NOT_FAVORITE;
+
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -9,6 +13,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
@@ -25,7 +30,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     private RestaurantDetailViewModel viewModel;
 
     public static final String KEY_RESTAURANT_ID = "KEY_RESTAURANT_ID";
-    private String restaurantId;
 
 
     public static Intent navigate(
@@ -51,17 +55,39 @@ public class RestaurantDetailActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        restaurantId = getIntent().getStringExtra(KEY_RESTAURANT_ID);
-
         viewModel = new ViewModelProvider(this).get(RestaurantDetailViewModel.class);
-
-        viewModel.getRestaurantId(restaurantId);
 
         setupObservers();
     }
 
     private void setupObservers() {
-        viewModel.getRestaurantDetails(restaurantId).observe(this, restaurantDetail -> {
+
+        viewModel.isRestoFav().observe(this, isFav -> {
+                if (isFav) {
+                    binding.detailRestaurantLikeButton.setIconTint(ColorStateList.valueOf(getResources().getColor(R.color.red_clay)));
+                    // ENUM TO MANAGE STATE FAV STAR + ACTION
+                }
+            }
+        );
+
+        viewModel.getRestaurantFavoriteState().observe(this, restaurantFavoriteState -> {
+                if (restaurantFavoriteState == IS_FAVORITE) {
+                    binding.detailRestaurantLikeButton.setIcon(ContextCompat.getDrawable(
+                            this, R.drawable.baseline_star_24
+                        )
+                    );
+                    binding.detailRestaurantLikeButton.setOnClickListener(v -> viewModel.onRemoveFavoriteRestaurant());
+                } else if (restaurantFavoriteState == IS_NOT_FAVORITE) {
+                    binding.detailRestaurantLikeButton.setIcon(ContextCompat.getDrawable(
+                            this, R.drawable.baseline_star_border_24
+                        )
+                    );
+                    binding.detailRestaurantLikeButton.setOnClickListener(v -> viewModel.onAddFavoriteRestaurant());
+                }
+            }
+        );
+
+        viewModel.getRestaurantDetails().observe(this, restaurantDetail -> {
                 if (restaurantDetail != null) {
                     binding.detailRestaurantName.setText(restaurantDetail.getName());
                     binding.detailRestaurantAddress.setText(restaurantDetail.getAddress());
@@ -70,15 +96,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                     binding.loadingStateLoadingBar.setVisibility(Boolean.TRUE.equals(restaurantDetail.isLoading()) ? View.VISIBLE : View.INVISIBLE);
                     binding.detailRestaurantWebsiteButton.setEnabled(restaurantDetail.isWebsiteAvailable());
                     binding.detailRestaurantCallButton.setEnabled(restaurantDetail.isPhoneNumberAvailable());
-                    binding.detailRestaurantLikeButton.setEnabled(restaurantDetail.isLiked());
-                    binding.detailRestaurantLikeButton.setOnClickListener(v -> {
-                            if (restaurantDetail.isLiked()) {
-                                viewModel.onRemoveFavoriteRestaurant(restaurantDetail.getId());
-                            } else {
-                                viewModel.onAddFavoriteRestaurant(restaurantDetail.getId());
-                            }
-                        }
-                    );
 
                     Glide.with(this)
                         .load(restaurantDetail.getPictureUrl())
@@ -101,7 +118,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                 }
             }
         );
-        binding.detailRestaurantPicture.setOnClickListener(v -> finish());
     }
 
     @Override
