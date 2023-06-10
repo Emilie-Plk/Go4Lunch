@@ -135,10 +135,8 @@ public class GpsLocationRepositoryBroadcastReceiver extends BroadcastReceiver im
             isGpsEnabledMutableLiveData.setValue(isGpsEnabled);
         }
     }
-
     @Override
     public void stopLocationRequest() {
         fusedLocationProviderClient.removeLocationUpdates(locationCallback);
     }
-    // should I unregister the receiver?
 }

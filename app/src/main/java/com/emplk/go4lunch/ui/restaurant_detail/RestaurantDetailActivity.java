@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.RestaurantDetailActivityBinding;
-import com.emplk.go4lunch.ui.workmate_list.OnStartChatWithWorkmateListener;
+import com.emplk.go4lunch.ui.workmate_list.OnWorkmateClickedListener;
 import com.emplk.go4lunch.ui.workmate_list.WorkmateListAdapter;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -63,9 +63,9 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     }
 
     private void setupWorkmatesRecyclerView() {
-        WorkmateListAdapter adapter = new WorkmateListAdapter(new OnStartChatWithWorkmateListener() {
+        WorkmateListAdapter adapter = new WorkmateListAdapter(new OnWorkmateClickedListener() {
             @Override
-            public void onStartChatWithWorker(@NonNull String workmateId) {
+            public void onWorkmateClicked(@NonNull String workmateId) {
                 // TODO: maybe change this method's name, generalize it
             }
         });

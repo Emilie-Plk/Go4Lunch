@@ -21,9 +21,9 @@ import com.emplk.go4lunch.databinding.WorkmatesItemBinding;
 public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, RecyclerView.ViewHolder> {
 
     @NonNull
-    private final OnStartChatWithWorkmateListener listener;
+    private final OnWorkmateClickedListener listener;
 
-    public WorkmateListAdapter(@NonNull OnStartChatWithWorkmateListener listener) {
+    public WorkmateListAdapter(@NonNull OnWorkmateClickedListener listener) {
         super(new ListWorkmateItemCallback());
         this.listener = listener;
     }
@@ -84,9 +84,9 @@ public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, Rec
 
         public void bind(
             @NonNull WorkmatesViewStateItem.AllWorkmates itemViewState,
-            @NonNull OnStartChatWithWorkmateListener listener
+            @NonNull OnWorkmateClickedListener listener
         ) {
-            binding.getRoot().setOnClickListener(v -> listener.onStartChatWithWorker(itemViewState.getId()));
+            binding.getRoot().setOnClickListener(v -> listener.onWorkmateClicked(itemViewState.getId()));
 
             String workmateName = itemViewState.getName();
             String attendingRestaurant = itemViewState.getAttendingRestaurantName();
@@ -124,12 +124,12 @@ public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, Rec
 
         public void bind(
             @NonNull WorkmatesViewStateItem.WorkmatesGoingToSameRestaurant itemViewState,
-            @NonNull OnStartChatWithWorkmateListener listener
+            @NonNull OnWorkmateClickedListener listener
         ) {
 
             chatButton.setVisibility(View.VISIBLE);
 
-            chatButton.setOnClickListener(v -> listener.onStartChatWithWorker(itemViewState.getId()));
+            chatButton.setOnClickListener(v -> listener.onWorkmateClicked(itemViewState.getId()));  //TODO: add logic to start chat
 
             workmateName.setText(binding.getRoot().getContext().getString(
                 R.string.detail_workmate_joining, itemViewState.getName()));

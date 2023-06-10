@@ -37,7 +37,6 @@ public class WorkmateListFragment extends Fragment {
         return binding.getRoot();
     }
 
-
     @Override
     public void onViewCreated(
         @NonNull View view,
@@ -52,9 +51,9 @@ public class WorkmateListFragment extends Fragment {
     private void initRecyclerView() {
         RecyclerView recyclerView = binding.getRoot();
 
-        WorkmateListAdapter adapter = new WorkmateListAdapter(new OnStartChatWithWorkmateListener() {
+        WorkmateListAdapter adapter = new WorkmateListAdapter(new OnWorkmateClickedListener() {
             @Override
-            public void onStartChatWithWorker(@NonNull String workmateId) {
+            public void onWorkmateClicked(@NonNull String workmateId) {
 // TODO: start chat
             }
         }
@@ -64,8 +63,9 @@ public class WorkmateListFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         viewModel.getWorkmates().observe(getViewLifecycleOwner(), workmates -> {
-          adapter.submitList(workmates);
-        });
+                adapter.submitList(workmates);
+            }
+        );
     }
 
     @Override

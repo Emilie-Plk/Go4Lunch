@@ -82,7 +82,6 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewStateIt
 
         public RestaurantListViewHolder(@NonNull RestaurantItemBinding binding) {
             super(binding.getRoot());
-
             this.binding = binding;
         }
 
