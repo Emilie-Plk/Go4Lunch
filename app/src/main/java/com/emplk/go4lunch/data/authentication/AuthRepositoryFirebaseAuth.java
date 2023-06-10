@@ -45,19 +45,19 @@ public class AuthRepositoryFirebaseAuth implements AuthRepository {
             String id = firebaseAuth.getCurrentUser().getUid();
             String email = firebaseAuth.getCurrentUser().getEmail();
             String name = firebaseAuth.getCurrentUser().getDisplayName();
-            String photoUrl;
+            String pictureUrl;
 
             if (firebaseAuth.getCurrentUser().getPhotoUrl() != null) {
-                photoUrl = firebaseAuth.getCurrentUser().getPhotoUrl().toString();
+                pictureUrl = firebaseAuth.getCurrentUser().getPhotoUrl().toString();
             } else {
-                photoUrl = Uri.parse("android.resource://com.emplk.go4lunch/" + R.drawable.restaurant_table).toString();
+                pictureUrl = Uri.parse("android.resource://com.emplk.go4lunch/" + R.drawable.restaurant_table).toString();
             }
             if (email != null && name != null) {
                 return new LoggedUserEntity(
                     id,
                     name,
                     email,
-                    photoUrl
+                    pictureUrl
                 );
             }
         }

@@ -42,7 +42,7 @@ public class UserRepositoryFirestore implements UserRepository {
 
             userDocumentRef
                 .set(
-                    new UserDto(
+                    new LoggedUserDto(
                         loggedUserEntity.getId(),
                         loggedUserEntity.getName(),
                         loggedUserEntity.getEmail(),
@@ -75,8 +75,8 @@ public class UserRepositoryFirestore implements UserRepository {
                         return;
                     }
                     if (documentSnapshot != null) {
-                        UserDto userDto = documentSnapshot.toObject(UserDto.class);
-                        LoggedUserEntity loggedUserEntity = mapToLoggedUserEntity(userDto);
+                        LoggedUserDto loggedUserDto = documentSnapshot.toObject(LoggedUserDto.class);
+                        LoggedUserEntity loggedUserEntity = mapToLoggedUserEntity(loggedUserDto);
                         loggedUserEntityMutableLiveData.setValue(loggedUserEntity);
                     }
                 }
@@ -98,13 +98,16 @@ public class UserRepositoryFirestore implements UserRepository {
             userWithRestaurantChoiceDocumentRef
                 .set(
                     new UserWithRestaurantChoiceDto(
-                        loggedUserEntity.getId(),
-                        loggedUserEntity.getName(),
-                        loggedUserEntity.getPictureUrl(),
-                        restaurantEntity.getPlaceId(),
-                        restaurantEntity.getName(),
-                        restaurantEntity.getVicinity(),
-                        restaurantEntity.getPhotoUrl()
+                        new LoggedUserDto(
+                            loggedUserEntity.getId(),
+                            loggedUserEntity.getName(),
+                            loggedUserEntity.getEmail(),
+                            loggedUserEntity.getPictureUrl()
+                        ),
+                        restaurantEntity.getAttendingRestaurantId(),
+                        restaurantEntity.getAttendingRestaurantName(),
+                        restaurantEntity.getAttendingRestaurantVicinity(),
+                        restaurantEntity.getAttendingRestaurantPictureUrl()
                     )
                 )
                 .addOnSuccessListener(aVoid -> {
@@ -172,16 +175,16 @@ public class UserRepositoryFirestore implements UserRepository {
 
     private RestaurantEntity mapToRestaurantEntity(UserWithRestaurantChoiceDto userWithRestaurantChoiceDto) {
         if (userWithRestaurantChoiceDto != null &&
-            userWithRestaurantChoiceDto.getRestaurantId() != null &&
-            userWithRestaurantChoiceDto.getRestaurantName() != null &&
-            userWithRestaurantChoiceDto.getVicinity() != null &&
-            userWithRestaurantChoiceDto.getPictureUrl() != null
+            userWithRestaurantChoiceDto.getAttendingRestaurantId() != null &&
+            userWithRestaurantChoiceDto.getAttendingRestaurantName() != null &&
+            userWithRestaurantChoiceDto.getAttendingRestaurantVicinity() != null &&
+            userWithRestaurantChoiceDto.getLoggedUser() != null
         ) {
             return new RestaurantEntity(
-                userWithRestaurantChoiceDto.getRestaurantId(),
-                userWithRestaurantChoiceDto.getRestaurantName(),
-                userWithRestaurantChoiceDto.getVicinity(),
-                userWithRestaurantChoiceDto.getPictureUrl()
+                userWithRestaurantChoiceDto.getAttendingRestaurantId(),
+                userWithRestaurantChoiceDto.getAttendingRestaurantName(),
+                userWithRestaurantChoiceDto.getAttendingRestaurantVicinity(),
+                userWithRestaurantChoiceDto.getAttendingRestaurantPictureUrl()
             );
         } else {
             return null;
@@ -189,7 +192,7 @@ public class UserRepositoryFirestore implements UserRepository {
     }
 
 
-    private LoggedUserEntity mapToLoggedUserEntity(@Nullable UserDto result) {
+    private LoggedUserEntity mapToLoggedUserEntity(@Nullable LoggedUserDto result) {
         if (result != null &&
             result.getId() != null &&
             result.getName() != null &&

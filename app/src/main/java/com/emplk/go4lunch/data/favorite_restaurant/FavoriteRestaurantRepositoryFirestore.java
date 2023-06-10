@@ -64,9 +64,9 @@ public class FavoriteRestaurantRepositoryFirestore implements FavoriteRestaurant
     public LiveData<Set<String>> getUserFavoriteRestaurantIdsLiveData(@NonNull String userId) {
         MutableLiveData<Set<String>> favoriteRestaurantSetLiveData = new MutableLiveData<>();
 
-        firestore.collection("users")
+        firestore.collection(USERS_COLLECTION)
             .document(userId)
-            .collection("favoriteRestaurantIds")
+            .collection(COLLECTION_PATH_FAVORITE_RESTAURANTS)
             .addSnapshotListener((querySnapshot, error) -> {
                     if (error != null) {
                         favoriteRestaurantSetLiveData.setValue(Collections.emptySet());

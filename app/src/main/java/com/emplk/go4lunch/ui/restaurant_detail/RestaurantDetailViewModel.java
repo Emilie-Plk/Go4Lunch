@@ -12,6 +12,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.R;
@@ -25,7 +26,13 @@ import com.emplk.go4lunch.domain.favorite_restaurant.IsRestaurantUserFavoriteUse
 import com.emplk.go4lunch.domain.favorite_restaurant.RemoveFavoriteRestaurantUseCase;
 import com.emplk.go4lunch.domain.user.use_case.AddUserRestaurantChoiceUseCase;
 import com.emplk.go4lunch.domain.user.use_case.RemoveUserRestaurantChoiceUseCase;
+import com.emplk.go4lunch.domain.workmate.GetWorkmateEntitiesGoingToSameRestaurantUseCase;
+import com.emplk.go4lunch.domain.workmate.WorkmateEntity;
 import com.emplk.go4lunch.ui.utils.RestaurantFavoriteState;
+import com.emplk.go4lunch.ui.workmate_list.WorkmatesViewStateItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -65,6 +72,9 @@ public class RestaurantDetailViewModel extends ViewModel {
     @NonNull
     private final RemoveUserRestaurantChoiceUseCase removeUserRestaurantChoiceUseCase;
 
+    @NonNull
+    private final GetWorkmateEntitiesGoingToSameRestaurantUseCase getWorkmateEntitiesGoingToSameRestaurantUseCase;
+
     private final String restaurantId;
 
 
@@ -79,6 +89,7 @@ public class RestaurantDetailViewModel extends ViewModel {
         @NonNull RemoveFavoriteRestaurantUseCase removeFavoriteRestaurantUseCase,
         @NonNull AddUserRestaurantChoiceUseCase addUserRestaurantChoiceUseCase,
         @NonNull RemoveUserRestaurantChoiceUseCase removeUserRestaurantChoiceUseCase,
+        @NonNull GetWorkmateEntitiesGoingToSameRestaurantUseCase getWorkmateEntitiesGoingToSameRestaurantUseCase,
         @NonNull SavedStateHandle savedStateHandle
     ) {
         this.getDetailsRestaurantWrapperUseCase = getDetailsRestaurantWrapperUseCase;
@@ -90,6 +101,7 @@ public class RestaurantDetailViewModel extends ViewModel {
         this.removeFavoriteRestaurantUseCase = removeFavoriteRestaurantUseCase;
         this.addUserRestaurantChoiceUseCase = addUserRestaurantChoiceUseCase;
         this.removeUserRestaurantChoiceUseCase = removeUserRestaurantChoiceUseCase;
+        this.getWorkmateEntitiesGoingToSameRestaurantUseCase = getWorkmateEntitiesGoingToSameRestaurantUseCase;
 
         restaurantId = savedStateHandle.get(RestaurantDetailActivity.KEY_RESTAURANT_ID);
 
@@ -209,11 +221,34 @@ public class RestaurantDetailViewModel extends ViewModel {
         removeFavoriteRestaurantUseCase.invoke(restaurantId);
     }
 
-    public void onAddUserRestaurantChoice(@NonNull String restaurantName, @NonNull String vicinity, @Nullable String photoReferenceUrl) {
+    public void onAddUserRestaurantChoice(
+        @NonNull String restaurantName,
+        @NonNull String vicinity,
+        @Nullable String photoReferenceUrl
+    ) {
         addUserRestaurantChoiceUseCase.invoke(restaurantId, restaurantName, vicinity, photoReferenceUrl);
     }
 
     public void onRemoveUserRestaurantChoice() {
         removeUserRestaurantChoiceUseCase.invoke();
+    }
+
+    public LiveData<List<WorkmatesViewStateItem>> getWorkmatesGoingToRestaurant() {
+        return Transformations.switchMap(getWorkmateEntitiesGoingToSameRestaurantUseCase.invoke(restaurantId), workmatesGoingToSameRestaurant -> {
+                List<WorkmatesViewStateItem> workmatesViewStateItems = new ArrayList<>();
+                for (WorkmateEntity workmateEntity : workmatesGoingToSameRestaurant) {
+                    workmatesViewStateItems.add(
+                        new WorkmatesViewStateItem(
+                            workmateEntity.getLoggedUserEntity().getId(),
+                            workmateEntity.getLoggedUserEntity().getName(),
+                            workmateEntity.getLoggedUserEntity().getPictureUrl(),
+                            workmateEntity.getAttendingRestaurantId(),
+                            workmateEntity.getAttendingRestaurantName()
+                        )
+                    );
+                }
+                return new MutableLiveData<>(workmatesViewStateItems);
+            }
+        );
     }
 }

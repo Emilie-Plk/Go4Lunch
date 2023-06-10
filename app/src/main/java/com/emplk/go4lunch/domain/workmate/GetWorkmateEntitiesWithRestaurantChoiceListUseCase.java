@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
-import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserIdUseCase;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -32,17 +31,16 @@ public class GetWorkmateEntitiesWithRestaurantChoiceListUseCase {
     }
 
     public LiveData<List<WorkmateEntity>> invoke() {
-        LiveData<List<LoggedUserEntity>> loggedUserEntityListLiveData = workmateRepository.getLoggedUserEntitiesWithRestaurantChoiceLiveData();
-        List<WorkmateEntity> workmateEntityList = new ArrayList<>();
-        return Transformations.switchMap(loggedUserEntityListLiveData, loggedUserEntities -> {
-                MutableLiveData<List<WorkmateEntity>> result = new MutableLiveData<>();
-                for (LoggedUserEntity loggedUserEntity : loggedUserEntities) {
-                    if (!loggedUserEntity.getId().equals(getCurrentLoggedUserIdUseCase.invoke())) {
-                        workmateEntityList.add(new WorkmateEntity(loggedUserEntity, null));
+        return Transformations.switchMap(workmateRepository.getWorkmateEntitiesWithRestaurantChoiceLiveData(), workmateEntities -> {
+                List<WorkmateEntity> workmateEntitiesWithoutCurrentUserList = new ArrayList<>();
+                MutableLiveData<List<WorkmateEntity>> workmateEntitiesWithoutCurrentUserMutableLiveData = new MutableLiveData<>();
+                for (WorkmateEntity workmateEntity : workmateEntities) {
+                    if (!workmateEntity.getLoggedUserEntity().getId().equals(getCurrentLoggedUserIdUseCase.invoke())) {
+                        workmateEntitiesWithoutCurrentUserList.add(workmateEntity);
                     }
-                    result.setValue(workmateEntityList);
                 }
-                return result;
+                workmateEntitiesWithoutCurrentUserMutableLiveData.setValue(workmateEntitiesWithoutCurrentUserList);
+                return workmateEntitiesWithoutCurrentUserMutableLiveData;
             }
         );
     }

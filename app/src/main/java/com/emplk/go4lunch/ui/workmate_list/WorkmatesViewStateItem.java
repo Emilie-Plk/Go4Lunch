@@ -14,7 +14,7 @@ public class WorkmatesViewStateItem {
     private final String name;
 
     @Nullable
-    private final String photoUrl;
+    private final String pictureUrl;
 
     @Nullable
     private final String attendingRestaurantId;
@@ -25,13 +25,13 @@ public class WorkmatesViewStateItem {
     public WorkmatesViewStateItem(
         @NonNull String id,
         @NonNull String name,
-        @Nullable String photoUrl,
+        @Nullable String pictureUrl,
         @Nullable String attendingRestaurantId,
         @Nullable String attendingRestaurantName
     ) {
         this.id = id;
         this.name = name;
-        this.photoUrl = photoUrl;
+        this.pictureUrl = pictureUrl;
         this.attendingRestaurantId = attendingRestaurantId;
         this.attendingRestaurantName = attendingRestaurantName;
     }
@@ -47,8 +47,8 @@ public class WorkmatesViewStateItem {
     }
 
     @Nullable
-    public String getPhotoUrl() {
-        return photoUrl;
+    public String getPictureUrl() {
+        return pictureUrl;
     }
 
     @Nullable
@@ -66,12 +66,12 @@ public class WorkmatesViewStateItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WorkmatesViewStateItem that = (WorkmatesViewStateItem) o;
-        return id.equals(that.id) && name.equals(that.name) && Objects.equals(photoUrl, that.photoUrl) && Objects.equals(attendingRestaurantId, that.attendingRestaurantId) && Objects.equals(attendingRestaurantName, that.attendingRestaurantName);
+        return id.equals(that.id) && name.equals(that.name) && Objects.equals(pictureUrl, that.pictureUrl) && Objects.equals(attendingRestaurantId, that.attendingRestaurantId) && Objects.equals(attendingRestaurantName, that.attendingRestaurantName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, photoUrl, attendingRestaurantId, attendingRestaurantName);
+        return Objects.hash(id, name, pictureUrl, attendingRestaurantId, attendingRestaurantName);
     }
 
     @NonNull
@@ -80,7 +80,7 @@ public class WorkmatesViewStateItem {
         return "WorkmatesViewStateItem{" +
             "id='" + id + '\'' +
             ", name='" + name + '\'' +
-            ", photoUrl='" + photoUrl + '\'' +
+            ", pictureUrl='" + pictureUrl + '\'' +
             ", attendingRestaurantId='" + attendingRestaurantId + '\'' +
             ", attendingRestaurantName='" + attendingRestaurantName + '\'' +
             '}';

@@ -31,12 +31,12 @@ public class AddUserRestaurantChoiceUseCase {
         @Nullable String restaurantId,
         @Nullable String restaurantName,
         @Nullable String vicinity,
-        @Nullable String photoReferenceUrl
+        @Nullable String pictureReferenceUrl
     ) {
         if (restaurantId != null &&
             restaurantName != null &&
             vicinity != null &&
-            photoReferenceUrl != null
+            pictureReferenceUrl != null
         ) {
             userRepository.upsertUserRestaurantChoice(
                 getCurrentLoggedUserUseCase.invoke(),
@@ -44,7 +44,7 @@ public class AddUserRestaurantChoiceUseCase {
                     restaurantId,
                     restaurantName,
                     vicinity,
-                    photoReferenceUrl
+                    pictureReferenceUrl
                 )
             );
         }

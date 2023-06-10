@@ -10,6 +10,6 @@ public interface WorkmateRepository {
 
     LiveData<List<LoggedUserEntity>> getLoggedUserEntitiesLiveData();
 
-    LiveData<List<LoggedUserEntity>> getLoggedUserEntitiesWithRestaurantChoiceLiveData();
+    LiveData<List<WorkmateEntity>> getWorkmateEntitiesWithRestaurantChoiceLiveData();
 
 }

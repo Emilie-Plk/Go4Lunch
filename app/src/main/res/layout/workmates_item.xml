@@ -18,12 +18,13 @@
 
     <TextView
         android:id="@+id/list_workmate_name_and_restaurant"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:ellipsize="end"
         android:text="@string/list_workmate_name_joining"
         app:layout_constraintBottom_toBottomOf="@id/list_workmate_avatar"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/list_workmate_avatar"
         app:layout_constraintTop_toTopOf="@id/list_workmate_avatar"
         tools:text="Marta is joining!" />

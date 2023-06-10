@@ -8,47 +8,47 @@ import java.util.Objects;
 public class RestaurantEntity {
 
     @NonNull
-    private final String placeId;
+    private final String attendingRestaurantId;
 
     @NonNull
-    private final String name;
+    private final String attendingRestaurantName;
 
     @NonNull
-    private final String vicinity;
+    private final String attendingRestaurantVicinity;
 
     @Nullable
-    private final String photoUrl;
+    private final String attendingRestaurantPictureUrl;
 
     public RestaurantEntity(
-        @NonNull String placeId,
-        @NonNull String name,
-        @NonNull String vicinity,
-        @Nullable String photoUrl
+        @NonNull String attendingRestaurantId,
+        @NonNull String attendingRestaurantName,
+        @NonNull String attendingRestaurantVicinity,
+        @Nullable String attendingRestaurantPictureUrl
     ) {
-        this.placeId = placeId;
-        this.name = name;
-        this.vicinity = vicinity;
-        this.photoUrl = photoUrl;
+        this.attendingRestaurantId = attendingRestaurantId;
+        this.attendingRestaurantName = attendingRestaurantName;
+        this.attendingRestaurantVicinity = attendingRestaurantVicinity;
+        this.attendingRestaurantPictureUrl = attendingRestaurantPictureUrl;
     }
 
     @NonNull
-    public String getPlaceId() {
-        return placeId;
+    public String getAttendingRestaurantId() {
+        return attendingRestaurantId;
     }
 
     @NonNull
-    public String getName() {
-        return name;
+    public String getAttendingRestaurantName() {
+        return attendingRestaurantName;
     }
 
     @NonNull
-    public String getVicinity() {
-        return vicinity;
+    public String getAttendingRestaurantVicinity() {
+        return attendingRestaurantVicinity;
     }
 
     @Nullable
-    public String getPhotoUrl() {
-        return photoUrl;
+    public String getAttendingRestaurantPictureUrl() {
+        return attendingRestaurantPictureUrl;
     }
 
     @Override
@@ -56,22 +56,22 @@ public class RestaurantEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RestaurantEntity that = (RestaurantEntity) o;
-        return placeId.equals(that.placeId) && name.equals(that.name) && vicinity.equals(that.vicinity) && Objects.equals(photoUrl, that.photoUrl);
+        return attendingRestaurantId.equals(that.attendingRestaurantId) && attendingRestaurantName.equals(that.attendingRestaurantName) && attendingRestaurantVicinity.equals(that.attendingRestaurantVicinity) && Objects.equals(attendingRestaurantPictureUrl, that.attendingRestaurantPictureUrl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(placeId, name, vicinity, photoUrl);
+        return Objects.hash(attendingRestaurantId, attendingRestaurantName, attendingRestaurantVicinity, attendingRestaurantPictureUrl);
     }
 
     @NonNull
     @Override
     public String toString() {
         return "RestaurantEntity{" +
-            "placeId='" + placeId + '\'' +
-            ", name='" + name + '\'' +
-            ", vicinity='" + vicinity + '\'' +
-            ", photoUrl='" + photoUrl + '\'' +
+            "attendingRestaurantId='" + attendingRestaurantId + '\'' +
+            ", attendingRestaurantName='" + attendingRestaurantName + '\'' +
+            ", attendingRestaurantVicinity='" + attendingRestaurantVicinity + '\'' +
+            ", attendingRestaurantPictureUrl='" + attendingRestaurantPictureUrl + '\'' +
             '}';
     }
 }

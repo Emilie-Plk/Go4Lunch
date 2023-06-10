@@ -76,7 +76,7 @@ public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, Wor
             binding.listWorkmateNameAndRestaurant.setText(formattedText);
 
             Glide.with(binding.getRoot())
-                .load(itemViewState.getPhotoUrl())
+                .load(itemViewState.getPictureUrl())
                 .transform(new CenterCrop(), new RoundedCorners(50))
                 .into(workmateAvatar);
         }

@@ -3,10 +3,9 @@ package com.emplk.go4lunch.data.user;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.Map;
 import java.util.Objects;
 
-public class UserDto {
+public class LoggedUserDto {
     @Nullable
     private final String id;
 
@@ -20,14 +19,14 @@ public class UserDto {
     private final String pictureUrl;
 
 
-    public UserDto() {
+    public LoggedUserDto() {
         id = null;
         name = null;
         email = null;
         pictureUrl = null;
     }
 
-    public UserDto(
+    public LoggedUserDto(
         @Nullable String id,
         @Nullable String name,
         @Nullable String email,
@@ -64,8 +63,8 @@ public class UserDto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserDto userDto = (UserDto) o;
-        return Objects.equals(id, userDto.id) && Objects.equals(name, userDto.name) && Objects.equals(email, userDto.email) && Objects.equals(pictureUrl, userDto.pictureUrl);
+        LoggedUserDto loggedUserDto = (LoggedUserDto) o;
+        return Objects.equals(id, loggedUserDto.id) && Objects.equals(name, loggedUserDto.name) && Objects.equals(email, loggedUserDto.email) && Objects.equals(pictureUrl, loggedUserDto.pictureUrl);
     }
 
     @Override
@@ -76,7 +75,7 @@ public class UserDto {
     @NonNull
     @Override
     public String toString() {
-        return "UserDto{" +
+        return "LoggedUserDto{" +
             "id='" + id + '\'' +
             ", username='" + name + '\'' +
             ", email='" + email + '\'' +

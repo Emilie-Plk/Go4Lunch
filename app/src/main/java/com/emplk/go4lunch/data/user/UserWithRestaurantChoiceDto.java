@@ -8,87 +8,65 @@ import java.util.Objects;
 public class UserWithRestaurantChoiceDto {
 
     @Nullable
-    private final String id;
+    private final LoggedUserDto loggedUser;
 
     @Nullable
-    private final String name;
+    private final String attendingRestaurantId;
 
     @Nullable
-    private final String pictureUrl;
+    private final String attendingRestaurantName;
 
     @Nullable
-    private final String restaurantId;
+    private final String attendingRestaurantVicinity;
 
     @Nullable
-    private final String restaurantName;
-
-    @Nullable
-    private final String vicinity;
-
-    @Nullable
-    private final String restaurantUrl;
+    private final String attendingRestaurantPictureUrl;
 
     public UserWithRestaurantChoiceDto() {
-        id = null;
-        name = null;
-        pictureUrl = null;
-        restaurantId = null;
-        restaurantName = null;
-        vicinity = null;
-        restaurantUrl = null;
+        loggedUser = null;
+        attendingRestaurantId = null;
+        attendingRestaurantName = null;
+        attendingRestaurantVicinity = null;
+        attendingRestaurantPictureUrl = null;
     }
 
     public UserWithRestaurantChoiceDto(
-        @Nullable String id,
-        @Nullable String name,
-        @Nullable String pictureUrl,
-        @Nullable String restaurantId,
-        @Nullable String restaurantName,
-        @Nullable String vicinity,
-        @Nullable String restaurantUrl
+        @Nullable LoggedUserDto loggedUser,
+        @Nullable String attendingRestaurantId,
+        @Nullable String attendingRestaurantName,
+        @Nullable String attendingRestaurantVicinity,
+        @Nullable String attendingRestaurantPictureUrl
     ) {
-        this.id = id;
-        this.name = name;
-        this.pictureUrl = pictureUrl;
-        this.restaurantId = restaurantId;
-        this.restaurantName = restaurantName;
-        this.vicinity = vicinity;
-        this.restaurantUrl = restaurantUrl;
+        this.loggedUser = loggedUser;
+        this.attendingRestaurantId = attendingRestaurantId;
+        this.attendingRestaurantName = attendingRestaurantName;
+        this.attendingRestaurantVicinity = attendingRestaurantVicinity;
+        this.attendingRestaurantPictureUrl = attendingRestaurantPictureUrl;
     }
 
     @Nullable
-    public String getId() {
-        return id;
+    public LoggedUserDto getLoggedUser() {
+        return loggedUser;
     }
 
     @Nullable
-    public String getName() {
-        return name;
+    public String getAttendingRestaurantId() {
+        return attendingRestaurantId;
     }
 
     @Nullable
-    public String getPictureUrl() {
-        return pictureUrl;
+    public String getAttendingRestaurantName() {
+        return attendingRestaurantName;
     }
 
     @Nullable
-    public String getRestaurantId() {
-        return restaurantId;
+    public String getAttendingRestaurantVicinity() {
+        return attendingRestaurantVicinity;
     }
 
     @Nullable
-    public String getRestaurantName() {
-        return restaurantName;
-    }
-
-    @Nullable
-    public String getVicinity() {
-        return vicinity;
-    }
-
-    @Nullable
-    public String getRestaurantUrl() {
-        return restaurantUrl;
+    public String getAttendingRestaurantPictureUrl() {
+        return attendingRestaurantPictureUrl;
     }
 
     @Override
@@ -96,25 +74,23 @@ public class UserWithRestaurantChoiceDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserWithRestaurantChoiceDto that = (UserWithRestaurantChoiceDto) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(pictureUrl, that.pictureUrl) && Objects.equals(restaurantId, that.restaurantId) && Objects.equals(restaurantName, that.restaurantName) && Objects.equals(vicinity, that.vicinity) && Objects.equals(restaurantUrl, that.restaurantUrl);
+        return Objects.equals(loggedUser, that.loggedUser) && Objects.equals(attendingRestaurantId, that.attendingRestaurantId) && Objects.equals(attendingRestaurantName, that.attendingRestaurantName) && Objects.equals(attendingRestaurantVicinity, that.attendingRestaurantVicinity) && Objects.equals(attendingRestaurantPictureUrl, that.attendingRestaurantPictureUrl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, pictureUrl, restaurantId, restaurantName, vicinity, restaurantUrl);
+        return Objects.hash(loggedUser, attendingRestaurantId, attendingRestaurantName, attendingRestaurantVicinity, attendingRestaurantPictureUrl);
     }
 
     @NonNull
     @Override
     public String toString() {
         return "UserWithRestaurantChoiceDto{" +
-            "id='" + id + '\'' +
-            ", name='" + name + '\'' +
-            ", pictureUrl='" + pictureUrl + '\'' +
-            ", restaurantId='" + restaurantId + '\'' +
-            ", restaurantName='" + restaurantName + '\'' +
-            ", vicinity='" + vicinity + '\'' +
-            ", restaurantUrl='" + restaurantUrl + '\'' +
+            "loggedUser=" + loggedUser +
+            ", attendingRestaurantId='" + attendingRestaurantId + '\'' +
+            ", attendingRestaurantName='" + attendingRestaurantName + '\'' +
+            ", attendingRestaurantVicinity='" + attendingRestaurantVicinity + '\'' +
+            ", attendingRestaurantPictureUrl='" + attendingRestaurantPictureUrl + '\'' +
             '}';
     }
 }

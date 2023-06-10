@@ -31,14 +31,14 @@ public class WorkmatesViewModel extends ViewModel {
     public LiveData<List<WorkmatesViewStateItem>> getWorkmates() {
         return Transformations.switchMap(getWorkmateEntitiesWithRestaurantChoiceListUseCase.invoke(), workmateEntities -> {
                 List<WorkmatesViewStateItem> workmatesViewStateItems = new ArrayList<>();
-            MutableLiveData<List<WorkmatesViewStateItem>> result = new MutableLiveData<>();
+                MutableLiveData<List<WorkmatesViewStateItem>> result = new MutableLiveData<>();
                 for (WorkmateEntity workmate : workmateEntities) {
                     workmatesViewStateItems.add(new WorkmatesViewStateItem(
-                            workmate.getLoggedUserEntity().getId(),
-                            workmate.getLoggedUserEntity().getName(),
-                            workmate.getLoggedUserEntity().getPictureUrl(),
-                            workmate.getAttendingRestaurantId() != null ? workmate.getAttendingRestaurantId() : null,
-                            "McDonald's"
+                        workmate.getLoggedUserEntity().getId(),
+                        workmate.getLoggedUserEntity().getName(),
+                        workmate.getLoggedUserEntity().getPictureUrl(),
+                        workmate.getAttendingRestaurantId() != null ? workmate.getAttendingRestaurantId() : null,
+                        workmate.getAttendingRestaurantName() != null ? workmate.getAttendingRestaurantName() : null
                         )
                     );
                 }

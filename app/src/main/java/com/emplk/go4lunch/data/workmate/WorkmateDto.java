@@ -3,59 +3,49 @@ package com.emplk.go4lunch.data.workmate;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.emplk.go4lunch.data.user.LoggedUserDto;
+
 import java.util.Objects;
 
 public class WorkmateDto {
     @Nullable
-    private final String id;
-    @Nullable
-    private final String name;
+    private final LoggedUserDto loggedUserDto;
 
     @Nullable
-    private final String email;
+    private final String attendingRestaurantId;
 
     @Nullable
-    private final String pictureUrl;
+    private final String attendingRestaurantName;
 
     // Empty constructor for Firestore serialization
     public WorkmateDto() {
-        id = null;
-        name = null;
-        email = null;
-        pictureUrl = null;
+        this(null, null, null);
+
     }
 
     public WorkmateDto(
-        @Nullable String id,
-        @Nullable String name,
-        @Nullable String email,
-        @Nullable String pictureUrl
+        @Nullable LoggedUserDto loggedUserDto,
+        @Nullable String attendingRestaurantId,
+        @Nullable String attendingRestaurantName
     ) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.pictureUrl = pictureUrl;
+        this.loggedUserDto = loggedUserDto;
+        this.attendingRestaurantId = attendingRestaurantId;
+        this.attendingRestaurantName = attendingRestaurantName;
     }
 
     @Nullable
-    public String getId() {
-        return id;
-    }
-
-
-    @Nullable
-    public String getName() {
-        return name;
+    public LoggedUserDto getLoggedUserDto() {
+        return loggedUserDto;
     }
 
     @Nullable
-    public String getEmail() {
-        return email;
+    public String getAttendingRestaurantId() {
+        return attendingRestaurantId;
     }
 
     @Nullable
-    public String getPictureUrl() {
-        return pictureUrl;
+    public String getAttendingRestaurantName() {
+        return attendingRestaurantName;
     }
 
     @Override
@@ -63,22 +53,21 @@ public class WorkmateDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WorkmateDto that = (WorkmateDto) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(email, that.email) && Objects.equals(pictureUrl, that.pictureUrl);
+        return Objects.equals(loggedUserDto, that.loggedUserDto) && Objects.equals(attendingRestaurantId, that.attendingRestaurantId) && Objects.equals(attendingRestaurantName, that.attendingRestaurantName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, pictureUrl);
+        return Objects.hash(loggedUserDto, attendingRestaurantId, attendingRestaurantName);
     }
 
     @NonNull
     @Override
     public String toString() {
         return "WorkmateDto{" +
-            "id='" + id + '\'' +
-            ", name='" + name + '\'' +
-            ", email='" + email + '\'' +
-            ", pictureUrl='" + pictureUrl + '\'' +
+            "loggedUserDto=" + loggedUserDto +
+            ", attendingRestaurantId='" + attendingRestaurantId + '\'' +
+            ", attendingRestaurantName='" + attendingRestaurantName + '\'' +
             '}';
     }
 }

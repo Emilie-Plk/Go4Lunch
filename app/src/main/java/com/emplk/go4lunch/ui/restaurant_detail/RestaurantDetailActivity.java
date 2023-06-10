@@ -14,10 +14,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.RestaurantDetailActivityBinding;
+import com.emplk.go4lunch.ui.workmate_list.OnStartChatWithWorkmateListener;
+import com.emplk.go4lunch.ui.workmate_list.WorkmateListAdapter;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -54,6 +58,25 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(RestaurantDetailViewModel.class);
 
         setupObservers();
+
+        setupWorkmatesRecyclerView();
+    }
+
+    private void setupWorkmatesRecyclerView() {
+        WorkmateListAdapter adapter = new WorkmateListAdapter(new OnStartChatWithWorkmateListener() {
+            @Override
+            public void onStartChatWithWorker(@NonNull String workmateId) {
+                // TODO: maybe change this method's name, generalize it
+            }
+        });
+        RecyclerView recyclerView = binding.detailRestaurantWorkmatesList;
+       recyclerView.setAdapter(adapter);
+       recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+       viewModel.getWorkmatesGoingToRestaurant().observe(this, workmates -> {
+               adapter.submitList(workmates);
+           }
+       );
     }
 
     private void setupObservers() {

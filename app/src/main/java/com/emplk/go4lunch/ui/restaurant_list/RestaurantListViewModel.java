@@ -28,6 +28,7 @@ import com.emplk.go4lunch.domain.nearby_search.SortNearbyRestaurantsUseCase;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchWrapper;
 import com.emplk.go4lunch.domain.permission.HasGpsPermissionUseCase;
+import com.emplk.go4lunch.domain.workmate.GetWorkmateEntitiesGoingToSameRestaurantUseCase;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -48,6 +49,9 @@ public class RestaurantListViewModel extends ViewModel {
     @NonNull
     private final SortNearbyRestaurantsUseCase sortNearbyRestaurantsUseCase;
 
+    @NonNull
+    private final GetWorkmateEntitiesGoingToSameRestaurantUseCase getWorkmateEntitiesGoingToSameRestaurantUseCase;
+
     private final LiveData<Boolean> hasGpsPermissionLiveData;
 
 
@@ -58,9 +62,12 @@ public class RestaurantListViewModel extends ViewModel {
         @NonNull HasGpsPermissionUseCase hasGpsPermissionUseCase,
         @NonNull IsGpsEnabledUseCase isGpsEnabledUseCase,
         @NonNull Resources resources,
-        @NonNull SortNearbyRestaurantsUseCase sortNearbyRestaurantsUseCase) {
+        @NonNull SortNearbyRestaurantsUseCase sortNearbyRestaurantsUseCase,
+        @NonNull GetWorkmateEntitiesGoingToSameRestaurantUseCase getWorkmateEntitiesGoingToSameRestaurantUseCase
+    ) {
         this.resources = resources;
         this.sortNearbyRestaurantsUseCase = sortNearbyRestaurantsUseCase;
+        this.getWorkmateEntitiesGoingToSameRestaurantUseCase = getWorkmateEntitiesGoingToSameRestaurantUseCase;
 
         LiveData<LocationEntity> locationLiveData = getCurrentLocationUseCase.invoke();
 
