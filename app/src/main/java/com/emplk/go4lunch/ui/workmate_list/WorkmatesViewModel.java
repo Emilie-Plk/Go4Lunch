@@ -33,7 +33,8 @@ public class WorkmatesViewModel extends ViewModel {
                 List<WorkmatesViewStateItem> workmatesViewStateItems = new ArrayList<>();
                 MutableLiveData<List<WorkmatesViewStateItem>> result = new MutableLiveData<>();
                 for (WorkmateEntity workmate : workmateEntities) {
-                    workmatesViewStateItems.add(new WorkmatesViewStateItem(
+                    workmatesViewStateItems.add(
+                        new WorkmatesViewStateItem.AllWorkmates(
                         workmate.getLoggedUserEntity().getId(),
                         workmate.getLoggedUserEntity().getName(),
                         workmate.getLoggedUserEntity().getPictureUrl(),

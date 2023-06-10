@@ -1,7 +1,9 @@
 package com.emplk.go4lunch.ui.workmate_list;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,7 +18,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.WorkmatesItemBinding;
 
-public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, WorkmateListAdapter.ViewHolder> {
+public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, RecyclerView.ViewHolder> {
 
     @NonNull
     private final OnStartChatWithWorkmateListener listener;
@@ -28,38 +30,60 @@ public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, Wor
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(
+    public RecyclerView.ViewHolder onCreateViewHolder(
         @NonNull ViewGroup parent,
         int viewType
     ) {
-        WorkmatesItemBinding binding = WorkmatesItemBinding.inflate(
-            LayoutInflater.from(parent.getContext()), parent, false);
-        return new ViewHolder(binding);
+        switch (WorkmatesViewStateItem.Type.values()[viewType]) {
+            case ALL_WORKMATES:
+                return new AllWorkMatesViewHolder(
+                    WorkmatesItemBinding.inflate(
+                        LayoutInflater.from(parent.getContext()), parent, false)
+                );
+            case WORKMATES_GOING_TO_SAME_RESTAURANT:
+                return new WorkmatesGoingToSameRestaurantViewHolder(
+                    WorkmatesItemBinding.inflate(
+                        LayoutInflater.from(parent.getContext()), parent, false));
+            default:
+                throw new IllegalStateException("Unknown viewType : " + viewType);
+        }
+
     }
 
     @Override
     public void onBindViewHolder(
-        @NonNull ViewHolder holder,
+        @NonNull RecyclerView.ViewHolder holder,
         int position
     ) {
-        holder.bind(getItem(position), listener);
+        if (holder instanceof AllWorkMatesViewHolder) {
+            ((AllWorkMatesViewHolder) holder).bind((WorkmatesViewStateItem.AllWorkmates) getItem(position), listener);
+        } else if (holder instanceof WorkmatesGoingToSameRestaurantViewHolder) {
+            ((WorkmatesGoingToSameRestaurantViewHolder) holder).bind((WorkmatesViewStateItem.WorkmatesGoingToSameRestaurant) getItem(position), listener);
+        } else {
+            throw new IllegalStateException("Unknown item type at position: " + position);
+        }
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public int getItemViewType(int position) {
+        return getItem(position).getType().ordinal();
+    }
+
+    public static class AllWorkMatesViewHolder extends RecyclerView.ViewHolder {
         private final TextView workmateNameAndAttendingRestaurant;
         private final ImageView workmateAvatar;
 
         private final WorkmatesItemBinding binding;
 
-        public ViewHolder(@NonNull WorkmatesItemBinding binding) {
+        public AllWorkMatesViewHolder(@NonNull WorkmatesItemBinding binding) {
             super(binding.getRoot());
+            this.binding = binding;
             this.workmateNameAndAttendingRestaurant = binding.listWorkmateNameAndRestaurant;
             this.workmateAvatar = binding.listWorkmateAvatar;
-            this.binding = binding;
         }
 
         public void bind(
-            @NonNull WorkmatesViewStateItem itemViewState,
+            @NonNull WorkmatesViewStateItem.AllWorkmates itemViewState,
             @NonNull OnStartChatWithWorkmateListener listener
         ) {
             binding.getRoot().setOnClickListener(v -> listener.onStartChatWithWorker(itemViewState.getId()));
@@ -73,7 +97,42 @@ public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, Wor
                 attendingRestaurant
             );
 
-            binding.listWorkmateNameAndRestaurant.setText(formattedText);
+            workmateNameAndAttendingRestaurant.setText(formattedText);
+
+            Glide.with(binding.getRoot())
+                .load(itemViewState.getPictureUrl())
+                .transform(new CenterCrop(), new RoundedCorners(50))
+                .into(workmateAvatar);
+        }
+    }
+
+    public static class WorkmatesGoingToSameRestaurantViewHolder extends RecyclerView.ViewHolder {
+        private final TextView workmateName;
+        private final ImageView workmateAvatar;
+        private final ImageButton chatButton;
+
+        private final WorkmatesItemBinding binding;
+
+
+        public WorkmatesGoingToSameRestaurantViewHolder(@NonNull WorkmatesItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            this.workmateName = binding.listWorkmateNameAndRestaurant;
+            this.workmateAvatar = binding.listWorkmateAvatar;
+            this.chatButton = binding.listWorkmateChatButton;
+        }
+
+        public void bind(
+            @NonNull WorkmatesViewStateItem.WorkmatesGoingToSameRestaurant itemViewState,
+            @NonNull OnStartChatWithWorkmateListener listener
+        ) {
+
+            chatButton.setVisibility(View.VISIBLE);
+
+            chatButton.setOnClickListener(v -> listener.onStartChatWithWorker(itemViewState.getId()));
+
+            workmateName.setText(binding.getRoot().getContext().getString(
+                R.string.detail_workmate_joining, itemViewState.getName()));
 
             Glide.with(binding.getRoot())
                 .load(itemViewState.getPictureUrl())
@@ -88,7 +147,9 @@ public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, Wor
             @NonNull WorkmatesViewStateItem oldItem,
             @NonNull WorkmatesViewStateItem newItem
         ) {
-            return oldItem.getId().equals(newItem.getId());
+            boolean bothAreAllWorkmatesList = oldItem instanceof WorkmatesViewStateItem.AllWorkmates && newItem instanceof WorkmatesViewStateItem.AllWorkmates;
+            boolean bothAreWorkmatesGoingToSameRestaurantList = oldItem instanceof WorkmatesViewStateItem.WorkmatesGoingToSameRestaurant && newItem instanceof WorkmatesViewStateItem.WorkmatesGoingToSameRestaurant;
+            return bothAreAllWorkmatesList || bothAreWorkmatesGoingToSameRestaurantList;
         }
 
         @Override

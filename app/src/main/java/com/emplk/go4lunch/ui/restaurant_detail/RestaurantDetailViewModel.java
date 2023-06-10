@@ -238,12 +238,11 @@ public class RestaurantDetailViewModel extends ViewModel {
                 List<WorkmatesViewStateItem> workmatesViewStateItems = new ArrayList<>();
                 for (WorkmateEntity workmateEntity : workmatesGoingToSameRestaurant) {
                     workmatesViewStateItems.add(
-                        new WorkmatesViewStateItem(
+                        new WorkmatesViewStateItem.WorkmatesGoingToSameRestaurant(
                             workmateEntity.getLoggedUserEntity().getId(),
                             workmateEntity.getLoggedUserEntity().getName(),
                             workmateEntity.getLoggedUserEntity().getPictureUrl(),
-                            workmateEntity.getAttendingRestaurantId(),
-                            workmateEntity.getAttendingRestaurantName()
+                            workmateEntity.getAttendingRestaurantId()
                         )
                     );
                 }
