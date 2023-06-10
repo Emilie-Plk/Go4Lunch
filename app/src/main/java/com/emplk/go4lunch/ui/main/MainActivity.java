@@ -27,9 +27,7 @@ import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.MainActivityBinding;
 import com.emplk.go4lunch.databinding.MainNavigationHeaderBinding;
 import com.emplk.go4lunch.ui.dispatcher.DispatcherActivity;
-import com.emplk.go4lunch.ui.main.searchview.OnPredictionClickedListener;
 import com.emplk.go4lunch.ui.main.searchview.SearchViewAdapter;
-import com.emplk.go4lunch.ui.restaurant_detail.RestaurantDetailActivity;
 import com.emplk.go4lunch.ui.restaurant_list.RestaurantListFragment;
 import com.emplk.go4lunch.ui.restaurant_map.MapFragment;
 import com.emplk.go4lunch.ui.workmate_list.WorkmateListFragment;
@@ -77,14 +75,14 @@ public class MainActivity extends AppCompatActivity {
         navigationHeaderBinding = MainNavigationHeaderBinding.bind(headerView);
         viewModel.getUserInfoLiveData().observe(this, firebaseUser -> {
                 Glide.with(this)
-                    .load(firebaseUser.getPhotoUrl())
+                    .load(firebaseUser.getPictureUrl())
                     .fallback(R.drawable.baseline_person_24)
                     .error(R.drawable.baseline_person_24)
                     .transform(new CenterCrop(), new RoundedCorners(25))
                     .into(navigationHeaderBinding.navigationHeaderUserProfilePicture);
 
                 navigationHeaderBinding.navigationHeaderUserEmail.setText(firebaseUser.getEmail());
-                navigationHeaderBinding.navigationHeaderUserName.setText(firebaseUser.getUsername());
+                navigationHeaderBinding.navigationHeaderUserName.setText(firebaseUser.getName());
             }
         );
 /*

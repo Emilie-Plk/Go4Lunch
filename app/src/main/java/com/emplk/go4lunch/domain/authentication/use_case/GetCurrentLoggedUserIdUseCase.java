@@ -16,7 +16,7 @@ public class GetCurrentLoggedUserIdUseCase {
     public String invoke() {
         LoggedUserEntity loggedUserEntity = getCurrentLoggedUserUseCase.invoke();
         if (loggedUserEntity != null) {
-            return loggedUserEntity.getUserId();
+            return loggedUserEntity.getId();
         } else {
             throw new IllegalStateException("User id is null!");
         }

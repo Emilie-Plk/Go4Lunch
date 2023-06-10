@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserUseCase;
-import com.emplk.go4lunch.domain.detail.GetRestaurantEntityUseCase;
+import com.emplk.go4lunch.domain.detail.GetDetailsRestaurantWrapperUseCase;
 import com.emplk.go4lunch.domain.user.RestaurantEntity;
 import com.emplk.go4lunch.domain.user.UserRepository;
 
@@ -16,19 +16,14 @@ public class AddUserRestaurantChoiceUseCase {
     private final UserRepository userRepository;
 
     @NonNull
-    private final GetRestaurantEntityUseCase getRestaurantEntityUseCase;
-
-    @NonNull
     private final GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase;
 
     @Inject
     public AddUserRestaurantChoiceUseCase(
         @NonNull UserRepository userRepository,
-        @NonNull GetRestaurantEntityUseCase getRestaurantEntityUseCase,
         @NonNull GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase
     ) {
         this.userRepository = userRepository;
-        this.getRestaurantEntityUseCase = getRestaurantEntityUseCase;
         this.getCurrentLoggedUserUseCase = getCurrentLoggedUserUseCase;
     }
 

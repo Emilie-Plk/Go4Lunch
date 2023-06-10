@@ -30,16 +30,23 @@ public class RestaurantListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(
+        @NonNull LayoutInflater inflater,
+        ViewGroup container,
+        Bundle savedInstanceState
+    ) {
         binding = RestaurantListFragmentBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(
+        @NonNull View view,
+        @Nullable Bundle savedInstanceState
+    ) {
         super.onViewCreated(view, savedInstanceState);
 
-        setUpViewModel();
+        viewModel = new ViewModelProvider(this).get(RestaurantListViewModel.class);
         initRecyclerView();
     }
 
@@ -60,15 +67,11 @@ public class RestaurantListFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        viewModel.getRestaurantItemViewStateListLiveData()
+        viewModel.getRestaurants()
             .observe(getViewLifecycleOwner(), list -> {
                     adapter.submitList(list);
                 }
             );
-    }
-
-    private void setUpViewModel() {
-        viewModel = new ViewModelProvider(this).get(RestaurantListViewModel.class);
     }
 
 

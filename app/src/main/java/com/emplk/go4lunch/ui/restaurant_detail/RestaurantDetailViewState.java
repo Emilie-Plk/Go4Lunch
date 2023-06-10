@@ -3,8 +3,6 @@ package com.emplk.go4lunch.ui.restaurant_detail;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.emplk.go4lunch.ui.utils.RestaurantFavoriteState;
-
 import java.util.Objects;
 
 public class RestaurantDetailViewState {
@@ -15,7 +13,7 @@ public class RestaurantDetailViewState {
     @NonNull
     private final String name;
     @NonNull
-    private final String address;
+    private final String vicinity;
 
     @Nullable
     private final String pictureUrl;
@@ -46,7 +44,7 @@ public class RestaurantDetailViewState {
     public RestaurantDetailViewState(
         @NonNull String id,
         @NonNull String name,
-        @NonNull String address,
+        @NonNull String vicinity,
         @Nullable String pictureUrl,
         @NonNull Float rating,
         @Nullable String phoneNumber,
@@ -59,7 +57,7 @@ public class RestaurantDetailViewState {
     ) {
         this.id = id;
         this.name = name;
-        this.address = address;
+        this.vicinity = vicinity;
         this.pictureUrl = pictureUrl;
         this.rating = rating;
         this.phoneNumber = phoneNumber;
@@ -82,8 +80,8 @@ public class RestaurantDetailViewState {
     }
 
     @NonNull
-    public String getAddress() {
-        return address;
+    public String getVicinity() {
+        return vicinity;
     }
 
     @Nullable
@@ -136,12 +134,12 @@ public class RestaurantDetailViewState {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RestaurantDetailViewState that = (RestaurantDetailViewState) o;
-        return id.equals(that.id) && name.equals(that.name) && address.equals(that.address) && Objects.equals(pictureUrl, that.pictureUrl) && rating.equals(that.rating) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(websiteUrl, that.websiteUrl)  && Objects.equals(isAttending, that.isAttending) && Objects.equals(isVeganFriendly, that.isVeganFriendly) && isLoading.equals(that.isLoading) && isPhoneNumberAvailable.equals(that.isPhoneNumberAvailable) && isWebsiteAvailable.equals(that.isWebsiteAvailable);
+        return id.equals(that.id) && name.equals(that.name) && vicinity.equals(that.vicinity) && Objects.equals(pictureUrl, that.pictureUrl) && rating.equals(that.rating) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(websiteUrl, that.websiteUrl) && Objects.equals(isAttending, that.isAttending) && Objects.equals(isVeganFriendly, that.isVeganFriendly) && isLoading.equals(that.isLoading) && isPhoneNumberAvailable.equals(that.isPhoneNumberAvailable) && isWebsiteAvailable.equals(that.isWebsiteAvailable);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, address, pictureUrl, rating, phoneNumber, websiteUrl, isAttending, isVeganFriendly, isLoading, isPhoneNumberAvailable, isWebsiteAvailable);
+        return Objects.hash(id, name, vicinity, pictureUrl, rating, phoneNumber, websiteUrl, isAttending, isVeganFriendly, isLoading, isPhoneNumberAvailable, isWebsiteAvailable);
     }
 
     @NonNull
@@ -150,7 +148,7 @@ public class RestaurantDetailViewState {
         return "RestaurantDetailViewState{" +
             "id='" + id + '\'' +
             ", name='" + name + '\'' +
-            ", address='" + address + '\'' +
+            ", vicinity='" + vicinity + '\'' +
             ", pictureUrl='" + pictureUrl + '\'' +
             ", rating=" + rating +
             ", phoneNumber='" + phoneNumber + '\'' +

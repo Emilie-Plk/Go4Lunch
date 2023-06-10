@@ -24,6 +24,7 @@
     <string name="restaurant_item_food_image_a11y">Food image</string>
     <string name="detail_restaurant_chose_fab">Go?</string>
     <string name="list_workmate_name_joining">%s is joining!</string>
+    <string name="list_workmate_name_and_attenting_restaurant">%1$s is eating at %2$s</string>
     <string name="list_error_message_generic">Something went wrong with your request!\nTry later :)</string>
     <string name="list_error_message_permission">Something went wrong!\nPlease activate your Gps :)</string>
     <string name="detail_food_picture_a11y">Food picture</string>
@@ -48,5 +49,6 @@
     <string name="list_restaurant_opening_text_undefined" translatable="false"> </string>
     <string name="map_user_maker_message">Hello, there</string>
     <string name="map_toast_message_error_gps">Please enable your GPS to continue!</string>
+    <string name="error_placeholder">error</string>
 
 </resources>

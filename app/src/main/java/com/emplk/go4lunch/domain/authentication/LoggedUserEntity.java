@@ -8,32 +8,37 @@ import java.util.Objects;
 public class LoggedUserEntity {
 
     @NonNull
-    private final String userId;
+    private final String id;
+
+    @NonNull
+    private final String name;
 
     @NonNull
     private final String email;
 
-    @NonNull
-    private final String username;
-
     @Nullable
-    private final String photoUrl;
+    private final String pictureUrl;
 
     public LoggedUserEntity(
-        @NonNull String userId,
-        @NonNull String displayName,
+        @NonNull String id,
+        @NonNull String name,
         @NonNull String email,
-        @Nullable String photoUrl
+        @Nullable String pictureUrl
     ) {
-        this.userId = userId;
-        this.username = displayName;
+        this.id = id;
+        this.name = name;
         this.email = email;
-        this.photoUrl = photoUrl;
+        this.pictureUrl = pictureUrl;
     }
 
     @NonNull
-    public String getUserId() {
-        return userId;
+    public String getId() {
+        return id;
+    }
+
+    @NonNull
+    public String getName() {
+        return name;
     }
 
     @NonNull
@@ -41,14 +46,9 @@ public class LoggedUserEntity {
         return email;
     }
 
-    @NonNull
-    public String getUsername() {
-        return username;
-    }
-
     @Nullable
-    public String getPhotoUrl() {
-        return photoUrl;
+    public String getPictureUrl() {
+        return pictureUrl;
     }
 
     @Override
@@ -56,22 +56,22 @@ public class LoggedUserEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LoggedUserEntity that = (LoggedUserEntity) o;
-        return userId.equals(that.userId) && email.equals(that.email) && username.equals(that.username) && Objects.equals(photoUrl, that.photoUrl);
+        return id.equals(that.id) && name.equals(that.name) && email.equals(that.email) && Objects.equals(pictureUrl, that.pictureUrl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, email, username, photoUrl);
+        return Objects.hash(id, name, email, pictureUrl);
     }
 
     @NonNull
     @Override
     public String toString() {
         return "LoggedUserEntity{" +
-            "userId='" + userId + '\'' +
+            "id='" + id + '\'' +
+            ", name='" + name + '\'' +
             ", email='" + email + '\'' +
-            ", username='" + username + '\'' +
-            ", photoUrl='" + photoUrl + '\'' +
+            ", pictureUrl='" + pictureUrl + '\'' +
             '}';
     }
 }

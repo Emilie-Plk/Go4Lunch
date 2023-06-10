@@ -42,9 +42,9 @@ public class AuthRepositoryFirebaseAuth implements AuthRepository {
     @Override
     public LoggedUserEntity getCurrentLoggedUser() {
         if (firebaseAuth.getCurrentUser() != null) {
-            String userId = firebaseAuth.getCurrentUser().getUid();
+            String id = firebaseAuth.getCurrentUser().getUid();
             String email = firebaseAuth.getCurrentUser().getEmail();
-            String displayName = firebaseAuth.getCurrentUser().getDisplayName();
+            String name = firebaseAuth.getCurrentUser().getDisplayName();
             String photoUrl;
 
             if (firebaseAuth.getCurrentUser().getPhotoUrl() != null) {
@@ -52,11 +52,11 @@ public class AuthRepositoryFirebaseAuth implements AuthRepository {
             } else {
                 photoUrl = Uri.parse("android.resource://com.emplk.go4lunch/" + R.drawable.restaurant_table).toString();
             }
-            if (email != null && displayName != null) {
+            if (email != null && name != null) {
                 return new LoggedUserEntity(
-                    userId,
+                    id,
+                    name,
                     email,
-                    displayName,
                     photoUrl
                 );
             }

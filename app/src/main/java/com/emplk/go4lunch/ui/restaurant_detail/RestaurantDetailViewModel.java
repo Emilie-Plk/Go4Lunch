@@ -209,7 +209,7 @@ public class RestaurantDetailViewModel extends ViewModel {
         removeFavoriteRestaurantUseCase.invoke(restaurantId);
     }
 
-    public void onAddUserRestaurantChoice(@NonNull String restaurantName, @NonNull String vicinity, @NonNull String photoReferenceUrl) {
+    public void onAddUserRestaurantChoice(@NonNull String restaurantName, @NonNull String vicinity, @Nullable String photoReferenceUrl) {
         addUserRestaurantChoiceUseCase.invoke(restaurantId, restaurantName, vicinity, photoReferenceUrl);
     }
 

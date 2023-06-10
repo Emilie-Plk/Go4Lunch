@@ -23,13 +23,11 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class RestaurantDetailActivity extends AppCompatActivity {
-
     private RestaurantDetailActivityBinding binding;
 
     private RestaurantDetailViewModel viewModel;
 
     public static final String KEY_RESTAURANT_ID = "KEY_RESTAURANT_ID";
-
 
     public static Intent navigate(
         @NonNull Context context,
@@ -39,7 +37,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         intent.putExtra(KEY_RESTAURANT_ID, restaurantId);
         return intent;
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,13 +63,19 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                             this, R.drawable.baseline_star_24
                         )
                     );
-                    binding.detailRestaurantLikeButton.setOnClickListener(v -> viewModel.onRemoveFavoriteRestaurant());
+                    binding.detailRestaurantLikeButton.setOnClickListener(v -> {
+                            viewModel.onRemoveFavoriteRestaurant();
+                        }
+                    );
                 } else if (restaurantFavoriteState == IS_NOT_FAVORITE) {
                     binding.detailRestaurantLikeButton.setIcon(ContextCompat.getDrawable(
                             this, R.drawable.baseline_star_border_24
                         )
                     );
-                    binding.detailRestaurantLikeButton.setOnClickListener(v -> viewModel.onAddFavoriteRestaurant());
+                    binding.detailRestaurantLikeButton.setOnClickListener(v -> {
+                            viewModel.onAddFavoriteRestaurant();
+                        }
+                    );
                 }
             }
         );
@@ -80,7 +83,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         viewModel.getRestaurantDetails().observe(this, restaurantDetail -> {
                 if (restaurantDetail != null) {
                     binding.detailRestaurantName.setText(restaurantDetail.getName());
-                    binding.detailRestaurantAddress.setText(restaurantDetail.getAddress());
+                    binding.detailRestaurantAddress.setText(restaurantDetail.getVicinity());
                     binding.detailRestaurantRatingBar.setRating(restaurantDetail.getRating());
                     binding.detailRestaurantVeganFriendly.setVisibility(Boolean.TRUE.equals(restaurantDetail.isVeganFriendly()) ? View.VISIBLE : View.INVISIBLE);
                     binding.loadingStateLoadingBar.setVisibility(Boolean.TRUE.equals(restaurantDetail.isLoading()) ? View.VISIBLE : View.INVISIBLE);
@@ -106,11 +109,13 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                         }
                     );
 
-                    binding.detailRestaurantChoseFab.setOnClickListener(v -> viewModel.onAddUserRestaurantChoice(
-                            restaurantDetail.getName(),
-                            restaurantDetail.getAddress(),
-                            restaurantDetail.getPictureUrl()
-                        )
+                    binding.detailRestaurantChoseFab.setOnClickListener(v -> {
+                            viewModel.onAddUserRestaurantChoice(
+                                restaurantDetail.getName(),
+                                restaurantDetail.getVicinity(),
+                                restaurantDetail.getPictureUrl()
+                            );
+                        }
                     );
                 }
             }

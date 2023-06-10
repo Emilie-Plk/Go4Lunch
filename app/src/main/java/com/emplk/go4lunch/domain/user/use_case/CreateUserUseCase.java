@@ -4,7 +4,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserLiveDataUseCase;
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserUseCase;
 import com.emplk.go4lunch.domain.user.UserRepository;
@@ -33,10 +32,10 @@ public class CreateUserUseCase {
         if (loggedUserEntity != null) {
             userRepository.upsertLoggedUserEntity(
                     new LoggedUserEntity(
-                        loggedUserEntity.getUserId(),
+                        loggedUserEntity.getId(),
                         loggedUserEntity.getEmail(),
-                        loggedUserEntity.getUsername(),
-                        loggedUserEntity.getPhotoUrl()
+                        loggedUserEntity.getName(),
+                        loggedUserEntity.getPictureUrl()
                     )
             );
         } else {

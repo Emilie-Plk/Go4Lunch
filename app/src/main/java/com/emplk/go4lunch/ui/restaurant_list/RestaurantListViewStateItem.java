@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 
 import java.util.Objects;
 
-public abstract class RestaurantListViewState {
+public abstract class RestaurantListViewStateItem {
 
     public enum Type {
         LOADING_STATE,
@@ -16,7 +16,7 @@ public abstract class RestaurantListViewState {
     @NonNull
     protected final Type type;
 
-    public RestaurantListViewState(@NonNull Type type) {
+    public RestaurantListViewStateItem(@NonNull Type type) {
         this.type = type;
     }
 
@@ -28,7 +28,7 @@ public abstract class RestaurantListViewState {
     @Override
     public abstract boolean equals(@Nullable Object obj);
 
-    public static class Loading extends RestaurantListViewState {
+    public static class Loading extends RestaurantListViewStateItem {
 
         public Loading() {
             super(Type.LOADING_STATE);
@@ -47,7 +47,7 @@ public abstract class RestaurantListViewState {
         }
     }
 
-    public static class RestaurantItem extends RestaurantListViewState {
+    public static class RestaurantItemItem extends RestaurantListViewStateItem {
         @NonNull
         private final String id;
 
@@ -75,7 +75,7 @@ public abstract class RestaurantListViewState {
         @NonNull
         private final Float rating;
 
-        public RestaurantItem(
+        public RestaurantItemItem(
             @NonNull String id,
             @NonNull String name,
             @NonNull String address,
@@ -148,7 +148,7 @@ public abstract class RestaurantListViewState {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            RestaurantItem that = (RestaurantItem) o;
+            RestaurantItemItem that = (RestaurantItemItem) o;
             return id.equals(that.id) && name.equals(that.name) && address.equals(that.address) && distance.equals(that.distance) && attendants.equals(that.attendants) && restaurantOpeningState == that.restaurantOpeningState && Objects.equals(pictureUrl, that.pictureUrl) && isRatingBarVisible.equals(that.isRatingBarVisible) && rating.equals(that.rating);
         }
 
@@ -160,7 +160,7 @@ public abstract class RestaurantListViewState {
         @NonNull
         @Override
         public String toString() {
-            return "RestaurantItem{" +
+            return "RestaurantItemItem{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
@@ -174,7 +174,7 @@ public abstract class RestaurantListViewState {
         }
     }
 
-    public static class RestaurantListError extends RestaurantListViewState {
+    public static class RestaurantListErrorItem extends RestaurantListViewStateItem {
         @NonNull
         private final String errorMessage;
 
@@ -182,7 +182,7 @@ public abstract class RestaurantListViewState {
         @NonNull
         private final ErrorDrawable errorDrawable;
 
-        public RestaurantListError(
+        public RestaurantListErrorItem(
             @NonNull String errorMessage,
             @NonNull ErrorDrawable errorDrawable
         ) {
@@ -205,7 +205,7 @@ public abstract class RestaurantListViewState {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            RestaurantListError that = (RestaurantListError) o;
+            RestaurantListErrorItem that = (RestaurantListErrorItem) o;
             return errorDrawable == that.errorDrawable && errorMessage.equals(that.errorMessage);
         }
 
@@ -217,7 +217,7 @@ public abstract class RestaurantListViewState {
         @NonNull
         @Override
         public String toString() {
-            return "RestaurantListError{" +
+            return "RestaurantListErrorItem{" +
                 "errorMessage='" + errorMessage + '\'' +
                 ", errorDrawable=" + errorDrawable +
                 '}';

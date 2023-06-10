@@ -12,7 +12,6 @@ import static com.emplk.go4lunch.ui.restaurant_list.RestaurantOpeningState.IS_OP
 
 import android.content.res.Resources;
 import android.location.Location;
-import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,7 +44,7 @@ public class RestaurantListViewModel extends ViewModel {
     @NonNull
     private final Resources resources;
 
-    private final MediatorLiveData<List<RestaurantListViewState>> restaurantListMediatorLiveData = new MediatorLiveData<>();
+    private final MediatorLiveData<List<RestaurantListViewStateItem>> restaurantListMediatorLiveData = new MediatorLiveData<>();
     @NonNull
     private final SortNearbyRestaurantsUseCase sortNearbyRestaurantsUseCase;
 
@@ -97,12 +96,12 @@ public class RestaurantListViewModel extends ViewModel {
         @Nullable LocationEntity location,
         @Nullable NearbySearchWrapper nearbySearchWrapper
     ) {
-        List<RestaurantListViewState> result = new ArrayList<>();
+        List<RestaurantListViewStateItem> result = new ArrayList<>();
 
         if (location == null) {
             if (hasGpsPermission != null && !hasGpsPermission) {
                 result.add(
-                    new RestaurantListViewState.RestaurantListError(
+                    new RestaurantListViewStateItem.RestaurantListErrorItem(
                         resources.getString(R.string.list_error_message_no_gps),
                         NO_GPS_FOUND
                     )
@@ -114,7 +113,7 @@ public class RestaurantListViewModel extends ViewModel {
 
         if (isGpsEnabled != null && !isGpsEnabled) {
             result.add(
-                new RestaurantListViewState.RestaurantListError(
+                new RestaurantListViewStateItem.RestaurantListErrorItem(
                     resources.getString(R.string.list_error_message_no_gps),
                     NO_GPS_FOUND
                 )
@@ -125,7 +124,7 @@ public class RestaurantListViewModel extends ViewModel {
 
         if (nearbySearchWrapper == null) {
             result.add(
-                new RestaurantListViewState.RestaurantListError(
+                new RestaurantListViewStateItem.RestaurantListErrorItem(
                     resources.getString(R.string.list_error_message_generic),
                     UNKNOWN_ERROR
                 )
@@ -135,11 +134,11 @@ public class RestaurantListViewModel extends ViewModel {
 
         if (nearbySearchWrapper instanceof NearbySearchWrapper.Loading) {
             result.add(
-                new RestaurantListViewState.Loading()
+                new RestaurantListViewStateItem.Loading()
             );
         } else if (nearbySearchWrapper instanceof NearbySearchWrapper.NoResults) {
             result.add(
-                new RestaurantListViewState.RestaurantListError(
+                new RestaurantListViewStateItem.RestaurantListErrorItem(
                     resources.getString(R.string.list_error_message_no_results),
                     NO_RESULT_FOUND
                 )
@@ -148,7 +147,7 @@ public class RestaurantListViewModel extends ViewModel {
             List<NearbySearchEntity> sortedRestaurantList = sortNearbyRestaurantsUseCase.invoke(((NearbySearchWrapper.Success) nearbySearchWrapper).getNearbySearchEntityList(), location);
             for (NearbySearchEntity nearbySearchEntity : sortedRestaurantList) {
                 result.add(
-                    new RestaurantListViewState.RestaurantItem(
+                    new RestaurantListViewStateItem.RestaurantItemItem(
                         nearbySearchEntity.getPlaceId(),
                         nearbySearchEntity.getRestaurantName(),
                         nearbySearchEntity.getVicinity(),
@@ -164,7 +163,7 @@ public class RestaurantListViewModel extends ViewModel {
         } else if (nearbySearchWrapper instanceof NearbySearchWrapper.RequestError) {
             ((NearbySearchWrapper.RequestError) nearbySearchWrapper).getThrowable().printStackTrace();
             result.add(
-                new RestaurantListViewState.RestaurantListError(
+                new RestaurantListViewStateItem.RestaurantListErrorItem(
                     resources.getString(R.string.list_error_message_generic),
                     REQUEST_FAILURE
                 )
@@ -187,7 +186,7 @@ public class RestaurantListViewModel extends ViewModel {
         return rating != null && rating > 0F;
     }
 
-    public LiveData<List<RestaurantListViewState>> getRestaurantItemViewStateListLiveData() {
+    public LiveData<List<RestaurantListViewStateItem>> getRestaurants() {
         return restaurantListMediatorLiveData;
     }
     @Nullable

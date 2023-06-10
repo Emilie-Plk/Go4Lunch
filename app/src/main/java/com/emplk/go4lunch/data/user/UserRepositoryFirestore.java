@@ -38,15 +38,15 @@ public class UserRepositoryFirestore implements UserRepository {
         if (loggedUserEntity != null) {
             DocumentReference userDocumentRef = firestore
                 .collection(USERS_COLLECTION)
-                .document(loggedUserEntity.getUserId());
+                .document(loggedUserEntity.getId());
 
             userDocumentRef
                 .set(
                     new UserDto(
-                        loggedUserEntity.getUserId(),
-                        loggedUserEntity.getUsername(),
+                        loggedUserEntity.getId(),
+                        loggedUserEntity.getName(),
                         loggedUserEntity.getEmail(),
-                        loggedUserEntity.getPhotoUrl()
+                        loggedUserEntity.getPictureUrl()
                     )
                 )
                 .addOnSuccessListener(aVoid -> {
@@ -93,14 +93,14 @@ public class UserRepositoryFirestore implements UserRepository {
             DocumentReference userWithRestaurantChoiceDocumentRef =
                 firestore
                     .collection(USERS_WITH_RESTAURANT_CHOICE)
-                    .document(loggedUserEntity.getUserId());
+                    .document(loggedUserEntity.getId());
 
             userWithRestaurantChoiceDocumentRef
                 .set(
                     new UserWithRestaurantChoiceDto(
-                        loggedUserEntity.getUserId(),
-                        loggedUserEntity.getUsername(),
-                        loggedUserEntity.getPhotoUrl(),
+                        loggedUserEntity.getId(),
+                        loggedUserEntity.getName(),
+                        loggedUserEntity.getPictureUrl(),
                         restaurantEntity.getPlaceId(),
                         restaurantEntity.getName(),
                         restaurantEntity.getVicinity(),
@@ -125,7 +125,7 @@ public class UserRepositoryFirestore implements UserRepository {
         if (loggedUserEntity != null) {
             DocumentReference userDocumentRef = firestore
                 .collection(USERS_WITH_RESTAURANT_CHOICE)
-                .document(loggedUserEntity.getUserId());
+                .document(loggedUserEntity.getId());
 
             userDocumentRef
                 .delete()
@@ -149,7 +149,7 @@ public class UserRepositoryFirestore implements UserRepository {
         if (loggedUserEntity != null) {
             firestore
                 .collection(USERS_WITH_RESTAURANT_CHOICE)
-                .document(loggedUserEntity.getUserId())
+                .document(loggedUserEntity.getId())
                 .addSnapshotListener((documentSnapshot, error) -> {
                         if (error != null) {
                             Log.e("UserRepositoryFirestore", "Error fetching user with restaurant choice document: " + error);
