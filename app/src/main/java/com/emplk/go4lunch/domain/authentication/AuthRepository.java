@@ -11,7 +11,10 @@ public interface AuthRepository {
     @Nullable
     String getCurrentLoggedUserId();
 
+<<<<<<< HEAD
     LiveData<Boolean> isUserLoggedLiveData();
 
+=======
+>>>>>>> 05ad6ff11891ef69d3653037b199421a96f94283
     void signOut();
 }

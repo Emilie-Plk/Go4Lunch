@@ -38,6 +38,7 @@ public class UserRepositoryFirestore implements UserRepository {
         if (loggedUserEntity != null) {
             DocumentReference userDocumentRef = firestore
                 .collection(USERS_COLLECTION)
+<<<<<<< HEAD
                 .document(loggedUserEntity.getId());
 
             userDocumentRef
@@ -57,12 +58,32 @@ public class UserRepositoryFirestore implements UserRepository {
                         Log.e("UserRepositoryFirestore", "Error creating user document: " + e);
                     }
                 );
+=======
+                .document(userEntity.getLoggedUserEntity().getUserId());
+
+            userDocumentRef
+                .set(
+                    new UserDto(
+                        userEntity.getLoggedUserEntity().getUserId(),
+                        userEntity.getLoggedUserEntity().getUsername(),
+                        userEntity.getLoggedUserEntity().getEmail(),
+                        userEntity.getLoggedUserEntity().getPhotoUrl()
+                    )
+                )
+                .addOnSuccessListener(aVoid -> {
+                    Log.i("UserRepositoryFirestore", "User document successfully created!");
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("UserRepositoryFirestore", "Error creating user document: " + e);
+                });
+>>>>>>> 05ad6ff11891ef69d3653037b199421a96f94283
         } else {
             Log.e("UserRepositoryFirestore", "Error creating user document: userEntity is null!");
         }
     }
 
     @Override
+<<<<<<< HEAD
     public LiveData<LoggedUserEntity> getLoggedUserEntityLiveData(@NonNull String userId) {
         MutableLiveData<LoggedUserEntity> loggedUserEntityMutableLiveData = new MutableLiveData<>();
 
@@ -193,6 +214,32 @@ public class UserRepositoryFirestore implements UserRepository {
 
 
     private LoggedUserEntity mapToLoggedUserEntity(@Nullable LoggedUserDto result) {
+=======
+    public LiveData<LoggedUserEntity> getUserEntityLiveData(@NonNull String userId) {
+        MutableLiveData<LoggedUserEntity> userEntityMutableLiveData = new MutableLiveData<>();
+
+        firestore
+            .collection(USERS_COLLECTION)
+            .document(userId)
+            .addSnapshotListener((documentSnapshot, error) -> {
+                    if (error != null) {
+                        Log.e("UserRepositoryFirestore", "Error fetching user document: " + error);
+                        userEntityMutableLiveData.setValue(null);
+                        return;
+                    }
+                    if (documentSnapshot != null) {
+                        UserDto userDto = documentSnapshot.toObject(UserDto.class);
+                        LoggedUserEntity userEntity = mapToUserEntity(userDto);
+                        userEntityMutableLiveData.setValue(userEntity);
+                    }
+                }
+            );
+
+        return userEntityMutableLiveData;
+    }
+
+    private LoggedUserEntity mapToUserEntity(@Nullable UserDto result) {
+>>>>>>> 05ad6ff11891ef69d3653037b199421a96f94283
         if (result != null &&
             result.getId() != null &&
             result.getName() != null &&
