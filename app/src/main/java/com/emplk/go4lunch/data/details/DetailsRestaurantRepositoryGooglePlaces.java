@@ -91,8 +91,10 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
     }
 
     @NonNull
-    private DetailsRestaurantEntity mapToDetailsRestaurantEntity(@Nullable DetailsRestaurantResponse
-                                                            response) {
+    private DetailsRestaurantEntity mapToDetailsRestaurantEntity(
+        @Nullable DetailsRestaurantResponse
+            response
+    ) {
         String placeId;
         String name;
         String vicinity;

@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserUseCase;
-import com.emplk.go4lunch.domain.detail.GetDetailsRestaurantWrapperUseCase;
 import com.emplk.go4lunch.domain.user.RestaurantEntity;
 import com.emplk.go4lunch.domain.user.UserRepository;
 

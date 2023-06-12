@@ -35,11 +35,11 @@ public class WorkmatesViewModel extends ViewModel {
                 for (WorkmateEntity workmate : workmateEntities) {
                     workmatesViewStateItems.add(
                         new WorkmatesViewStateItem.AllWorkmates(
-                        workmate.getLoggedUserEntity().getId(),
-                        workmate.getLoggedUserEntity().getName(),
-                        workmate.getLoggedUserEntity().getPictureUrl(),
-                        workmate.getAttendingRestaurantId() != null ? workmate.getAttendingRestaurantId() : null,
-                        workmate.getAttendingRestaurantName() != null ? workmate.getAttendingRestaurantName() : null
+                            workmate.getLoggedUserEntity().getId(),
+                            workmate.getLoggedUserEntity().getName(),
+                            workmate.getLoggedUserEntity().getPictureUrl(),
+                            workmate.getAttendingRestaurantId() != null ? workmate.getAttendingRestaurantId() : null,
+                            workmate.getAttendingRestaurantName() != null ? workmate.getAttendingRestaurantName() : null
                         )
                     );
                 }

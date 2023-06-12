@@ -22,7 +22,11 @@ public class OpeningHours {
     @Nullable
     private final List<String> weekdayText;
 
-    public OpeningHours(@Nullable Boolean openNow, @Nullable List<PeriodsItem> periods, @Nullable List<String> weekdayText) {
+    public OpeningHours(
+        @Nullable Boolean openNow,
+        @Nullable List<PeriodsItem> periods,
+        @Nullable List<String> weekdayText
+    ) {
         this.openNow = openNow;
         this.periods = periods;
         this.weekdayText = weekdayText;

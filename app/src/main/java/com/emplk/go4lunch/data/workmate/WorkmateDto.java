@@ -17,10 +17,9 @@ public class WorkmateDto {
     @Nullable
     private final String attendingRestaurantName;
 
-    // Empty constructor for Firestore serialization
+
     public WorkmateDto() {
         this(null, null, null);
-
     }
 
     public WorkmateDto(

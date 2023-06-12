@@ -8,7 +8,7 @@ import java.util.Objects;
 public class DetailsRestaurantEntity {
     @NonNull
     private final String placeId;
-    
+
     @NonNull
     private final String restaurantName;
 
@@ -38,7 +38,8 @@ public class DetailsRestaurantEntity {
         @Nullable Float rating,
         @Nullable String phoneNumber,
         @Nullable String websiteUrl,
-        @Nullable Boolean isVeganFriendly) {
+        @Nullable Boolean isVeganFriendly
+    ) {
         this.placeId = placeId;
         this.restaurantName = restaurantName;
         this.vicinity = vicinity;

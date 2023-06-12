@@ -14,7 +14,10 @@ public class Close {
     @SerializedName("day")
     private final Integer day;
 
-    public Close(String time, int day) {
+    public Close(
+        String time,
+        int day
+    ) {
         this.time = time;
         this.day = day;
     }

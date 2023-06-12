@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-package com.emplk.go4lunch.domain.user.use_case;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
@@ -8,8 +5,6 @@ import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserIdU
 import com.emplk.go4lunch.domain.favorite_restaurant.GetFavoriteRestaurantsIdsUseCase;
 import com.emplk.go4lunch.domain.user.UserEntity;
 import com.emplk.go4lunch.domain.user.UserRepository;
-
-import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -47,37 +42,4 @@ public class GetUserEntityUseCase {
         }
         return null;
     }
-
-    private void combine(
-        Set<String> favoriteRestaurantSet,
-        String attendingRestaurantId
-    ) {
-    }
 }
-=======
-package com.emplk.go4lunch.domain.user.use_case;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-
-import com.emplk.go4lunch.domain.user.UserEntity;
-import com.emplk.go4lunch.domain.user.UserRepository;
-
-import javax.inject.Inject;
-
-public class GetUserEntityUseCase {
-
-    @NonNull
-    private final UserRepository userRepository;
-
-    @Inject
-    public GetUserEntityUseCase(@NonNull UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    public LiveData<UserEntity> invoke() {
-        // TODO Combine les 4 LiveData pour générer le UserEntity
-        return userRepository.getUserEntityLiveData();
-    }
-}
->>>>>>> 05ad6ff11891ef69d3653037b199421a96f94283

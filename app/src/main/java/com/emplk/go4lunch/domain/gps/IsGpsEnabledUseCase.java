@@ -2,6 +2,7 @@ package com.emplk.go4lunch.domain.gps;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
 import com.emplk.go4lunch.domain.gps.entity.LocationStateEntity;
@@ -21,12 +22,14 @@ public class IsGpsEnabledUseCase {
     }
 
     public LiveData<Boolean> invoke() {
-        return Transformations.map(gpsLocationRepository.getLocationStateLiveData(), gpsResponse -> {
+        return Transformations.switchMap(gpsLocationRepository.getLocationStateLiveData(), gpsResponse -> {
+                MutableLiveData<Boolean> isGpsEnabledLiveData = new MutableLiveData<>();
                 if (gpsResponse instanceof LocationStateEntity.GpsProviderDisabled) {
-                    return false;
-                } else {
-                    return true;
+                    isGpsEnabledLiveData.setValue(false);
+                } else if (gpsResponse instanceof LocationStateEntity.Success) {
+                    isGpsEnabledLiveData.setValue(true);
                 }
+                return isGpsEnabledLiveData;
             }
         );
     }

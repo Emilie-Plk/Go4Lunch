@@ -20,7 +20,10 @@ public class SortNearbyRestaurantsUseCase {
     ) {
     }
 
-    public List<NearbySearchEntity> invoke(@NonNull List<NearbySearchEntity> nearbySearchEntityList, @NonNull LocationEntity userLocationEntity) {
+    public List<NearbySearchEntity> invoke(
+        @NonNull List<NearbySearchEntity> nearbySearchEntityList,
+        @NonNull LocationEntity userLocationEntity
+    ) {
         LatLng userLatLng = new LatLng(userLocationEntity.getLatitude(), userLocationEntity.getLongitude());
         return nearbySearchEntityList.stream()
             .sorted(Comparator.comparingDouble(place ->

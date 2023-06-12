@@ -28,7 +28,8 @@ public class PhotosItem {
         @Nullable String photoReference,
         int width,
         @Nullable List<String> htmlAttributions,
-        int height) {
+        int height
+    ) {
         this.photoReference = photoReference;
         this.width = width;
         this.htmlAttributions = htmlAttributions;

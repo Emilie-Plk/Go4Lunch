@@ -15,7 +15,10 @@ public class TermsItem {
     @SerializedName("value")
     private final String value;
 
-    public TermsItem(@Nullable Integer offset, @Nullable String value) {
+    public TermsItem(
+        @Nullable Integer offset,
+        @Nullable String value
+    ) {
         this.offset = offset;
         this.value = value;
     }

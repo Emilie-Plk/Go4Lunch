@@ -19,7 +19,10 @@ public enum RestaurantOpeningState {
     private final int colorRes;
 
 
-    RestaurantOpeningState(@StringRes int text, @ColorRes int colorRes) {
+    RestaurantOpeningState(
+        @StringRes int text,
+        @ColorRes int colorRes
+    ) {
         this.text = text;
         this.colorRes = colorRes;
 

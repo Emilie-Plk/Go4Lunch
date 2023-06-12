@@ -12,7 +12,10 @@ public class PeriodsItem {
     @SerializedName("open")
     private final Open open;
 
-    public PeriodsItem(Close close, Open open) {
+    public PeriodsItem(
+        Close close,
+        Open open
+    ) {
         this.close = close;
         this.open = open;
     }

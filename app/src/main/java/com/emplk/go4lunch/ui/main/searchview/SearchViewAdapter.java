@@ -22,7 +22,10 @@ public class SearchViewAdapter extends ListAdapter<PredictionViewState, Recycler
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(
+        @NonNull ViewGroup parent,
+        int viewType
+    ) {
         return new PredictionViewHolder(
             PredictionItemBinding.inflate(
                 LayoutInflater.from(parent.getContext()), parent, false
@@ -31,7 +34,10 @@ public class SearchViewAdapter extends ListAdapter<PredictionViewState, Recycler
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(
+        @NonNull RecyclerView.ViewHolder holder,
+        int position
+    ) {
         ((PredictionViewHolder) holder).bind(getItem(position), listener);
     }
 
@@ -57,12 +63,18 @@ public class SearchViewAdapter extends ListAdapter<PredictionViewState, Recycler
     private static class ListPredictionItemCallback extends DiffUtil.ItemCallback<PredictionViewState> {
 
         @Override
-        public boolean areItemsTheSame(@NonNull PredictionViewState oldItem, @NonNull PredictionViewState newItem) {
+        public boolean areItemsTheSame(
+            @NonNull PredictionViewState oldItem,
+            @NonNull PredictionViewState newItem
+        ) {
             return oldItem.getPlaceId().equals(newItem.getPlaceId());
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull PredictionViewState oldItem, @NonNull PredictionViewState newItem) {
+        public boolean areContentsTheSame(
+            @NonNull PredictionViewState oldItem,
+            @NonNull PredictionViewState newItem
+        ) {
             return oldItem.equals(newItem);
         }
     }

@@ -14,7 +14,10 @@ public class Open {
     @SerializedName("day")
     private final Integer day;
 
-    public Open(String time, Integer day) {
+    public Open(
+        String time,
+        Integer day
+    ) {
         this.time = time;
         this.day = day;
     }

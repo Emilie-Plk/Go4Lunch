@@ -12,8 +12,8 @@ import com.emplk.go4lunch.domain.location.GetCurrentLocationStateUseCase;
 import com.emplk.go4lunch.domain.nearby_search.GetNearbySearchWrapperUseCase;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchWrapper;
-import com.emplk.go4lunch.ui.utils.RestaurantFavoriteState;
 import com.emplk.go4lunch.ui.restaurant_map.map__marker.RestaurantMarkerViewStateItem;
+import com.emplk.go4lunch.ui.utils.RestaurantFavoriteState;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;

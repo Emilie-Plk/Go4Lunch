@@ -18,16 +18,8 @@ public class LoggedUserDto {
     @Nullable
     private final String pictureUrl;
 
-<<<<<<< HEAD:app/src/main/java/com/emplk/go4lunch/data/user/LoggedUserDto.java
-
     public LoggedUserDto() {
-=======
-    public UserDto() {
->>>>>>> 05ad6ff11891ef69d3653037b199421a96f94283:app/src/main/java/com/emplk/go4lunch/data/user/UserDto.java
-        id = null;
-        name = null;
-        email = null;
-        pictureUrl = null;
+        this(null, null, null, null);
     }
 
     public LoggedUserDto(
@@ -62,21 +54,12 @@ public class LoggedUserDto {
         return pictureUrl;
     }
 
-<<<<<<< HEAD:app/src/main/java/com/emplk/go4lunch/data/user/LoggedUserDto.java
-
-=======
->>>>>>> 05ad6ff11891ef69d3653037b199421a96f94283:app/src/main/java/com/emplk/go4lunch/data/user/UserDto.java
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-<<<<<<< HEAD:app/src/main/java/com/emplk/go4lunch/data/user/LoggedUserDto.java
-        LoggedUserDto loggedUserDto = (LoggedUserDto) o;
-        return Objects.equals(id, loggedUserDto.id) && Objects.equals(name, loggedUserDto.name) && Objects.equals(email, loggedUserDto.email) && Objects.equals(pictureUrl, loggedUserDto.pictureUrl);
-=======
-        UserDto userDto = (UserDto) o;
-        return Objects.equals(id, userDto.id) && Objects.equals(name, userDto.name) && Objects.equals(email, userDto.email) && Objects.equals(pictureUrl, userDto.pictureUrl);
->>>>>>> 05ad6ff11891ef69d3653037b199421a96f94283:app/src/main/java/com/emplk/go4lunch/data/user/UserDto.java
+        LoggedUserDto that = (LoggedUserDto) o;
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(email, that.email) && Objects.equals(pictureUrl, that.pictureUrl);
     }
 
     @Override

@@ -67,8 +67,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
 
     // HILT
-    implementation "com.google.dagger:hilt-android:2.44.2"
-    annotationProcessor 'com.google.dagger:hilt-compiler:2.44.2'
+    implementation "com.google.dagger:hilt-android:2.45"
+    annotationProcessor 'com.google.dagger:hilt-compiler:2.45'
 
     // FIREBASE
     // Import the Firebase BoM
@@ -76,7 +76,6 @@ dependencies {
 
     // FIRESTORE
     implementation 'com.google.firebase:firebase-firestore'
-
 
 
     // When using the BoM, don't specify versions in Firebase dependencies

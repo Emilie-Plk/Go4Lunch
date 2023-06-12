@@ -19,7 +19,8 @@ public class PredictionEntity {
     public PredictionEntity(
         @NonNull String placeId,
         @NonNull String restaurantName,
-        @Nullable String vicinity) {
+        @Nullable String vicinity
+    ) {
         this.placeId = placeId;
         this.restaurantName = restaurantName;
         this.vicinity = vicinity;

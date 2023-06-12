@@ -134,7 +134,8 @@ public class Result {
         @Nullable String formattedPhoneNumber,
         @Nullable String internationalPhoneNumber,
         @Nullable String placeId,
-        @Nullable Boolean servesVegetarianFood) {
+        @Nullable Boolean servesVegetarianFood
+    ) {
         this.utcOffset = utcOffset;
         this.formattedAddress = formattedAddress;
         this.types = types;

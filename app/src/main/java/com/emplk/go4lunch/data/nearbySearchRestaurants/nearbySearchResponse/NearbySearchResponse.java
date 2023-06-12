@@ -46,7 +46,12 @@ public class NearbySearchResponse {
         return status;
     }
 
-    public NearbySearchResponse(@Nullable String nextPageToken, @Nullable List<Object> htmlAttributions, @Nullable List<ResultsItem> results, @Nullable String status) {
+    public NearbySearchResponse(
+        @Nullable String nextPageToken,
+        @Nullable List<Object> htmlAttributions,
+        @Nullable List<ResultsItem> results,
+        @Nullable String status
+    ) {
         this.nextPageToken = nextPageToken;
         this.htmlAttributions = htmlAttributions;
         this.results = results;

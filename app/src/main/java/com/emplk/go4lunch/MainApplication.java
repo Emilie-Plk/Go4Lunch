@@ -33,7 +33,10 @@ public class MainApplication extends Application implements Application.Activity
     }
 
     @Override
-    public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+    public void onActivityCreated(
+        @NonNull Activity activity,
+        @Nullable Bundle savedInstanceState
+    ) {
 
     }
 
@@ -61,7 +64,10 @@ public class MainApplication extends Application implements Application.Activity
     }
 
     @Override
-    public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
+    public void onActivitySaveInstanceState(
+        @NonNull Activity activity,
+        @NonNull Bundle outState
+    ) {
 
     }
 

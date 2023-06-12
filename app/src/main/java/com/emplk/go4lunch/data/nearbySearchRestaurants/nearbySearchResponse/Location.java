@@ -16,7 +16,10 @@ public class Location {
     @NonNull
     private final Double lat;
 
-    public Location(@NonNull Double lng, @NonNull Double lat) {
+    public Location(
+        @NonNull Double lng,
+        @NonNull Double lat
+    ) {
         this.lng = lng;
         this.lat = lat;
     }

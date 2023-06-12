@@ -24,7 +24,6 @@ import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantWrapper;
 import com.emplk.go4lunch.domain.favorite_restaurant.AddFavoriteRestaurantUseCase;
 import com.emplk.go4lunch.domain.favorite_restaurant.IsRestaurantUserFavoriteUseCase;
 import com.emplk.go4lunch.domain.favorite_restaurant.RemoveFavoriteRestaurantUseCase;
-<<<<<<< HEAD
 import com.emplk.go4lunch.domain.user.use_case.AddUserRestaurantChoiceUseCase;
 import com.emplk.go4lunch.domain.user.use_case.RemoveUserRestaurantChoiceUseCase;
 import com.emplk.go4lunch.domain.workmate.GetWorkmateEntitiesGoingToSameRestaurantUseCase;
@@ -34,9 +33,6 @@ import com.emplk.go4lunch.ui.workmate_list.WorkmatesViewStateItem;
 
 import java.util.ArrayList;
 import java.util.List;
-=======
-import com.emplk.go4lunch.domain.user.use_case.GetUserEntityUseCase;
->>>>>>> 05ad6ff11891ef69d3653037b199421a96f94283
 
 import javax.inject.Inject;
 
@@ -71,11 +67,7 @@ public class RestaurantDetailViewModel extends ViewModel {
     private final RemoveFavoriteRestaurantUseCase removeFavoriteRestaurantUseCase;
 
     @NonNull
-<<<<<<< HEAD
     private final AddUserRestaurantChoiceUseCase addUserRestaurantChoiceUseCase;
-=======
-    private final GetUserEntityUseCase getUserEntityUseCase;
->>>>>>> 05ad6ff11891ef69d3653037b199421a96f94283
 
     @NonNull
     private final RemoveUserRestaurantChoiceUseCase removeUserRestaurantChoiceUseCase;
@@ -95,15 +87,10 @@ public class RestaurantDetailViewModel extends ViewModel {
         @NonNull IsRestaurantUserFavoriteUseCase isRestaurantUserFavoriteUseCase,
         @NonNull AddFavoriteRestaurantUseCase addFavoriteRestaurantUseCase,
         @NonNull RemoveFavoriteRestaurantUseCase removeFavoriteRestaurantUseCase,
-<<<<<<< HEAD
         @NonNull AddUserRestaurantChoiceUseCase addUserRestaurantChoiceUseCase,
         @NonNull RemoveUserRestaurantChoiceUseCase removeUserRestaurantChoiceUseCase,
         @NonNull GetWorkmateEntitiesGoingToSameRestaurantUseCase getWorkmateEntitiesGoingToSameRestaurantUseCase,
         @NonNull SavedStateHandle savedStateHandle
-=======
-        @NonNull GetUserEntityUseCase getUserEntityUseCase,
-        @NonNull GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase
->>>>>>> 05ad6ff11891ef69d3653037b199421a96f94283
     ) {
         this.getDetailsRestaurantWrapperUseCase = getDetailsRestaurantWrapperUseCase;
         this.resources = resources;
@@ -112,58 +99,16 @@ public class RestaurantDetailViewModel extends ViewModel {
         this.isRestaurantUserFavoriteUseCase = isRestaurantUserFavoriteUseCase;
         this.addFavoriteRestaurantUseCase = addFavoriteRestaurantUseCase;
         this.removeFavoriteRestaurantUseCase = removeFavoriteRestaurantUseCase;
-<<<<<<< HEAD
         this.addUserRestaurantChoiceUseCase = addUserRestaurantChoiceUseCase;
         this.removeUserRestaurantChoiceUseCase = removeUserRestaurantChoiceUseCase;
         this.getWorkmateEntitiesGoingToSameRestaurantUseCase = getWorkmateEntitiesGoingToSameRestaurantUseCase;
-=======
-        this.getUserEntityUseCase = getUserEntityUseCase;
-        this.getCurrentLoggedUserUseCase = getCurrentLoggedUserUseCase;
->>>>>>> 05ad6ff11891ef69d3653037b199421a96f94283
 
         restaurantId = savedStateHandle.get(RestaurantDetailActivity.KEY_RESTAURANT_ID);
 
-<<<<<<< HEAD
+
         LiveData<DetailsRestaurantWrapper> detailsRestaurantWrapperLiveData = getDetailsRestaurantWrapperUseCase.invoke(restaurantId);
 
         LiveData<Boolean> isRestaurantLikedLiveData = isRestaurantUserFavoriteUseCase.invoke(restaurantId);
-=======
-        LiveData<String> userIdLiveData = Transformations.map(getUserEntityUseCase.invoke(), userInfo -> {
-                if (userInfo != null) {
-                    return userInfo.getLoggedUserEntity().getUserId();
-                }
-                return null;
-            }
-        );
-
-        LiveData<DetailsRestaurantWrapper> detailsRestaurantWrapperLiveData = Transformations.switchMap(restaurantIdMutableLiveData, restaurantId -> {
-                return getDetailsRestaurantWrapperUseCase.invoke(restaurantId);
-            }
-        );
-
-        LiveData<Boolean> isRestaurantLikedLiveData = Transformations.switchMap(getUserEntityUseCase.invoke(), userInfo -> {
-                return Transformations.map(restaurantIdMutableLiveData, restaurantId -> {
-                        if (restaurantId != null) {
-                            return userInfo.getFavoriteRestaurantIds().containsKey(restaurantId);
-                        } else if (userInfo.getFavoriteRestaurantIds().isEmpty()) {
-                            return false;
-                        }
-                        return null;
-                    }
-                );
-            }
-        );
-
-        restaurantDetailViewStateMediatorLiveData.addSource(restaurantIdMutableLiveData, restaurantId -> {
-                combine(restaurantId, userIdLiveData.getValue(), detailsRestaurantWrapperLiveData.getValue(), isRestaurantLikedLiveData.getValue());
-            }
-        );
-
-        restaurantDetailViewStateMediatorLiveData.addSource(userIdLiveData, userId -> {
-                combine(restaurantIdMutableLiveData.getValue(), userId, detailsRestaurantWrapperLiveData.getValue(), isRestaurantLikedLiveData.getValue());
-            }
-        );
->>>>>>> 05ad6ff11891ef69d3653037b199421a96f94283
 
         restaurantDetailViewStateMediatorLiveData.addSource(detailsRestaurantWrapperLiveData, detailsRestaurantWrapper -> {
                 combine(detailsRestaurantWrapper, isRestaurantLikedLiveData.getValue());

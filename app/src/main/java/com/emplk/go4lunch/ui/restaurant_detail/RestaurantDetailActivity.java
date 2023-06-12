@@ -70,13 +70,13 @@ public class RestaurantDetailActivity extends AppCompatActivity {
             }
         });
         RecyclerView recyclerView = binding.detailRestaurantWorkmatesList;
-       recyclerView.setAdapter(adapter);
-       recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-       viewModel.getWorkmatesGoingToRestaurant().observe(this, workmates -> {
-               adapter.submitList(workmates);
-           }
-       );
+        viewModel.getWorkmatesGoingToRestaurant().observe(this, workmates -> {
+                adapter.submitList(workmates);
+            }
+        );
     }
 
     private void setupObservers() {

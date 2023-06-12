@@ -26,10 +26,10 @@ public class OnBoardingViewModel extends ViewModel {
     private final SingleLiveEvent<Boolean> isChangeAppSettingsClickedSingleLiveEvent = new SingleLiveEvent<>();
 
 
-
     @Inject
     public OnBoardingViewModel(
-        @NonNull HasGpsPermissionUseCase hasGpsPermissionUseCase) {
+        @NonNull HasGpsPermissionUseCase hasGpsPermissionUseCase
+    ) {
 
         LiveData<Boolean> hasGpsPermissionLiveData = hasGpsPermissionUseCase.invoke();
 
@@ -82,7 +82,8 @@ public class OnBoardingViewModel extends ViewModel {
         @Nullable Boolean hasGpsPermission,
         @Nullable Boolean hasGpsPermissionBeenAsked,
         @Nullable Boolean isShowRationale,
-        @Nullable Boolean changeAppSettings) {
+        @Nullable Boolean changeAppSettings
+    ) {
         if (hasGpsPermission == null || hasGpsPermissionBeenAsked == null) {
             return;
         }

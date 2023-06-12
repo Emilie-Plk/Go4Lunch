@@ -36,7 +36,6 @@ public class GetCurrentLocationUseCase {
                 }
             }
         );
-
         return mediatorLiveData;
     }
 }

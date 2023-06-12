@@ -90,7 +90,8 @@ public class AutocompleteRepositoryGooglePlaces implements AutocompleteRepositor
                         @Override
                         public void onFailure(
                             @NonNull Call<AutocompleteSuggestionResponses> call,
-                            @NonNull Throwable t) {
+                            @NonNull Throwable t
+                        ) {
                             resultMutableLiveData.setValue(new AutocompleteWrapper.Error(t));
                         }
                     }
@@ -125,7 +126,7 @@ public class AutocompleteRepositoryGooglePlaces implements AutocompleteRepositor
 
                 String vicinity;
                 if (prediction.getStructuredFormatting() != null &&
-                prediction.getStructuredFormatting().getSecondaryText() != null) {
+                    prediction.getStructuredFormatting().getSecondaryText() != null) {
                     vicinity = prediction.getStructuredFormatting().getSecondaryText();
                 } else {
                     vicinity = null;

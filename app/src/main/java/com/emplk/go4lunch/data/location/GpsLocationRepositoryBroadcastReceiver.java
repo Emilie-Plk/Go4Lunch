@@ -77,11 +77,6 @@ public class GpsLocationRepositoryBroadcastReceiver extends BroadcastReceiver im
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     }
 
-    @Override
-    public LiveData<Boolean> isGpsEnabledLiveData() {
-        return isGpsEnabledMutableLiveData;
-    }
-
     public LiveData<LocationStateEntity> getLocationStateLiveData() {
         MediatorLiveData<LocationStateEntity> gpsResponseMediatorLiveData = new MediatorLiveData<>();
         Observer<Object> observer = new Observer<Object>() {
@@ -89,16 +84,17 @@ public class GpsLocationRepositoryBroadcastReceiver extends BroadcastReceiver im
             public void onChanged(Object object) {
                 LocationStateEntity locationStateEntity;
 
-                if (isGpsEnabledMutableLiveData.getValue() != null && !isGpsEnabledMutableLiveData.getValue()) {
+                Boolean isGpsEnabled = isGpsEnabledMutableLiveData.getValue();
+                LocationEntity locationEntity = gpsLocationEntityMutableLiveData.getValue();
+
+                if (isGpsEnabled != null && !isGpsEnabled) {
                     locationStateEntity = new LocationStateEntity.GpsProviderDisabled();
+                } else if (locationEntity == null) {
+                    return;
                 } else {
-                    LocationEntity locationEntity = gpsLocationEntityMutableLiveData.getValue();
-                    if (locationEntity != null) {
-                        locationStateEntity = new LocationStateEntity.Success(locationEntity);
-                    } else {
-                        locationStateEntity = new LocationStateEntity.Success(new LocationEntity(48.8566, 2.3522));
-                    }
+                    locationStateEntity = new LocationStateEntity.Success(locationEntity);
                 }
+
                 gpsResponseMediatorLiveData.setValue(locationStateEntity);
             }
         };
@@ -130,11 +126,16 @@ public class GpsLocationRepositoryBroadcastReceiver extends BroadcastReceiver im
         @NonNull Context context,
         @NonNull Intent intent
     ) {
-        if (Intent.ACTION_PROVIDER_CHANGED.equals(intent.getAction()) && (locationManager != null)) {
-            boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            isGpsEnabledMutableLiveData.setValue(isGpsEnabled);
+        String action = intent.getAction();
+        if (action != null && action.equals(LocationManager.PROVIDERS_CHANGED_ACTION)) {
+            LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            if (locationManager != null) {
+                boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                isGpsEnabledMutableLiveData.setValue(isGpsEnabled);
+            }
         }
     }
+
     @Override
     public void stopLocationRequest() {
         fusedLocationProviderClient.removeLocationUpdates(locationCallback);

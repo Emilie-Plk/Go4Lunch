@@ -196,6 +196,7 @@ public class RestaurantListViewModel extends ViewModel {
     public LiveData<List<RestaurantListViewStateItem>> getRestaurants() {
         return restaurantListMediatorLiveData;
     }
+
     @Nullable
     private String parseRestaurantPictureUrl(String photoReferenceUrl) {
         if (photoReferenceUrl != null && !photoReferenceUrl.isEmpty()) {

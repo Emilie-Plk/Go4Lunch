@@ -26,7 +26,8 @@ public class DetailsRestaurantResponse {
     public DetailsRestaurantResponse(
         @Nullable Result result,
         @Nullable List<Object> htmlAttributions,
-        @Nullable String status) {
+        @Nullable String status
+    ) {
         this.result = result;
         this.htmlAttributions = htmlAttributions;
         this.status = status;

@@ -43,7 +43,8 @@ public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, Rec
             case WORKMATES_GOING_TO_SAME_RESTAURANT:
                 return new WorkmatesGoingToSameRestaurantViewHolder(
                     WorkmatesItemBinding.inflate(
-                        LayoutInflater.from(parent.getContext()), parent, false));
+                        LayoutInflater.from(parent.getContext()), parent, false)
+                );
             default:
                 throw new IllegalStateException("Unknown viewType : " + viewType);
         }
