@@ -51,5 +51,6 @@
     <string name="map_toast_message_error_gps">Please enable your GPS to continue!</string>
     <string name="error_placeholder">error</string>
     <string name="detail_workmate_joining">%s is joining!</string>
+    <string name="list_workmate_not_attending">%s has not chosen yet!</string>
 
 </resources>

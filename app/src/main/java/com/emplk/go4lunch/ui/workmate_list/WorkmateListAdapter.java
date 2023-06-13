@@ -92,13 +92,19 @@ public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, Rec
             String workmateName = itemViewState.getName();
             String attendingRestaurant = itemViewState.getAttendingRestaurantName();
 
-            String formattedText = binding.getRoot().getContext().getString(
+            String workmateWithRestaurantChoice = binding.getRoot().getContext().getString(
                 R.string.list_workmate_name_and_attenting_restaurant,
                 workmateName,
                 attendingRestaurant
             );
 
-            workmateNameAndAttendingRestaurant.setText(formattedText);
+            String workmateWithoutRestaurantChoice = binding.getRoot().getContext().getString(
+                R.string.list_workmate_not_attending,
+                workmateName
+            );
+
+            workmateNameAndAttendingRestaurant.setText(
+                (itemViewState.getAttendingRestaurantId() != null) ? workmateWithRestaurantChoice : workmateWithoutRestaurantChoice);
 
             Glide.with(binding.getRoot())
                 .load(itemViewState.getPictureUrl())

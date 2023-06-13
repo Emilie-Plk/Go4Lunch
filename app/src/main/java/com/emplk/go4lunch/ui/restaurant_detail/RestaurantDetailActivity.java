@@ -1,11 +1,12 @@
 package com.emplk.go4lunch.ui.restaurant_detail;
 
+import static com.emplk.go4lunch.ui.restaurant_detail.AttendanceState.IS_ATTENDING;
+import static com.emplk.go4lunch.ui.restaurant_detail.AttendanceState.IS_NOT_ATTENDING;
 import static com.emplk.go4lunch.ui.utils.RestaurantFavoriteState.IS_FAVORITE;
 import static com.emplk.go4lunch.ui.utils.RestaurantFavoriteState.IS_NOT_FAVORITE;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -105,6 +106,28 @@ public class RestaurantDetailActivity extends AppCompatActivity {
             }
         );
 
+        viewModel.getAttendanceState().observe(this, attendanceState -> {
+                if (attendanceState == IS_ATTENDING) {
+                    binding.detailRestaurantChoseFab.setText("Go!");
+                    binding.detailRestaurantChoseFab.setOnClickListener(v -> {
+                            viewModel.onRemoveUserRestaurantChoice();
+                        }
+                    );
+                } else if (attendanceState == IS_NOT_ATTENDING) {
+                    binding.detailRestaurantChoseFab.setText("Go?");
+                    binding.detailRestaurantChoseFab.setOnClickListener(v -> {
+                            viewModel.onAddUserRestaurantChoice(   // TODO: maybe try just to pass the restau id through the VM with savedStateHandle
+                                binding.detailRestaurantName.getText().toString(),
+                                binding.detailRestaurantAddress.getText().toString(),
+                                viewModel.getRestaurantDetails().getValue().getPictureUrl()
+                            );
+                        }
+                    );
+                }
+
+            }
+        );
+
         viewModel.getRestaurantDetails().observe(this, restaurantDetail -> {
                 if (restaurantDetail != null) {
                     binding.detailRestaurantName.setText(restaurantDetail.getName());
@@ -134,7 +157,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                         }
                     );
 
-                    binding.detailRestaurantChoseFab.setText(Boolean.TRUE.equals(restaurantDetail.isAttending()) ? "Go!" : "Go?");
 
                     binding.detailRestaurantChoseFab.setOnClickListener(v -> {
                             viewModel.onAddUserRestaurantChoice(

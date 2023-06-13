@@ -72,7 +72,7 @@ public class LoggedUserDto {
     public String toString() {
         return "LoggedUserDto{" +
             "id='" + id + '\'' +
-            ", username='" + name + '\'' +
+            ", name='" + name + '\'' +
             ", email='" + email + '\'' +
             ", pictureUrl='" + pictureUrl + '\'' +
             '}';

@@ -34,7 +34,6 @@ import com.emplk.go4lunch.ui.workmate_list.WorkmatesViewStateItem;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -50,6 +49,8 @@ public class RestaurantDetailViewModel extends ViewModel {
     private final MediatorLiveData<RestaurantDetailViewState> restaurantDetailViewStateMediatorLiveData = new MediatorLiveData<>();
 
     private final MutableLiveData<RestaurantFavoriteState> restaurantFavoriteStateMutableLiveData = new MutableLiveData<>();
+
+    private final MutableLiveData<AttendanceState> attendanceStateMutableLiveData = new MutableLiveData<>();
 
     @NonNull
     private final GetDetailsRestaurantWrapperUseCase getDetailsRestaurantWrapperUseCase;
@@ -155,12 +156,18 @@ public class RestaurantDetailViewModel extends ViewModel {
         if (detailsRestaurantWrapper instanceof DetailsRestaurantWrapper.Success) {
             DetailsRestaurantEntity detailsRestaurantEntity = ((DetailsRestaurantWrapper.Success) detailsRestaurantWrapper).getDetailsRestaurantEntity();
             boolean isRestaurantLiked = currentUser.getFavoriteRestaurantSet().contains(restaurantId);
-            boolean isAttending = Objects.equals(currentUser.getAttendingRestaurantId(), restaurantId);
+            boolean isAttending = (currentUser.getAttendingRestaurantId() != null && currentUser.getAttendingRestaurantId().equals(restaurantId));
 
             if (isRestaurantLiked) {
                 restaurantFavoriteStateMutableLiveData.setValue(RestaurantFavoriteState.IS_FAVORITE);
             } else {
                 restaurantFavoriteStateMutableLiveData.setValue(RestaurantFavoriteState.IS_NOT_FAVORITE);
+            }
+
+            if (isAttending) {
+                attendanceStateMutableLiveData.setValue(AttendanceState.IS_ATTENDING);
+            } else {
+                attendanceStateMutableLiveData.setValue(AttendanceState.IS_NOT_ATTENDING);
             }
 
             restaurantDetailViewStateMediatorLiveData.setValue(
@@ -191,6 +198,10 @@ public class RestaurantDetailViewModel extends ViewModel {
 
     public LiveData<RestaurantFavoriteState> getRestaurantFavoriteState() {
         return restaurantFavoriteStateMutableLiveData;
+    }
+
+    public LiveData<AttendanceState> getAttendanceState() {
+        return attendanceStateMutableLiveData;
     }
 
 

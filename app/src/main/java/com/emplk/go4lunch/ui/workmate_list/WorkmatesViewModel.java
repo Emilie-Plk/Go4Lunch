@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
+import com.emplk.go4lunch.domain.workmate.GetWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase;
 import com.emplk.go4lunch.domain.workmate.GetWorkmateEntitiesWithRestaurantChoiceListUseCase;
 import com.emplk.go4lunch.domain.workmate.WorkmateEntity;
 
@@ -20,16 +21,16 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class WorkmatesViewModel extends ViewModel {
 
     @NonNull
-    private final GetWorkmateEntitiesWithRestaurantChoiceListUseCase getWorkmateEntitiesWithRestaurantChoiceListUseCase;
+    private final GetWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase getWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase;
 
     @Inject
-    public WorkmatesViewModel(@NonNull GetWorkmateEntitiesWithRestaurantChoiceListUseCase getWorkmateEntitiesWithRestaurantChoiceListUseCase) {
-        this.getWorkmateEntitiesWithRestaurantChoiceListUseCase = getWorkmateEntitiesWithRestaurantChoiceListUseCase;
+    public WorkmatesViewModel(@NonNull GetWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase getWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase) {
+        this.getWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase = getWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase;
     }
 
 
     public LiveData<List<WorkmatesViewStateItem>> getWorkmates() {
-        return Transformations.switchMap(getWorkmateEntitiesWithRestaurantChoiceListUseCase.invoke(), workmateEntities -> {
+        return Transformations.switchMap(getWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase.invoke(), workmateEntities -> {
                 List<WorkmatesViewStateItem> workmatesViewStateItems = new ArrayList<>();
                 MutableLiveData<List<WorkmatesViewStateItem>> result = new MutableLiveData<>();
                 for (WorkmateEntity workmate : workmateEntities) {

@@ -33,8 +33,8 @@ public class CreateUserUseCase {
             userRepository.upsertLoggedUserEntity(
                 new LoggedUserEntity(
                     loggedUserEntity.getId(),
-                    loggedUserEntity.getEmail(),
                     loggedUserEntity.getName(),
+                    loggedUserEntity.getEmail(),
                     loggedUserEntity.getPictureUrl()
                 )
             );

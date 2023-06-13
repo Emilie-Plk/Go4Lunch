@@ -13,6 +13,9 @@ import com.emplk.go4lunch.domain.user.UserRepository;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -171,6 +174,30 @@ public class UserRepositoryFirestore implements UserRepository {
             restaurantEntityMutableLiveData.setValue(null);
         }
         return restaurantEntityMutableLiveData;
+    }
+
+    @Override
+    public LiveData<List<LoggedUserEntity>> getLoggedUserEntitiesLiveData() {
+     MutableLiveData<List<LoggedUserEntity>> loggedUserEntitiesMutableLiveData = new MutableLiveData<>();
+
+        firestore.collection(USERS_COLLECTION)
+            .addSnapshotListener((queryDocumentSnapshots, error) -> {
+                    if (error != null) {
+                        Log.e("UserRepositoryFirestore", "Error fetching users documents: " + error);
+                        loggedUserEntitiesMutableLiveData.setValue(null);
+                        return;
+                    }
+                    if (queryDocumentSnapshots != null) {
+                        List<LoggedUserDto> loggedUserDtos = queryDocumentSnapshots.toObjects(LoggedUserDto.class);
+                        List<LoggedUserEntity> loggedUserEntities = new ArrayList<>();
+                        for (LoggedUserDto loggedUserDto : loggedUserDtos) {
+                            loggedUserEntities.add(mapToLoggedUserEntity(loggedUserDto));
+                        }
+                        loggedUserEntitiesMutableLiveData.setValue(loggedUserEntities);
+                    }
+                }
+            );
+        return loggedUserEntitiesMutableLiveData;
     }
 
     private LoggedUserEntity mapToLoggedUserEntity(@Nullable LoggedUserDto result) {
