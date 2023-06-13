@@ -49,7 +49,7 @@ public class UserEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserEntity user = (UserEntity) o;
-        return loggedUserEntity.equals(user.loggedUserEntity) && favoriteRestaurantSet.equals(user.favoriteRestaurantSet) && Objects.equals(attendingRestaurantId, user.attendingRestaurantId);
+        return loggedUserEntity.equals(user.loggedUserEntity) && Objects.equals(favoriteRestaurantSet, user.favoriteRestaurantSet) && Objects.equals(attendingRestaurantId, user.attendingRestaurantId);
     }
 
     @Override

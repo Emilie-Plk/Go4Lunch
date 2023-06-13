@@ -5,6 +5,7 @@ import static com.emplk.go4lunch.ui.utils.RestaurantFavoriteState.IS_NOT_FAVORIT
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -57,9 +58,10 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(RestaurantDetailViewModel.class);
 
+        setupWorkmatesRecyclerView();
+
         setupObservers();
 
-        setupWorkmatesRecyclerView();
     }
 
     private void setupWorkmatesRecyclerView() {
@@ -131,6 +133,8 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                             startActivity(intent);
                         }
                     );
+
+                    binding.detailRestaurantChoseFab.setText(Boolean.TRUE.equals(restaurantDetail.isAttending()) ? "Go!" : "Go?");
 
                     binding.detailRestaurantChoseFab.setOnClickListener(v -> {
                             viewModel.onAddUserRestaurantChoice(

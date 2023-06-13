@@ -61,6 +61,7 @@ public class FavoriteRestaurantRepositoryFirestore implements FavoriteRestaurant
     }
 
     @Override
+    @NonNull
     public LiveData<Set<String>> getUserFavoriteRestaurantIdsLiveData(@NonNull String userId) {
         MutableLiveData<Set<String>> favoriteRestaurantSetLiveData = new MutableLiveData<>();
 

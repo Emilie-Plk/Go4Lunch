@@ -17,14 +17,15 @@ import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserIdUseCase;
-import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserUseCase;
 import com.emplk.go4lunch.domain.detail.GetDetailsRestaurantWrapperUseCase;
 import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantEntity;
 import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantWrapper;
 import com.emplk.go4lunch.domain.favorite_restaurant.AddFavoriteRestaurantUseCase;
 import com.emplk.go4lunch.domain.favorite_restaurant.IsRestaurantUserFavoriteUseCase;
 import com.emplk.go4lunch.domain.favorite_restaurant.RemoveFavoriteRestaurantUseCase;
+import com.emplk.go4lunch.domain.user.UserEntity;
 import com.emplk.go4lunch.domain.user.use_case.AddUserRestaurantChoiceUseCase;
+import com.emplk.go4lunch.domain.user.use_case.GetUserEntityUseCase;
 import com.emplk.go4lunch.domain.user.use_case.RemoveUserRestaurantChoiceUseCase;
 import com.emplk.go4lunch.domain.workmate.GetWorkmateEntitiesGoingToSameRestaurantUseCase;
 import com.emplk.go4lunch.domain.workmate.WorkmateEntity;
@@ -33,6 +34,7 @@ import com.emplk.go4lunch.ui.workmate_list.WorkmatesViewStateItem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -56,9 +58,6 @@ public class RestaurantDetailViewModel extends ViewModel {
     private final GetCurrentLoggedUserIdUseCase getCurrentLoggedUserIdUseCase;
 
     @NonNull
-    private final GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase;
-
-    @NonNull
     private final IsRestaurantUserFavoriteUseCase isRestaurantUserFavoriteUseCase;
     @NonNull
     private final AddFavoriteRestaurantUseCase addFavoriteRestaurantUseCase;
@@ -75,6 +74,9 @@ public class RestaurantDetailViewModel extends ViewModel {
     @NonNull
     private final GetWorkmateEntitiesGoingToSameRestaurantUseCase getWorkmateEntitiesGoingToSameRestaurantUseCase;
 
+    @NonNull
+    private final GetUserEntityUseCase getUserEntityUseCase;
+
     private final String restaurantId;
 
 
@@ -83,25 +85,25 @@ public class RestaurantDetailViewModel extends ViewModel {
         @NonNull GetDetailsRestaurantWrapperUseCase getDetailsRestaurantWrapperUseCase,
         @NonNull Resources resources,
         @NonNull GetCurrentLoggedUserIdUseCase getCurrentLoggedUserIdUseCase,
-        @NonNull GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase,
         @NonNull IsRestaurantUserFavoriteUseCase isRestaurantUserFavoriteUseCase,
         @NonNull AddFavoriteRestaurantUseCase addFavoriteRestaurantUseCase,
         @NonNull RemoveFavoriteRestaurantUseCase removeFavoriteRestaurantUseCase,
         @NonNull AddUserRestaurantChoiceUseCase addUserRestaurantChoiceUseCase,
         @NonNull RemoveUserRestaurantChoiceUseCase removeUserRestaurantChoiceUseCase,
         @NonNull GetWorkmateEntitiesGoingToSameRestaurantUseCase getWorkmateEntitiesGoingToSameRestaurantUseCase,
+        @NonNull GetUserEntityUseCase getUserEntityUseCase,
         @NonNull SavedStateHandle savedStateHandle
     ) {
         this.getDetailsRestaurantWrapperUseCase = getDetailsRestaurantWrapperUseCase;
         this.resources = resources;
         this.getCurrentLoggedUserIdUseCase = getCurrentLoggedUserIdUseCase;
-        this.getCurrentLoggedUserUseCase = getCurrentLoggedUserUseCase;
         this.isRestaurantUserFavoriteUseCase = isRestaurantUserFavoriteUseCase;
         this.addFavoriteRestaurantUseCase = addFavoriteRestaurantUseCase;
         this.removeFavoriteRestaurantUseCase = removeFavoriteRestaurantUseCase;
         this.addUserRestaurantChoiceUseCase = addUserRestaurantChoiceUseCase;
         this.removeUserRestaurantChoiceUseCase = removeUserRestaurantChoiceUseCase;
         this.getWorkmateEntitiesGoingToSameRestaurantUseCase = getWorkmateEntitiesGoingToSameRestaurantUseCase;
+        this.getUserEntityUseCase = getUserEntityUseCase;
 
         restaurantId = savedStateHandle.get(RestaurantDetailActivity.KEY_RESTAURANT_ID);
 
@@ -111,12 +113,12 @@ public class RestaurantDetailViewModel extends ViewModel {
         LiveData<Boolean> isRestaurantLikedLiveData = isRestaurantUserFavoriteUseCase.invoke(restaurantId);
 
         restaurantDetailViewStateMediatorLiveData.addSource(detailsRestaurantWrapperLiveData, detailsRestaurantWrapper -> {
-                combine(detailsRestaurantWrapper, isRestaurantLikedLiveData.getValue());
+                combine(detailsRestaurantWrapper, getUserEntityUseCase.invoke().getValue());
             }
         );
 
-        restaurantDetailViewStateMediatorLiveData.addSource(isRestaurantLikedLiveData, isRestaurantLiked -> {
-                combine(detailsRestaurantWrapperLiveData.getValue(), isRestaurantLiked);
+        restaurantDetailViewStateMediatorLiveData.addSource(getUserEntityUseCase.invoke(), currentUser -> {
+                combine(detailsRestaurantWrapperLiveData.getValue(), currentUser);
             }
         );
 
@@ -124,9 +126,9 @@ public class RestaurantDetailViewModel extends ViewModel {
 
     private void combine(
         @Nullable DetailsRestaurantWrapper detailsRestaurantWrapper,
-        @Nullable Boolean isRestaurantLiked
+        @Nullable UserEntity currentUser
     ) {
-        if (detailsRestaurantWrapper == null || isRestaurantLiked == null) {
+        if (detailsRestaurantWrapper == null || currentUser == null) {
             return;
         }
 
@@ -142,6 +144,7 @@ public class RestaurantDetailViewModel extends ViewModel {
                     "",
                     false,
                     false,
+                    false,
                     true,    // ...but I need it for this somehow
                     false,
                     false
@@ -151,6 +154,15 @@ public class RestaurantDetailViewModel extends ViewModel {
 
         if (detailsRestaurantWrapper instanceof DetailsRestaurantWrapper.Success) {
             DetailsRestaurantEntity detailsRestaurantEntity = ((DetailsRestaurantWrapper.Success) detailsRestaurantWrapper).getDetailsRestaurantEntity();
+            boolean isRestaurantLiked = currentUser.getFavoriteRestaurantSet().contains(restaurantId);
+            boolean isAttending = Objects.equals(currentUser.getAttendingRestaurantId(), restaurantId);
+
+            if (isRestaurantLiked) {
+                restaurantFavoriteStateMutableLiveData.setValue(RestaurantFavoriteState.IS_FAVORITE);
+            } else {
+                restaurantFavoriteStateMutableLiveData.setValue(RestaurantFavoriteState.IS_NOT_FAVORITE);
+            }
+
             restaurantDetailViewStateMediatorLiveData.setValue(
                 new RestaurantDetailViewState(
                     restaurantId,
@@ -160,25 +172,18 @@ public class RestaurantDetailViewModel extends ViewModel {
                     convertFiveToThreeRating(detailsRestaurantEntity.getRating()),
                     detailsRestaurantEntity.getPhoneNumber(),
                     detailsRestaurantEntity.getWebsiteUrl(),
-                    false,
+                    isAttending,
+                    isRestaurantLiked,
                     detailsRestaurantEntity.getVeganFriendly(),
                     false,
                     detailsRestaurantEntity.getPhoneNumber() != null,
                     detailsRestaurantEntity.getWebsiteUrl() != null
                 )
             );
-            getRestaurantFavoriteState(isRestaurantLiked);
         }
         //TODO: handle error case
     }
 
-    private void getRestaurantFavoriteState(Boolean isRestaurantLiked) {
-        if (isRestaurantLiked) {
-            restaurantFavoriteStateMutableLiveData.setValue(RestaurantFavoriteState.IS_FAVORITE);
-        } else {
-            restaurantFavoriteStateMutableLiveData.setValue(RestaurantFavoriteState.IS_NOT_FAVORITE);
-        }
-    }
 
     public LiveData<RestaurantDetailViewState> getRestaurantDetails() {
         return restaurantDetailViewStateMediatorLiveData;

@@ -29,6 +29,9 @@ public class RestaurantDetailViewState {
 
     @Nullable
     private final Boolean isAttending;
+
+    @Nullable
+    private final Boolean isFavorite;
     @Nullable
     private final Boolean isVeganFriendly;
 
@@ -50,6 +53,7 @@ public class RestaurantDetailViewState {
         @Nullable String phoneNumber,
         @Nullable String websiteUrl,
         @Nullable Boolean isAttending,
+        @Nullable Boolean isFavorite,
         @Nullable Boolean isVeganFriendly,
         @NonNull Boolean isLoading,
         @NonNull Boolean isPhoneNumberAvailable,
@@ -63,6 +67,7 @@ public class RestaurantDetailViewState {
         this.phoneNumber = phoneNumber;
         this.websiteUrl = websiteUrl;
         this.isAttending = isAttending;
+        this.isFavorite = isFavorite;
         this.isVeganFriendly = isVeganFriendly;
         this.isLoading = isLoading;
         this.isPhoneNumberAvailable = isPhoneNumberAvailable;
@@ -107,6 +112,11 @@ public class RestaurantDetailViewState {
     @Nullable
     public Boolean isAttending() {
         return isAttending;
+    }
+
+    @Nullable
+    public Boolean getFavorite() {
+        return isFavorite;
     }
 
     @Nullable

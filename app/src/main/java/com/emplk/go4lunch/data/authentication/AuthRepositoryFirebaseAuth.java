@@ -53,15 +53,16 @@ public class AuthRepositoryFirebaseAuth implements AuthRepository {
                 pictureUrl = Uri.parse("android.resource://com.emplk.go4lunch/" + R.drawable.restaurant_table).toString();
             }
             if (email != null && name != null) {
-                return new LoggedUserEntity(
+               return new LoggedUserEntity(
                     id,
                     name,
                     email,
                     pictureUrl
                 );
             }
+        } else {
+            Log.e("AuthRepository", "Error while getting current user");
         }
-        Log.e("AuthRepository", "Error while getting current user");
         return null;
     }
 
