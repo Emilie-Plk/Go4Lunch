@@ -7,7 +7,6 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.domain.workmate.GetWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase;
-import com.emplk.go4lunch.domain.workmate.GetWorkmateEntitiesWithRestaurantChoiceListUseCase;
 import com.emplk.go4lunch.domain.workmate.WorkmateEntity;
 
 import java.util.ArrayList;

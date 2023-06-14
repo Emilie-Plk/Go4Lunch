@@ -34,8 +34,7 @@ public class AddUserRestaurantChoiceUseCase {
     ) {
         if (restaurantId != null &&
             restaurantName != null &&
-            vicinity != null &&
-            pictureReferenceUrl != null
+            vicinity != null
         ) {
             userRepository.upsertUserRestaurantChoice(
                 getCurrentLoggedUserUseCase.invoke(),

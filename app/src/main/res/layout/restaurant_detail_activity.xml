@@ -6,194 +6,208 @@
     android:layout_height="match_parent"
     tools:context="com.emplk.go4lunch.ui.restaurant_detail.RestaurantDetailActivity">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/detail_restaurant_toolbar"
+    <FrameLayout
+        android:id="@+id/detail_restaurant_loading_state_layout"
         android:layout_width="match_parent"
-        style="@style/Theme.Go4Lunch.DetailRestaurantToolbar"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:translationZ="2dp" />
-
-    <ImageView
-        android:id="@+id/detail_restaurant_picture"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:contentDescription="@string/detail_food_picture_a11y"
-        android:scaleType="centerCrop"
-        app:layout_constraintDimensionRatio="16:9"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/fries_horizontal_tools" />
+        app:layout_constraintTop_toTopOf="parent">
 
-
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/loading_state_loading_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:indeterminate="true"
-        app:layout_constraintBottom_toBottomOf="@id/detail_restaurant_picture"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/detail_restaurant_vegan_friendly"
-        style="@style/Theme.Go4Lunch.VeganFriendlyImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:contentDescription="@string/detail_button_website"
-        android:src="@drawable/vegan_friendly_icon"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/detail_restaurant_picture"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <include layout="@layout/loading_state" />
+    </FrameLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/detail_restaurant_orange_middle_bar_layout"
-        style="@style/Theme.Go4Lunch.DarkView"
+        android:id="@+id/detail_restaurant_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="80dp"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/detail_restaurant_picture">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/detail_restaurant_chose_fab"
-            style="@style/Theme.Go4Lunch.DetailRestaurantChoseBtn"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/detail_restaurant_toolbar"
+            style="@style/Theme.Go4Lunch.DetailRestaurantToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:translationZ="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageView
+            android:id="@+id/detail_restaurant_picture"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:contentDescription="@string/detail_food_picture_a11y"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="16:9"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/fries_horizontal_tools" />
+
+        <ImageView
+            android:id="@+id/detail_restaurant_vegan_friendly"
+            style="@style/Theme.Go4Lunch.VeganFriendlyImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:text="@string/detail_restaurant_chose_fab"
-            app:icon="@drawable/baseline_restaurant_24"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="@string/detail_button_website"
+            android:src="@drawable/vegan_friendly_icon"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/detail_restaurant_picture"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/detail_restaurant_orange_middle_bar_layout"
+            style="@style/Theme.Go4Lunch.DarkView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="80dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/detail_restaurant_name"
-            style="@style/Theme.Go4Lunch.LightText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="12dp"
-            android:ellipsize="end"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toStartOf="@id/detail_restaurant_rating_bar"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Five Guys" />
+            app:layout_constraintTop_toBottomOf="@id/detail_restaurant_picture">
 
-        <androidx.appcompat.widget.AppCompatRatingBar
-            android:id="@+id/detail_restaurant_rating_bar"
-            style="@style/Theme.Go4Lunch.RatingBar"
-            android:layout_width="wrap_content"
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/detail_restaurant_chose_fab"
+                style="@style/Theme.Go4Lunch.DetailRestaurantChoseBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="@string/detail_restaurant_chose_fab"
+                app:icon="@drawable/baseline_restaurant_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/detail_restaurant_name"
+                style="@style/Theme.Go4Lunch.LightText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:ellipsize="end"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toStartOf="@id/detail_restaurant_rating_bar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Five Guys" />
+
+            <androidx.appcompat.widget.AppCompatRatingBar
+                android:id="@+id/detail_restaurant_rating_bar"
+                style="@style/Theme.Go4Lunch.RatingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginEnd="12dp"
+                android:theme="@style/RatingBar"
+                app:layout_constraintBottom_toBottomOf="@id/detail_restaurant_name"
+                app:layout_constraintEnd_toStartOf="@id/detail_restaurant_chose_fab"
+                app:layout_constraintStart_toEndOf="@id/detail_restaurant_name"
+                app:layout_constraintTop_toTopOf="@id/detail_restaurant_name"
+                tools:rating="2" />
+
+
+            <TextView
+                android:id="@+id/detail_restaurant_address"
+                style="@style/Theme.Go4Lunch.LightText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="12dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/detail_restaurant_chose_fab"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/detail_restaurant_name"
+                tools:text="2 rue de la concorde, 92600 Asnières-sur-Seine" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="1dp"
-            android:layout_marginEnd="12dp"
-            android:theme="@style/RatingBar"
-            app:layout_constraintBottom_toBottomOf="@id/detail_restaurant_name"
-            app:layout_constraintEnd_toStartOf="@id/detail_restaurant_chose_fab"
-            app:layout_constraintStart_toEndOf="@id/detail_restaurant_name"
-            app:layout_constraintTop_toTopOf="@id/detail_restaurant_name"
-            tools:rating="2" />
-
-
-        <TextView
-            android:id="@+id/detail_restaurant_address"
-            style="@style/Theme.Go4Lunch.LightText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:layout_marginBottom="12dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/detail_restaurant_chose_fab"
+            app:layout_constraintBottom_toTopOf="@id/detail_restaurant_buttons"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/detail_restaurant_name"
-            tools:text="2 rue de la concorde, 92600 Asnières-sur-Seine" />
+            app:layout_constraintTop_toBottomOf="@id/detail_restaurant_orange_middle_bar_layout" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/detail_restaurant_buttons"
+            style="@style/Theme.Go4Lunch.LightView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="80dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/detail_restaurant_orange_middle_bar_layout">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/detail_restaurant_call_button"
+                style="@style/Theme.Go4Lunch.DetailRestaurantButtons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/detail_button_call"
+                app:icon="@drawable/baseline_local_phone_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/detail_restaurant_like_button"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/detail_restaurant_like_button"
+                style="@style/Theme.Go4Lunch.DetailRestaurantLikeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/detail_button_like"
+                app:icon="@drawable/baseline_star_border_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/detail_restaurant_website_button"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/detail_restaurant_call_button"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/detail_restaurant_website_button"
+                style="@style/Theme.Go4Lunch.DetailRestaurantButtons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/detail_button_website"
+                app:icon="@drawable/baseline_internet_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/detail_restaurant_like_button"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/detail_restaurant_buttons" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/detail_restaurant_workmates_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/detail_restaurant_buttons"
+            tools:listitem="@layout/workmates_item" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <com.google.android.material.divider.MaterialDivider
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/detail_restaurant_buttons"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/detail_restaurant_orange_middle_bar_layout" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/detail_restaurant_buttons"
-        style="@style/Theme.Go4Lunch.LightView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="80dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/detail_restaurant_orange_middle_bar_layout">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/detail_restaurant_call_button"
-            style="@style/Theme.Go4Lunch.DetailRestaurantButtons"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/detail_button_call"
-            app:icon="@drawable/baseline_local_phone_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/detail_restaurant_like_button"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/detail_restaurant_like_button"
-            style="@style/Theme.Go4Lunch.DetailRestaurantLikeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/detail_button_like"
-            app:icon="@drawable/baseline_star_border_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/detail_restaurant_website_button"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/detail_restaurant_call_button"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/detail_restaurant_website_button"
-            style="@style/Theme.Go4Lunch.DetailRestaurantButtons"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/detail_button_website"
-            app:icon="@drawable/baseline_internet_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/detail_restaurant_like_button"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <com.google.android.material.divider.MaterialDivider
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/detail_restaurant_buttons" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/detail_restaurant_workmates_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/detail_restaurant_buttons"
-        tools:listitem="@layout/workmates_item" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,6 @@
 package com.emplk.go4lunch.domain.favorite_restaurant;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
 import java.util.Set;

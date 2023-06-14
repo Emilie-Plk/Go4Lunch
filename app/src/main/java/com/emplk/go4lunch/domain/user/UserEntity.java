@@ -13,7 +13,7 @@ public class UserEntity {
     @NonNull
     private final LoggedUserEntity loggedUserEntity;
 
-    @NonNull
+    @Nullable
     private final Set<String> favoriteRestaurantSet;
 
     @Nullable
@@ -21,7 +21,7 @@ public class UserEntity {
 
     public UserEntity(
         @NonNull LoggedUserEntity loggedUserEntity,
-        @NonNull Set<String> favoriteRestaurantSet,
+        @Nullable Set<String> favoriteRestaurantSet,
         @Nullable String attendingRestaurantId
     ) {
         this.loggedUserEntity = loggedUserEntity;
@@ -34,7 +34,7 @@ public class UserEntity {
         return loggedUserEntity;
     }
 
-    @NonNull
+    @Nullable
     public Set<String> getFavoriteRestaurantSet() {
         return favoriteRestaurantSet;
     }

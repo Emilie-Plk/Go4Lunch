@@ -100,13 +100,7 @@ public class UserRepositoryFirestore implements UserRepository {
 
             userWithRestaurantChoiceDocumentRef
                 .set(
-                    new UserWithRestaurantChoiceDto(
-                        new LoggedUserDto(
-                            loggedUserEntity.getId(),
-                            loggedUserEntity.getName(),
-                            loggedUserEntity.getEmail(),
-                            loggedUserEntity.getPictureUrl()
-                        ),
+                    new RestaurantChoiceDto(
                         restaurantEntity.getAttendingRestaurantId(),
                         restaurantEntity.getAttendingRestaurantName(),
                         restaurantEntity.getAttendingRestaurantVicinity(),
@@ -136,15 +130,15 @@ public class UserRepositoryFirestore implements UserRepository {
             userDocumentRef
                 .delete()
                 .addOnSuccessListener(aVoid -> {
-                        Log.i("UserRepositoryFirestore", "User document successfully deleted!");
+                        Log.i("UserRepositoryFirestore", "User's restaurant choice successfully deleted!");
                     }
                 )
                 .addOnFailureListener(e -> {
-                        Log.e("UserRepositoryFirestore", "Error deleting user document: " + e);
+                        Log.e("UserRepositoryFirestore", "Error deleting user's restaurant choice: " + e);
                     }
                 );
         } else {
-            Log.e("UserRepositoryFirestore", "Error deleting user document: userEntity is null!");
+            Log.e("UserRepositoryFirestore", "Error deleting user's restaurant choice: userEntity is null!");
         }
     }
 
@@ -163,24 +157,25 @@ public class UserRepositoryFirestore implements UserRepository {
                             return;
                         }
                         if (documentSnapshot != null) {
-                            UserWithRestaurantChoiceDto userWithRestaurantChoiceDto = documentSnapshot.toObject(UserWithRestaurantChoiceDto.class);
-                            RestaurantEntity restaurantEntity = mapToRestaurantEntity(userWithRestaurantChoiceDto);
+                            RestaurantChoiceDto restaurantChoiceDto = documentSnapshot.toObject(RestaurantChoiceDto.class);
+                            RestaurantEntity restaurantEntity = mapToRestaurantEntity(restaurantChoiceDto);
                             restaurantEntityMutableLiveData.setValue(restaurantEntity);
+                        } else {
+                            // Reset the value to null when the document is deleted
+                            restaurantEntityMutableLiveData.setValue(null);
                         }
                     }
                 );
-        } else {
-            Log.e("UserRepositoryFirestore", "Error fetching user with restaurant choice document: userEntity is null!");
-            restaurantEntityMutableLiveData.setValue(null);
         }
         return restaurantEntityMutableLiveData;
     }
 
     @Override
     public LiveData<List<LoggedUserEntity>> getLoggedUserEntitiesLiveData() {
-     MutableLiveData<List<LoggedUserEntity>> loggedUserEntitiesMutableLiveData = new MutableLiveData<>();
+        MutableLiveData<List<LoggedUserEntity>> loggedUserEntitiesMutableLiveData = new MutableLiveData<>();
 
-        firestore.collection(USERS_COLLECTION)
+        firestore
+            .collection(USERS_COLLECTION)
             .addSnapshotListener((queryDocumentSnapshots, error) -> {
                     if (error != null) {
                         Log.e("UserRepositoryFirestore", "Error fetching users documents: " + error);
@@ -218,22 +213,20 @@ public class UserRepositoryFirestore implements UserRepository {
         }
     }
 
-    private RestaurantEntity mapToRestaurantEntity(UserWithRestaurantChoiceDto userWithRestaurantChoiceDto) {
-        if (userWithRestaurantChoiceDto != null &&
-            userWithRestaurantChoiceDto.getAttendingRestaurantId() != null &&
-            userWithRestaurantChoiceDto.getAttendingRestaurantName() != null &&
-            userWithRestaurantChoiceDto.getAttendingRestaurantVicinity() != null &&
-            userWithRestaurantChoiceDto.getLoggedUser() != null
+    private RestaurantEntity mapToRestaurantEntity(RestaurantChoiceDto restaurantChoiceDto) {
+        if (restaurantChoiceDto != null &&
+            restaurantChoiceDto.getAttendingRestaurantId() != null &&
+            restaurantChoiceDto.getAttendingRestaurantName() != null &&
+            restaurantChoiceDto.getAttendingRestaurantVicinity() != null
         ) {
             return new RestaurantEntity(
-                userWithRestaurantChoiceDto.getAttendingRestaurantId(),
-                userWithRestaurantChoiceDto.getAttendingRestaurantName(),
-                userWithRestaurantChoiceDto.getAttendingRestaurantVicinity(),
-                userWithRestaurantChoiceDto.getAttendingRestaurantPictureUrl()
+                restaurantChoiceDto.getAttendingRestaurantId(),
+                restaurantChoiceDto.getAttendingRestaurantName(),
+                restaurantChoiceDto.getAttendingRestaurantVicinity(),
+                restaurantChoiceDto.getAttendingRestaurantPictureUrl()
             );
-        } else {
-            return null;
         }
+        return null;
     }
 }
 

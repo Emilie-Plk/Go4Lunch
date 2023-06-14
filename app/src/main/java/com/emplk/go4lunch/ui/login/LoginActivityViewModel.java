@@ -3,7 +3,7 @@ package com.emplk.go4lunch.ui.login;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 
-import com.emplk.go4lunch.domain.user.use_case.CreateUserUseCase;
+import com.emplk.go4lunch.domain.user.use_case.UpsertLoggedUserEntityUseCase;
 
 import javax.inject.Inject;
 
@@ -13,14 +13,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class LoginActivityViewModel extends ViewModel {
 
     @NonNull
-    private final CreateUserUseCase createUserUseCase;
+    private final UpsertLoggedUserEntityUseCase upsertLoggedUserEntityUseCase;
 
     @Inject
-    public LoginActivityViewModel(@NonNull CreateUserUseCase createUserUseCase) {
-        this.createUserUseCase = createUserUseCase;
+    public LoginActivityViewModel(@NonNull UpsertLoggedUserEntityUseCase upsertLoggedUserEntityUseCase) {
+        this.upsertLoggedUserEntityUseCase = upsertLoggedUserEntityUseCase;
     }
 
     public void onLoginComplete() {
-        createUserUseCase.invoke();
+        upsertLoggedUserEntityUseCase.invoke();
     }
 }

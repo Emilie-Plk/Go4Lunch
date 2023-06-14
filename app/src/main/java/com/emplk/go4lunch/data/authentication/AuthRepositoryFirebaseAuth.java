@@ -11,7 +11,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.domain.authentication.AuthRepository;
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
-import com.facebook.AccessToken;
 import com.google.firebase.auth.FirebaseAuth;
 
 import javax.inject.Inject;
@@ -49,12 +48,12 @@ public class AuthRepositoryFirebaseAuth implements AuthRepository {
             String pictureUrl;
 
             if (firebaseAuth.getCurrentUser().getPhotoUrl() != null) {
-                pictureUrl = firebaseAuth.getCurrentUser().getPhotoUrl().toString() + AccessToken.getCurrentAccessToken();
+                pictureUrl = firebaseAuth.getCurrentUser().getPhotoUrl().toString();
             } else {
                 pictureUrl = Uri.parse("android.resource://com.emplk.go4lunch/" + R.drawable.baseline_person_24).toString();
             }
             if (email != null && name != null) {
-               return new LoggedUserEntity(
+                return new LoggedUserEntity(
                     id,
                     name,
                     email,

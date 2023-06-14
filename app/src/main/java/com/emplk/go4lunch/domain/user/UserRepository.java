@@ -22,6 +22,6 @@ public interface UserRepository {
     void deleteUserRestaurantChoice(@Nullable LoggedUserEntity loggedUserEntity);
 
     LiveData<RestaurantEntity> getUserRestaurantChoiceLiveData(@Nullable LoggedUserEntity loggedUserEntity);
-    
+
     LiveData<List<LoggedUserEntity>> getLoggedUserEntitiesLiveData();
 }

@@ -16,12 +16,10 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.R;
-import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserIdUseCase;
 import com.emplk.go4lunch.domain.detail.GetDetailsRestaurantWrapperUseCase;
 import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantEntity;
 import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantWrapper;
 import com.emplk.go4lunch.domain.favorite_restaurant.AddFavoriteRestaurantUseCase;
-import com.emplk.go4lunch.domain.favorite_restaurant.IsRestaurantUserFavoriteUseCase;
 import com.emplk.go4lunch.domain.favorite_restaurant.RemoveFavoriteRestaurantUseCase;
 import com.emplk.go4lunch.domain.user.UserEntity;
 import com.emplk.go4lunch.domain.user.use_case.AddUserRestaurantChoiceUseCase;
@@ -48,19 +46,6 @@ public class RestaurantDetailViewModel extends ViewModel {
 
     private final MediatorLiveData<RestaurantDetailViewState> restaurantDetailViewStateMediatorLiveData = new MediatorLiveData<>();
 
-    private final MutableLiveData<RestaurantFavoriteState> restaurantFavoriteStateMutableLiveData = new MutableLiveData<>();
-
-    private final MutableLiveData<AttendanceState> attendanceStateMutableLiveData = new MutableLiveData<>();
-
-    @NonNull
-    private final GetDetailsRestaurantWrapperUseCase getDetailsRestaurantWrapperUseCase;
-
-    @NonNull
-    private final GetCurrentLoggedUserIdUseCase getCurrentLoggedUserIdUseCase;
-
-    @NonNull
-    private final IsRestaurantUserFavoriteUseCase isRestaurantUserFavoriteUseCase;
-    @NonNull
     private final AddFavoriteRestaurantUseCase addFavoriteRestaurantUseCase;
 
     @NonNull
@@ -75,8 +60,6 @@ public class RestaurantDetailViewModel extends ViewModel {
     @NonNull
     private final GetWorkmateEntitiesGoingToSameRestaurantUseCase getWorkmateEntitiesGoingToSameRestaurantUseCase;
 
-    @NonNull
-    private final GetUserEntityUseCase getUserEntityUseCase;
 
     private final String restaurantId;
 
@@ -85,8 +68,6 @@ public class RestaurantDetailViewModel extends ViewModel {
     public RestaurantDetailViewModel(
         @NonNull GetDetailsRestaurantWrapperUseCase getDetailsRestaurantWrapperUseCase,
         @NonNull Resources resources,
-        @NonNull GetCurrentLoggedUserIdUseCase getCurrentLoggedUserIdUseCase,
-        @NonNull IsRestaurantUserFavoriteUseCase isRestaurantUserFavoriteUseCase,
         @NonNull AddFavoriteRestaurantUseCase addFavoriteRestaurantUseCase,
         @NonNull RemoveFavoriteRestaurantUseCase removeFavoriteRestaurantUseCase,
         @NonNull AddUserRestaurantChoiceUseCase addUserRestaurantChoiceUseCase,
@@ -95,23 +76,17 @@ public class RestaurantDetailViewModel extends ViewModel {
         @NonNull GetUserEntityUseCase getUserEntityUseCase,
         @NonNull SavedStateHandle savedStateHandle
     ) {
-        this.getDetailsRestaurantWrapperUseCase = getDetailsRestaurantWrapperUseCase;
         this.resources = resources;
-        this.getCurrentLoggedUserIdUseCase = getCurrentLoggedUserIdUseCase;
-        this.isRestaurantUserFavoriteUseCase = isRestaurantUserFavoriteUseCase;
         this.addFavoriteRestaurantUseCase = addFavoriteRestaurantUseCase;
         this.removeFavoriteRestaurantUseCase = removeFavoriteRestaurantUseCase;
         this.addUserRestaurantChoiceUseCase = addUserRestaurantChoiceUseCase;
         this.removeUserRestaurantChoiceUseCase = removeUserRestaurantChoiceUseCase;
         this.getWorkmateEntitiesGoingToSameRestaurantUseCase = getWorkmateEntitiesGoingToSameRestaurantUseCase;
-        this.getUserEntityUseCase = getUserEntityUseCase;
 
         restaurantId = savedStateHandle.get(RestaurantDetailActivity.KEY_RESTAURANT_ID);
 
 
         LiveData<DetailsRestaurantWrapper> detailsRestaurantWrapperLiveData = getDetailsRestaurantWrapperUseCase.invoke(restaurantId);
-
-        LiveData<Boolean> isRestaurantLikedLiveData = isRestaurantUserFavoriteUseCase.invoke(restaurantId);
 
         restaurantDetailViewStateMediatorLiveData.addSource(detailsRestaurantWrapperLiveData, detailsRestaurantWrapper -> {
                 combine(detailsRestaurantWrapper, getUserEntityUseCase.invoke().getValue());
@@ -133,45 +108,25 @@ public class RestaurantDetailViewModel extends ViewModel {
             return;
         }
 
+        boolean isRestaurantLiked = currentUser.getFavoriteRestaurantSet() != null && !currentUser.getFavoriteRestaurantSet().isEmpty() && currentUser.getFavoriteRestaurantSet().contains(restaurantId);
+        boolean isAttending = (currentUser.getAttendingRestaurantId() != null && currentUser.getAttendingRestaurantId().equals(restaurantId));
+
+        RestaurantFavoriteState restaurantFavoriteState = isRestaurantLiked ? RestaurantFavoriteState.IS_FAVORITE : RestaurantFavoriteState.IS_NOT_FAVORITE;
+        AttendanceState attendanceState = isAttending ? AttendanceState.IS_ATTENDING : AttendanceState.IS_NOT_ATTENDING;
+
         if (detailsRestaurantWrapper instanceof DetailsRestaurantWrapper.Loading) {
             restaurantDetailViewStateMediatorLiveData.setValue(
-                new RestaurantDetailViewState(
-                    restaurantId,
-                    "",    // ugly...
-                    "",
-                    "",
-                    0f,
-                    "",
-                    "",
-                    false,
-                    false,
-                    false,
-                    true,    // ...but I need it for this somehow
-                    false,
-                    false
+                new RestaurantDetailViewState.Loading(
                 )
             );
         }
 
         if (detailsRestaurantWrapper instanceof DetailsRestaurantWrapper.Success) {
+
             DetailsRestaurantEntity detailsRestaurantEntity = ((DetailsRestaurantWrapper.Success) detailsRestaurantWrapper).getDetailsRestaurantEntity();
-            boolean isRestaurantLiked = currentUser.getFavoriteRestaurantSet().contains(restaurantId);
-            boolean isAttending = (currentUser.getAttendingRestaurantId() != null && currentUser.getAttendingRestaurantId().equals(restaurantId));
-
-            if (isRestaurantLiked) {
-                restaurantFavoriteStateMutableLiveData.setValue(RestaurantFavoriteState.IS_FAVORITE);
-            } else {
-                restaurantFavoriteStateMutableLiveData.setValue(RestaurantFavoriteState.IS_NOT_FAVORITE);
-            }
-
-            if (isAttending) {
-                attendanceStateMutableLiveData.setValue(AttendanceState.IS_ATTENDING);
-            } else {
-                attendanceStateMutableLiveData.setValue(AttendanceState.IS_NOT_ATTENDING);
-            }
 
             restaurantDetailViewStateMediatorLiveData.setValue(
-                new RestaurantDetailViewState(
+                new RestaurantDetailViewState.RestaurantDetail(
                     restaurantId,
                     checkIfResponseFieldExist(detailsRestaurantEntity.getRestaurantName()),
                     checkIfResponseFieldExist(detailsRestaurantEntity.getVicinity()),
@@ -179,10 +134,9 @@ public class RestaurantDetailViewModel extends ViewModel {
                     convertFiveToThreeRating(detailsRestaurantEntity.getRating()),
                     detailsRestaurantEntity.getPhoneNumber(),
                     detailsRestaurantEntity.getWebsiteUrl(),
-                    isAttending,
-                    isRestaurantLiked,
+                    attendanceState,
+                    restaurantFavoriteState,
                     detailsRestaurantEntity.getVeganFriendly(),
-                    false,
                     detailsRestaurantEntity.getPhoneNumber() != null,
                     detailsRestaurantEntity.getWebsiteUrl() != null
                 )
@@ -191,19 +145,9 @@ public class RestaurantDetailViewModel extends ViewModel {
         //TODO: handle error case
     }
 
-
     public LiveData<RestaurantDetailViewState> getRestaurantDetails() {
         return restaurantDetailViewStateMediatorLiveData;
     }
-
-    public LiveData<RestaurantFavoriteState> getRestaurantFavoriteState() {
-        return restaurantFavoriteStateMutableLiveData;
-    }
-
-    public LiveData<AttendanceState> getAttendanceState() {
-        return attendanceStateMutableLiveData;
-    }
-
 
     private Float convertFiveToThreeRating(@Nullable Float fiveRating) {
         if (fiveRating == null) {

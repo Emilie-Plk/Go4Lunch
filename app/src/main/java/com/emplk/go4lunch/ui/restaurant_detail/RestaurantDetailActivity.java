@@ -1,14 +1,10 @@
 package com.emplk.go4lunch.ui.restaurant_detail;
 
-import static com.emplk.go4lunch.ui.restaurant_detail.AttendanceState.IS_ATTENDING;
-import static com.emplk.go4lunch.ui.restaurant_detail.AttendanceState.IS_NOT_ATTENDING;
-import static com.emplk.go4lunch.ui.utils.RestaurantFavoriteState.IS_FAVORITE;
-import static com.emplk.go4lunch.ui.utils.RestaurantFavoriteState.IS_NOT_FAVORITE;
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -22,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.RestaurantDetailActivityBinding;
+import com.emplk.go4lunch.ui.utils.RestaurantFavoriteState;
 import com.emplk.go4lunch.ui.workmate_list.OnWorkmateClickedListener;
 import com.emplk.go4lunch.ui.workmate_list.WorkmateListAdapter;
 
@@ -83,93 +80,94 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     }
 
     private void setupObservers() {
-        viewModel.getRestaurantFavoriteState().observe(this, restaurantFavoriteState -> {
-                if (restaurantFavoriteState == IS_FAVORITE) {
-                    binding.detailRestaurantLikeButton.setIcon(ContextCompat.getDrawable(
-                            this, R.drawable.baseline_star_24
-                        )
-                    );
-                    binding.detailRestaurantLikeButton.setOnClickListener(v -> {
-                            viewModel.onRemoveFavoriteRestaurant();
-                        }
-                    );
-                } else if (restaurantFavoriteState == IS_NOT_FAVORITE) {
-                    binding.detailRestaurantLikeButton.setIcon(ContextCompat.getDrawable(
-                            this, R.drawable.baseline_star_border_24
-                        )
-                    );
-                    binding.detailRestaurantLikeButton.setOnClickListener(v -> {
-                            viewModel.onAddFavoriteRestaurant();
-                        }
-                    );
-                }
-            }
-        );
-
-        viewModel.getAttendanceState().observe(this, attendanceState -> {
-                if (attendanceState == IS_ATTENDING) {
-                    binding.detailRestaurantChoseFab.setText("Go!");
-                    binding.detailRestaurantChoseFab.setOnClickListener(v -> {
-                            viewModel.onRemoveUserRestaurantChoice();
-                        }
-                    );
-                } else if (attendanceState == IS_NOT_ATTENDING) {
-                    binding.detailRestaurantChoseFab.setText("Go?");
-                    binding.detailRestaurantChoseFab.setOnClickListener(v -> {
-                            viewModel.onAddUserRestaurantChoice(   // TODO: maybe try just to pass the restau id through the VM with savedStateHandle
-                                binding.detailRestaurantName.getText().toString(),
-                                binding.detailRestaurantAddress.getText().toString(),
-                                viewModel.getRestaurantDetails().getValue().getPictureUrl()
-                            );
-                        }
-                    );
-                }
-
-            }
-        );
 
         viewModel.getRestaurantDetails().observe(this, restaurantDetail -> {
-                if (restaurantDetail != null) {
-                    binding.detailRestaurantName.setText(restaurantDetail.getName());
-                    binding.detailRestaurantAddress.setText(restaurantDetail.getVicinity());
-                    binding.detailRestaurantRatingBar.setRating(restaurantDetail.getRating());
-                    binding.detailRestaurantVeganFriendly.setVisibility(Boolean.TRUE.equals(restaurantDetail.isVeganFriendly()) ? View.VISIBLE : View.INVISIBLE);
-                    binding.loadingStateLoadingBar.setVisibility(Boolean.TRUE.equals(restaurantDetail.isLoading()) ? View.VISIBLE : View.INVISIBLE);
-                    binding.detailRestaurantWebsiteButton.setEnabled(restaurantDetail.isWebsiteAvailable());
-                    binding.detailRestaurantCallButton.setEnabled(restaurantDetail.isPhoneNumberAvailable());
+
+
+                if (restaurantDetail instanceof RestaurantDetailViewState.Loading) {
+                    binding.detailRestaurantLayout.setVisibility(View.GONE);
+                }
+
+                if (restaurantDetail instanceof RestaurantDetailViewState.RestaurantDetail) {
+                    binding.detailRestaurantLayout.setVisibility(View.VISIBLE);
+                    binding.detailRestaurantLoadingStateLayout.setVisibility(View.GONE);
+
+                    RestaurantDetailViewState.RestaurantDetail detail = (RestaurantDetailViewState.RestaurantDetail) restaurantDetail;
+                    binding.detailRestaurantName.setText(detail.getName());
+                    binding.detailRestaurantAddress.setText(detail.getVicinity());
+                    binding.detailRestaurantRatingBar.setRating(detail.getRating());
+                    binding.detailRestaurantVeganFriendly.setVisibility(Boolean.TRUE.equals(detail.isVeganFriendly()) ? View.VISIBLE : View.INVISIBLE);
+                    binding.detailRestaurantWebsiteButton.setEnabled(detail.isWebsiteAvailable());
+                    binding.detailRestaurantCallButton.setEnabled(detail.isPhoneNumberAvailable());
+
+
+                    if (detail.getAttendanceState() == AttendanceState.IS_ATTENDING) {
+                        binding.detailRestaurantChoseFab.setText(detail.getAttendanceState().getText());
+                        binding.detailRestaurantChoseFab.setOnClickListener(v -> {
+                                Log.d("EMILIE", "clicked on remove user restaurant choice");
+                                viewModel.onRemoveUserRestaurantChoice();
+                            }
+                        );
+                    } else if (detail.getAttendanceState() == AttendanceState.IS_NOT_ATTENDING) {
+                        binding.detailRestaurantChoseFab.setText(detail.getAttendanceState().getText());
+                        binding.detailRestaurantChoseFab.setOnClickListener(v -> {
+                                Log.d("EMILIE", "clicked on add user restaurant choice");
+                                viewModel.onAddUserRestaurantChoice(
+                                    detail.getName(),
+                                    detail.getVicinity(),
+                                    detail.getPictureUrl()
+                                );
+                            }
+                        );
+                    }
+
+                    if (detail.getRestaurantFavoriteState() == RestaurantFavoriteState.IS_FAVORITE) {
+                        binding.detailRestaurantLikeButton.setIcon(
+                            ContextCompat.getDrawable(this,
+                                detail.getRestaurantFavoriteState().getDrawableRes()
+                            )
+                        );
+                        binding.detailRestaurantLikeButton.setOnClickListener(v -> {
+                                Log.d("EMILIE", "clicked on remove favorite restaurant");
+                                viewModel.onRemoveFavoriteRestaurant();
+                            }
+                        );
+                    } else if (detail.getRestaurantFavoriteState() == RestaurantFavoriteState.IS_NOT_FAVORITE) {
+                        binding.detailRestaurantLikeButton.setIcon(
+                            ContextCompat.getDrawable(this,
+                                detail.getRestaurantFavoriteState().getDrawableRes()
+                            )
+                        );
+                        binding.detailRestaurantLikeButton.setOnClickListener(v -> {
+                                Log.d("EMILIE", "clicked on add favorite restaurant");
+                                viewModel.onAddFavoriteRestaurant();
+                            }
+                        );
+                    }
 
                     Glide.with(this)
-                        .load(restaurantDetail.getPictureUrl())
+                        .load(detail.getPictureUrl())
                         .centerCrop()
                         .error(R.drawable.restaurant_table)
                         .fallback(R.drawable.restaurant_table)
                         .into(binding.detailRestaurantPicture);
 
                     binding.detailRestaurantWebsiteButton.setOnClickListener(v -> {
-                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(restaurantDetail.getWebsiteUrl()));
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(detail.getWebsiteUrl()));
                             startActivity(intent);
                         }
                     );
 
                     binding.detailRestaurantCallButton.setOnClickListener(v -> {
-                            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", restaurantDetail.getPhoneNumber(), null));
+                            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", detail.getPhoneNumber(), null));
                             startActivity(intent);
-                        }
-                    );
-
-
-                    binding.detailRestaurantChoseFab.setOnClickListener(v -> {
-                            viewModel.onAddUserRestaurantChoice(
-                                restaurantDetail.getName(),
-                                restaurantDetail.getVicinity(),
-                                restaurantDetail.getPictureUrl()
-                            );
                         }
                     );
                 }
             }
         );
     }
+
 
     @Override
     public boolean onSupportNavigateUp() {
