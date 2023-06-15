@@ -14,8 +14,6 @@ public interface UserRepository {
 
     LiveData<List<LoggedUserEntity>> getLoggedUserEntitiesLiveData();
 
-    LiveData<LoggedUserEntity> getLoggedUserEntityLiveData(@NonNull String userId); // TODO: need this method?
-
     void upsertUserRestaurantChoice(
         @Nullable LoggedUserEntity loggedUserEntity,
         @NonNull ChosenRestaurantEntity chosenRestaurantEntity

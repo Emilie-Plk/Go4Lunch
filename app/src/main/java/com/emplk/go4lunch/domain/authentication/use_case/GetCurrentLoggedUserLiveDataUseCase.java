@@ -20,9 +20,7 @@ public class GetCurrentLoggedUserLiveDataUseCase {
     }
 
     @Nullable
-    public LiveData<LoggedUserEntity> invoke() {
-        MutableLiveData<LoggedUserEntity> loggedUserEntityMutableLiveData = new MutableLiveData<>();
-        loggedUserEntityMutableLiveData.setValue(authRepository.getCurrentLoggedUser());
-        return loggedUserEntityMutableLiveData;
+    public LoggedUserEntity invoke() {
+        return authRepository.getCurrentLoggedUser();
     }
 }

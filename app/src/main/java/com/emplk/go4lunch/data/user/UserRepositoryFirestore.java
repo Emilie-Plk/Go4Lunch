@@ -68,28 +68,6 @@ public class UserRepositoryFirestore implements UserRepository {
     }
 
     @Override
-    public LiveData<LoggedUserEntity> getLoggedUserEntityLiveData(@NonNull String userId) {
-        MutableLiveData<LoggedUserEntity> loggedUserEntityMutableLiveData = new MutableLiveData<>();
-
-        firestore.collection(USERS_COLLECTION)
-            .document(userId)
-            .addSnapshotListener((documentSnapshot, error) -> {   // either error/documentSnapshot
-                    if (error != null) {
-                        Log.e("UserRepositoryFirestore", "Error fetching user document: " + error);
-                        loggedUserEntityMutableLiveData.setValue(null);
-                        return;
-                    }
-                    if (documentSnapshot != null) {
-                        LoggedUserDto loggedUserDto = documentSnapshot.toObject(LoggedUserDto.class);
-                        LoggedUserEntity loggedUserEntity = mapToLoggedUserEntity(loggedUserDto);
-                        loggedUserEntityMutableLiveData.setValue(loggedUserEntity);
-                    }
-                }
-            );
-        return loggedUserEntityMutableLiveData;
-    }
-
-    @Override
     public void upsertUserRestaurantChoice(
         @Nullable LoggedUserEntity loggedUserEntity,
         @NonNull ChosenRestaurantEntity chosenRestaurantEntity

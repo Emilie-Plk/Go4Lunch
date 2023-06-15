@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
-import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserLiveDataUseCase;
+import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserUseCase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,57 +16,42 @@ import javax.inject.Inject;
 public class GetWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase {
 
     @NonNull
-    private final GetWorkmateEntitiesWithRestaurantChoiceListUseCase getWorkmateEntitiesWithRestaurantChoiceListUseCase;
+    private final GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase;
 
     @NonNull
-    private final GetCurrentLoggedUserLiveDataUseCase getCurrentLoggedUserLiveDataUseCase;
-
-    @NonNull
-    private final GetLoggedUserEntitiesUseCase getLoggedUserEntitiesUseCase;
-
-    @NonNull
-    MediatorLiveData<List<WorkmateEntity>> workmateEntitiesWithAndWithoutRestaurantChoiceMediatorLiveData = new MediatorLiveData<>();
+    private final MediatorLiveData<List<WorkmateEntity>> workmateEntitiesWithAndWithoutRestaurantChoiceMediatorLiveData = new MediatorLiveData<>();
 
     @Inject
     public GetWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase(
         @NonNull GetWorkmateEntitiesWithRestaurantChoiceListUseCase getWorkmateEntitiesWithRestaurantChoiceListUseCase,
-        @NonNull GetCurrentLoggedUserLiveDataUseCase getCurrentLoggedUserLiveDataUseCase,
+        @NonNull GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase,
         @NonNull GetLoggedUserEntitiesUseCase getLoggedUserEntitiesUseCase
     ) {
-        this.getWorkmateEntitiesWithRestaurantChoiceListUseCase = getWorkmateEntitiesWithRestaurantChoiceListUseCase;
-        this.getCurrentLoggedUserLiveDataUseCase = getCurrentLoggedUserLiveDataUseCase;
-        this.getLoggedUserEntitiesUseCase = getLoggedUserEntitiesUseCase;
+        this.getCurrentLoggedUserUseCase = getCurrentLoggedUserUseCase;
 
         LiveData<List<WorkmateEntity>> workmateEntitiesWithRestaurantChoiceLiveData = getWorkmateEntitiesWithRestaurantChoiceListUseCase.invoke();
         LiveData<List<LoggedUserEntity>> loggedUserEntitiesLiveData = getLoggedUserEntitiesUseCase.invoke();
-        LiveData<LoggedUserEntity> currentLoggedUserLiveData = getCurrentLoggedUserLiveDataUseCase.invoke();
 
         workmateEntitiesWithAndWithoutRestaurantChoiceMediatorLiveData.addSource(workmateEntitiesWithRestaurantChoiceLiveData, workmateEntitiesWithRestaurantChoice -> {
-                combine(workmateEntitiesWithRestaurantChoice, loggedUserEntitiesLiveData.getValue(), currentLoggedUserLiveData.getValue());
+                combine(workmateEntitiesWithRestaurantChoice, loggedUserEntitiesLiveData.getValue());
             }
         );
 
         workmateEntitiesWithAndWithoutRestaurantChoiceMediatorLiveData.addSource(loggedUserEntitiesLiveData, loggedUserEntities -> {
-                combine(workmateEntitiesWithRestaurantChoiceLiveData.getValue(), loggedUserEntities, currentLoggedUserLiveData.getValue());
-            }
-        );
-
-        workmateEntitiesWithAndWithoutRestaurantChoiceMediatorLiveData.addSource(currentLoggedUserLiveData, currentLoggedUser -> {
-                combine(workmateEntitiesWithRestaurantChoiceLiveData.getValue(), loggedUserEntitiesLiveData.getValue(), currentLoggedUser);
+                combine(workmateEntitiesWithRestaurantChoiceLiveData.getValue(), loggedUserEntities);
             }
         );
     }
 
     public LiveData<List<WorkmateEntity>> invoke() {
         return workmateEntitiesWithAndWithoutRestaurantChoiceMediatorLiveData;
-
     }
 
     private void combine(
         @Nullable List<WorkmateEntity> workmateEntitiesWithRestaurantChoice,
-        @Nullable List<LoggedUserEntity> loggedUserEntities,
-        @Nullable LoggedUserEntity currentLoggedUser
+        @Nullable List<LoggedUserEntity> loggedUserEntities
     ) {
+        LoggedUserEntity currentLoggedUser = getCurrentLoggedUserUseCase.invoke();
         if (currentLoggedUser == null || loggedUserEntities == null) {
             return;
         }

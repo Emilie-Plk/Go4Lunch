@@ -70,8 +70,8 @@ public class MainViewModel extends ViewModel {
     }
 
 
-    public LiveData<LoggedUserEntity> getUserInfoLiveData() { //TODO: just use the LoggedUserEntity
-        return getCurrentLoggedUserLiveDataUseCase.invoke();
+    public LiveData<LoggedUserEntity> getUserInfoLiveData() { //TODO: map ViewState from LoggedUserEntity
+        return new MutableLiveData<>(getCurrentLoggedUserLiveDataUseCase.invoke());
     }
 
     public LiveData<UserLoggingState> onUserLogged() {
