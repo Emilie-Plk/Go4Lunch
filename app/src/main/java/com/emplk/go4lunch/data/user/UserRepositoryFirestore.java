@@ -8,10 +8,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
-import com.emplk.go4lunch.domain.user.RestaurantEntity;
+import com.emplk.go4lunch.domain.user.ChosenRestaurantEntity;
 import com.emplk.go4lunch.domain.user.UserRepository;
+import com.emplk.go4lunch.domain.user.UserWithRestaurantChoiceEntity;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,7 +92,7 @@ public class UserRepositoryFirestore implements UserRepository {
     @Override
     public void upsertUserRestaurantChoice(
         @Nullable LoggedUserEntity loggedUserEntity,
-        @NonNull RestaurantEntity restaurantEntity
+        @NonNull ChosenRestaurantEntity chosenRestaurantEntity
     ) {
         if (loggedUserEntity != null) {
             DocumentReference userWithRestaurantChoiceDocumentRef =
@@ -100,11 +102,11 @@ public class UserRepositoryFirestore implements UserRepository {
 
             userWithRestaurantChoiceDocumentRef
                 .set(
-                    new RestaurantChoiceDto(
-                        restaurantEntity.getAttendingRestaurantId(),
-                        restaurantEntity.getAttendingRestaurantName(),
-                        restaurantEntity.getAttendingRestaurantVicinity(),
-                        restaurantEntity.getAttendingRestaurantPictureUrl()
+                    new UserWithRestaurantChoiceDto(
+                        chosenRestaurantEntity.getAttendingRestaurantId(),
+                        chosenRestaurantEntity.getAttendingRestaurantName(),
+                        chosenRestaurantEntity.getAttendingRestaurantVicinity(),
+                        chosenRestaurantEntity.getAttendingRestaurantPictureUrl()
                     )
                 )
                 .addOnSuccessListener(aVoid -> {
@@ -118,6 +120,58 @@ public class UserRepositoryFirestore implements UserRepository {
         } else {
             Log.e("UserRepositoryFirestore", "Error creating user document: userEntity is null!");
         }
+    }
+
+    @Override
+    public LiveData<List<UserWithRestaurantChoiceEntity>> getUserWithRestaurantChoiceEntities() {
+        MutableLiveData<List<UserWithRestaurantChoiceEntity>> userWithRestaurantChoiceEntitiesMutableLiveData = new MutableLiveData<>();
+
+        firestore.collection(USERS_WITH_RESTAURANT_CHOICE)
+            .addSnapshotListener((queryDocumentSnapshots, error) -> {
+                    if (error != null) {
+                        Log.e("UserRepositoryFirestore", "Error fetching users documents: " + error);
+                        userWithRestaurantChoiceEntitiesMutableLiveData.setValue(null);
+                        return;
+                    }
+                    if (queryDocumentSnapshots != null) {
+                        List<UserWithRestaurantChoiceEntity> userWithRestaurantChoiceEntities = new ArrayList<>();
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            String documentId = documentSnapshot.getId();
+                            UserWithRestaurantChoiceDto userWithRestaurantChoiceDto = documentSnapshot.toObject(UserWithRestaurantChoiceDto.class);
+                            userWithRestaurantChoiceEntities.add(mapToUserWithRestaurantChoiceEntity(userWithRestaurantChoiceDto, documentId));
+                        }
+                        userWithRestaurantChoiceEntitiesMutableLiveData.setValue(userWithRestaurantChoiceEntities);
+                    }
+                }
+            );
+        return userWithRestaurantChoiceEntitiesMutableLiveData;
+    }
+
+    @Override
+    public LiveData<UserWithRestaurantChoiceEntity> getUserWithRestaurantChoiceEntity(@NonNull String userId) {
+        MutableLiveData<UserWithRestaurantChoiceEntity> userWithRestaurantChoiceEntityMutableLiveData = new MutableLiveData<>();
+
+        firestore
+            .collection(USERS_WITH_RESTAURANT_CHOICE)
+            .document(userId)
+            .addSnapshotListener((documentSnapshot, error) -> {
+                    if (error != null) {
+                        Log.e("UserRepositoryFirestore", "Error fetching user document: " + error);
+                        userWithRestaurantChoiceEntityMutableLiveData.setValue(null);
+                        return;
+                    }
+                    if (documentSnapshot != null) {
+                        UserWithRestaurantChoiceDto userWithRestaurantChoiceDto = documentSnapshot.toObject(UserWithRestaurantChoiceDto.class);
+                        if (userWithRestaurantChoiceDto != null) {
+                            UserWithRestaurantChoiceEntity userWithRestaurantChoiceEntity = mapToUserWithRestaurantChoiceEntity(userWithRestaurantChoiceDto, userId);
+                            userWithRestaurantChoiceEntityMutableLiveData.setValue(userWithRestaurantChoiceEntity);
+                        } else {
+                            userWithRestaurantChoiceEntityMutableLiveData.setValue(null);
+                        }
+                    }
+                }
+            );
+        return userWithRestaurantChoiceEntityMutableLiveData;
     }
 
     @Override
@@ -142,33 +196,6 @@ public class UserRepositoryFirestore implements UserRepository {
         }
     }
 
-    @Override
-    public LiveData<RestaurantEntity> getUserRestaurantChoiceLiveData(@Nullable LoggedUserEntity loggedUserEntity) {
-        MutableLiveData<RestaurantEntity> restaurantEntityMutableLiveData = new MutableLiveData<>();
-
-        if (loggedUserEntity != null) {
-            firestore
-                .collection(USERS_WITH_RESTAURANT_CHOICE)
-                .document(loggedUserEntity.getId())
-                .addSnapshotListener((documentSnapshot, error) -> {
-                        if (error != null) {
-                            Log.e("UserRepositoryFirestore", "Error fetching user with restaurant choice document: " + error);
-                            restaurantEntityMutableLiveData.setValue(null);
-                            return;
-                        }
-                        if (documentSnapshot != null) {
-                            RestaurantChoiceDto restaurantChoiceDto = documentSnapshot.toObject(RestaurantChoiceDto.class);
-                            RestaurantEntity restaurantEntity = mapToRestaurantEntity(restaurantChoiceDto);
-                            restaurantEntityMutableLiveData.setValue(restaurantEntity);
-                        } else {
-                            // Reset the value to null when the document is deleted
-                            restaurantEntityMutableLiveData.setValue(null);
-                        }
-                    }
-                );
-        }
-        return restaurantEntityMutableLiveData;
-    }
 
     @Override
     public LiveData<List<LoggedUserEntity>> getLoggedUserEntitiesLiveData() {
@@ -213,20 +240,25 @@ public class UserRepositoryFirestore implements UserRepository {
         }
     }
 
-    private RestaurantEntity mapToRestaurantEntity(RestaurantChoiceDto restaurantChoiceDto) {
-        if (restaurantChoiceDto != null &&
-            restaurantChoiceDto.getAttendingRestaurantId() != null &&
-            restaurantChoiceDto.getAttendingRestaurantName() != null &&
-            restaurantChoiceDto.getAttendingRestaurantVicinity() != null
+    private UserWithRestaurantChoiceEntity mapToUserWithRestaurantChoiceEntity(
+        UserWithRestaurantChoiceDto userWithRestaurantChoiceDto,
+        String userId
+    ) {
+        if (userWithRestaurantChoiceDto.getAttendingRestaurantId() != null &&
+            userWithRestaurantChoiceDto.getAttendingRestaurantName() != null &&
+            userWithRestaurantChoiceDto.getAttendingRestaurantVicinity() != null &&
+            userWithRestaurantChoiceDto.getAttendingRestaurantPictureUrl() != null
         ) {
-            return new RestaurantEntity(
-                restaurantChoiceDto.getAttendingRestaurantId(),
-                restaurantChoiceDto.getAttendingRestaurantName(),
-                restaurantChoiceDto.getAttendingRestaurantVicinity(),
-                restaurantChoiceDto.getAttendingRestaurantPictureUrl()
+            return new UserWithRestaurantChoiceEntity(
+                userId,
+                userWithRestaurantChoiceDto.getAttendingRestaurantId(),
+                userWithRestaurantChoiceDto.getAttendingRestaurantName(),
+                userWithRestaurantChoiceDto.getAttendingRestaurantVicinity(),
+                userWithRestaurantChoiceDto.getAttendingRestaurantPictureUrl()
             );
+        } else {
+            return null;
         }
-        return null;
     }
 }
 

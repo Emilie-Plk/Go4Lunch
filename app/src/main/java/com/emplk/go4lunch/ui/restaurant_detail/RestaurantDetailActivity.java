@@ -66,9 +66,9 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         WorkmateListAdapter adapter = new WorkmateListAdapter(new OnWorkmateClickedListener() {
             @Override
             public void onWorkmateClicked(@NonNull String workmateId) {
-                // TODO: maybe change this method's name, generalize it
             }
-        });
+        }
+        );
         RecyclerView recyclerView = binding.detailRestaurantWorkmatesList;
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -83,9 +83,9 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
         viewModel.getRestaurantDetails().observe(this, restaurantDetail -> {
 
-
                 if (restaurantDetail instanceof RestaurantDetailViewState.Loading) {
                     binding.detailRestaurantLayout.setVisibility(View.GONE);
+                    binding.detailRestaurantLoadingStateLayout.setVisibility(View.VISIBLE);
                 }
 
                 if (restaurantDetail instanceof RestaurantDetailViewState.RestaurantDetail) {
@@ -99,7 +99,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                     binding.detailRestaurantVeganFriendly.setVisibility(Boolean.TRUE.equals(detail.isVeganFriendly()) ? View.VISIBLE : View.INVISIBLE);
                     binding.detailRestaurantWebsiteButton.setEnabled(detail.isWebsiteAvailable());
                     binding.detailRestaurantCallButton.setEnabled(detail.isPhoneNumberAvailable());
-
 
                     if (detail.getAttendanceState() == AttendanceState.IS_ATTENDING) {
                         binding.detailRestaurantChoseFab.setText(detail.getAttendanceState().getText());

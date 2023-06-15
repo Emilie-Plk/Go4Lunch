@@ -7,7 +7,6 @@ import androidx.lifecycle.MediatorLiveData;
 
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserLiveDataUseCase;
-import com.emplk.go4lunch.domain.user.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,69 +16,90 @@ import javax.inject.Inject;
 public class GetWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase {
 
     @NonNull
+    private final GetWorkmateEntitiesWithRestaurantChoiceListUseCase getWorkmateEntitiesWithRestaurantChoiceListUseCase;
+
+    @NonNull
+    private final GetCurrentLoggedUserLiveDataUseCase getCurrentLoggedUserLiveDataUseCase;
+
+    @NonNull
+    private final GetLoggedUserEntitiesUseCase getLoggedUserEntitiesUseCase;
+
+    @NonNull
     MediatorLiveData<List<WorkmateEntity>> workmateEntitiesWithAndWithoutRestaurantChoiceMediatorLiveData = new MediatorLiveData<>();
 
     @Inject
     public GetWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase(
         @NonNull GetWorkmateEntitiesWithRestaurantChoiceListUseCase getWorkmateEntitiesWithRestaurantChoiceListUseCase,
-        @NonNull UserRepository userRepository,
-        @NonNull GetCurrentLoggedUserLiveDataUseCase getCurrentLoggedUserLiveDataUseCase
+        @NonNull GetCurrentLoggedUserLiveDataUseCase getCurrentLoggedUserLiveDataUseCase,
+        @NonNull GetLoggedUserEntitiesUseCase getLoggedUserEntitiesUseCase
     ) {
+        this.getWorkmateEntitiesWithRestaurantChoiceListUseCase = getWorkmateEntitiesWithRestaurantChoiceListUseCase;
+        this.getCurrentLoggedUserLiveDataUseCase = getCurrentLoggedUserLiveDataUseCase;
+        this.getLoggedUserEntitiesUseCase = getLoggedUserEntitiesUseCase;
+
         LiveData<List<WorkmateEntity>> workmateEntitiesWithRestaurantChoiceLiveData = getWorkmateEntitiesWithRestaurantChoiceListUseCase.invoke();
-        LiveData<List<LoggedUserEntity>> allLoggedUserEntitiesLiveData = userRepository.getLoggedUserEntitiesLiveData();
+        LiveData<List<LoggedUserEntity>> loggedUserEntitiesLiveData = getLoggedUserEntitiesUseCase.invoke();
         LiveData<LoggedUserEntity> currentLoggedUserLiveData = getCurrentLoggedUserLiveDataUseCase.invoke();
 
-        workmateEntitiesWithAndWithoutRestaurantChoiceMediatorLiveData.addSource(
-            workmateEntitiesWithRestaurantChoiceLiveData, workmateEntitiesWithRestaurantChoice -> {
-                combine(workmateEntitiesWithRestaurantChoice, allLoggedUserEntitiesLiveData.getValue(), currentLoggedUserLiveData.getValue());
+        workmateEntitiesWithAndWithoutRestaurantChoiceMediatorLiveData.addSource(workmateEntitiesWithRestaurantChoiceLiveData, workmateEntitiesWithRestaurantChoice -> {
+                combine(workmateEntitiesWithRestaurantChoice, loggedUserEntitiesLiveData.getValue(), currentLoggedUserLiveData.getValue());
             }
         );
 
-        workmateEntitiesWithAndWithoutRestaurantChoiceMediatorLiveData.addSource(
-            allLoggedUserEntitiesLiveData, allLoggedUserEntities -> {
-                combine(workmateEntitiesWithRestaurantChoiceLiveData.getValue(), allLoggedUserEntities, currentLoggedUserLiveData.getValue());
+        workmateEntitiesWithAndWithoutRestaurantChoiceMediatorLiveData.addSource(loggedUserEntitiesLiveData, loggedUserEntities -> {
+                combine(workmateEntitiesWithRestaurantChoiceLiveData.getValue(), loggedUserEntities, currentLoggedUserLiveData.getValue());
             }
         );
 
-        if (currentLoggedUserLiveData != null) {   //TODO: not sure but how to avoid nullability otherwise?
-            workmateEntitiesWithAndWithoutRestaurantChoiceMediatorLiveData.addSource(
-                currentLoggedUserLiveData, currentLoggedUser -> {
-                    combine(workmateEntitiesWithRestaurantChoiceLiveData.getValue(), allLoggedUserEntitiesLiveData.getValue(), currentLoggedUser);
-                }
-            );
-        }
+        workmateEntitiesWithAndWithoutRestaurantChoiceMediatorLiveData.addSource(currentLoggedUserLiveData, currentLoggedUser -> {
+                combine(workmateEntitiesWithRestaurantChoiceLiveData.getValue(), loggedUserEntitiesLiveData.getValue(), currentLoggedUser);
+            }
+        );
     }
 
     public LiveData<List<WorkmateEntity>> invoke() {
         return workmateEntitiesWithAndWithoutRestaurantChoiceMediatorLiveData;
+
     }
 
     private void combine(
         @Nullable List<WorkmateEntity> workmateEntitiesWithRestaurantChoice,
-        @Nullable List<LoggedUserEntity> allLoggedUserEntities,
+        @Nullable List<LoggedUserEntity> loggedUserEntities,
         @Nullable LoggedUserEntity currentLoggedUser
     ) {
-
-        if (workmateEntitiesWithRestaurantChoice == null && allLoggedUserEntities == null && currentLoggedUser == null) {
+        if (currentLoggedUser == null || loggedUserEntities == null) {
             return;
         }
 
-        if (workmateEntitiesWithRestaurantChoice != null && allLoggedUserEntities != null && currentLoggedUser != null) {
-            List<WorkmateEntity> combinedList = new ArrayList<>(workmateEntitiesWithRestaurantChoice);
+        List<WorkmateEntity> workmateEntitiesWithAndWithoutRestaurantChoice = new ArrayList<>();
 
-            for (LoggedUserEntity loggedUserEntity : allLoggedUserEntities) {
-                boolean isFound = false;
-                for (WorkmateEntity workmateEntity : workmateEntitiesWithRestaurantChoice) {
-                    if (workmateEntity.getLoggedUserEntity().getId().equals(loggedUserEntity.getId())) {
-                        isFound = true;
-                        break;
-                    }
+        // Map workmate entities with restaurant choice
+        if (workmateEntitiesWithRestaurantChoice != null) {
+            for (WorkmateEntity workmateEntity : workmateEntitiesWithRestaurantChoice) {
+                if (!workmateEntity.getLoggedUserEntity().getId().equals(currentLoggedUser.getId())) {
+                    workmateEntitiesWithAndWithoutRestaurantChoice.add(workmateEntity);
+                }
+            }
+        }
+
+        // Map logged user entities without restaurant choice
+        for (LoggedUserEntity loggedUserEntity : loggedUserEntities) {
+            if (!loggedUserEntity.getId().equals(currentLoggedUser.getId())) {
+                boolean hasRestaurantChoice = false;
+                if (workmateEntitiesWithRestaurantChoice != null) {
+                    hasRestaurantChoice = workmateEntitiesWithRestaurantChoice.stream()
+                        .anyMatch(entity -> entity.getLoggedUserEntity().getId().equals(loggedUserEntity.getId()));
                 }
 
-                if (!isFound && !loggedUserEntity.getId().equals(currentLoggedUser.getId())) {
-                    combinedList.add(
+                if (!hasRestaurantChoice) {
+                    workmateEntitiesWithAndWithoutRestaurantChoice.add(
                         new WorkmateEntity(
-                            loggedUserEntity,
+                            new LoggedUserEntity(
+                                loggedUserEntity.getId(),
+                                loggedUserEntity.getName(),
+                                loggedUserEntity.getEmail(),
+                                loggedUserEntity.getPictureUrl()
+                            ),
                             null,
                             null,
                             null,
@@ -88,8 +108,30 @@ public class GetWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase {
                     );
                 }
             }
-
-            workmateEntitiesWithAndWithoutRestaurantChoiceMediatorLiveData.setValue(combinedList);
         }
+
+        // if no user is attending
+        if (workmateEntitiesWithRestaurantChoice == null || workmateEntitiesWithRestaurantChoice.isEmpty()) {
+            for (LoggedUserEntity loggedUserEntity : loggedUserEntities) {
+                if (!loggedUserEntity.getId().equals(currentLoggedUser.getId())) {
+                    workmateEntitiesWithAndWithoutRestaurantChoice.add(
+                        new WorkmateEntity(
+                            new LoggedUserEntity(
+                                loggedUserEntity.getId(),
+                                loggedUserEntity.getName(),
+                                loggedUserEntity.getEmail(),
+                                loggedUserEntity.getPictureUrl()
+                            ),
+                            null,
+                            null,
+                            null,
+                            null
+                        )
+                    );
+                }
+            }
+        }
+
+        workmateEntitiesWithAndWithoutRestaurantChoiceMediatorLiveData.setValue(workmateEntitiesWithAndWithoutRestaurantChoice);
     }
 }

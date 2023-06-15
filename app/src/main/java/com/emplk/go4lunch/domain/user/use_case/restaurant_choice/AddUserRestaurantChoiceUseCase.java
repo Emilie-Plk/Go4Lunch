@@ -1,10 +1,10 @@
-package com.emplk.go4lunch.domain.user.use_case;
+package com.emplk.go4lunch.domain.user.use_case.restaurant_choice;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserUseCase;
-import com.emplk.go4lunch.domain.user.RestaurantEntity;
+import com.emplk.go4lunch.domain.user.ChosenRestaurantEntity;
 import com.emplk.go4lunch.domain.user.UserRepository;
 
 import javax.inject.Inject;
@@ -38,7 +38,7 @@ public class AddUserRestaurantChoiceUseCase {
         ) {
             userRepository.upsertUserRestaurantChoice(
                 getCurrentLoggedUserUseCase.invoke(),
-                new RestaurantEntity(
+                new ChosenRestaurantEntity(
                     restaurantId,
                     restaurantName,
                     vicinity,

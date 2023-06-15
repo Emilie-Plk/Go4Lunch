@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.domain.user.use_case;
+package com.emplk.go4lunch.domain.user.use_case.restaurant_choice;
 
 import androidx.annotation.NonNull;
 

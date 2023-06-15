@@ -6,10 +6,6 @@ import androidx.annotation.Nullable;
 import java.util.Objects;
 
 public class UserWithRestaurantChoiceDto {
-
-    @Nullable
-    private final LoggedUserDto loggedUser;
-
     @Nullable
     private final String attendingRestaurantId;
 
@@ -23,7 +19,6 @@ public class UserWithRestaurantChoiceDto {
     private final String attendingRestaurantPictureUrl;
 
     public UserWithRestaurantChoiceDto() {
-        loggedUser = null;
         attendingRestaurantId = null;
         attendingRestaurantName = null;
         attendingRestaurantVicinity = null;
@@ -31,22 +26,15 @@ public class UserWithRestaurantChoiceDto {
     }
 
     public UserWithRestaurantChoiceDto(
-        @Nullable LoggedUserDto loggedUser,
         @Nullable String attendingRestaurantId,
         @Nullable String attendingRestaurantName,
         @Nullable String attendingRestaurantVicinity,
         @Nullable String attendingRestaurantPictureUrl
     ) {
-        this.loggedUser = loggedUser;
         this.attendingRestaurantId = attendingRestaurantId;
         this.attendingRestaurantName = attendingRestaurantName;
         this.attendingRestaurantVicinity = attendingRestaurantVicinity;
         this.attendingRestaurantPictureUrl = attendingRestaurantPictureUrl;
-    }
-
-    @Nullable
-    public LoggedUserDto getLoggedUser() {
-        return loggedUser;
     }
 
     @Nullable
@@ -74,19 +62,18 @@ public class UserWithRestaurantChoiceDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserWithRestaurantChoiceDto that = (UserWithRestaurantChoiceDto) o;
-        return Objects.equals(loggedUser, that.loggedUser) && Objects.equals(attendingRestaurantId, that.attendingRestaurantId) && Objects.equals(attendingRestaurantName, that.attendingRestaurantName) && Objects.equals(attendingRestaurantVicinity, that.attendingRestaurantVicinity) && Objects.equals(attendingRestaurantPictureUrl, that.attendingRestaurantPictureUrl);
+        return  Objects.equals(attendingRestaurantId, that.attendingRestaurantId) && Objects.equals(attendingRestaurantName, that.attendingRestaurantName) && Objects.equals(attendingRestaurantVicinity, that.attendingRestaurantVicinity) && Objects.equals(attendingRestaurantPictureUrl, that.attendingRestaurantPictureUrl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(loggedUser, attendingRestaurantId, attendingRestaurantName, attendingRestaurantVicinity, attendingRestaurantPictureUrl);
+        return Objects.hash(attendingRestaurantId, attendingRestaurantName, attendingRestaurantVicinity, attendingRestaurantPictureUrl);
     }
 
     @NonNull
     @Override
     public String toString() {
         return "UserWithRestaurantChoiceDto{" +
-            "loggedUser=" + loggedUser +
             ", attendingRestaurantId='" + attendingRestaurantId + '\'' +
             ", attendingRestaurantName='" + attendingRestaurantName + '\'' +
             ", attendingRestaurantVicinity='" + attendingRestaurantVicinity + '\'' +

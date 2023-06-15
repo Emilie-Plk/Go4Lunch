@@ -12,16 +12,19 @@ public interface UserRepository {
 
     void upsertLoggedUserEntity(@Nullable LoggedUserEntity userEntity);
 
+    LiveData<List<LoggedUserEntity>> getLoggedUserEntitiesLiveData();
+
     LiveData<LoggedUserEntity> getLoggedUserEntityLiveData(@NonNull String userId); // TODO: need this method?
 
     void upsertUserRestaurantChoice(
         @Nullable LoggedUserEntity loggedUserEntity,
-        @NonNull RestaurantEntity restaurantEntity
+        @NonNull ChosenRestaurantEntity chosenRestaurantEntity
     );
+
+    LiveData<List<UserWithRestaurantChoiceEntity>> getUserWithRestaurantChoiceEntities();
+
+    LiveData<UserWithRestaurantChoiceEntity> getUserWithRestaurantChoiceEntity(@NonNull String userId);
 
     void deleteUserRestaurantChoice(@Nullable LoggedUserEntity loggedUserEntity);
 
-    LiveData<RestaurantEntity> getUserRestaurantChoiceLiveData(@Nullable LoggedUserEntity loggedUserEntity);
-
-    LiveData<List<LoggedUserEntity>> getLoggedUserEntitiesLiveData();
 }

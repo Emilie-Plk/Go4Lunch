@@ -1,35 +1,28 @@
-package com.emplk.go4lunch.data.user;
+package com.emplk.go4lunch.domain.user;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.Objects;
 
-public class RestaurantChoiceDto {
+public class ChosenRestaurantEntity {
 
-    @Nullable
+    @NonNull
     private final String attendingRestaurantId;
 
-    @Nullable
+    @NonNull
     private final String attendingRestaurantName;
 
-    @Nullable
+    @NonNull
     private final String attendingRestaurantVicinity;
 
     @Nullable
     private final String attendingRestaurantPictureUrl;
 
-    public RestaurantChoiceDto() {
-        attendingRestaurantId = null;
-        attendingRestaurantName = null;
-        attendingRestaurantVicinity = null;
-        attendingRestaurantPictureUrl = null;
-    }
-
-    public RestaurantChoiceDto(
-        @Nullable String attendingRestaurantId,
-        @Nullable String attendingRestaurantName,
-        @Nullable String attendingRestaurantVicinity,
+    public ChosenRestaurantEntity(
+        @NonNull String attendingRestaurantId,
+        @NonNull String attendingRestaurantName,
+        @NonNull String attendingRestaurantVicinity,
         @Nullable String attendingRestaurantPictureUrl
     ) {
         this.attendingRestaurantId = attendingRestaurantId;
@@ -38,17 +31,17 @@ public class RestaurantChoiceDto {
         this.attendingRestaurantPictureUrl = attendingRestaurantPictureUrl;
     }
 
-    @Nullable
+    @NonNull
     public String getAttendingRestaurantId() {
         return attendingRestaurantId;
     }
 
-    @Nullable
+    @NonNull
     public String getAttendingRestaurantName() {
         return attendingRestaurantName;
     }
 
-    @Nullable
+    @NonNull
     public String getAttendingRestaurantVicinity() {
         return attendingRestaurantVicinity;
     }
@@ -62,8 +55,8 @@ public class RestaurantChoiceDto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RestaurantChoiceDto that = (RestaurantChoiceDto) o;
-        return Objects.equals(attendingRestaurantId, that.attendingRestaurantId) && Objects.equals(attendingRestaurantName, that.attendingRestaurantName) && Objects.equals(attendingRestaurantVicinity, that.attendingRestaurantVicinity) && Objects.equals(attendingRestaurantPictureUrl, that.attendingRestaurantPictureUrl);
+        ChosenRestaurantEntity that = (ChosenRestaurantEntity) o;
+        return attendingRestaurantId.equals(that.attendingRestaurantId) && attendingRestaurantName.equals(that.attendingRestaurantName) && attendingRestaurantVicinity.equals(that.attendingRestaurantVicinity) && Objects.equals(attendingRestaurantPictureUrl, that.attendingRestaurantPictureUrl);
     }
 
     @Override
@@ -74,8 +67,8 @@ public class RestaurantChoiceDto {
     @NonNull
     @Override
     public String toString() {
-        return "RestaurantChoiceDto{" +
-            ", attendingRestaurantId='" + attendingRestaurantId + '\'' +
+        return "ChosenRestaurantEntity{" +
+            "attendingRestaurantId='" + attendingRestaurantId + '\'' +
             ", attendingRestaurantName='" + attendingRestaurantName + '\'' +
             ", attendingRestaurantVicinity='" + attendingRestaurantVicinity + '\'' +
             ", attendingRestaurantPictureUrl='" + attendingRestaurantPictureUrl + '\'' +

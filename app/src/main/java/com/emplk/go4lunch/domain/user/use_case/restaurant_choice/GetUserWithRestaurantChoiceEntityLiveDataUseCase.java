@@ -1,15 +1,16 @@
-package com.emplk.go4lunch.domain.user.use_case;
+package com.emplk.go4lunch.domain.user.use_case.restaurant_choice;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
+import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserUseCase;
-import com.emplk.go4lunch.domain.user.RestaurantEntity;
 import com.emplk.go4lunch.domain.user.UserRepository;
+import com.emplk.go4lunch.domain.user.UserWithRestaurantChoiceEntity;
 
 import javax.inject.Inject;
 
-public class GetUserRestaurantEntityChoiceLiveDataUseCase {
+public class GetUserWithRestaurantChoiceEntityLiveDataUseCase {
 
     @NonNull
     private final UserRepository userRepository;
@@ -18,7 +19,7 @@ public class GetUserRestaurantEntityChoiceLiveDataUseCase {
     private final GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase;
 
     @Inject
-    public GetUserRestaurantEntityChoiceLiveDataUseCase(
+    public GetUserWithRestaurantChoiceEntityLiveDataUseCase(
         @NonNull UserRepository userRepository,
         @NonNull GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase
     ) {
@@ -26,7 +27,8 @@ public class GetUserRestaurantEntityChoiceLiveDataUseCase {
         this.getCurrentLoggedUserUseCase = getCurrentLoggedUserUseCase;
     }
 
-    public LiveData<RestaurantEntity> invoke() {
-        return userRepository.getUserRestaurantChoiceLiveData(getCurrentLoggedUserUseCase.invoke());
+    public LiveData<UserWithRestaurantChoiceEntity> invoke() {
+        LoggedUserEntity loggedUserEntity = getCurrentLoggedUserUseCase.invoke();
+        return userRepository.getUserWithRestaurantChoiceEntity(loggedUserEntity.getId());
     }
 }

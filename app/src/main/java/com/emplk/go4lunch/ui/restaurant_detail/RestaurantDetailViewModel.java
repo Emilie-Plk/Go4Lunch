@@ -16,15 +16,16 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.R;
+import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserIdUseCase;
 import com.emplk.go4lunch.domain.detail.GetDetailsRestaurantWrapperUseCase;
 import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantEntity;
 import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantWrapper;
 import com.emplk.go4lunch.domain.favorite_restaurant.AddFavoriteRestaurantUseCase;
 import com.emplk.go4lunch.domain.favorite_restaurant.RemoveFavoriteRestaurantUseCase;
 import com.emplk.go4lunch.domain.user.UserEntity;
-import com.emplk.go4lunch.domain.user.use_case.AddUserRestaurantChoiceUseCase;
 import com.emplk.go4lunch.domain.user.use_case.GetUserEntityUseCase;
-import com.emplk.go4lunch.domain.user.use_case.RemoveUserRestaurantChoiceUseCase;
+import com.emplk.go4lunch.domain.user.use_case.restaurant_choice.AddUserRestaurantChoiceUseCase;
+import com.emplk.go4lunch.domain.user.use_case.restaurant_choice.RemoveUserRestaurantChoiceUseCase;
 import com.emplk.go4lunch.domain.workmate.GetWorkmateEntitiesGoingToSameRestaurantUseCase;
 import com.emplk.go4lunch.domain.workmate.WorkmateEntity;
 import com.emplk.go4lunch.ui.utils.RestaurantFavoriteState;
@@ -60,6 +61,9 @@ public class RestaurantDetailViewModel extends ViewModel {
     @NonNull
     private final GetWorkmateEntitiesGoingToSameRestaurantUseCase getWorkmateEntitiesGoingToSameRestaurantUseCase;
 
+    @NonNull
+    private final GetCurrentLoggedUserIdUseCase getCurrentLoggedUserIdUseCase;
+
 
     private final String restaurantId;
 
@@ -74,6 +78,7 @@ public class RestaurantDetailViewModel extends ViewModel {
         @NonNull RemoveUserRestaurantChoiceUseCase removeUserRestaurantChoiceUseCase,
         @NonNull GetWorkmateEntitiesGoingToSameRestaurantUseCase getWorkmateEntitiesGoingToSameRestaurantUseCase,
         @NonNull GetUserEntityUseCase getUserEntityUseCase,
+        @NonNull GetCurrentLoggedUserIdUseCase getCurrentLoggedUserIdUseCase,
         @NonNull SavedStateHandle savedStateHandle
     ) {
         this.resources = resources;
@@ -82,18 +87,20 @@ public class RestaurantDetailViewModel extends ViewModel {
         this.addUserRestaurantChoiceUseCase = addUserRestaurantChoiceUseCase;
         this.removeUserRestaurantChoiceUseCase = removeUserRestaurantChoiceUseCase;
         this.getWorkmateEntitiesGoingToSameRestaurantUseCase = getWorkmateEntitiesGoingToSameRestaurantUseCase;
+        this.getCurrentLoggedUserIdUseCase = getCurrentLoggedUserIdUseCase;
 
         restaurantId = savedStateHandle.get(RestaurantDetailActivity.KEY_RESTAURANT_ID);
 
 
         LiveData<DetailsRestaurantWrapper> detailsRestaurantWrapperLiveData = getDetailsRestaurantWrapperUseCase.invoke(restaurantId);
+        LiveData<UserEntity> currentUserEntityLiveData = getUserEntityUseCase.invoke();
 
         restaurantDetailViewStateMediatorLiveData.addSource(detailsRestaurantWrapperLiveData, detailsRestaurantWrapper -> {
-                combine(detailsRestaurantWrapper, getUserEntityUseCase.invoke().getValue());
+                combine(detailsRestaurantWrapper, currentUserEntityLiveData.getValue());
             }
         );
 
-        restaurantDetailViewStateMediatorLiveData.addSource(getUserEntityUseCase.invoke(), currentUser -> {
+        restaurantDetailViewStateMediatorLiveData.addSource(currentUserEntityLiveData, currentUser -> {
                 combine(detailsRestaurantWrapperLiveData.getValue(), currentUser);
             }
         );
@@ -116,8 +123,7 @@ public class RestaurantDetailViewModel extends ViewModel {
 
         if (detailsRestaurantWrapper instanceof DetailsRestaurantWrapper.Loading) {
             restaurantDetailViewStateMediatorLiveData.setValue(
-                new RestaurantDetailViewState.Loading(
-                )
+                new RestaurantDetailViewState.Loading()
             );
         }
 
@@ -142,7 +148,15 @@ public class RestaurantDetailViewModel extends ViewModel {
                 )
             );
         }
-        //TODO: handle error case
+
+        if (detailsRestaurantWrapper instanceof DetailsRestaurantWrapper.Error) {
+            if (((DetailsRestaurantWrapper.Error) detailsRestaurantWrapper).getThrowable().getMessage() != null) {
+                restaurantDetailViewStateMediatorLiveData.setValue(
+                    new RestaurantDetailViewState.Error(
+                        ((DetailsRestaurantWrapper.Error) detailsRestaurantWrapper).getThrowable().getMessage()
+                    ));
+            }
+        }
     }
 
     public LiveData<RestaurantDetailViewState> getRestaurantDetails() {
@@ -198,14 +212,16 @@ public class RestaurantDetailViewModel extends ViewModel {
         return Transformations.switchMap(getWorkmateEntitiesGoingToSameRestaurantUseCase.invoke(restaurantId), workmatesGoingToSameRestaurant -> {
                 List<WorkmatesViewStateItem> workmatesViewStateItems = new ArrayList<>();
                 for (WorkmateEntity workmateEntity : workmatesGoingToSameRestaurant) {
-                    workmatesViewStateItems.add(
-                        new WorkmatesViewStateItem.WorkmatesGoingToSameRestaurant(
-                            workmateEntity.getLoggedUserEntity().getId(),
-                            workmateEntity.getLoggedUserEntity().getName(),
-                            workmateEntity.getLoggedUserEntity().getPictureUrl(),
-                            workmateEntity.getAttendingRestaurantId()
-                        )
-                    );
+                    if (!workmateEntity.getLoggedUserEntity().getId().equals(getCurrentLoggedUserIdUseCase.invoke())) {
+                        workmatesViewStateItems.add(
+                            new WorkmatesViewStateItem.WorkmatesGoingToSameRestaurant(
+                                workmateEntity.getLoggedUserEntity().getId(),
+                                workmateEntity.getLoggedUserEntity().getName(),
+                                workmateEntity.getLoggedUserEntity().getPictureUrl(),
+                                workmateEntity.getAttendingRestaurantId()
+                            )
+                        );
+                    }
                 }
                 return new MutableLiveData<>(workmatesViewStateItems);
             }

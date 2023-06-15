@@ -8,8 +8,9 @@ import androidx.lifecycle.MediatorLiveData;
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserLiveDataUseCase;
 import com.emplk.go4lunch.domain.favorite_restaurant.GetFavoriteRestaurantsIdsUseCase;
-import com.emplk.go4lunch.domain.user.RestaurantEntity;
 import com.emplk.go4lunch.domain.user.UserEntity;
+import com.emplk.go4lunch.domain.user.UserWithRestaurantChoiceEntity;
+import com.emplk.go4lunch.domain.user.use_case.restaurant_choice.GetUserWithRestaurantChoiceEntityLiveDataUseCase;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -28,36 +29,36 @@ public class GetUserEntityUseCase {
     public GetUserEntityUseCase(
         @NonNull GetCurrentLoggedUserLiveDataUseCase getCurrentLoggedUserLiveDataUseCase,
         @NonNull GetFavoriteRestaurantsIdsUseCase getFavoriteRestaurantsIdsUseCase,
-        @NonNull GetUserRestaurantEntityChoiceLiveDataUseCase getUserRestaurantEntityChoiceLiveDataUseCase
+        @NonNull GetUserWithRestaurantChoiceEntityLiveDataUseCase getUserWithRestaurantChoiceEntityLiveDataUseCase
     ) {
 
         LiveData<LoggedUserEntity> loggedUserEntityLiveData = getCurrentLoggedUserLiveDataUseCase.invoke();
+LiveData<Set<String>> attendingRestaurantIdLiveData = getFavoriteRestaurantsIdsUseCase.invoke();
+        LiveData<UserWithRestaurantChoiceEntity> userWithRestaurantChoiceEntityLiveData = getUserWithRestaurantChoiceEntityLiveDataUseCase.invoke();
 
-        LiveData<RestaurantEntity> attendingRestaurantIdLiveData = getUserRestaurantEntityChoiceLiveDataUseCase.invoke();
-
-        userEntityMediatorLiveData.addSource(getCurrentLoggedUserLiveDataUseCase.invoke(), currentLoggedUser -> {
+        userEntityMediatorLiveData.addSource(loggedUserEntityLiveData, currentLoggedUser -> {
                 combine(
                     currentLoggedUser,
                     getFavoriteRestaurantsIdsUseCase.invoke().getValue(),
-                    attendingRestaurantIdLiveData.getValue()
+                    userWithRestaurantChoiceEntityLiveData.getValue()
                 );
             }
         );
 
-        userEntityMediatorLiveData.addSource(getFavoriteRestaurantsIdsUseCase.invoke(), favoriteRestaurantIds -> {
+        userEntityMediatorLiveData.addSource(attendingRestaurantIdLiveData, favoriteRestaurantIds -> {
                 combine(
                     loggedUserEntityLiveData.getValue(),
                     favoriteRestaurantIds,
-                    attendingRestaurantIdLiveData.getValue()
+                    userWithRestaurantChoiceEntityLiveData.getValue()
                 );
             }
         );
 
-        userEntityMediatorLiveData.addSource(attendingRestaurantIdLiveData, attendingRestaurantId -> {
+        userEntityMediatorLiveData.addSource(userWithRestaurantChoiceEntityLiveData, userWithRestaurantChoice -> {
                 combine(
                     loggedUserEntityLiveData.getValue(),
                     getFavoriteRestaurantsIdsUseCase.invoke().getValue(),
-                    attendingRestaurantId
+                    userWithRestaurantChoice
                 );
             }
         );
@@ -71,20 +72,21 @@ public class GetUserEntityUseCase {
     private void combine(
         @Nullable LoggedUserEntity loggedUserEntity,
         @Nullable Set<String> favoriteRestaurantsIds,
-        @Nullable RestaurantEntity attendingRestaurant
+        @Nullable UserWithRestaurantChoiceEntity userWithRestaurantChoice
     ) {
-        if (loggedUserEntity == null) {
+        if (loggedUserEntity == null && userWithRestaurantChoice == null) {
             return;
         }
+        if (loggedUserEntity != null && userWithRestaurantChoice != null) {
+            Set<String> updatedFavoriteRestaurantsIds = new HashSet<>(favoriteRestaurantsIds != null ? favoriteRestaurantsIds : Collections.emptySet());
 
-        Set<String> updatedFavoriteRestaurantsIds = new HashSet<>(favoriteRestaurantsIds != null ? favoriteRestaurantsIds : Collections.emptySet());
-
-        userEntityMediatorLiveData.setValue(
-            new UserEntity(
-                loggedUserEntity,
-                updatedFavoriteRestaurantsIds,
-                attendingRestaurant != null ? attendingRestaurant.getAttendingRestaurantId() : null
-            )
-        );
+            userEntityMediatorLiveData.setValue(
+                new UserEntity(
+                    loggedUserEntity,
+                    updatedFavoriteRestaurantsIds,
+                    userWithRestaurantChoice.getAttendingRestaurantId()
+                )
+            );
+        }
     }
 }
