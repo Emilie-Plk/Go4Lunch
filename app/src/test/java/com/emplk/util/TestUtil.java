@@ -12,6 +12,7 @@ public class TestUtil {
 
         return liveData.getValue();
     }
+
     public static <T> int getEmitCountForTesting(@NonNull final SingleLiveEvent<T> singleLiveEvent) {
         final int[] emitCount = {0};
         singleLiveEvent.observeForever(t -> emitCount[0]++);

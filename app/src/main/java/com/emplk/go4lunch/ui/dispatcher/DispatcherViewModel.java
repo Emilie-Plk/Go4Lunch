@@ -56,6 +56,7 @@ public class DispatcherViewModel extends ViewModel {
         @Nullable Boolean hasPermission,
         @Nullable Boolean isUserLoggedIn,
         @Nullable Boolean isGpsEnabled
+        // TODO: will use it later to show dialog to user
     ) {
         if (hasPermission == null) {
             return;
