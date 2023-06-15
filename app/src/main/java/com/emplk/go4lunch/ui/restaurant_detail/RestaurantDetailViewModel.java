@@ -41,7 +41,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class RestaurantDetailViewModel extends ViewModel {
 
-
     @NonNull
     private final Resources resources;
 
@@ -104,7 +103,6 @@ public class RestaurantDetailViewModel extends ViewModel {
                 combine(detailsRestaurantWrapperLiveData.getValue(), currentUser);
             }
         );
-
     }
 
     private void combine(
@@ -154,7 +152,8 @@ public class RestaurantDetailViewModel extends ViewModel {
                 restaurantDetailViewStateMediatorLiveData.setValue(
                     new RestaurantDetailViewState.Error(
                         ((DetailsRestaurantWrapper.Error) detailsRestaurantWrapper).getThrowable().getMessage()
-                    ));
+                    )
+                );
             }
         }
     }

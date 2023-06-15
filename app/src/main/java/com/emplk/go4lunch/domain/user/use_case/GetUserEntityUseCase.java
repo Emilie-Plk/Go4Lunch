@@ -33,19 +33,19 @@ public class GetUserEntityUseCase {
     ) {
 
         LiveData<LoggedUserEntity> loggedUserEntityLiveData = getCurrentLoggedUserLiveDataUseCase.invoke();
-LiveData<Set<String>> attendingRestaurantIdLiveData = getFavoriteRestaurantsIdsUseCase.invoke();
+        LiveData<Set<String>> favoriteRestaurantsIdsLiveData = getFavoriteRestaurantsIdsUseCase.invoke();
         LiveData<UserWithRestaurantChoiceEntity> userWithRestaurantChoiceEntityLiveData = getUserWithRestaurantChoiceEntityLiveDataUseCase.invoke();
 
         userEntityMediatorLiveData.addSource(loggedUserEntityLiveData, currentLoggedUser -> {
                 combine(
                     currentLoggedUser,
-                    getFavoriteRestaurantsIdsUseCase.invoke().getValue(),
+                    favoriteRestaurantsIdsLiveData.getValue(),
                     userWithRestaurantChoiceEntityLiveData.getValue()
                 );
             }
         );
 
-        userEntityMediatorLiveData.addSource(attendingRestaurantIdLiveData, favoriteRestaurantIds -> {
+        userEntityMediatorLiveData.addSource(favoriteRestaurantsIdsLiveData, favoriteRestaurantIds -> {
                 combine(
                     loggedUserEntityLiveData.getValue(),
                     favoriteRestaurantIds,
@@ -57,7 +57,7 @@ LiveData<Set<String>> attendingRestaurantIdLiveData = getFavoriteRestaurantsIdsU
         userEntityMediatorLiveData.addSource(userWithRestaurantChoiceEntityLiveData, userWithRestaurantChoice -> {
                 combine(
                     loggedUserEntityLiveData.getValue(),
-                    getFavoriteRestaurantsIdsUseCase.invoke().getValue(),
+                    favoriteRestaurantsIdsLiveData.getValue(),
                     userWithRestaurantChoice
                 );
             }
