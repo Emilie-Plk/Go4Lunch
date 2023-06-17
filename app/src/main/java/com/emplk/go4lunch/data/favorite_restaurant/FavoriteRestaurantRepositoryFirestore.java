@@ -2,18 +2,12 @@ package com.emplk.go4lunch.data.favorite_restaurant;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.emplk.go4lunch.data.util.FirestoreFavoriteRestaurantIdsLiveData;
 import com.emplk.go4lunch.domain.favorite_restaurant.FavoriteRestaurantRepository;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -66,9 +60,11 @@ public class FavoriteRestaurantRepositoryFirestore implements FavoriteRestaurant
     @Override
     @NonNull
     public LiveData<Set<String>> getUserFavoriteRestaurantIdsLiveData(@NonNull String userId) {
-        DocumentReference userDocumentRef = firestore.collection(USERS_COLLECTION).document(userId);
-        CollectionReference favoriteRestaurantsCollectionRef = userDocumentRef.collection(COLLECTION_PATH_FAVORITE_RESTAURANTS);
-
-        return new FirestoreFavoriteRestaurantIdsLiveData(userDocumentRef, favoriteRestaurantsCollectionRef);
+        return new FirestoreFavoriteRestaurantIdsLiveData(
+            firestore
+                .collection(USERS_COLLECTION)
+                .document(userId)
+                .collection(COLLECTION_PATH_FAVORITE_RESTAURANTS)
+        );
     }
 }

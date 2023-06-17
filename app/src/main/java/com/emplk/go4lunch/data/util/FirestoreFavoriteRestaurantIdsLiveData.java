@@ -41,7 +41,7 @@ public class FirestoreFavoriteRestaurantIdsLiveData extends LiveData<Set<String>
 
     private ListenerRegistration registration;
 
-    public FirestoreFavoriteRestaurantIdsLiveData(DocumentReference userDocumentRef, CollectionReference favoriteRestaurantsCollectionRef) {
+    public FirestoreFavoriteRestaurantIdsLiveData(CollectionReference favoriteRestaurantsCollectionRef) {
         this.favoriteRestaurantsCollectionRef = favoriteRestaurantsCollectionRef;
     }
 

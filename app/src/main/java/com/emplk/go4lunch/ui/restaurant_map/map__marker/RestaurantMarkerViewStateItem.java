@@ -12,7 +12,7 @@ public class RestaurantMarkerViewStateItem {
     private final String id;
 
     @NonNull
-    private final String name; // will need it for autocomplete
+    private final String name;
 
     @NonNull
     private final LatLng latLng;
