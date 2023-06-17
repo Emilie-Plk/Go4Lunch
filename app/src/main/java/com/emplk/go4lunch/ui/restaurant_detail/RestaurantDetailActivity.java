@@ -1,5 +1,9 @@
 package com.emplk.go4lunch.ui.restaurant_detail;
 
+
+import static com.emplk.go4lunch.ui.restaurant_detail.WorkmateState.WORKMATE_GOING;
+import static com.emplk.go4lunch.ui.restaurant_detail.WorkmateState.WORKMATE_NOT_GOING;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -13,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.emplk.go4lunch.R;
@@ -69,18 +72,26 @@ public class RestaurantDetailActivity extends AppCompatActivity {
             }
         }
         );
-        RecyclerView recyclerView = binding.detailRestaurantWorkmatesList;
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        binding.detailRestaurantWorkmatesList.setAdapter(adapter);
+        binding.detailRestaurantWorkmatesList.setLayoutManager(new LinearLayoutManager(this));
 
         viewModel.getWorkmatesGoingToRestaurant().observe(this, workmates -> {
                 adapter.submitList(workmates);
             }
         );
+
+        viewModel.getWorkerState().observe(this, workerState -> {
+                if (workerState == WORKMATE_GOING) {
+                    binding.detailNoWorkmatesTv.setVisibility(View.GONE);
+                } else if (workerState == WORKMATE_NOT_GOING) {
+                    binding.detailNoWorkmatesTv.setVisibility(View.VISIBLE);
+                }
+            }
+        );
     }
 
     private void setupObservers() {
-
         viewModel.getRestaurantDetails().observe(this, restaurantDetail -> {
 
                 if (restaurantDetail instanceof RestaurantDetailViewState.Loading) {

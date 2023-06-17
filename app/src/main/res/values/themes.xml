@@ -25,6 +25,10 @@
         <item name="android:textColor">@color/licorice_gray</item>
     </style>
 
+    <style name="Theme.Go4Lunch.GrayText">
+        <item name="android:textColor">@color/darkest_gray</item>
+    </style>
+
     <!--LOGIN ACTIVITY-->
 
     <style name="Theme.Go4Lunch.LoginFacebookButton" parent="Widget.Material3.Button.TonalButton">

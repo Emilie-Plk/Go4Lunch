@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -22,6 +23,7 @@ import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.MainActivityBinding;
 import com.emplk.go4lunch.databinding.MainNavigationHeaderBinding;
 import com.emplk.go4lunch.ui.dispatcher.DispatcherActivity;
+import com.emplk.go4lunch.ui.restaurant_detail.RestaurantDetailActivity;
 import com.emplk.go4lunch.ui.restaurant_list.RestaurantListFragment;
 import com.emplk.go4lunch.ui.restaurant_map.MapFragment;
 import com.emplk.go4lunch.ui.workmate_list.WorkmateListFragment;
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         initNavigationDrawer();
     }
 
+    @SuppressLint("NonConstantResourceId")
     private void setObservers() {
 
         MainNavigationHeaderBinding navigationHeaderBinding = MainNavigationHeaderBinding.bind(
@@ -100,6 +103,48 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         );
+
+        viewModel.getUserWithRestaurantChoice().observe(this, userWithRestaurantChoice -> {
+                binding.mainNavigationView.setNavigationItemSelectedListener(
+                    item -> {
+                        switch (item.getItemId()) {
+                            case R.id.nav_your_lunch:
+                                if (userWithRestaurantChoice != null) {
+                                    startActivity(
+                                        RestaurantDetailActivity.navigate(
+                                            this, userWithRestaurantChoice.getAttendingRestaurantId()
+                                        )
+                                    );
+                                } else {
+                                    Toast.makeText(
+                                            this, "You didn't chose where to lunch yet, loser",
+                                            Toast.LENGTH_SHORT)
+                                        .show();
+                                }
+                                break;
+                            case R.id.nav_settings:
+                                Log.i(TAG, "Clicked on 'Settings' nav item");
+                                break;
+                            case R.id.nav_gps_permission:
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                Uri uri = Uri.fromParts("package", getPackageName(), null);
+                                intent.setData(uri);
+                                startActivity(intent);
+                                break;
+                            case R.id.nav_logout:
+                                viewModel.signOut();
+                                Log.i(TAG, "Clicked on 'Logout' nav item");
+                                startActivity(new Intent(
+                                    this, DispatcherActivity.class)
+                                );
+                                finish();
+                                break;
+                        }
+                        return true;
+                    }
+                );
+            }
+        );
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -139,31 +184,7 @@ public class MainActivity extends AppCompatActivity {
 
         binding.mainNavigationView.bringToFront();
 
-        binding.mainNavigationView.setNavigationItemSelectedListener(
-            item -> {
-                switch (item.getItemId()) {
-                    case R.id.nav_your_lunch:
-                        Log.i(TAG, "Clicked on 'Your lunch' nav item");
-                        break;
-                    case R.id.nav_settings:
-                        Log.i(TAG, "Clicked on 'Settings' nav item");
-                        break;
-                    case R.id.nav_gps_permission:
-                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                        Uri uri = Uri.fromParts("package", getPackageName(), null);
-                        intent.setData(uri);
-                        startActivity(intent);
-                        break;
-                    case R.id.nav_logout:
-                        viewModel.signOut();
-                        Log.i(TAG, "Clicked on 'Logout' nav item");
-                        startActivity(new Intent(MainActivity.this, DispatcherActivity.class));
-                        finish();
-                        break;
-                }
-                return true;
-            }
-        );
+
     }
 
     private void replaceFragment(@NonNull Fragment fragment) {

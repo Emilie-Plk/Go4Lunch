@@ -52,5 +52,6 @@
     <string name="error_placeholder">error</string>
     <string name="detail_workmate_joining">%s is joining!</string>
     <string name="list_workmate_not_attending">%s has not chosen yet!</string>
+    <string name="no_workmate_text">No workmate is going to eat\n at this restaurant so far!</string>
 
 </resources>

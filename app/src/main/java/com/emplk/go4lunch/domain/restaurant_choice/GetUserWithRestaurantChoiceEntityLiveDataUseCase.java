@@ -29,6 +29,9 @@ public class GetUserWithRestaurantChoiceEntityLiveDataUseCase {
 
     public LiveData<UserWithRestaurantChoiceEntity> invoke() {
         LoggedUserEntity loggedUserEntity = getCurrentLoggedUserUseCase.invoke();
-        return userRepository.getUserWithRestaurantChoiceEntity(loggedUserEntity.getId());
+        if (loggedUserEntity != null) {
+            return userRepository.getUserWithRestaurantChoiceEntity(loggedUserEntity.getId());
+        }
+        return null;
     }
 }

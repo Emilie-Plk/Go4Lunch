@@ -24,7 +24,7 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewStateIt
     private final OnRestaurantClickedListener listener;
 
     public RestaurantListAdapter(@NonNull OnRestaurantClickedListener listener) {
-        super(new RestaurantListViewHolder.ListRestaurantItemCallback());
+        super(new ListRestaurantItemCallback());
         this.listener = listener;
     }
 
@@ -49,7 +49,7 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewStateIt
                     )
                 );
             case ERROR_STATE:
-                return new RestaurantListViewHolder.ErrorViewHolder(
+                return new ErrorViewHolder(
                     RestaurantListErrorStateBinding.inflate(
                         LayoutInflater.from(parent.getContext()), parent, false
                     )
@@ -66,8 +66,8 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewStateIt
     ) {
         if (holder instanceof RestaurantListViewHolder) {
             ((RestaurantListViewHolder) holder).bind((RestaurantListViewStateItem.RestaurantItemItem) getItem(position), listener);
-        } else if (holder instanceof RestaurantListViewHolder.ErrorViewHolder) {
-            ((RestaurantListViewHolder.ErrorViewHolder) holder).bind((RestaurantListViewStateItem.RestaurantListErrorItem) getItem(position));
+        } else if (holder instanceof ErrorViewHolder) {
+            ((ErrorViewHolder) holder).bind((RestaurantListViewStateItem.RestaurantListErrorItem) getItem(position));
         }
     }
 
@@ -114,62 +114,63 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewStateIt
             }
         }
 
-        public static class ErrorViewHolder extends RecyclerView.ViewHolder {
+    }
 
-            private final RestaurantListErrorStateBinding binding;
+    public static class ErrorViewHolder extends RecyclerView.ViewHolder {
 
-            public ErrorViewHolder(RestaurantListErrorStateBinding binding) {
-                super(binding.getRoot());
-                this.binding = binding;
-            }
+        private final RestaurantListErrorStateBinding binding;
 
-            public void bind(@NonNull RestaurantListViewStateItem.RestaurantListErrorItem item) {
-                binding.restaurantListErrorTitle.setText(item.getErrorMessage());
-
-                int drawableError;
-                switch (item.getErrorDrawable()) {
-                    case NO_GPS_FOUND:
-                        drawableError = R.drawable.baseline_not_listed_location_24;
-                        break;
-                    case NO_RESULT_FOUND:
-                        drawableError = R.drawable.baseline_mood_bad_24;
-                        break;
-                    case REQUEST_FAILURE:
-                        drawableError = R.drawable.baseline_network_off_24;
-                        break;
-                    default:
-                        drawableError = R.drawable.baseline_error_outline_24;
-                }
-                binding.restaurantListErrorImage.setImageResource(drawableError);
-            }
+        public ErrorViewHolder(RestaurantListErrorStateBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
+        public void bind(@NonNull RestaurantListViewStateItem.RestaurantListErrorItem item) {
+            binding.restaurantListErrorTitle.setText(item.getErrorMessage());
 
-        private static class ListRestaurantItemCallback extends DiffUtil.ItemCallback<RestaurantListViewStateItem> {
-            @Override
-            public boolean areItemsTheSame(
-                @NonNull RestaurantListViewStateItem oldItem,
-                @NonNull RestaurantListViewStateItem newItem
-            ) {
-
-                boolean bothAreLoading = oldItem instanceof RestaurantListViewStateItem.Loading && newItem instanceof RestaurantListViewStateItem.Loading;
-                boolean bothAreRestaurantLists = oldItem instanceof RestaurantListViewStateItem.RestaurantItemItem && newItem instanceof RestaurantListViewStateItem.RestaurantItemItem;
-
-                return bothAreLoading ||
-                    (bothAreRestaurantLists &&
-                        ((RestaurantListViewStateItem.RestaurantItemItem) oldItem).getId().equals(((RestaurantListViewStateItem.RestaurantItemItem) newItem).getId())
-                    ) || (
-                    oldItem instanceof RestaurantListViewStateItem.RestaurantListErrorItem && newItem instanceof RestaurantListViewStateItem.RestaurantListErrorItem);
-
+            int drawableError;
+            switch (item.getErrorDrawable()) {
+                case NO_GPS_FOUND:
+                    drawableError = R.drawable.baseline_not_listed_location_24;
+                    break;
+                case NO_RESULT_FOUND:
+                    drawableError = R.drawable.baseline_mood_bad_24;
+                    break;
+                case REQUEST_FAILURE:
+                    drawableError = R.drawable.baseline_network_off_24;
+                    break;
+                default:
+                    drawableError = R.drawable.baseline_error_outline_24;
             }
+            binding.restaurantListErrorImage.setImageResource(drawableError);
+        }
 
-            @Override
-            public boolean areContentsTheSame(
-                @NonNull RestaurantListViewStateItem oldItem,
-                @NonNull RestaurantListViewStateItem newItem
-            ) {
-                return oldItem.equals(newItem);
-            }
+    }
+
+    private static class ListRestaurantItemCallback extends DiffUtil.ItemCallback<RestaurantListViewStateItem> {
+        @Override
+        public boolean areItemsTheSame(
+            @NonNull RestaurantListViewStateItem oldItem,
+            @NonNull RestaurantListViewStateItem newItem
+        ) {
+
+            boolean bothAreLoading = oldItem instanceof RestaurantListViewStateItem.Loading && newItem instanceof RestaurantListViewStateItem.Loading;
+            boolean bothAreRestaurantLists = oldItem instanceof RestaurantListViewStateItem.RestaurantItemItem && newItem instanceof RestaurantListViewStateItem.RestaurantItemItem;
+
+            return bothAreLoading ||
+                (bothAreRestaurantLists &&
+                    ((RestaurantListViewStateItem.RestaurantItemItem) oldItem).getId().equals(((RestaurantListViewStateItem.RestaurantItemItem) newItem).getId())
+                ) || (
+                oldItem instanceof RestaurantListViewStateItem.RestaurantListErrorItem && newItem instanceof RestaurantListViewStateItem.RestaurantListErrorItem);
+        }
+
+        @Override
+        public boolean areContentsTheSame(
+            @NonNull RestaurantListViewStateItem oldItem,
+            @NonNull RestaurantListViewStateItem newItem
+        ) {
+            return oldItem.equals(newItem);
         }
     }
 }
+

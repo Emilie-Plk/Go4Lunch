@@ -17,6 +17,8 @@ import com.emplk.go4lunch.domain.authentication.use_case.LogoutUserUseCase;
 import com.emplk.go4lunch.domain.autocomplete.GetAutocompleteWrapperUseCase;
 import com.emplk.go4lunch.domain.autocomplete.entity.AutocompleteWrapper;
 import com.emplk.go4lunch.domain.autocomplete.entity.PredictionEntity;
+import com.emplk.go4lunch.domain.restaurant_choice.GetUserWithRestaurantChoiceEntityLiveDataUseCase;
+import com.emplk.go4lunch.domain.user.UserWithRestaurantChoiceEntity;
 import com.emplk.go4lunch.ui.main.searchview.PredictionViewState;
 import com.emplk.go4lunch.ui.main.searchview.SearchViewVisibilityState;
 import com.emplk.go4lunch.ui.utils.SingleLiveEvent;
@@ -43,6 +45,9 @@ public class MainViewModel extends ViewModel {
     @NonNull
     private final IsUserLoggedInUseCase isUserLoggedInUseCase;
 
+    @NonNull
+    private final GetUserWithRestaurantChoiceEntityLiveDataUseCase getUserWithRestaurantChoiceEntityLiveDataUseCase;
+
     @NonNull  // TODO: will use it to display/hide searchview bar
     private final MutableLiveData<List<SearchViewVisibilityState>> searchViewVisibilityStateMutableLiveData = new MutableLiveData<>();
 
@@ -58,13 +63,15 @@ public class MainViewModel extends ViewModel {
         @NonNull GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase,
         @NonNull LogoutUserUseCase logoutUserUseCase,
         @NonNull GetAutocompleteWrapperUseCase getAutocompleteWrapperUseCase,
-        @NonNull IsUserLoggedInUseCase isUserLoggedInUseCase
+        @NonNull IsUserLoggedInUseCase isUserLoggedInUseCase,
+        @NonNull GetUserWithRestaurantChoiceEntityLiveDataUseCase getUserWithRestaurantChoiceEntityLiveDataUseCase
     ) {
 
         this.getCurrentLoggedUserUseCase = getCurrentLoggedUserUseCase;
         this.logoutUserUseCase = logoutUserUseCase;
         this.getAutocompleteWrapperUseCase = getAutocompleteWrapperUseCase;
         this.isUserLoggedInUseCase = isUserLoggedInUseCase;
+        this.getUserWithRestaurantChoiceEntityLiveDataUseCase = getUserWithRestaurantChoiceEntityLiveDataUseCase;
 
         fragmentStateSingleLiveEvent.setValue(MAP_FRAGMENT);
     }
@@ -85,6 +92,10 @@ public class MainViewModel extends ViewModel {
                 return userLoggingStateLiveData;
             }
         );
+    }
+
+    public LiveData<UserWithRestaurantChoiceEntity> getUserWithRestaurantChoice() {
+        return getUserWithRestaurantChoiceEntityLiveDataUseCase.invoke();
     }
 
 

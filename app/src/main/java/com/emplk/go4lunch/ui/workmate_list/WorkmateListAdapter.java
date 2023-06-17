@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.emplk.go4lunch.R;
+import com.emplk.go4lunch.databinding.NoWorkmateLayoutBinding;
 import com.emplk.go4lunch.databinding.WorkmatesItemBinding;
 
 public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, RecyclerView.ViewHolder> {
@@ -60,9 +61,7 @@ public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, Rec
             ((AllWorkMatesViewHolder) holder).bind((WorkmatesViewStateItem.AllWorkmates) getItem(position), listener);
         } else if (holder instanceof WorkmatesGoingToSameRestaurantViewHolder) {
             ((WorkmatesGoingToSameRestaurantViewHolder) holder).bind((WorkmatesViewStateItem.WorkmatesGoingToSameRestaurant) getItem(position), listener);
-        } else {
-            throw new IllegalStateException("Unknown item type at position: " + position);
-        }
+        } else throw new IllegalStateException("Unknown item type at position: " + position);
     }
 
     @Override
@@ -117,7 +116,6 @@ public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, Rec
         private final TextView workmateName;
         private final ImageView workmateAvatar;
         private final ImageButton chatButton;
-
         private final WorkmatesItemBinding binding;
 
 
