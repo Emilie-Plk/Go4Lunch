@@ -4,7 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.emplk.go4lunch.data.util.FirestoreFavoriteRestaurantIdsLiveData;
 import com.emplk.go4lunch.domain.favorite_restaurant.FavoriteRestaurantRepository;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -63,26 +66,9 @@ public class FavoriteRestaurantRepositoryFirestore implements FavoriteRestaurant
     @Override
     @NonNull
     public LiveData<Set<String>> getUserFavoriteRestaurantIdsLiveData(@NonNull String userId) {
-        MutableLiveData<Set<String>> favoriteRestaurantSetLiveData = new MutableLiveData<>();
+        DocumentReference userDocumentRef = firestore.collection(USERS_COLLECTION).document(userId);
+        CollectionReference favoriteRestaurantsCollectionRef = userDocumentRef.collection(COLLECTION_PATH_FAVORITE_RESTAURANTS);
 
-        firestore.collection(USERS_COLLECTION)
-            .document(userId)
-            .collection(COLLECTION_PATH_FAVORITE_RESTAURANTS)
-            .addSnapshotListener((querySnapshot, error) -> {
-                    if (error != null) {
-                        favoriteRestaurantSetLiveData.setValue(Collections.emptySet());
-                        return;
-                    }
-                    if (querySnapshot != null) {
-                        Set<String> favoriteRestaurantIds = new HashSet<>();
-                        for (QueryDocumentSnapshot document : querySnapshot) {
-                            String favoriteRestaurantId = document.getId();
-                            favoriteRestaurantIds.add(favoriteRestaurantId);
-                        }
-                        favoriteRestaurantSetLiveData.setValue(favoriteRestaurantIds);
-                    }
-                }
-            );
-        return favoriteRestaurantSetLiveData;
+        return new FirestoreFavoriteRestaurantIdsLiveData(userDocumentRef, favoriteRestaurantsCollectionRef);
     }
 }

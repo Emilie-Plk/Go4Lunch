@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.data.workmate;
+package com.emplk.go4lunch.data.user.workmate;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
