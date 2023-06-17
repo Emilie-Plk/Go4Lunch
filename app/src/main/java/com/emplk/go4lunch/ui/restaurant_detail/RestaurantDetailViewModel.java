@@ -24,8 +24,8 @@ import com.emplk.go4lunch.domain.favorite_restaurant.AddFavoriteRestaurantUseCas
 import com.emplk.go4lunch.domain.favorite_restaurant.RemoveFavoriteRestaurantUseCase;
 import com.emplk.go4lunch.domain.user.UserEntity;
 import com.emplk.go4lunch.domain.user.use_case.GetUserEntityUseCase;
-import com.emplk.go4lunch.domain.user.use_case.restaurant_choice.AddUserRestaurantChoiceUseCase;
-import com.emplk.go4lunch.domain.user.use_case.restaurant_choice.RemoveUserRestaurantChoiceUseCase;
+import com.emplk.go4lunch.domain.restaurant_choice.AddUserRestaurantChoiceUseCase;
+import com.emplk.go4lunch.domain.restaurant_choice.RemoveUserRestaurantChoiceUseCase;
 import com.emplk.go4lunch.domain.workmate.GetWorkmateEntitiesGoingToSameRestaurantUseCase;
 import com.emplk.go4lunch.domain.workmate.WorkmateEntity;
 import com.emplk.go4lunch.ui.utils.RestaurantFavoriteState;

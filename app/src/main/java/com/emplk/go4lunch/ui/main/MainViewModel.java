@@ -11,7 +11,7 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
-import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserLiveDataUseCase;
+import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserUseCase;
 import com.emplk.go4lunch.domain.authentication.use_case.IsUserLoggedInUseCase;
 import com.emplk.go4lunch.domain.authentication.use_case.LogoutUserUseCase;
 import com.emplk.go4lunch.domain.autocomplete.GetAutocompleteWrapperUseCase;
@@ -32,7 +32,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class MainViewModel extends ViewModel {
 
     @NonNull
-    private final GetCurrentLoggedUserLiveDataUseCase getCurrentLoggedUserLiveDataUseCase;
+    private final GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase;
 
     @NonNull
     private final LogoutUserUseCase logoutUserUseCase;
@@ -55,13 +55,13 @@ public class MainViewModel extends ViewModel {
     @Inject
     public MainViewModel(
 
-        @NonNull GetCurrentLoggedUserLiveDataUseCase getCurrentLoggedUserLiveDataUseCase,
+        @NonNull GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase,
         @NonNull LogoutUserUseCase logoutUserUseCase,
         @NonNull GetAutocompleteWrapperUseCase getAutocompleteWrapperUseCase,
         @NonNull IsUserLoggedInUseCase isUserLoggedInUseCase
     ) {
 
-        this.getCurrentLoggedUserLiveDataUseCase = getCurrentLoggedUserLiveDataUseCase;
+        this.getCurrentLoggedUserUseCase = getCurrentLoggedUserUseCase;
         this.logoutUserUseCase = logoutUserUseCase;
         this.getAutocompleteWrapperUseCase = getAutocompleteWrapperUseCase;
         this.isUserLoggedInUseCase = isUserLoggedInUseCase;
@@ -70,8 +70,8 @@ public class MainViewModel extends ViewModel {
     }
 
 
-    public LiveData<LoggedUserEntity> getUserInfoLiveData() { //TODO: just use the LoggedUserEntity
-        return getCurrentLoggedUserLiveDataUseCase.invoke();
+    public LiveData<LoggedUserEntity> getUserInfoLiveData() { //TODO: maybe should use the UserEntity
+        return new MutableLiveData<>(getCurrentLoggedUserUseCase.invoke());
     }
 
     public LiveData<UserLoggingState> onUserLogged() {

@@ -10,7 +10,7 @@ import com.emplk.go4lunch.domain.user.UserRepository;
 
 import javax.inject.Inject;
 
-public class UpsertLoggedUserEntityUseCase {
+public class AddLoggedUserEntityUseCase {
 
     @NonNull
     private final UserRepository userRepository;
@@ -19,7 +19,7 @@ public class UpsertLoggedUserEntityUseCase {
     private final GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase;
 
     @Inject
-    public UpsertLoggedUserEntityUseCase(
+    public AddLoggedUserEntityUseCase(
         @NonNull UserRepository userRepository,
         @NonNull GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase
     ) {

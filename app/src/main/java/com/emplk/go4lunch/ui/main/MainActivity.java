@@ -8,17 +8,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
@@ -27,7 +22,6 @@ import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.MainActivityBinding;
 import com.emplk.go4lunch.databinding.MainNavigationHeaderBinding;
 import com.emplk.go4lunch.ui.dispatcher.DispatcherActivity;
-import com.emplk.go4lunch.ui.main.searchview.SearchViewAdapter;
 import com.emplk.go4lunch.ui.restaurant_list.RestaurantListFragment;
 import com.emplk.go4lunch.ui.restaurant_map.MapFragment;
 import com.emplk.go4lunch.ui.workmate_list.WorkmateListFragment;
@@ -43,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
 
     private MainViewModel viewModel;
 
-    private SearchViewAdapter searchViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,16 +56,14 @@ public class MainActivity extends AppCompatActivity {
         initBottomNavigationBar();
 
         initNavigationDrawer();
-
-        initSearchView();
     }
 
     private void setObservers() {
 
-        // MainNavigation Header
-        MainNavigationHeaderBinding navigationHeaderBinding;
-        View headerView = binding.mainNavigationView.getHeaderView(0);
-        navigationHeaderBinding = MainNavigationHeaderBinding.bind(headerView);
+        MainNavigationHeaderBinding navigationHeaderBinding = MainNavigationHeaderBinding.bind(
+            binding.mainNavigationView.getHeaderView(0)
+        );
+
         viewModel.getUserInfoLiveData().observe(this, firebaseUser -> {
                 Glide.with(this)
                     .load(firebaseUser.getPictureUrl())
@@ -85,13 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 navigationHeaderBinding.navigationHeaderUserName.setText(firebaseUser.getName());
             }
         );
-/*
-        viewModel.getPredictionViewStateLiveData().observe(this, predictionViewState -> {
-                if (predictionViewState != null) {
-                    searchViewAdapter.submitList(predictionViewState);
-                }
-            }
-        );*/
+
 
         viewModel.getFragmentStateSingleLiveEvent().observe(this, fragmentState -> {
                 switch (fragmentState) {
@@ -109,60 +94,12 @@ public class MainActivity extends AppCompatActivity {
         );
 
         viewModel.onUserLogged().observe(this, loggingState -> {
-                if (loggingState == UserLoggingState.IS_LOGGED) {
-                    return;
-                } else if (loggingState == UserLoggingState.IS_NOT_LOGGED) {
+                if (loggingState == UserLoggingState.IS_NOT_LOGGED) {
                     startActivity(DispatcherActivity.navigate(this));
                     finish();
                 }
             }
         );
-    }
-
-    private void initSearchView() {
-        SearchView searchView = binding.mainToolbarSearchView;
-        searchView.clearFocus();
-
-        RecyclerView recyclerView = binding.mainSearchviewRecyclerview;
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setVisibility(View.GONE); // TODO: MVVMize this pls
-       /* searchViewAdapter = new SearchViewAdapter(new OnPredictionClickedListener() {
-            @Override
-            public void onPredictionClicked(@NonNull String placeId) {
-                startActivity(RestaurantDetailActivity.navigate(MainActivity.this, placeId));
-            }
-        }
-        );*/
-
-        recyclerView.setAdapter(searchViewAdapter);
-/*
-        searchView.setOnQueryTextListener(   //TODO: get this right later
-            new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    return false;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    recyclerView.setVisibility(View.VISIBLE);
-                    viewModel.onUserSearchQuery(newText).observe(MainActivity.this, predictionViewState -> {
-                            if (predictionViewState != null) {
-                                searchViewAdapter.submitList(predictionViewState);
-                            }
-                        }
-                    );
-                    return false;
-                }
-            }
-        );
-
-        searchView.setOnCloseListener(() -> {
-                recyclerView.setVisibility(View.GONE);
-                return false;
-            }
-        );
- */
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -189,7 +126,14 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("NonConstantResourceId")
     private void initNavigationDrawer() {
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.mainDrawerLayout, binding.mainToolbar, R.string.open_nav, R.string.close_nav);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+            this,
+            binding.mainDrawerLayout,
+            binding.mainToolbar,
+            R.string.open_nav,
+            R.string.close_nav
+        );
+
         binding.mainDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -223,14 +167,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void replaceFragment(@NonNull Fragment fragment) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.main_frame_layout, fragment);
-        fragmentTransaction.commit();
-    }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        binding = null;
+        getSupportFragmentManager()
+            .beginTransaction()
+            .replace(R.id.main_frame_layout, fragment)
+            .commit();
     }
 }

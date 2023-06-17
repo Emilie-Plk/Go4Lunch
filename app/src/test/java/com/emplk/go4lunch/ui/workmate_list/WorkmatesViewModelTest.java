@@ -39,7 +39,7 @@ public class WorkmatesViewModelTest {
 
     @Before
     public void setUp() {
-        loggedUserEntity = getTestLoggedUserEntity();
+        loggedUserEntity = mock(LoggedUserEntity.class);
         workmateEntitiesWithAndWithoutChoiceMutableLiveData = new MutableLiveData<>();
 
         doReturn(workmateEntitiesWithAndWithoutChoiceMutableLiveData).when(getWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase).invoke();
@@ -65,15 +65,6 @@ public class WorkmatesViewModelTest {
         verify(getWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase).invoke();
         verifyNoMoreInteractions(getWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase);
         verifyNoMoreInteractions(getCurrentLoggedUserUseCase);
-    }
-
-    private LoggedUserEntity getTestLoggedUserEntity() {
-        return new LoggedUserEntity(
-            "testUid",
-            "testUsername",
-            "testEmail",
-            "testUrlPicture"
-        );
     }
 
     private List<WorkmateEntity> getTestWorkmateEntitiesWithAndWithoutChoice() {

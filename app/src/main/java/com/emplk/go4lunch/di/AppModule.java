@@ -37,7 +37,7 @@ public class AppModule {
     @Singleton
     public Retrofit provideRetrofit(@NonNull Application application) {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient client = new OkHttpClient.Builder()
             .addInterceptor(interceptor)

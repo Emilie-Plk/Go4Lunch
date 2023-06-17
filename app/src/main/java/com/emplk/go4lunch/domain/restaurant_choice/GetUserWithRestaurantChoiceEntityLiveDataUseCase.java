@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.domain.user.use_case.restaurant_choice;
+package com.emplk.go4lunch.domain.restaurant_choice;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;

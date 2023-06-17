@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
-import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserLiveDataUseCase;
+import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserUseCase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ public class GetWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase {
     private final GetWorkmateEntitiesWithRestaurantChoiceListUseCase getWorkmateEntitiesWithRestaurantChoiceListUseCase;
 
     @NonNull
-    private final GetCurrentLoggedUserLiveDataUseCase getCurrentLoggedUserLiveDataUseCase;
+    private final GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase;
 
     @NonNull
     private final GetLoggedUserEntitiesUseCase getLoggedUserEntitiesUseCase;
@@ -30,31 +30,27 @@ public class GetWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase {
     @Inject
     public GetWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase(
         @NonNull GetWorkmateEntitiesWithRestaurantChoiceListUseCase getWorkmateEntitiesWithRestaurantChoiceListUseCase,
-        @NonNull GetCurrentLoggedUserLiveDataUseCase getCurrentLoggedUserLiveDataUseCase,
+        @NonNull GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase,
         @NonNull GetLoggedUserEntitiesUseCase getLoggedUserEntitiesUseCase
     ) {
         this.getWorkmateEntitiesWithRestaurantChoiceListUseCase = getWorkmateEntitiesWithRestaurantChoiceListUseCase;
-        this.getCurrentLoggedUserLiveDataUseCase = getCurrentLoggedUserLiveDataUseCase;
+        this.getCurrentLoggedUserUseCase = getCurrentLoggedUserUseCase;
         this.getLoggedUserEntitiesUseCase = getLoggedUserEntitiesUseCase;
 
         LiveData<List<WorkmateEntity>> workmateEntitiesWithRestaurantChoiceLiveData = getWorkmateEntitiesWithRestaurantChoiceListUseCase.invoke();
         LiveData<List<LoggedUserEntity>> loggedUserEntitiesLiveData = getLoggedUserEntitiesUseCase.invoke();
-        LiveData<LoggedUserEntity> currentLoggedUserLiveData = getCurrentLoggedUserLiveDataUseCase.invoke();
+
 
         workmateEntitiesWithAndWithoutRestaurantChoiceMediatorLiveData.addSource(workmateEntitiesWithRestaurantChoiceLiveData, workmateEntitiesWithRestaurantChoice -> {
-                combine(workmateEntitiesWithRestaurantChoice, loggedUserEntitiesLiveData.getValue(), currentLoggedUserLiveData.getValue());
+                combine(workmateEntitiesWithRestaurantChoice, loggedUserEntitiesLiveData.getValue());
             }
         );
 
         workmateEntitiesWithAndWithoutRestaurantChoiceMediatorLiveData.addSource(loggedUserEntitiesLiveData, loggedUserEntities -> {
-                combine(workmateEntitiesWithRestaurantChoiceLiveData.getValue(), loggedUserEntities, currentLoggedUserLiveData.getValue());
+                combine(workmateEntitiesWithRestaurantChoiceLiveData.getValue(), loggedUserEntities);
             }
         );
 
-        workmateEntitiesWithAndWithoutRestaurantChoiceMediatorLiveData.addSource(currentLoggedUserLiveData, currentLoggedUser -> {
-                combine(workmateEntitiesWithRestaurantChoiceLiveData.getValue(), loggedUserEntitiesLiveData.getValue(), currentLoggedUser);
-            }
-        );
     }
 
     public LiveData<List<WorkmateEntity>> invoke() {
@@ -64,9 +60,10 @@ public class GetWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase {
 
     private void combine(
         @Nullable List<WorkmateEntity> workmateEntitiesWithRestaurantChoice,
-        @Nullable List<LoggedUserEntity> loggedUserEntities,
-        @Nullable LoggedUserEntity currentLoggedUser
+        @Nullable List<LoggedUserEntity> loggedUserEntities
     ) {
+        LoggedUserEntity currentLoggedUser = getCurrentLoggedUserUseCase.invoke();
+
         if (currentLoggedUser == null || loggedUserEntities == null) {
             return;
         }
