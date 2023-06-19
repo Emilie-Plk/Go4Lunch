@@ -20,12 +20,14 @@
     <color name="grayish_black">#1B1818</color>
     <color name="licorice_gray">#221A19</color>
     <color name="golden_yellow">#FFC823</color>
+    <color name="sweet_pink">#E15887</color>
     <color name="tinted_gray_translucent">#1B52443C</color>
     <color name="detail_btn_disabled">@color/darker_gray</color>
     <color name="grey_text">@color/darker_gray</color>
     <color name="detail_btn_enabled">@color/crimson_rust</color>
     <color name="error_red">#e63946</color>
     <color name="ok_green">#3D9C41</color>
+    <color name="ok_green_pale">#BDE8BF</color>
     <color name="transparent">#00000000</color>
 
 

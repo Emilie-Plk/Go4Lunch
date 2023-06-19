@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -111,45 +110,39 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                     binding.detailRestaurantWebsiteButton.setEnabled(detail.isWebsiteAvailable());
                     binding.detailRestaurantCallButton.setEnabled(detail.isPhoneNumberAvailable());
 
-                    if (detail.getAttendanceState() == AttendanceState.IS_ATTENDING) {
-                        binding.detailRestaurantChoseFab.setText(detail.getAttendanceState().getText());
-                        binding.detailRestaurantChoseFab.setOnClickListener(v -> {
-                                Log.d("EMILIE", "clicked on remove user restaurant choice");
-                                viewModel.onRemoveUserRestaurantChoice();
-                            }
+                    AttendanceState attendanceState = detail.getAttendanceState();
+                    if (attendanceState != null) {
+                        binding.detailRestaurantChoseFab.setText(attendanceState.getText());
+                        binding.detailRestaurantChoseFab.setBackgroundTintList(ContextCompat.getColorStateList(this, attendanceState.getBackgroundColorRes()));
+                        binding.detailRestaurantChoseFab.setIconTint(ContextCompat.getColorStateList(this, attendanceState.getIconColorRes()));
+                    }
+                    if (attendanceState == AttendanceState.IS_ATTENDING) {
+                        binding.detailRestaurantChoseFab.setOnClickListener(v -> viewModel.onRemoveUserRestaurantChoice());
+                    } else if (attendanceState == AttendanceState.IS_NOT_ATTENDING) {
+                        binding.detailRestaurantChoseFab.setOnClickListener(v -> viewModel.onAddUserRestaurantChoice(detail.getName(), detail.getVicinity(), detail.getPictureUrl()));
+                    }
+
+                    RestaurantFavoriteState restaurantFavoriteState = detail.getRestaurantFavoriteState();
+                    if (restaurantFavoriteState != null) {
+                        binding.detailRestaurantLikeButton.setIcon(
+                            ContextCompat.getDrawable(this,
+                                restaurantFavoriteState.getDrawableRes()
+                            )
                         );
-                    } else if (detail.getAttendanceState() == AttendanceState.IS_NOT_ATTENDING) {
-                        binding.detailRestaurantChoseFab.setText(detail.getAttendanceState().getText());
-                        binding.detailRestaurantChoseFab.setOnClickListener(v -> {
-                                Log.d("EMILIE", "clicked on add user restaurant choice");
-                                viewModel.onAddUserRestaurantChoice(
-                                    detail.getName(),
-                                    detail.getVicinity(),
-                                    detail.getPictureUrl()
-                                );
-                            }
+                        binding.detailRestaurantLikeButton.setIconTint(
+                            ContextCompat.getColorStateList(this,
+                                restaurantFavoriteState.getIconColorRes()
+                            )
                         );
                     }
 
-                    if (detail.getRestaurantFavoriteState() == RestaurantFavoriteState.IS_FAVORITE) {
-                        binding.detailRestaurantLikeButton.setIcon(
-                            ContextCompat.getDrawable(this,
-                                detail.getRestaurantFavoriteState().getDrawableRes()
-                            )
-                        );
+                    if (restaurantFavoriteState == RestaurantFavoriteState.IS_FAVORITE) {
                         binding.detailRestaurantLikeButton.setOnClickListener(v -> {
-                                Log.d("EMILIE", "clicked on remove favorite restaurant");
                                 viewModel.onRemoveFavoriteRestaurant();
                             }
                         );
                     } else if (detail.getRestaurantFavoriteState() == RestaurantFavoriteState.IS_NOT_FAVORITE) {
-                        binding.detailRestaurantLikeButton.setIcon(
-                            ContextCompat.getDrawable(this,
-                                detail.getRestaurantFavoriteState().getDrawableRes()
-                            )
-                        );
                         binding.detailRestaurantLikeButton.setOnClickListener(v -> {
-                                Log.d("EMILIE", "clicked on add favorite restaurant");
                                 viewModel.onAddFavoriteRestaurant();
                             }
                         );

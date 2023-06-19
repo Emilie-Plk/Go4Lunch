@@ -85,7 +85,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                             .title(item.getName())
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
                     );
-                    
+
                     if (restaurantMarker != null) {
                         restaurantMarker.setTag(item.getId());
                     }

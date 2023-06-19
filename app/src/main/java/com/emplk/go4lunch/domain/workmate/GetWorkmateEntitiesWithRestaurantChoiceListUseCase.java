@@ -19,13 +19,7 @@ import javax.inject.Inject;
 public class GetWorkmateEntitiesWithRestaurantChoiceListUseCase {
 
     @NonNull
-    private final UserRepository userRepository;
-
-    @NonNull
     private final GetCurrentLoggedUserIdUseCase getCurrentLoggedUserIdUseCase;
-
-    @NonNull
-    private final GetLoggedUserEntitiesUseCase getLoggedUserEntitiesUseCase;
 
     MediatorLiveData<List<WorkmateEntity>> workmateEntitiesWithRestaurantChoiceLiveData = new MediatorLiveData<>();
 
@@ -35,9 +29,7 @@ public class GetWorkmateEntitiesWithRestaurantChoiceListUseCase {
         @NonNull GetCurrentLoggedUserIdUseCase getCurrentLoggedUserIdUseCase,
         @NonNull GetLoggedUserEntitiesUseCase getLoggedUserEntitiesUseCase
     ) {
-        this.userRepository = userRepository;
         this.getCurrentLoggedUserIdUseCase = getCurrentLoggedUserIdUseCase;
-        this.getLoggedUserEntitiesUseCase = getLoggedUserEntitiesUseCase;
 
         LiveData<List<LoggedUserEntity>> loggedUserEntitiesLiveData = getLoggedUserEntitiesUseCase.invoke();
         LiveData<List<UserWithRestaurantChoiceEntity>> userWithRestaurantChoiceEntitiesLiveData = userRepository.getUserWithRestaurantChoiceEntities();

@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                                     );
                                 } else {
                                     Toast.makeText(
-                                            this, "You didn't chose where to lunch yet, loser",
+                                            this, R.string.toast_message_user_no_restaurant_chosen,
                                             Toast.LENGTH_SHORT)
                                         .show();
                                 }

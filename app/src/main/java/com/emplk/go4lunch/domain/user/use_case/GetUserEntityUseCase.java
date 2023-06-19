@@ -8,9 +8,9 @@ import androidx.lifecycle.MediatorLiveData;
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserUseCase;
 import com.emplk.go4lunch.domain.favorite_restaurant.GetFavoriteRestaurantsIdsUseCase;
+import com.emplk.go4lunch.domain.restaurant_choice.GetUserWithRestaurantChoiceEntityLiveDataUseCase;
 import com.emplk.go4lunch.domain.user.UserEntity;
 import com.emplk.go4lunch.domain.user.UserWithRestaurantChoiceEntity;
-import com.emplk.go4lunch.domain.restaurant_choice.GetUserWithRestaurantChoiceEntityLiveDataUseCase;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -32,7 +32,7 @@ public class GetUserEntityUseCase {
         @Nullable GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase,
         @NonNull GetFavoriteRestaurantsIdsUseCase getFavoriteRestaurantsIdsUseCase,
         @NonNull GetUserWithRestaurantChoiceEntityLiveDataUseCase getUserWithRestaurantChoiceEntityLiveDataUseCase
-        ) {
+    ) {
         this.getCurrentLoggedUserUseCase = getCurrentLoggedUserUseCase;
         userEntityMediatorLiveData = new MediatorLiveData<>();
 

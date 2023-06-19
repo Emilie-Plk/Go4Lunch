@@ -142,7 +142,6 @@
     </style>
 
     <style name="Theme.Go4Lunch.DetailRestaurantChoseBtn" parent="Widget.Material3.ExtendedFloatingActionButton.Icon.Primary">
-        <item name="backgroundTint">@color/dirty_white</item>
         <item name="android:textColor">@color/licorice_gray</item>
         <item name="iconTint">@color/crimson_rust</item>
     </style>
