@@ -41,13 +41,16 @@ public class GpsLocationRepositoryBroadcastReceiver extends BroadcastReceiver im
     private static final int SMALLEST_DISPLACEMENT_THRESHOLD_METER = 100;
 
     @NonNull
+    private final Context context;
+
+    @NonNull
     private final FusedLocationProviderClient fusedLocationProviderClient;
 
     @NonNull
     private final MutableLiveData<LocationEntity> gpsLocationEntityMutableLiveData = new MutableLiveData<>();
 
     @NonNull
-    private final MutableLiveData<Boolean> isGpsEnabledMutableLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isGpsEnabledMutableLiveData;
 
     private final LocationCallback locationCallback = new LocationCallback() {
         @Override
@@ -61,20 +64,25 @@ public class GpsLocationRepositoryBroadcastReceiver extends BroadcastReceiver im
         }
     };
 
-    private final LocationManager locationManager;
-
     @Inject
     public GpsLocationRepositoryBroadcastReceiver(
         @NonNull @ApplicationContext Context context,
         @NonNull FusedLocationProviderClient fusedLocationProviderClient
     ) {
+        this.context = context;
         this.fusedLocationProviderClient = fusedLocationProviderClient;
 
         IntentFilter intentFilter = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
         intentFilter.addAction(Intent.ACTION_PROVIDER_CHANGED);
         context.registerReceiver(this, intentFilter);
 
-        locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        isGpsEnabledMutableLiveData = new MutableLiveData<>();
+
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        if (locationManager != null) {
+            boolean isGpsEnabledAtStart = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            isGpsEnabledMutableLiveData.setValue(isGpsEnabledAtStart);
+        }
     }
 
     public LiveData<LocationStateEntity> getLocationStateLiveData() {
@@ -94,7 +102,6 @@ public class GpsLocationRepositoryBroadcastReceiver extends BroadcastReceiver im
                 } else {
                     locationStateEntity = new LocationStateEntity.Success(locationEntity);
                 }
-
                 gpsResponseMediatorLiveData.setValue(locationStateEntity);
             }
         };
@@ -105,9 +112,21 @@ public class GpsLocationRepositoryBroadcastReceiver extends BroadcastReceiver im
     }
 
     @Override
+    public LiveData<Boolean> isGpsProviderEnabled() {
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        if (locationManager != null) {
+            boolean isGpsEnabledAtStart = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            return new MutableLiveData<>(isGpsEnabledAtStart);
+        }
+        return new MutableLiveData<>();
+    }
+
+    @Override
     @RequiresPermission(anyOf = {ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION})
     public void startLocationRequest() {
-        LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, LOCATION_REQUEST_INTERVAL_MS)
+        LocationRequest locationRequest = new LocationRequest.Builder(
+            Priority.PRIORITY_HIGH_ACCURACY, LOCATION_REQUEST_INTERVAL_MS)
+            .setWaitForAccurateLocation(false)
             .setMinUpdateIntervalMillis(LOCATION_REQUEST_INTERVAL_MS)
             .setMinUpdateDistanceMeters(SMALLEST_DISPLACEMENT_THRESHOLD_METER)
             .build();

@@ -60,6 +60,7 @@ public class MainApplication extends Application implements Application.Activity
         activityCount--;
         if (activityCount == 0) {
             gpsLocationRepositoryBroadcastReceiver.stopLocationRequest();
+            unregisterReceiver(gpsLocationRepositoryBroadcastReceiver);
         }
     }
 
@@ -73,6 +74,5 @@ public class MainApplication extends Application implements Application.Activity
 
     @Override
     public void onActivityDestroyed(@NonNull Activity activity) {
-
     }
 }

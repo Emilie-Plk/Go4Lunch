@@ -183,12 +183,9 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
 
         binding.mainNavigationView.bringToFront();
-
-
     }
 
     private void replaceFragment(@NonNull Fragment fragment) {
-
         getSupportFragmentManager()
             .beginTransaction()
             .replace(R.id.main_frame_layout, fragment)

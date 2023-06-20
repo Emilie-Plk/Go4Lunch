@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.LoginActivityBinding;
+import com.emplk.go4lunch.ui.dispatcher.DispatcherActivity;
 import com.emplk.go4lunch.ui.main.MainActivity;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -78,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         if (firebaseUser != null) {
-            startActivity(new Intent(LoginActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            startActivity(new Intent(LoginActivity.this, DispatcherActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
 
         callbackManager = CallbackManager.Factory.create();
@@ -160,7 +161,7 @@ public class LoginActivity extends AppCompatActivity {
                                     // Check condition
                                     if (task.isSuccessful()) {
                                         viewModel.onLoginComplete();
-                                        startActivity(new Intent(LoginActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                        startActivity(new Intent(LoginActivity.this, DispatcherActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                         Log.i(TAG, "Firebase auth successful");
                                     } else {
                                         Log.e("Firebase auth error: ", task.getException().getMessage());

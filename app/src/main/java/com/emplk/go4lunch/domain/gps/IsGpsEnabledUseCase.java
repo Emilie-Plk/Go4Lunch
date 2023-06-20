@@ -10,7 +10,6 @@ import com.emplk.go4lunch.domain.gps.entity.LocationStateEntity;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
 public class IsGpsEnabledUseCase {
 
     @NonNull

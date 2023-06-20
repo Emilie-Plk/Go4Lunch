@@ -3,9 +3,7 @@ package com.emplk.go4lunch.ui.main;
 import static com.emplk.go4lunch.ui.main.FragmentState.MAP_FRAGMENT;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
@@ -14,16 +12,12 @@ import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserUseCase;
 import com.emplk.go4lunch.domain.authentication.use_case.IsUserLoggedInUseCase;
 import com.emplk.go4lunch.domain.authentication.use_case.LogoutUserUseCase;
-import com.emplk.go4lunch.domain.autocomplete.GetAutocompleteWrapperUseCase;
-import com.emplk.go4lunch.domain.autocomplete.entity.AutocompleteWrapper;
-import com.emplk.go4lunch.domain.autocomplete.entity.PredictionEntity;
+import com.emplk.go4lunch.domain.gps.IsGpsEnabledUseCase;
 import com.emplk.go4lunch.domain.restaurant_choice.GetUserWithRestaurantChoiceEntityLiveDataUseCase;
 import com.emplk.go4lunch.domain.user.UserWithRestaurantChoiceEntity;
-import com.emplk.go4lunch.ui.main.searchview.PredictionViewState;
 import com.emplk.go4lunch.ui.main.searchview.SearchViewVisibilityState;
 import com.emplk.go4lunch.ui.utils.SingleLiveEvent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -39,11 +33,12 @@ public class MainViewModel extends ViewModel {
     @NonNull
     private final LogoutUserUseCase logoutUserUseCase;
 
-    @NonNull
-    private final GetAutocompleteWrapperUseCase getAutocompleteWrapperUseCase;
 
     @NonNull
     private final IsUserLoggedInUseCase isUserLoggedInUseCase;
+
+    @NonNull
+    private final IsGpsEnabledUseCase isGpsEnabledUseCase;
 
     @NonNull
     private final GetUserWithRestaurantChoiceEntityLiveDataUseCase getUserWithRestaurantChoiceEntityLiveDataUseCase;
@@ -51,26 +46,22 @@ public class MainViewModel extends ViewModel {
     @NonNull  // TODO: will use it to display/hide searchview bar
     private final MutableLiveData<List<SearchViewVisibilityState>> searchViewVisibilityStateMutableLiveData = new MutableLiveData<>();
 
-    @NonNull
-    private final MediatorLiveData<List<PredictionViewState>> predictionViewStateMediatorLiveData = new MediatorLiveData<>();
 
     @NonNull
     private final SingleLiveEvent<FragmentState> fragmentStateSingleLiveEvent = new SingleLiveEvent<>();
 
     @Inject
     public MainViewModel(
-
         @NonNull GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase,
         @NonNull LogoutUserUseCase logoutUserUseCase,
-        @NonNull GetAutocompleteWrapperUseCase getAutocompleteWrapperUseCase,
         @NonNull IsUserLoggedInUseCase isUserLoggedInUseCase,
+        @NonNull IsGpsEnabledUseCase isGpsEnabledUseCase,
         @NonNull GetUserWithRestaurantChoiceEntityLiveDataUseCase getUserWithRestaurantChoiceEntityLiveDataUseCase
     ) {
-
         this.getCurrentLoggedUserUseCase = getCurrentLoggedUserUseCase;
         this.logoutUserUseCase = logoutUserUseCase;
-        this.getAutocompleteWrapperUseCase = getAutocompleteWrapperUseCase;
         this.isUserLoggedInUseCase = isUserLoggedInUseCase;
+        this.isGpsEnabledUseCase = isGpsEnabledUseCase;
         this.getUserWithRestaurantChoiceEntityLiveDataUseCase = getUserWithRestaurantChoiceEntityLiveDataUseCase;
 
         fragmentStateSingleLiveEvent.setValue(MAP_FRAGMENT);
@@ -98,35 +89,6 @@ public class MainViewModel extends ViewModel {
         return getUserWithRestaurantChoiceEntityLiveDataUseCase.invoke();
     }
 
-
-    public LiveData<List<PredictionViewState>> onUserSearchQuery(@Nullable String input) {
-        MutableLiveData<List<PredictionViewState>> predictionListViewStateMutableLiveData = new MutableLiveData<>();
-        List<PredictionViewState> result = new ArrayList<>();
-        if (input != null) {
-            return Transformations.switchMap(getAutocompleteWrapperUseCase.invoke(input), predictionWrapper -> {
-                    if (predictionWrapper instanceof AutocompleteWrapper.Success) {
-                        for (PredictionEntity predictionEntity : ((AutocompleteWrapper.Success) predictionWrapper).getPredictionEntityList()) {
-                            result.add(
-                                new PredictionViewState(
-                                    predictionEntity.getPlaceId(),
-                                    predictionEntity.getRestaurantName(),
-                                    predictionEntity.getVicinity()
-                                )
-                            );
-                        }
-                    } else if (predictionWrapper instanceof AutocompleteWrapper.NoResults) {
-                        result.add(new PredictionViewState("No results found", "", null));
-
-                    } else if (predictionWrapper instanceof AutocompleteWrapper.Error) {
-                        result.add(new PredictionViewState("Error", "", null));
-                    }
-                    predictionListViewStateMutableLiveData.setValue(result);
-                    return predictionListViewStateMutableLiveData;
-                }
-            );
-        }
-        return predictionListViewStateMutableLiveData;
-    }
 
     public void signOut() {
         logoutUserUseCase.invoke();
