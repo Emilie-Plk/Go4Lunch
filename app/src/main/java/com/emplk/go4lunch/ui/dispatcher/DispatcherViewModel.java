@@ -3,11 +3,9 @@ package com.emplk.go4lunch.ui.dispatcher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.domain.authentication.use_case.IsUserLoggedInUseCase;
-import com.emplk.go4lunch.domain.gps.IsGpsEnabledAtAppLaunchUseCase;
 import com.emplk.go4lunch.domain.location.StartLocationRequestUseCase;
 import com.emplk.go4lunch.domain.permission.HasGpsPermissionUseCase;
 import com.emplk.go4lunch.ui.utils.SingleLiveEvent;
@@ -27,35 +25,28 @@ public class DispatcherViewModel extends ViewModel {
     public DispatcherViewModel(
         @NonNull HasGpsPermissionUseCase hasGpsPermissionUseCase,
         @NonNull IsUserLoggedInUseCase isUserLoggedInUseCase,
-        @NonNull StartLocationRequestUseCase startLocationRequestUseCase,
-        @NonNull IsGpsEnabledAtAppLaunchUseCase isGpsEnabledAtAppLaunchUseCase
+        @NonNull StartLocationRequestUseCase startLocationRequestUseCase
     ) {
         this.startLocationRequestUseCase = startLocationRequestUseCase;
 
         LiveData<Boolean> permissionLiveData = hasGpsPermissionUseCase.invoke();
         LiveData<Boolean> isUserLoggedInLiveData = isUserLoggedInUseCase.invoke();
-        LiveData<Boolean> isGpsEnabledLiveData = isGpsEnabledAtAppLaunchUseCase.invoke();
 
         dispatcherViewActionMediatorLiveData.addSource(permissionLiveData, hasPermission -> {
-                combine(hasPermission, isUserLoggedInLiveData.getValue(), isGpsEnabledLiveData.getValue());
+                combine(hasPermission, isUserLoggedInLiveData.getValue());
             }
         );
         dispatcherViewActionMediatorLiveData.addSource(isUserLoggedInLiveData, isUserLoggedIn -> {
-                combine(permissionLiveData.getValue(), isUserLoggedIn, isGpsEnabledLiveData.getValue());
-            }
-        );
-        dispatcherViewActionMediatorLiveData.addSource(isGpsEnabledLiveData, isGpsEnabled -> {
-                combine(permissionLiveData.getValue(), isUserLoggedInLiveData.getValue(), isGpsEnabled);
+                combine(permissionLiveData.getValue(), isUserLoggedIn);
             }
         );
     }
 
     private void combine(
         @Nullable Boolean hasPermission,
-        @Nullable Boolean isUserLoggedIn,
-        @Nullable Boolean isGpsEnabled
+        @Nullable Boolean isUserLoggedIn
     ) {
-        if (hasPermission == null || isUserLoggedIn == null || isGpsEnabled == null) {
+        if (hasPermission == null || isUserLoggedIn == null) {
             return;
         }
 
@@ -63,8 +54,6 @@ public class DispatcherViewModel extends ViewModel {
             startLocationRequestUseCase.invoke();
             if (!isUserLoggedIn) {
                 dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_LOGIN_ACTIVITY);
-            } else if (!isGpsEnabled) {
-                dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.DISPLAY_GPS_DIALOG);
             } else {
                 dispatcherViewActionMediatorLiveData.setValue(DispatcherViewAction.GO_TO_MAIN_ACTIVITY);
             }

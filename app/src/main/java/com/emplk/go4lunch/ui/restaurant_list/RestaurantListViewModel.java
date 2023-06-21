@@ -85,6 +85,7 @@ public class RestaurantListViewModel extends ViewModel {
             combine(hasGpsPermission, isGpsEnabledMutableLiveData.getValue(), locationLiveData.getValue(), nearbySearchWrapperLiveData.getValue(), attendantsByRestaurantIdsLiveData.getValue())
         );
 
+        //TODO: virer le isGpsEnabled?
         restaurantListMediatorLiveData.addSource(locationLiveData, location ->
             combine(hasGpsPermissionLiveData.getValue(), isGpsEnabledMutableLiveData.getValue(), location, nearbySearchWrapperLiveData.getValue(), attendantsByRestaurantIdsLiveData.getValue())
         );

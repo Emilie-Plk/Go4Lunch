@@ -13,6 +13,7 @@ import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserUse
 import com.emplk.go4lunch.domain.authentication.use_case.IsUserLoggedInUseCase;
 import com.emplk.go4lunch.domain.authentication.use_case.LogoutUserUseCase;
 import com.emplk.go4lunch.domain.gps.IsGpsEnabledUseCase;
+import com.emplk.go4lunch.domain.location.StartLocationRequestUseCase;
 import com.emplk.go4lunch.domain.restaurant_choice.GetUserWithRestaurantChoiceEntityLiveDataUseCase;
 import com.emplk.go4lunch.domain.user.UserWithRestaurantChoiceEntity;
 import com.emplk.go4lunch.ui.main.searchview.SearchViewVisibilityState;
@@ -41,6 +42,9 @@ public class MainViewModel extends ViewModel {
     private final IsGpsEnabledUseCase isGpsEnabledUseCase;
 
     @NonNull
+    private final StartLocationRequestUseCase startLocationRequestUseCase;
+
+    @NonNull
     private final GetUserWithRestaurantChoiceEntityLiveDataUseCase getUserWithRestaurantChoiceEntityLiveDataUseCase;
 
     @NonNull  // TODO: will use it to display/hide searchview bar
@@ -56,12 +60,14 @@ public class MainViewModel extends ViewModel {
         @NonNull LogoutUserUseCase logoutUserUseCase,
         @NonNull IsUserLoggedInUseCase isUserLoggedInUseCase,
         @NonNull IsGpsEnabledUseCase isGpsEnabledUseCase,
+        @NonNull StartLocationRequestUseCase startLocationRequestUseCase,
         @NonNull GetUserWithRestaurantChoiceEntityLiveDataUseCase getUserWithRestaurantChoiceEntityLiveDataUseCase
     ) {
         this.getCurrentLoggedUserUseCase = getCurrentLoggedUserUseCase;
         this.logoutUserUseCase = logoutUserUseCase;
         this.isUserLoggedInUseCase = isUserLoggedInUseCase;
         this.isGpsEnabledUseCase = isGpsEnabledUseCase;
+        this.startLocationRequestUseCase = startLocationRequestUseCase;
         this.getUserWithRestaurantChoiceEntityLiveDataUseCase = getUserWithRestaurantChoiceEntityLiveDataUseCase;
 
         fragmentStateSingleLiveEvent.setValue(MAP_FRAGMENT);
@@ -89,6 +95,9 @@ public class MainViewModel extends ViewModel {
         return getUserWithRestaurantChoiceEntityLiveDataUseCase.invoke();
     }
 
+    public LiveData<Boolean> isGpsEnabledLiveData() {
+        return Transformations.distinctUntilChanged(isGpsEnabledUseCase.invoke());
+    }
 
     public void signOut() {
         logoutUserUseCase.invoke();
@@ -101,6 +110,10 @@ public class MainViewModel extends ViewModel {
 
     public void onChangeFragmentView(@NonNull FragmentState fragmentState) {
         fragmentStateSingleLiveEvent.setValue(fragmentState);
+    }
+
+    public void onResume() {
+        startLocationRequestUseCase.invoke();
     }
 }
 

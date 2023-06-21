@@ -11,9 +11,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.ui.login.LoginActivity;
 import com.emplk.go4lunch.ui.main.MainActivity;
 import com.emplk.go4lunch.ui.onboarding.OnBoardingActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -23,7 +25,6 @@ public class DispatcherActivity extends AppCompatActivity {
     public static Intent navigate(@NonNull Context context) {
         return new Intent(context, DispatcherActivity.class);
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,34 +45,6 @@ public class DispatcherActivity extends AppCompatActivity {
                     case GO_TO_MAIN_ACTIVITY:
                         startActivity(new Intent(DispatcherActivity.this, MainActivity.class));
                         finish();
-                        break;
-                    case DISPLAY_GPS_DIALOG:
-                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        builder.setTitle("Enable GPS")
-                            .setMessage("Please enable your GPS")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(
-                                        DialogInterface dialog,
-                                        int which
-                                    ) {
-                                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                                        startActivity(intent);
-                                    }
-                                }
-                            )
-                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(
-                                        DialogInterface dialog,
-                                        int which
-                                    ) {
-                                        dialog.dismiss();
-                                    }
-                                }
-                            )
-                            .create()
-                            .show();
                         break;
                 }
             }

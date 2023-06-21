@@ -33,7 +33,6 @@ public abstract class NearbySearchWrapper {
             this.throwable = throwable;
         }
 
-
         public Throwable getThrowable() {
             return throwable;
         }

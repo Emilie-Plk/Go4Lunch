@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -90,7 +89,6 @@ public class OnBoardingActivity extends AppCompatActivity {
 
     private void continueWithPermissions() {
         startActivity(new Intent(OnBoardingActivity.this, DispatcherActivity.class));
-        Toast.makeText(this, "Continuing with Gps Permission granted", Toast.LENGTH_SHORT).show();
         finish();
     }
 }

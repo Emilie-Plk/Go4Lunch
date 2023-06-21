@@ -28,6 +28,7 @@ import com.emplk.go4lunch.ui.restaurant_list.RestaurantListFragment;
 import com.emplk.go4lunch.ui.restaurant_map.MapFragment;
 import com.emplk.go4lunch.ui.workmate_list.WorkmateListFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private MainActivityBinding binding;
 
     private MainViewModel viewModel;
+
+    private Snackbar snackbar;
 
 
     @Override
@@ -80,6 +83,30 @@ public class MainActivity extends AppCompatActivity {
             }
         );
 
+        viewModel.isGpsEnabledLiveData().observe(this, isGpsEnabled -> {
+                if (!isGpsEnabled) {
+                    snackbar = Snackbar
+                        .make(
+                            binding.getRoot(),
+                            "Enable GPS ?",
+                            Snackbar.LENGTH_INDEFINITE)
+                        .setAnchorView(R.id.bottom_bar_map)
+                        .setAction(
+                            "settings",
+                            view -> {
+                                Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivity(intent);
+                            }
+                        );
+                    snackbar.show();
+                }
+                else {
+                    if (snackbar != null && snackbar.isShown()) {
+                        snackbar.dismiss();
+                    }
+                }
+            }
+        );
 
         viewModel.getFragmentStateSingleLiveEvent().observe(this, fragmentState -> {
                 switch (fragmentState) {
@@ -190,5 +217,11 @@ public class MainActivity extends AppCompatActivity {
             .beginTransaction()
             .replace(R.id.main_frame_layout, fragment)
             .commit();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        viewModel.onResume();
     }
 }

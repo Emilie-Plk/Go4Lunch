@@ -60,6 +60,12 @@ public class GpsLocationRepositoryBroadcastReceiver extends BroadcastReceiver im
             if (location != null) {
                 LocationEntity locationEntity = new LocationEntity(location.getLatitude(), location.getLongitude());
                 gpsLocationEntityMutableLiveData.setValue(locationEntity);
+
+                LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+                if (locationManager != null) {
+                    boolean isGpsEnabledAtStart = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                    isGpsEnabledMutableLiveData.setValue(isGpsEnabledAtStart);
+                }
             }
         }
     };
@@ -77,7 +83,6 @@ public class GpsLocationRepositoryBroadcastReceiver extends BroadcastReceiver im
         context.registerReceiver(this, intentFilter);
 
         isGpsEnabledMutableLiveData = new MutableLiveData<>();
-
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         if (locationManager != null) {
             boolean isGpsEnabledAtStart = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -109,16 +114,6 @@ public class GpsLocationRepositoryBroadcastReceiver extends BroadcastReceiver im
         gpsResponseMediatorLiveData.addSource(isGpsEnabledMutableLiveData, observer);
 
         return gpsResponseMediatorLiveData;
-    }
-
-    @Override
-    public LiveData<Boolean> isGpsProviderEnabled() {
-        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        if (locationManager != null) {
-            boolean isGpsEnabledAtStart = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            return new MutableLiveData<>(isGpsEnabledAtStart);
-        }
-        return new MutableLiveData<>();
     }
 
     @Override
