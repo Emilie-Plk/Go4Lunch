@@ -1,70 +1,82 @@
 package com.emplk.go4lunch.ui.restaurant_map;
 
+import android.content.Context;
+import android.util.Log;
+
+import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.domain.gps.IsGpsEnabledUseCase;
 import com.emplk.go4lunch.domain.gps.entity.LocationStateEntity;
 import com.emplk.go4lunch.domain.location.GetCurrentLocationStateUseCase;
 import com.emplk.go4lunch.domain.nearby_search.GetNearbySearchWrapperUseCase;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchWrapper;
+import com.emplk.go4lunch.domain.workmate.GetAttendantsByRestaurantIdsUseCase;
 import com.emplk.go4lunch.ui.restaurant_map.map__marker.RestaurantMarkerViewStateItem;
-import com.emplk.go4lunch.ui.utils.RestaurantFavoriteState;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 
 @HiltViewModel
 public class MapViewModel extends ViewModel {
 
     @NonNull
-    private final IsGpsEnabledUseCase isGpsEnabledUseCase;
-
-    @NonNull
     private final GetCurrentLocationStateUseCase getCurrentLocationStateUseCase;
 
-    @NonNull
-    private final GetNearbySearchWrapperUseCase getNearbySearchWrapperUseCase;
-
     private final MediatorLiveData<List<RestaurantMarkerViewStateItem>> mapViewStateMediatorLiveData = new MediatorLiveData<>();
+    @NonNull
+    private final Context context;
 
     @Inject
     public MapViewModel(
         @NonNull IsGpsEnabledUseCase isGpsEnabledUseCase,
         @NonNull GetCurrentLocationStateUseCase getCurrentLocationStateUseCase,
-        @NonNull GetNearbySearchWrapperUseCase getNearbySearchWrapperUseCase
+        @NonNull GetNearbySearchWrapperUseCase getNearbySearchWrapperUseCase,
+        @NonNull GetAttendantsByRestaurantIdsUseCase getAttendantsByRestaurantIdsUseCase,
+        @NonNull @ApplicationContext Context context
     ) {
-        this.isGpsEnabledUseCase = isGpsEnabledUseCase;
         this.getCurrentLocationStateUseCase = getCurrentLocationStateUseCase;
-        this.getNearbySearchWrapperUseCase = getNearbySearchWrapperUseCase;
+        this.context = context;
 
         LiveData<NearbySearchWrapper> nearbySearchWrapperLiveData = getNearbySearchWrapperUseCase.invoke();
         LiveData<LocationStateEntity> locationStateEntityLiveData = getCurrentLocationStateUseCase.invoke();
         LiveData<Boolean> isGpsEnabledLiveData = isGpsEnabledUseCase.invoke();
+        LiveData<Map<String, Integer>> restaurantIdToAttendantsCountLiveData = getAttendantsByRestaurantIdsUseCase.invoke();
 
         mapViewStateMediatorLiveData.addSource(isGpsEnabledLiveData, isGpsEnabled -> {
-                combine(isGpsEnabled, locationStateEntityLiveData.getValue(), nearbySearchWrapperLiveData.getValue()
+                combine(isGpsEnabled, locationStateEntityLiveData.getValue(), nearbySearchWrapperLiveData.getValue(), restaurantIdToAttendantsCountLiveData.getValue()
                 );
             }
         );
 
         mapViewStateMediatorLiveData.addSource(locationStateEntityLiveData, locationEntity -> {
-                combine(isGpsEnabledLiveData.getValue(), locationEntity, nearbySearchWrapperLiveData.getValue()
+                combine(isGpsEnabledLiveData.getValue(), locationEntity, nearbySearchWrapperLiveData.getValue(), restaurantIdToAttendantsCountLiveData.getValue()
                 );
             }
         );
 
         mapViewStateMediatorLiveData.addSource(nearbySearchWrapperLiveData, nearbySearchWrapper -> {
-                combine(isGpsEnabledLiveData.getValue(), locationStateEntityLiveData.getValue(), nearbySearchWrapper
+                combine(isGpsEnabledLiveData.getValue(), locationStateEntityLiveData.getValue(), nearbySearchWrapper, restaurantIdToAttendantsCountLiveData.getValue()
+                );
+            }
+        );
+
+        mapViewStateMediatorLiveData.addSource(restaurantIdToAttendantsCountLiveData, restaurantIdToAttendantsCount -> {
+                combine(isGpsEnabledLiveData.getValue(), locationStateEntityLiveData.getValue(), nearbySearchWrapperLiveData.getValue(), restaurantIdToAttendantsCount
                 );
             }
         );
@@ -73,7 +85,8 @@ public class MapViewModel extends ViewModel {
     private void combine(
         @Nullable Boolean isGpsEnabled,
         @Nullable LocationStateEntity locationStateEntity,
-        @Nullable NearbySearchWrapper nearbySearchWrapper
+        @Nullable NearbySearchWrapper nearbySearchWrapper,
+        @Nullable Map<String, Integer> restaurantIdToAttendantsCount
     ) {
         if (isGpsEnabled == null || nearbySearchWrapper == null) {
             return;
@@ -91,19 +104,27 @@ public class MapViewModel extends ViewModel {
                                 nearbySearchEntity.getLocationEntity().getLatitude(),
                                 nearbySearchEntity.getLocationEntity().getLongitude()
                             ),
-                            RestaurantFavoriteState.IS_FAVORITE // TODO: I need to create a new obj for this (fav/not fav by user)
+                            isRestaurantAttended(restaurantIdToAttendantsCount, nearbySearchEntity.getPlaceId())
                         )
                     );
                     mapViewStateMediatorLiveData.setValue(restaurantMarkerViewStateItems);
                 }
             } else if (nearbySearchWrapper instanceof NearbySearchWrapper.Loading) {
-                return;
+                Log.d("MapViewModel", "Loading nearby search");
             }
-        } else if (locationStateEntity instanceof LocationStateEntity.GpsProviderDisabled) {
-            //maybe a SingleLiveEvent for toast, see what's happening in repo
-            return;
         }
+    }
 
+    @ColorRes
+    private int isRestaurantAttended(
+        @Nullable Map<String, Integer> restaurantIdToAttendantsCount,
+        @NonNull String placeId
+    ) {
+        if (restaurantIdToAttendantsCount != null && restaurantIdToAttendantsCount.containsKey(placeId)) {
+            return R.color.ok_green;
+        } else {
+            return R.color.light_peach;
+        }
     }
 
     public LiveData<List<RestaurantMarkerViewStateItem>> getMapViewState() {
@@ -113,5 +134,4 @@ public class MapViewModel extends ViewModel {
     public LiveData<LocationStateEntity> getLocationState() {
         return getCurrentLocationStateUseCase.invoke();
     }
-
 }

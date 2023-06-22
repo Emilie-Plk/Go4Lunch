@@ -1,7 +1,8 @@
 package com.emplk.go4lunch.ui.restaurant_map;
 
+import static com.emplk.go4lunch.ui.utils.BitmapFromVector.getBitmapFromVector;
+
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -20,12 +21,13 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -53,26 +55,37 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         viewModel.getMapViewState().observe(getViewLifecycleOwner(), mapViewState -> {
+                List<Marker> markers = new ArrayList<>();
                 for (RestaurantMarkerViewStateItem item : mapViewState) {
-                    Marker restaurantMarker = googleMap.addMarker(
-                        new MarkerOptions()
-                            .position(new LatLng(item.getLatLng().latitude, item.getLatLng().longitude))
-                            .title(item.getName())
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
-                    );
-                    if (restaurantMarker != null) {
-                        restaurantMarker.setTag(item.getId());
+                    MarkerOptions markerOptions = new MarkerOptions()
+                        .position(new LatLng(item.getLatLng().latitude, item.getLatLng().longitude))
+                        .title(item.getName())
+                        .icon(getBitmapFromVector(getContext(), R.drawable.baseline_custom_marker, item.getColorAttendance()));
+
+                    Marker marker = googleMap.addMarker(markerOptions);
+                    if (marker != null) {
+                        marker.setTag(item.getId());
                     }
-                    googleMap.setOnInfoWindowClickListener(marker -> {
-                            String restaurantId = (String) marker.getTag();
-                            if (restaurantId != null) {
-                                onMarkerClicked(restaurantId);
+
+                    markers.add(marker);
+                }
+
+                for (Marker marker : markers) {
+                    googleMap.setOnInfoWindowClickListener(
+                        new GoogleMap.OnInfoWindowClickListener() {
+                            @Override
+                            public void onInfoWindowClick(@NonNull Marker marker) {
+                                String restaurantId = (String) marker.getTag();
+                                if (restaurantId != null) {
+                                    onMarkerClicked(restaurantId);
+                                }
                             }
                         }
                     );
                 }
             }
         );
+
 
         viewModel.getLocationState().observe(getViewLifecycleOwner(), locationState -> {
                 if (locationState instanceof LocationStateEntity.Success) {

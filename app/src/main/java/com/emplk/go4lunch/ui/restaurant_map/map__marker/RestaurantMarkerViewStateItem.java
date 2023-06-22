@@ -1,8 +1,8 @@
 package com.emplk.go4lunch.ui.restaurant_map.map__marker;
 
+import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 
-import com.emplk.go4lunch.ui.utils.RestaurantFavoriteState;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Objects;
@@ -17,20 +17,20 @@ public class RestaurantMarkerViewStateItem {
     @NonNull
     private final LatLng latLng;
 
-    @NonNull
-    private final RestaurantFavoriteState restaurantFavoriteState;
+    @ColorRes
+    private final int colorAttendance;
 
 
     public RestaurantMarkerViewStateItem(
         @NonNull String id,
         @NonNull String name,
         @NonNull LatLng latLng,
-        @NonNull RestaurantFavoriteState restaurantFavoriteState
+        @ColorRes int colorAttendance
     ) {
         this.id = id;
         this.name = name;
         this.latLng = latLng;
-        this.restaurantFavoriteState = restaurantFavoriteState;
+        this.colorAttendance = colorAttendance;
     }
 
     @NonNull
@@ -48,10 +48,9 @@ public class RestaurantMarkerViewStateItem {
         return latLng;
     }
 
-
-    @NonNull
-    public RestaurantFavoriteState getMarkerState() {
-        return restaurantFavoriteState;
+    @ColorRes
+    public int getColorAttendance() {
+        return colorAttendance;
     }
 
     @Override
@@ -59,12 +58,12 @@ public class RestaurantMarkerViewStateItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RestaurantMarkerViewStateItem that = (RestaurantMarkerViewStateItem) o;
-        return id.equals(that.id) && name.equals(that.name) && latLng.equals(that.latLng) && restaurantFavoriteState == that.restaurantFavoriteState;
+        return colorAttendance == that.colorAttendance && id.equals(that.id) && name.equals(that.name) && latLng.equals(that.latLng);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, latLng, restaurantFavoriteState);
+        return Objects.hash(id, name, latLng, colorAttendance);
     }
 
     @NonNull
@@ -74,7 +73,7 @@ public class RestaurantMarkerViewStateItem {
             "id='" + id + '\'' +
             ", name='" + name + '\'' +
             ", latLng=" + latLng +
-            ", restaurantFavoriteState=" + restaurantFavoriteState +
+            ", colorAttendance=" + colorAttendance +
             '}';
     }
 }

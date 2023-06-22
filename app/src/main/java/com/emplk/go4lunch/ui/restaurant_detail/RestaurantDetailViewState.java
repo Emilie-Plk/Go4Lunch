@@ -3,7 +3,7 @@ package com.emplk.go4lunch.ui.restaurant_detail;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.emplk.go4lunch.ui.utils.RestaurantFavoriteState;
+import com.emplk.go4lunch.ui.utils.RestaurantDetailsFavoriteState;
 
 import java.util.Objects;
 
@@ -75,7 +75,7 @@ public abstract class RestaurantDetailViewState {
         private final AttendanceState attendanceState;
 
         @Nullable
-        private final RestaurantFavoriteState restaurantFavoriteState;
+        private final RestaurantDetailsFavoriteState restaurantDetailsFavoriteState;
         @Nullable
         private final Boolean isVeganFriendly;
         @NonNull
@@ -93,7 +93,7 @@ public abstract class RestaurantDetailViewState {
             @Nullable String phoneNumber,
             @Nullable String websiteUrl,
             @Nullable AttendanceState attendanceState,
-            @Nullable RestaurantFavoriteState restaurantFavoriteState,
+            @Nullable RestaurantDetailsFavoriteState restaurantDetailsFavoriteState,
             @Nullable Boolean isVeganFriendly,
             @NonNull Boolean isPhoneNumberAvailable,
             @NonNull Boolean isWebsiteAvailable
@@ -107,7 +107,7 @@ public abstract class RestaurantDetailViewState {
             this.phoneNumber = phoneNumber;
             this.websiteUrl = websiteUrl;
             this.attendanceState = attendanceState;
-            this.restaurantFavoriteState = restaurantFavoriteState;
+            this.restaurantDetailsFavoriteState = restaurantDetailsFavoriteState;
             this.isVeganFriendly = isVeganFriendly;
             this.isPhoneNumberAvailable = isPhoneNumberAvailable;
             this.isWebsiteAvailable = isWebsiteAvailable;
@@ -154,8 +154,8 @@ public abstract class RestaurantDetailViewState {
         }
 
         @Nullable
-        public RestaurantFavoriteState getRestaurantFavoriteState() {
-            return restaurantFavoriteState;
+        public RestaurantDetailsFavoriteState getRestaurantFavoriteState() {
+            return restaurantDetailsFavoriteState;
         }
 
         @Nullable
@@ -179,12 +179,12 @@ public abstract class RestaurantDetailViewState {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             RestaurantDetail that = (RestaurantDetail) o;
-            return id.equals(that.id) && name.equals(that.name) && vicinity.equals(that.vicinity) && Objects.equals(pictureUrl, that.pictureUrl) && rating.equals(that.rating) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(websiteUrl, that.websiteUrl) && attendanceState == that.attendanceState && restaurantFavoriteState == that.restaurantFavoriteState && Objects.equals(isVeganFriendly, that.isVeganFriendly) && isPhoneNumberAvailable.equals(that.isPhoneNumberAvailable) && isWebsiteAvailable.equals(that.isWebsiteAvailable);
+            return id.equals(that.id) && name.equals(that.name) && vicinity.equals(that.vicinity) && Objects.equals(pictureUrl, that.pictureUrl) && rating.equals(that.rating) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(websiteUrl, that.websiteUrl) && attendanceState == that.attendanceState && restaurantDetailsFavoriteState == that.restaurantDetailsFavoriteState && Objects.equals(isVeganFriendly, that.isVeganFriendly) && isPhoneNumberAvailable.equals(that.isPhoneNumberAvailable) && isWebsiteAvailable.equals(that.isWebsiteAvailable);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(id, name, vicinity, pictureUrl, rating, phoneNumber, websiteUrl, attendanceState, restaurantFavoriteState, isVeganFriendly, isPhoneNumberAvailable, isWebsiteAvailable);
+            return Objects.hash(id, name, vicinity, pictureUrl, rating, phoneNumber, websiteUrl, attendanceState, restaurantDetailsFavoriteState, isVeganFriendly, isPhoneNumberAvailable, isWebsiteAvailable);
         }
     }
 

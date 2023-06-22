@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
 import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.RestaurantDetailActivityBinding;
-import com.emplk.go4lunch.ui.utils.RestaurantFavoriteState;
+import com.emplk.go4lunch.ui.utils.RestaurantDetailsFavoriteState;
 import com.emplk.go4lunch.ui.workmate_list.OnWorkmateClickedListener;
 import com.emplk.go4lunch.ui.workmate_list.WorkmateListAdapter;
 
@@ -122,26 +122,26 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                         binding.detailRestaurantChoseFab.setOnClickListener(v -> viewModel.onAddUserRestaurantChoice(detail.getName(), detail.getVicinity(), detail.getPictureUrl()));
                     }
 
-                    RestaurantFavoriteState restaurantFavoriteState = detail.getRestaurantFavoriteState();
-                    if (restaurantFavoriteState != null) {
+                    RestaurantDetailsFavoriteState restaurantDetailsFavoriteState = detail.getRestaurantFavoriteState();
+                    if (restaurantDetailsFavoriteState != null) {
                         binding.detailRestaurantLikeButton.setIcon(
                             ContextCompat.getDrawable(this,
-                                restaurantFavoriteState.getDrawableRes()
+                                restaurantDetailsFavoriteState.getDrawableRes()
                             )
                         );
                         binding.detailRestaurantLikeButton.setIconTint(
                             ContextCompat.getColorStateList(this,
-                                restaurantFavoriteState.getIconColorRes()
+                                restaurantDetailsFavoriteState.getIconColorRes()
                             )
                         );
                     }
 
-                    if (restaurantFavoriteState == RestaurantFavoriteState.IS_FAVORITE) {
+                    if (restaurantDetailsFavoriteState == RestaurantDetailsFavoriteState.IS_FAVORITE) {
                         binding.detailRestaurantLikeButton.setOnClickListener(v -> {
                                 viewModel.onRemoveFavoriteRestaurant();
                             }
                         );
-                    } else if (detail.getRestaurantFavoriteState() == RestaurantFavoriteState.IS_NOT_FAVORITE) {
+                    } else if (detail.getRestaurantFavoriteState() == RestaurantDetailsFavoriteState.IS_NOT_FAVORITE) {
                         binding.detailRestaurantLikeButton.setOnClickListener(v -> {
                                 viewModel.onAddFavoriteRestaurant();
                             }

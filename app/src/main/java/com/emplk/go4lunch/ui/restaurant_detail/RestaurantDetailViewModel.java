@@ -28,7 +28,7 @@ import com.emplk.go4lunch.domain.user.UserEntity;
 import com.emplk.go4lunch.domain.user.use_case.GetUserEntityUseCase;
 import com.emplk.go4lunch.domain.workmate.GetWorkmateEntitiesGoingToSameRestaurantUseCase;
 import com.emplk.go4lunch.domain.workmate.WorkmateEntity;
-import com.emplk.go4lunch.ui.utils.RestaurantFavoriteState;
+import com.emplk.go4lunch.ui.utils.RestaurantDetailsFavoriteState;
 import com.emplk.go4lunch.ui.workmate_list.WorkmatesViewStateItem;
 
 import java.util.ArrayList;
@@ -120,7 +120,7 @@ public class RestaurantDetailViewModel extends ViewModel {
         boolean isRestaurantLiked = currentUser.getFavoriteRestaurantSet() != null && !currentUser.getFavoriteRestaurantSet().isEmpty() && currentUser.getFavoriteRestaurantSet().contains(restaurantId);
         boolean isAttending = (currentUser.getAttendingRestaurantId() != null && currentUser.getAttendingRestaurantId().equals(restaurantId));
 
-        RestaurantFavoriteState restaurantFavoriteState = isRestaurantLiked ? RestaurantFavoriteState.IS_FAVORITE : RestaurantFavoriteState.IS_NOT_FAVORITE;
+        RestaurantDetailsFavoriteState restaurantDetailsFavoriteState = isRestaurantLiked ? RestaurantDetailsFavoriteState.IS_FAVORITE : RestaurantDetailsFavoriteState.IS_NOT_FAVORITE;
         AttendanceState attendanceState = isAttending ? AttendanceState.IS_ATTENDING : AttendanceState.IS_NOT_ATTENDING;
 
         if (detailsRestaurantWrapper instanceof DetailsRestaurantWrapper.Loading) {
@@ -143,7 +143,7 @@ public class RestaurantDetailViewModel extends ViewModel {
                     detailsRestaurantEntity.getPhoneNumber(),
                     detailsRestaurantEntity.getWebsiteUrl(),
                     attendanceState,
-                    restaurantFavoriteState,
+                    restaurantDetailsFavoriteState,
                     detailsRestaurantEntity.getVeganFriendly(),
                     detailsRestaurantEntity.getPhoneNumber() != null,
                     detailsRestaurantEntity.getWebsiteUrl() != null

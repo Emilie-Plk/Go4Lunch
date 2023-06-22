@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.emplk.go4lunch.R;
 
-public enum RestaurantFavoriteState {
+public enum RestaurantDetailsFavoriteState {
 
     IS_FAVORITE(R.drawable.baseline_favorite_24, R.color.sweet_pink),
     IS_NOT_FAVORITE(R.drawable.baseline_favorite_border_24, R.color.light_gray);
@@ -17,7 +17,7 @@ public enum RestaurantFavoriteState {
     @ColorRes
     private final int iconColorRes;
 
-    RestaurantFavoriteState(
+    RestaurantDetailsFavoriteState(
         int drawableRes,
         int iconColorRes
     ) {
@@ -36,7 +36,7 @@ public enum RestaurantFavoriteState {
     @NonNull
     @Override
     public String toString() {
-        return "RestaurantFavoriteState{" +
+        return "RestaurantDetailsFavoriteState{" +
             "drawableRes=" + drawableRes +
             ", iconColorRes=" + iconColorRes +
             '}';
