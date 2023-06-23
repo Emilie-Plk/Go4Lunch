@@ -123,7 +123,7 @@ public class MapViewModel extends ViewModel {
         if (restaurantIdToAttendantsCount != null && restaurantIdToAttendantsCount.containsKey(placeId)) {
             return R.color.ok_green;
         } else {
-            return R.color.light_peach;
+            return R.color.ripe_peach;
         }
     }
 
