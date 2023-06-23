@@ -9,7 +9,6 @@ import javax.inject.Singleton;
 
 @Singleton
 public class StartLocationRequestUseCase {
-
     @NonNull
     private final GpsLocationRepository gpsLocationRepository;
 

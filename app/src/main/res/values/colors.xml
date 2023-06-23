@@ -9,6 +9,7 @@
 
     <!--  App colors-->
     <color name="crimson_rust">#BA3B0A</color>
+    <color name="crimson_rust_tamed">#EA624A</color>
     <color name="pumpkin_orange">#E8772E</color>
     <color name="light_orange">#E3CBBB</color>
     <color name="light_peach_translucent">#37EBA98F</color>

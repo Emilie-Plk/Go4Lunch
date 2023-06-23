@@ -67,7 +67,11 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     private void setupWorkmatesRecyclerView() {
         WorkmateListAdapter adapter = new WorkmateListAdapter(new OnWorkmateClickedListener() {
             @Override
-            public void onWorkmateClicked(@NonNull String workmateId) {
+            public void onChatButtonClicked(@NonNull String workmateId) {
+            }
+
+            @Override
+            public void onWorkmateClicked(@NonNull String restaurantId) {
             }
         }
         );

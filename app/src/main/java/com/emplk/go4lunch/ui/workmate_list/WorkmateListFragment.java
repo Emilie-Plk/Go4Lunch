@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.emplk.go4lunch.databinding.WorkmateListFragmentBinding;
+import com.emplk.go4lunch.ui.restaurant_detail.RestaurantDetailActivity;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -53,8 +54,13 @@ public class WorkmateListFragment extends Fragment {
 
         WorkmateListAdapter adapter = new WorkmateListAdapter(new OnWorkmateClickedListener() {
             @Override
-            public void onWorkmateClicked(@NonNull String workmateId) {
+            public void onChatButtonClicked(@NonNull String workmateId) {
 // TODO: start chat
+            }
+
+            @Override
+            public void onWorkmateClicked(@NonNull String restaurantId) {
+                startActivity(RestaurantDetailActivity.navigate(requireContext(), restaurantId));
             }
         }
         );

@@ -1,7 +1,6 @@
 package com.emplk.go4lunch.ui.workmate_list;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -71,7 +70,6 @@ public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, Rec
     public static class AllWorkMatesViewHolder extends RecyclerView.ViewHolder {
         private final TextView workmateNameAndAttendingRestaurant;
         private final ImageView workmateAvatar;
-
         private final WorkmatesItemBinding binding;
 
         public AllWorkMatesViewHolder(@NonNull WorkmatesItemBinding binding) {
@@ -85,17 +83,22 @@ public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, Rec
             @NonNull WorkmatesViewStateItem.AllWorkmates itemViewState,
             @NonNull OnWorkmateClickedListener listener
         ) {
-            binding.getRoot().setOnClickListener(v -> listener.onWorkmateClicked(itemViewState.getId()));
+            binding.getRoot().setOnClickListener(v -> {
+                    if (itemViewState.getAttendingRestaurantId() != null) {
+                        listener.onWorkmateClicked(itemViewState.getAttendingRestaurantId());
+                    }
+                }
+            );
+
+            binding.listWorkmateChatButton.setOnClickListener(v -> listener.onChatButtonClicked(itemViewState.getId()));
 
             String workmateName = itemViewState.getName();
             String attendingRestaurant = itemViewState.getAttendingRestaurantName();
-
             String workmateWithRestaurantChoice = binding.getRoot().getContext().getString(
                 R.string.list_workmate_name_and_attenting_restaurant,
                 workmateName,
                 attendingRestaurant
             );
-
             String workmateWithoutRestaurantChoice = binding.getRoot().getContext().getString(
                 R.string.list_workmate_not_attending,
                 workmateName
@@ -112,36 +115,29 @@ public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, Rec
     }
 
     public static class WorkmatesGoingToSameRestaurantViewHolder extends RecyclerView.ViewHolder {
-        private final TextView workmateName;
-        private final ImageView workmateAvatar;
-        private final ImageButton chatButton;
         private final WorkmatesItemBinding binding;
-
 
         public WorkmatesGoingToSameRestaurantViewHolder(@NonNull WorkmatesItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-            this.workmateName = binding.listWorkmateNameAndRestaurant;
-            this.workmateAvatar = binding.listWorkmateAvatar;
-            this.chatButton = binding.listWorkmateChatButton;
         }
 
         public void bind(
             @NonNull WorkmatesViewStateItem.WorkmatesGoingToSameRestaurant itemViewState,
             @NonNull OnWorkmateClickedListener listener
         ) {
+            binding.listWorkmateChatButton.setOnClickListener(v ->
+                listener.onChatButtonClicked(itemViewState.getId()
+                )
+            );
 
-            chatButton.setVisibility(View.VISIBLE);
-
-            chatButton.setOnClickListener(v -> listener.onWorkmateClicked(itemViewState.getId()));  //TODO: add logic to start chat
-
-            workmateName.setText(binding.getRoot().getContext().getString(
+            binding.listWorkmateNameAndRestaurant.setText(binding.getRoot().getContext().getString(
                 R.string.detail_workmate_joining, itemViewState.getName()));
 
             Glide.with(binding.getRoot())
                 .load(itemViewState.getPictureUrl())
                 .transform(new CenterCrop(), new RoundedCorners(50))
-                .into(workmateAvatar);
+                .into(binding.listWorkmateAvatar);
         }
     }
 

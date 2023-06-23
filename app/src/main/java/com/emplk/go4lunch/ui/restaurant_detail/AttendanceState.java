@@ -8,7 +8,6 @@ import androidx.annotation.StringRes;
 import com.emplk.go4lunch.R;
 
 public enum AttendanceState {
-
     IS_ATTENDING(R.string.detail_restaurant_chosen_fab, R.color.ok_green, R.color.ok_green_pale),
     IS_NOT_ATTENDING(R.string.detail_restaurant_unchosen_fab, R.color.grey_text, R.color.dirty_white);
 
