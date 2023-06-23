@@ -20,7 +20,7 @@ public interface UserRepository {
         @NonNull ChosenRestaurantEntity chosenRestaurantEntity
     );
 
-    LiveData<List<UserWithRestaurantChoiceEntity>> getUserWithRestaurantChoiceEntities();
+    LiveData<List<UserWithRestaurantChoiceEntity>> getUsersWithRestaurantChoiceEntities();
 
     LiveData<UserWithRestaurantChoiceEntity> getUserWithRestaurantChoiceEntity(@NonNull String userId);
 

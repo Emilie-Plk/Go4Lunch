@@ -15,6 +15,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +30,12 @@ public class UserRepositoryFirestore implements UserRepository {
     private static final String USERS_COLLECTION = "users";
 
     private static final String USERS_WITH_RESTAURANT_CHOICE = "usersWithRestaurantChoice";
+
+    private static final String TODAY = LocalDate.now()
+        .format(
+            DateTimeFormatter.ofPattern("yyyyMMdd")
+        );
+
     @NonNull
     private final FirebaseFirestore firestore;
 
@@ -74,10 +82,12 @@ public class UserRepositoryFirestore implements UserRepository {
         @NonNull ChosenRestaurantEntity chosenRestaurantEntity
     ) {
         if (loggedUserEntity != null) {
+            String formattedDocumentId = TODAY + "_" + loggedUserEntity.getId();
+
             DocumentReference userWithRestaurantChoiceDocumentRef =
                 firestore
                     .collection(USERS_WITH_RESTAURANT_CHOICE)
-                    .document(loggedUserEntity.getId());
+                    .document(formattedDocumentId);
 
             userWithRestaurantChoiceDocumentRef
                 .set(
@@ -102,7 +112,7 @@ public class UserRepositoryFirestore implements UserRepository {
     }
 
     @Override
-    public LiveData<List<UserWithRestaurantChoiceEntity>> getUserWithRestaurantChoiceEntities() {
+    public LiveData<List<UserWithRestaurantChoiceEntity>> getUsersWithRestaurantChoiceEntities() {
         MutableLiveData<List<UserWithRestaurantChoiceEntity>> userWithRestaurantChoiceEntitiesMutableLiveData = new MutableLiveData<>();
 
         firestore.collection(USERS_WITH_RESTAURANT_CHOICE)
@@ -115,9 +125,11 @@ public class UserRepositoryFirestore implements UserRepository {
                     if (queryDocumentSnapshots != null) {
                         List<UserWithRestaurantChoiceEntity> userWithRestaurantChoiceEntities = new ArrayList<>();
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            String documentId = documentSnapshot.getId();
-                            UserWithRestaurantChoiceDto userWithRestaurantChoiceDto = documentSnapshot.toObject(UserWithRestaurantChoiceDto.class);
-                            userWithRestaurantChoiceEntities.add(mapToUserWithRestaurantChoiceEntity(userWithRestaurantChoiceDto, documentId));
+                            if (documentSnapshot.getId().startsWith(TODAY + "_")) {
+                                String userId = documentSnapshot.getId().substring((documentSnapshot.getId()).lastIndexOf("_") + 1);
+                                UserWithRestaurantChoiceDto userWithRestaurantChoiceDto = documentSnapshot.toObject(UserWithRestaurantChoiceDto.class);
+                                userWithRestaurantChoiceEntities.add(mapToUserWithRestaurantChoiceEntity(userWithRestaurantChoiceDto, userId));
+                            }
                         }
                         userWithRestaurantChoiceEntitiesMutableLiveData.setValue(userWithRestaurantChoiceEntities);
                     }
@@ -132,7 +144,7 @@ public class UserRepositoryFirestore implements UserRepository {
 
         firestore
             .collection(USERS_WITH_RESTAURANT_CHOICE)
-            .document(userId)
+            .document(TODAY + "_" + userId)
             .addSnapshotListener((documentSnapshot, error) -> {
                     if (error != null) {
                         Log.e("UserRepositoryFirestore", "Error fetching user document: " + error);
@@ -156,9 +168,11 @@ public class UserRepositoryFirestore implements UserRepository {
     @Override
     public void deleteUserRestaurantChoice(@Nullable LoggedUserEntity loggedUserEntity) {
         if (loggedUserEntity != null) {
+            String formattedDocumentId = TODAY + "_" + loggedUserEntity.getId();
+
             DocumentReference userDocumentRef = firestore
                 .collection(USERS_WITH_RESTAURANT_CHOICE)
-                .document(loggedUserEntity.getId());
+                .document(formattedDocumentId);
 
             userDocumentRef
                 .delete()

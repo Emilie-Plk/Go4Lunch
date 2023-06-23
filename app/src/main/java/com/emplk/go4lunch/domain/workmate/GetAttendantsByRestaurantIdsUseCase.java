@@ -32,7 +32,7 @@ public class GetAttendantsByRestaurantIdsUseCase {
     }
 
     public LiveData<Map<String, Integer>> invoke() {
-        LiveData<List<UserWithRestaurantChoiceEntity>> userWithRestaurantChoiceEntitiesLiveData = userRepository.getUserWithRestaurantChoiceEntities();
+        LiveData<List<UserWithRestaurantChoiceEntity>> userWithRestaurantChoiceEntitiesLiveData = userRepository.getUsersWithRestaurantChoiceEntities();
 
         return Transformations.map(userWithRestaurantChoiceEntitiesLiveData, userWithRestaurantChoiceEntities -> {
                 Map<String, Integer> attendantsByRestaurantIdsMap = new HashMap<>();

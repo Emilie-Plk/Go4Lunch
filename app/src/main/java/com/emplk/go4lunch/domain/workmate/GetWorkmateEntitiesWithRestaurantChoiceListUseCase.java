@@ -32,7 +32,7 @@ public class GetWorkmateEntitiesWithRestaurantChoiceListUseCase {
         this.getCurrentLoggedUserIdUseCase = getCurrentLoggedUserIdUseCase;
 
         LiveData<List<LoggedUserEntity>> loggedUserEntitiesLiveData = getLoggedUserEntitiesUseCase.invoke();
-        LiveData<List<UserWithRestaurantChoiceEntity>> userWithRestaurantChoiceEntitiesLiveData = userRepository.getUserWithRestaurantChoiceEntities();
+        LiveData<List<UserWithRestaurantChoiceEntity>> userWithRestaurantChoiceEntitiesLiveData = userRepository.getUsersWithRestaurantChoiceEntities();
 
         workmateEntitiesWithRestaurantChoiceLiveData.addSource(loggedUserEntitiesLiveData, loggedUserEntities -> {
                 combine(loggedUserEntities, userWithRestaurantChoiceEntitiesLiveData.getValue());
