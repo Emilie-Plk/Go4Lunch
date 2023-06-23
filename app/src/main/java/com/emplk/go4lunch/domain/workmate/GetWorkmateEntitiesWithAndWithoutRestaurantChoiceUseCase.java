@@ -99,28 +99,6 @@ public class GetWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase {
             }
         }
 
-        // if no user is attending
-        if (workmateEntitiesWithRestaurantChoice == null || workmateEntitiesWithRestaurantChoice.isEmpty()) {
-            for (LoggedUserEntity loggedUserEntity : loggedUserEntities) {
-                if (!loggedUserEntity.getId().equals(currentLoggedUser.getId())) {
-                    workmateEntitiesWithAndWithoutRestaurantChoice.add(
-                        new WorkmateEntity(
-                            new LoggedUserEntity(
-                                loggedUserEntity.getId(),
-                                loggedUserEntity.getName(),
-                                loggedUserEntity.getEmail(),
-                                loggedUserEntity.getPictureUrl()
-                            ),
-                            null,
-                            null,
-                            null,
-                            null
-                        )
-                    );
-                }
-            }
-        }
-
         workmateEntitiesWithAndWithoutRestaurantChoiceMediatorLiveData.setValue(workmateEntitiesWithAndWithoutRestaurantChoice);
     }
 }
