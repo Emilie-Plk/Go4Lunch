@@ -77,7 +77,6 @@ dependencies {
     // FIRESTORE
     implementation 'com.google.firebase:firebase-firestore'
 
-
     // When using the BoM, don't specify versions in Firebase dependencies
     implementation 'com.google.firebase:firebase-auth'
 
@@ -103,11 +102,15 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
     implementation 'com.squareup.okhttp3:okhttp:4.9.3'
 
+    // WORK MANAGER
+    implementation "androidx.work:work-runtime:2.8.1"
+    // for @HiltWorker
+    implementation 'androidx.hilt:hilt-work:1.0.0'
+
     // GLIDE
     implementation 'com.github.bumptech.glide:glide:4.15.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
     implementation 'com.github.bumptech.glide:annotations:4.15.1'
-
 
     // Gps-related classes : FusedLocationProviderClient
     implementation 'com.google.android.gms:play-services-location:21.0.1'
@@ -120,7 +123,6 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:4.6.1'
     // Helps testing livedata (InstantTaskExecutorRule)
     testImplementation 'androidx.arch.core:core-testing:2.2.0'
-
 
     // INSTRUMENTED TESTS
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

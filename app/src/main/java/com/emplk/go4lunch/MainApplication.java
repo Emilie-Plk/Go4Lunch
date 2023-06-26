@@ -1,14 +1,22 @@
 package com.emplk.go4lunch;
 
+import static com.emplk.go4lunch.workmanager.NotificationUtils.calculateDelayUntilNoon;
+
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.emplk.go4lunch.data.location.GpsLocationRepositoryBroadcastReceiver;
 import com.emplk.go4lunch.data.permission.GpsPermissionRepositoryImpl;
+import com.emplk.go4lunch.workmanager.NotificationWorker;
+
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -16,21 +24,32 @@ import dagger.hilt.android.HiltAndroidApp;
 
 @HiltAndroidApp
 public class MainApplication extends Application implements Application.ActivityLifecycleCallbacks {
-
+    private static final String TAG = "NotificationWorker";
     @Inject
     GpsPermissionRepositoryImpl gpsPermissionRepositoryImpl;
-
     @Inject
     GpsLocationRepositoryBroadcastReceiver gpsLocationRepositoryBroadcastReceiver;
 
-    int activityCount;
-
+    private int activityCount;
 
     @Override
     public void onCreate() {
         super.onCreate();
         registerActivityLifecycleCallbacks(this);
+        createWorkRequest();
+
     }
+
+    private void createWorkRequest() {
+        long delayUntilNoon = calculateDelayUntilNoon();
+        OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(NotificationWorker.class)
+            .setInitialDelay(delayUntilNoon, TimeUnit.MILLISECONDS)
+            .addTag(TAG)
+            .build();
+
+        WorkManager.getInstance(this).enqueueUniqueWork(TAG, ExistingWorkPolicy.REPLACE, workRequest);
+    }
+
 
     @Override
     public void onActivityCreated(
@@ -75,4 +94,5 @@ public class MainApplication extends Application implements Application.Activity
     @Override
     public void onActivityDestroyed(@NonNull Activity activity) {
     }
+
 }

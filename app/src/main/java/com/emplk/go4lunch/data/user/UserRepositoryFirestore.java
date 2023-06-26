@@ -31,7 +31,7 @@ public class UserRepositoryFirestore implements UserRepository {
 
     private static final String USERS_WITH_RESTAURANT_CHOICE = "usersWithRestaurantChoice";
 
-    private static final String TODAY = LocalDate.now()
+    private static final String TODAY = LocalDate.now()   // TODO: à injecter ?
         .format(
             DateTimeFormatter.ofPattern("yyyyMMdd")
         );

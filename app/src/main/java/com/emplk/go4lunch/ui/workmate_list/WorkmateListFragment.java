@@ -55,12 +55,12 @@ public class WorkmateListFragment extends Fragment {
         WorkmateListAdapter adapter = new WorkmateListAdapter(new OnWorkmateClickedListener() {
             @Override
             public void onChatButtonClicked(@NonNull String workmateId) {
-// TODO: start chat
+                // TODO: start chat
             }
 
             @Override
             public void onWorkmateClicked(@NonNull String restaurantId) {
-                startActivity(RestaurantDetailActivity.navigate(requireContext(), restaurantId));
+                startActivity(RestaurantDetailActivity.navigate(requireContext(), restaurantId)); // tu pourrais très bien faire ton truc avec un SingleLE
             }
         }
         );
