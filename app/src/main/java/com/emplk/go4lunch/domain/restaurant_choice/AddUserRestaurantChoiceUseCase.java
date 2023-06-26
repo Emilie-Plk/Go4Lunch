@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserUseCase;
 import com.emplk.go4lunch.domain.user.ChosenRestaurantEntity;
 import com.emplk.go4lunch.domain.user.UserRepository;
+import com.google.firebase.Timestamp;
 
 import javax.inject.Inject;
 
@@ -27,6 +28,7 @@ public class AddUserRestaurantChoiceUseCase {
     }
 
     public void invoke(
+        @NonNull Timestamp timestamp,
         @Nullable String restaurantId,
         @Nullable String restaurantName,
         @Nullable String vicinity,
@@ -39,6 +41,7 @@ public class AddUserRestaurantChoiceUseCase {
             userRepository.upsertUserRestaurantChoice(
                 getCurrentLoggedUserUseCase.invoke(),
                 new ChosenRestaurantEntity(
+                    timestamp,
                     restaurantId,
                     restaurantName,
                     vicinity,

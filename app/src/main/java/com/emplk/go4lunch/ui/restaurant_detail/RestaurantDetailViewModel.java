@@ -30,6 +30,7 @@ import com.emplk.go4lunch.domain.workmate.GetWorkmateEntitiesGoingToSameRestaura
 import com.emplk.go4lunch.domain.workmate.WorkmateEntity;
 import com.emplk.go4lunch.ui.utils.RestaurantDetailsFavoriteState;
 import com.emplk.go4lunch.ui.workmate_list.WorkmatesViewStateItem;
+import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -204,7 +205,13 @@ public class RestaurantDetailViewModel extends ViewModel {
         @NonNull String vicinity,
         @Nullable String photoReferenceUrl
     ) {
-        addUserRestaurantChoiceUseCase.invoke(restaurantId, restaurantName, vicinity, photoReferenceUrl);
+        addUserRestaurantChoiceUseCase.invoke(
+            Timestamp.now(),
+            restaurantId,
+            restaurantName,
+            vicinity,
+            photoReferenceUrl
+        );
     }
 
     public LiveData<WorkmateState> getWorkerState() {

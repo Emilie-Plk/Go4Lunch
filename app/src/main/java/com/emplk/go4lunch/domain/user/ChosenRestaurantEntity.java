@@ -3,10 +3,13 @@ package com.emplk.go4lunch.domain.user;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.firebase.Timestamp;
+
 import java.util.Objects;
 
 public class ChosenRestaurantEntity {
-
+    @NonNull
+    private final Timestamp timestamp;
     @NonNull
     private final String attendingRestaurantId;
 
@@ -20,15 +23,22 @@ public class ChosenRestaurantEntity {
     private final String attendingRestaurantPictureUrl;
 
     public ChosenRestaurantEntity(
+        @NonNull Timestamp timestamp,
         @NonNull String attendingRestaurantId,
         @NonNull String attendingRestaurantName,
         @NonNull String attendingRestaurantVicinity,
         @Nullable String attendingRestaurantPictureUrl
     ) {
+        this.timestamp = timestamp;
         this.attendingRestaurantId = attendingRestaurantId;
         this.attendingRestaurantName = attendingRestaurantName;
         this.attendingRestaurantVicinity = attendingRestaurantVicinity;
         this.attendingRestaurantPictureUrl = attendingRestaurantPictureUrl;
+    }
+
+    @NonNull
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
     @NonNull
@@ -56,22 +66,24 @@ public class ChosenRestaurantEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChosenRestaurantEntity that = (ChosenRestaurantEntity) o;
-        return attendingRestaurantId.equals(that.attendingRestaurantId) && attendingRestaurantName.equals(that.attendingRestaurantName) && attendingRestaurantVicinity.equals(that.attendingRestaurantVicinity) && Objects.equals(attendingRestaurantPictureUrl, that.attendingRestaurantPictureUrl);
+        return timestamp.equals(that.timestamp) && attendingRestaurantId.equals(that.attendingRestaurantId) && attendingRestaurantName.equals(that.attendingRestaurantName) && attendingRestaurantVicinity.equals(that.attendingRestaurantVicinity) && Objects.equals(attendingRestaurantPictureUrl, that.attendingRestaurantPictureUrl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(attendingRestaurantId, attendingRestaurantName, attendingRestaurantVicinity, attendingRestaurantPictureUrl);
+        return Objects.hash(timestamp, attendingRestaurantId, attendingRestaurantName, attendingRestaurantVicinity, attendingRestaurantPictureUrl);
     }
 
     @NonNull
     @Override
     public String toString() {
         return "ChosenRestaurantEntity{" +
-            "attendingRestaurantId='" + attendingRestaurantId + '\'' +
+            "timestamp=" + timestamp +
+            ", attendingRestaurantId='" + attendingRestaurantId + '\'' +
             ", attendingRestaurantName='" + attendingRestaurantName + '\'' +
             ", attendingRestaurantVicinity='" + attendingRestaurantVicinity + '\'' +
             ", attendingRestaurantPictureUrl='" + attendingRestaurantPictureUrl + '\'' +
             '}';
     }
+
 }

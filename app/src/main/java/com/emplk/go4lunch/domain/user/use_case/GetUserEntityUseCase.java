@@ -65,7 +65,10 @@ public class GetUserEntityUseCase {
         @Nullable Set<String> favoriteRestaurantsIds,
         @Nullable UserWithRestaurantChoiceEntity userWithRestaurantChoice
     ) {
-        LoggedUserEntity loggedUserEntity = getCurrentLoggedUserUseCase.invoke();
+        LoggedUserEntity loggedUserEntity = null;
+        if (getCurrentLoggedUserUseCase != null) {
+            loggedUserEntity = getCurrentLoggedUserUseCase.invoke();
+        }
 
         if (loggedUserEntity == null) {
             return;

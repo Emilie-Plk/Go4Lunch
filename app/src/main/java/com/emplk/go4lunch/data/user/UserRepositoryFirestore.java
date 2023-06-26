@@ -11,13 +11,17 @@ import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.user.ChosenRestaurantEntity;
 import com.emplk.go4lunch.domain.user.UserRepository;
 import com.emplk.go4lunch.domain.user.UserWithRestaurantChoiceEntity;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -30,11 +34,6 @@ public class UserRepositoryFirestore implements UserRepository {
     private static final String USERS_COLLECTION = "users";
 
     private static final String USERS_WITH_RESTAURANT_CHOICE = "usersWithRestaurantChoice";
-
-    private static final String TODAY = LocalDate.now()   // TODO: à injecter ?
-        .format(
-            DateTimeFormatter.ofPattern("yyyyMMdd")
-        );
 
     @NonNull
     private final FirebaseFirestore firestore;
@@ -82,16 +81,17 @@ public class UserRepositoryFirestore implements UserRepository {
         @NonNull ChosenRestaurantEntity chosenRestaurantEntity
     ) {
         if (loggedUserEntity != null) {
-            String formattedDocumentId = TODAY + "_" + loggedUserEntity.getId();
+            String userId = loggedUserEntity.getId();
 
             DocumentReference userWithRestaurantChoiceDocumentRef =
                 firestore
                     .collection(USERS_WITH_RESTAURANT_CHOICE)
-                    .document(formattedDocumentId);
+                    .document(userId);
 
             userWithRestaurantChoiceDocumentRef
                 .set(
                     new UserWithRestaurantChoiceDto(
+                        chosenRestaurantEntity.getTimestamp(),
                         chosenRestaurantEntity.getAttendingRestaurantId(),
                         chosenRestaurantEntity.getAttendingRestaurantName(),
                         chosenRestaurantEntity.getAttendingRestaurantVicinity(),
@@ -115,28 +115,31 @@ public class UserRepositoryFirestore implements UserRepository {
     public LiveData<List<UserWithRestaurantChoiceEntity>> getUsersWithRestaurantChoiceEntities() {
         MutableLiveData<List<UserWithRestaurantChoiceEntity>> userWithRestaurantChoiceEntitiesMutableLiveData = new MutableLiveData<>();
 
-        firestore.collection(USERS_WITH_RESTAURANT_CHOICE)
+        firestore
+            .collection(USERS_WITH_RESTAURANT_CHOICE)
             .addSnapshotListener((queryDocumentSnapshots, error) -> {
-                    if (error != null) {
-                        Log.e("UserRepositoryFirestore", "Error fetching users documents: " + error);
-                        userWithRestaurantChoiceEntitiesMutableLiveData.setValue(null);
-                        return;
-                    }
-                    if (queryDocumentSnapshots != null) {
-                        List<UserWithRestaurantChoiceEntity> userWithRestaurantChoiceEntities = new ArrayList<>();
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            if (documentSnapshot.getId().startsWith(TODAY + "_")) {
-                                String userId = documentSnapshot.getId().substring((documentSnapshot.getId()).lastIndexOf("_") + 1);
-                                UserWithRestaurantChoiceDto userWithRestaurantChoiceDto = documentSnapshot.toObject(UserWithRestaurantChoiceDto.class);
-                                userWithRestaurantChoiceEntities.add(mapToUserWithRestaurantChoiceEntity(userWithRestaurantChoiceDto, userId));
-                            }
-                        }
-                        userWithRestaurantChoiceEntitiesMutableLiveData.setValue(userWithRestaurantChoiceEntities);
-                    }
+                if (error != null) {
+                    Log.e("UserRepositoryFirestore", "Error fetching users documents: " + error);
+                    userWithRestaurantChoiceEntitiesMutableLiveData.setValue(null);
+                    return;
                 }
-            );
+                if (queryDocumentSnapshots != null) {
+                    List<UserWithRestaurantChoiceEntity> userWithRestaurantChoiceEntities = new ArrayList<>();
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        Timestamp timestamp = documentSnapshot.getTimestamp("timestamp");
+                        if (timestamp != null && isWithinTimeRange(timestamp)) {
+                            String userId = documentSnapshot.getId();
+                            UserWithRestaurantChoiceDto userWithRestaurantChoiceDto = documentSnapshot.toObject(UserWithRestaurantChoiceDto.class);
+                            userWithRestaurantChoiceEntities.add(mapToUserWithRestaurantChoiceEntity(userWithRestaurantChoiceDto, userId));
+                        }
+                    }
+                    userWithRestaurantChoiceEntitiesMutableLiveData.setValue(userWithRestaurantChoiceEntities);
+                }
+            });
+
         return userWithRestaurantChoiceEntitiesMutableLiveData;
     }
+
 
     @Override
     public LiveData<UserWithRestaurantChoiceEntity> getUserWithRestaurantChoiceEntity(@NonNull String userId) {
@@ -144,37 +147,41 @@ public class UserRepositoryFirestore implements UserRepository {
 
         firestore
             .collection(USERS_WITH_RESTAURANT_CHOICE)
-            .document(TODAY + "_" + userId)
+            .document(userId)
             .addSnapshotListener((documentSnapshot, error) -> {
                     if (error != null) {
                         Log.e("UserRepositoryFirestore", "Error fetching user document: " + error);
                         userWithRestaurantChoiceEntityMutableLiveData.setValue(null);
                         return;
                     }
+
                     if (documentSnapshot != null) {
                         UserWithRestaurantChoiceDto userWithRestaurantChoiceDto = documentSnapshot.toObject(UserWithRestaurantChoiceDto.class);
                         if (userWithRestaurantChoiceDto != null) {
-                            UserWithRestaurantChoiceEntity userWithRestaurantChoiceEntity = mapToUserWithRestaurantChoiceEntity(userWithRestaurantChoiceDto, userId);
-                            userWithRestaurantChoiceEntityMutableLiveData.setValue(userWithRestaurantChoiceEntity);
+                            Timestamp timestamp = documentSnapshot.getTimestamp("timestamp");
+                            if (timestamp != null && isWithinTimeRange(timestamp)) {
+                                UserWithRestaurantChoiceEntity userWithRestaurantChoiceEntity = mapToUserWithRestaurantChoiceEntity(userWithRestaurantChoiceDto, userId);
+                                userWithRestaurantChoiceEntityMutableLiveData.setValue(userWithRestaurantChoiceEntity);
+                            } else {
+                                userWithRestaurantChoiceEntityMutableLiveData.setValue(null);
+                            }
                         } else {
                             userWithRestaurantChoiceEntityMutableLiveData.setValue(null);
                         }
+                    } else {
+                        userWithRestaurantChoiceEntityMutableLiveData.setValue(null);
                     }
                 }
             );
         return userWithRestaurantChoiceEntityMutableLiveData;
     }
 
+
     @Override
     public void deleteUserRestaurantChoice(@Nullable LoggedUserEntity loggedUserEntity) {
         if (loggedUserEntity != null) {
-            String formattedDocumentId = TODAY + "_" + loggedUserEntity.getId();
-
-            DocumentReference userDocumentRef = firestore
-                .collection(USERS_WITH_RESTAURANT_CHOICE)
-                .document(formattedDocumentId);
-
-            userDocumentRef
+            firestore.collection(USERS_WITH_RESTAURANT_CHOICE)
+                .document(loggedUserEntity.getId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
                         Log.i("UserRepositoryFirestore", "User's restaurant choice successfully deleted!");
@@ -188,7 +195,6 @@ public class UserRepositoryFirestore implements UserRepository {
             Log.e("UserRepositoryFirestore", "Error deleting user's restaurant choice: userEntity is null!");
         }
     }
-
 
     @Override
     public LiveData<List<LoggedUserEntity>> getLoggedUserEntitiesLiveData() {
@@ -237,13 +243,15 @@ public class UserRepositoryFirestore implements UserRepository {
         UserWithRestaurantChoiceDto userWithRestaurantChoiceDto,
         String userId
     ) {
-        if (userWithRestaurantChoiceDto.getAttendingRestaurantId() != null &&
+        if (userWithRestaurantChoiceDto.getTimestamp() != null &&
+            userWithRestaurantChoiceDto.getAttendingRestaurantId() != null &&
             userWithRestaurantChoiceDto.getAttendingRestaurantName() != null &&
             userWithRestaurantChoiceDto.getAttendingRestaurantVicinity() != null &&
             userWithRestaurantChoiceDto.getAttendingRestaurantPictureUrl() != null
         ) {
             return new UserWithRestaurantChoiceEntity(
                 userId,
+                userWithRestaurantChoiceDto.getTimestamp(),
                 userWithRestaurantChoiceDto.getAttendingRestaurantId(),
                 userWithRestaurantChoiceDto.getAttendingRestaurantName(),
                 userWithRestaurantChoiceDto.getAttendingRestaurantVicinity(),
@@ -252,6 +260,29 @@ public class UserRepositoryFirestore implements UserRepository {
         } else {
             return null;
         }
+    }
+
+    private Timestamp getTodayNoonTimestamp() {
+        ZoneId systemZone = ZoneId.systemDefault();
+        ZonedDateTime now = ZonedDateTime.now(systemZone);
+        ZonedDateTime todayNoon = now.withHour(12).withMinute(0).withSecond(0).withNano(0);
+        long milliseconds = todayNoon.toInstant().toEpochMilli();
+        return new Timestamp(new Date(milliseconds));
+    }
+
+    private Timestamp getTomorrow1159AMTimestamp() {
+        ZoneId systemZone = ZoneId.systemDefault();
+        ZonedDateTime now = ZonedDateTime.now(systemZone);
+        ZonedDateTime tomorrow1159AM = now.plusDays(1).withHour(11).withMinute(59).withSecond(0).withNano(0);
+        long milliseconds = tomorrow1159AM.toInstant().toEpochMilli();
+        return new Timestamp(new Date(milliseconds));
+    }
+
+
+    private boolean isWithinTimeRange(Timestamp timestamp) {
+        Timestamp todayNoonTimestamp = getTodayNoonTimestamp();
+        Timestamp tomorrow1159AMTimestamp = getTomorrow1159AMTimestamp();
+        return timestamp.compareTo(todayNoonTimestamp) >= 0 && timestamp.compareTo(tomorrow1159AMTimestamp) <= 0;
     }
 }
 
