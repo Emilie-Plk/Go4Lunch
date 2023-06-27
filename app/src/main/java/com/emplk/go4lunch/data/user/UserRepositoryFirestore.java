@@ -16,9 +16,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.time.LocalDateTime;
+import java.time.Clock;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,12 +36,16 @@ public class UserRepositoryFirestore implements UserRepository {
 
     @NonNull
     private final FirebaseFirestore firestore;
+    @NonNull
+    private final Clock clock;  // can I use a Clock ? I injected it with Hilt
 
     @Inject
     public UserRepositoryFirestore(
-        @NonNull FirebaseFirestore firestore
+        @NonNull FirebaseFirestore firestore,
+        @NonNull Clock clock
     ) {
         this.firestore = firestore;
+        this.clock = clock;
     }
 
     @Override
@@ -262,27 +265,34 @@ public class UserRepositoryFirestore implements UserRepository {
         }
     }
 
-    private Timestamp getTodayNoonTimestamp() {
+    @NonNull
+    private Timestamp getToday1159AMTimestamp() {
         ZoneId systemZone = ZoneId.systemDefault();
-        ZonedDateTime now = ZonedDateTime.now(systemZone);
-        ZonedDateTime todayNoon = now.withHour(12).withMinute(0).withSecond(0).withNano(0);
-        long milliseconds = todayNoon.toInstant().toEpochMilli();
+        ZonedDateTime now = ZonedDateTime.now(clock.withZone(systemZone));
+        ZonedDateTime today1159AM = now.withHour(11).withMinute(59).withSecond(0).withNano(0);
+        long milliseconds = today1159AM.toInstant().toEpochMilli();
         return new Timestamp(new Date(milliseconds));
     }
 
-    private Timestamp getTomorrow1159AMTimestamp() {
+    @NonNull
+    private Timestamp getYesterdayNoonTimestamp() {
         ZoneId systemZone = ZoneId.systemDefault();
-        ZonedDateTime now = ZonedDateTime.now(systemZone);
-        ZonedDateTime tomorrow1159AM = now.plusDays(1).withHour(11).withMinute(59).withSecond(0).withNano(0);
-        long milliseconds = tomorrow1159AM.toInstant().toEpochMilli();
+        ZonedDateTime now = ZonedDateTime.now(clock.withZone(systemZone));
+        ZonedDateTime yesterdayNoon = now.minusDays(1).withHour(12).withMinute(0).withSecond(0).withNano(0);
+        long milliseconds = yesterdayNoon.toInstant().toEpochMilli();
         return new Timestamp(new Date(milliseconds));
     }
-
 
     private boolean isWithinTimeRange(Timestamp timestamp) {
-        Timestamp todayNoonTimestamp = getTodayNoonTimestamp();
-        Timestamp tomorrow1159AMTimestamp = getTomorrow1159AMTimestamp();
-        return timestamp.compareTo(todayNoonTimestamp) >= 0 && timestamp.compareTo(tomorrow1159AMTimestamp) <= 0;
+        long milliseconds = timestamp.getSeconds() * 1000 + timestamp.getNanoseconds() / 1000000;
+        Date date = new Date(milliseconds);
+
+        Timestamp adjustedTimestamp = new Timestamp(date);
+
+        Timestamp today1159AMTimestamp = getToday1159AMTimestamp();
+        Timestamp yesterdayNoonTimestamp = getYesterdayNoonTimestamp();
+
+        return adjustedTimestamp.compareTo(yesterdayNoonTimestamp) >= 0 && adjustedTimestamp.compareTo(today1159AMTimestamp) <= 0;
     }
 }
 

@@ -90,4 +90,10 @@ public class AppModule {
     public Clock provideClock() {
         return Clock.systemDefaultZone();
     }
+
+    @Singleton
+    @Provides
+    public WorkManager provideWorkManager(@NonNull Application application) {
+        return WorkManager.getInstance(application);
+    }
 }

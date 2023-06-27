@@ -1,21 +1,25 @@
 package com.emplk.go4lunch;
 
-import static com.emplk.go4lunch.workmanager.NotificationUtils.calculateDelayUntilNoon;
-
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.work.ExistingWorkPolicy;
-import androidx.work.OneTimeWorkRequest;
+import androidx.hilt.work.HiltWorkerFactory;
+import androidx.work.Configuration;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import com.emplk.go4lunch.data.location.GpsLocationRepositoryBroadcastReceiver;
 import com.emplk.go4lunch.data.permission.GpsPermissionRepositoryImpl;
 import com.emplk.go4lunch.workmanager.NotificationWorker;
 
+import java.time.Clock;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -23,14 +27,25 @@ import javax.inject.Inject;
 import dagger.hilt.android.HiltAndroidApp;
 
 @HiltAndroidApp
-public class MainApplication extends Application implements Application.ActivityLifecycleCallbacks {
-    private static final String TAG = "NotificationWorker";
+public class MainApplication extends Application implements Application.ActivityLifecycleCallbacks, Configuration.Provider {
+
+    @Inject
+    HiltWorkerFactory hiltWorkerFactory;
+
+    @Inject
+    WorkManager workManager;
+
+    @Inject
+    Clock clock;
+
     @Inject
     GpsPermissionRepositoryImpl gpsPermissionRepositoryImpl;
     @Inject
     GpsLocationRepositoryBroadcastReceiver gpsLocationRepositoryBroadcastReceiver;
 
     private int activityCount;
+
+    private final static String NOTIFICATION_WORKER = "NOTIFICATION_WORKER";
 
     @Override
     public void onCreate() {
@@ -42,12 +57,19 @@ public class MainApplication extends Application implements Application.Activity
 
     private void createWorkRequest() {
         long delayUntilNoon = calculateDelayUntilNoon();
-        OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(NotificationWorker.class)
+        PeriodicWorkRequest workRequest = new PeriodicWorkRequest.Builder(
+            NotificationWorker.class,
+            24,
+            TimeUnit.HOURS)
             .setInitialDelay(delayUntilNoon, TimeUnit.MILLISECONDS)
-            .addTag(TAG)
             .build();
 
-        WorkManager.getInstance(this).enqueueUniqueWork(TAG, ExistingWorkPolicy.REPLACE, workRequest);
+        WorkManager
+            .getInstance(this)
+            .enqueueUniquePeriodicWork(
+                NOTIFICATION_WORKER,
+                ExistingPeriodicWorkPolicy.KEEP,
+                workRequest);
     }
 
 
@@ -95,4 +117,26 @@ public class MainApplication extends Application implements Application.Activity
     public void onActivityDestroyed(@NonNull Activity activity) {
     }
 
+    @NonNull
+    @Override
+    public Configuration getWorkManagerConfiguration() {
+        return new Configuration.Builder()
+            .setWorkerFactory(hiltWorkerFactory)
+            .build();
+    }
+
+    private long calculateDelayUntilNoon() {
+        LocalDateTime currentDateTime = LocalDateTime.now(clock);
+        LocalTime notificationTime = LocalTime.of(8, 29);
+
+        LocalDateTime desiredDateTime = currentDateTime.with(notificationTime);
+
+        // If the notification time has already passed today, move to the day after
+        if (currentDateTime.isAfter(desiredDateTime)) {
+            desiredDateTime = desiredDateTime.plusDays(1);
+        }
+
+        // Calculate the duration until the desired time
+        return Duration.between(currentDateTime, desiredDateTime).toMillis();
+    }
 }

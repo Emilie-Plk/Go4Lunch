@@ -1,33 +1,27 @@
 package com.emplk.go4lunch.workmanager;
 
-import static com.emplk.go4lunch.workmanager.NotificationUtils.calculateDelayUntilNoon;
-
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.nfc.Tag;
 import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.ExistingWorkPolicy;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
-import androidx.work.WorkRequest;
+import androidx.hilt.work.HiltWorker;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.emplk.go4lunch.R;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.concurrent.TimeUnit;
 
-// @HiltWorker
+import dagger.assisted.Assisted;
+import dagger.assisted.AssistedInject;
+
+@HiltWorker
 public class NotificationWorker extends Worker {
 
     private static final int NOTIFICATION_ID = 0;
@@ -36,9 +30,10 @@ public class NotificationWorker extends Worker {
 
     private final Context context;
 
+    @AssistedInject
     public NotificationWorker(
-        @NonNull Context context,
-        @NonNull WorkerParameters workerParams
+        @Assisted @NonNull Context context,
+        @Assisted @NonNull WorkerParameters workerParams
     ) {
         super(context, workerParams);
         this.context = context;
@@ -57,6 +52,17 @@ public class NotificationWorker extends Worker {
 
     @SuppressLint("MissingPermission")
     private void showNotification() {
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                CHANNEL_ID,
+                CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_DEFAULT
+            );
+            notificationManager.createNotificationChannel(channel);
+        }
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
             .setSmallIcon(R.drawable.baseline_restaurant_24)
             .setContentTitle("Time to Go4Lunch!")
@@ -66,16 +72,6 @@ public class NotificationWorker extends Worker {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true);
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                CHANNEL_ID,
-                CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_DEFAULT
-            );
-
-            notificationManager.createNotificationChannel(channel);
-        }
         notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
 }

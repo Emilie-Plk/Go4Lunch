@@ -98,7 +98,6 @@ public class GetWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase {
                 }
             }
         }
-
         workmateEntitiesWithAndWithoutRestaurantChoiceMediatorLiveData.setValue(workmateEntitiesWithAndWithoutRestaurantChoice);
     }
 }
