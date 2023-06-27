@@ -17,10 +17,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.time.Clock;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -116,37 +118,50 @@ public class UserRepositoryFirestore implements UserRepository {
 
     @Override
     public LiveData<List<UserWithRestaurantChoiceEntity>> getUsersWithRestaurantChoiceEntities() {
-        MutableLiveData<List<UserWithRestaurantChoiceEntity>> userWithRestaurantChoiceEntitiesMutableLiveData = new MutableLiveData<>();
+        MutableLiveData<List<UserWithRestaurantChoiceEntity>> usersWithRestaurantChoiceEntitiesMutableLiveData = new MutableLiveData<>();
+
+        LocalDateTime startDateTime = getStartDateTime();
+        Timestamp startTimestamp = getStartTimestamp(startDateTime);
+        Timestamp endTimestamp = getEndTimestamp(startDateTime);
 
         firestore
             .collection(USERS_WITH_RESTAURANT_CHOICE)
             .addSnapshotListener((queryDocumentSnapshots, error) -> {
-                if (error != null) {
-                    Log.e("UserRepositoryFirestore", "Error fetching users documents: " + error);
-                    userWithRestaurantChoiceEntitiesMutableLiveData.setValue(null);
-                    return;
-                }
-                if (queryDocumentSnapshots != null) {
-                    List<UserWithRestaurantChoiceEntity> userWithRestaurantChoiceEntities = new ArrayList<>();
-                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        Timestamp timestamp = documentSnapshot.getTimestamp("timestamp");
-                        if (timestamp != null && isWithinTimeRange(timestamp)) {
-                            String userId = documentSnapshot.getId();
-                            UserWithRestaurantChoiceDto userWithRestaurantChoiceDto = documentSnapshot.toObject(UserWithRestaurantChoiceDto.class);
-                            userWithRestaurantChoiceEntities.add(mapToUserWithRestaurantChoiceEntity(userWithRestaurantChoiceDto, userId));
-                        }
+                    if (error != null) {
+                        Log.e("UserRepositoryFirestore", "Error fetching users documents: " + error);
+                        usersWithRestaurantChoiceEntitiesMutableLiveData.setValue(null);
+                        return;
                     }
-                    userWithRestaurantChoiceEntitiesMutableLiveData.setValue(userWithRestaurantChoiceEntities);
-                }
-            });
 
-        return userWithRestaurantChoiceEntitiesMutableLiveData;
+                    if (queryDocumentSnapshots != null) {
+                        List<UserWithRestaurantChoiceEntity> userWithRestaurantChoiceEntities = new ArrayList<>();
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            UserWithRestaurantChoiceDto userWithRestaurantChoiceDto = documentSnapshot.toObject(UserWithRestaurantChoiceDto.class);
+                            Timestamp timestamp = documentSnapshot.getTimestamp("timestamp");
+                            if (timestamp != null &&
+                                timestamp.compareTo(startTimestamp) >= 0 &&
+                                timestamp.compareTo(endTimestamp) <= 0) {
+                                String userId = documentSnapshot.getId();
+                                UserWithRestaurantChoiceEntity userWithRestaurantChoiceEntity = mapToUserWithRestaurantChoiceEntity(userWithRestaurantChoiceDto, userId);
+                                userWithRestaurantChoiceEntities.add(userWithRestaurantChoiceEntity);
+                            } else {
+                                usersWithRestaurantChoiceEntitiesMutableLiveData.setValue(null);
+                            }
+                        }
+                        usersWithRestaurantChoiceEntitiesMutableLiveData.setValue(userWithRestaurantChoiceEntities);
+                    }
+                }
+            );
+
+        return usersWithRestaurantChoiceEntitiesMutableLiveData;
     }
 
-
-    @Override
     public LiveData<UserWithRestaurantChoiceEntity> getUserWithRestaurantChoiceEntity(@NonNull String userId) {
         MutableLiveData<UserWithRestaurantChoiceEntity> userWithRestaurantChoiceEntityMutableLiveData = new MutableLiveData<>();
+
+        LocalDateTime startDateTime = getStartDateTime();
+        Timestamp startTimestamp = getStartTimestamp(startDateTime);
+        Timestamp endTimestamp = getEndTimestamp(startDateTime);
 
         firestore
             .collection(USERS_WITH_RESTAURANT_CHOICE)
@@ -162,7 +177,9 @@ public class UserRepositoryFirestore implements UserRepository {
                         UserWithRestaurantChoiceDto userWithRestaurantChoiceDto = documentSnapshot.toObject(UserWithRestaurantChoiceDto.class);
                         if (userWithRestaurantChoiceDto != null) {
                             Timestamp timestamp = documentSnapshot.getTimestamp("timestamp");
-                            if (timestamp != null && isWithinTimeRange(timestamp)) {
+                            if (timestamp != null &&
+                                timestamp.compareTo(startTimestamp) >= 0 &&
+                                timestamp.compareTo(endTimestamp) <= 0) {
                                 UserWithRestaurantChoiceEntity userWithRestaurantChoiceEntity = mapToUserWithRestaurantChoiceEntity(userWithRestaurantChoiceDto, userId);
                                 userWithRestaurantChoiceEntityMutableLiveData.setValue(userWithRestaurantChoiceEntity);
                             } else {
@@ -176,9 +193,9 @@ public class UserRepositoryFirestore implements UserRepository {
                     }
                 }
             );
+
         return userWithRestaurantChoiceEntityMutableLiveData;
     }
-
 
     @Override
     public void deleteUserRestaurantChoice(@Nullable LoggedUserEntity loggedUserEntity) {
@@ -265,34 +282,22 @@ public class UserRepositoryFirestore implements UserRepository {
         }
     }
 
-    @NonNull
-    private Timestamp getToday1159AMTimestamp() {
-        ZoneId systemZone = ZoneId.systemDefault();
-        ZonedDateTime now = ZonedDateTime.now(clock.withZone(systemZone));
-        ZonedDateTime today1159AM = now.withHour(11).withMinute(59).withSecond(0).withNano(0);
-        long milliseconds = today1159AM.toInstant().toEpochMilli();
-        return new Timestamp(new Date(milliseconds));
+    private LocalDateTime getStartDateTime() {
+        LocalDate currentDate = LocalDate.now(clock);
+        return LocalDateTime.of(currentDate, LocalTime.NOON);
     }
 
-    @NonNull
-    private Timestamp getYesterdayNoonTimestamp() {
-        ZoneId systemZone = ZoneId.systemDefault();
-        ZonedDateTime now = ZonedDateTime.now(clock.withZone(systemZone));
-        ZonedDateTime yesterdayNoon = now.minusDays(1).withHour(12).withMinute(0).withSecond(0).withNano(0);
-        long milliseconds = yesterdayNoon.toInstant().toEpochMilli();
-        return new Timestamp(new Date(milliseconds));
+    private Timestamp getStartTimestamp(LocalDateTime dateTime) {
+        ZoneId zone = ZoneId.systemDefault();
+        ZonedDateTime zonedDateTime = ZonedDateTime.of(dateTime, zone);
+        return new Timestamp(zonedDateTime.toInstant().getEpochSecond(), zonedDateTime.toInstant().getNano());
     }
 
-    private boolean isWithinTimeRange(Timestamp timestamp) {
-        long milliseconds = timestamp.getSeconds() * 1000 + timestamp.getNanoseconds() / 1000000;
-        Date date = new Date(milliseconds);
-
-        Timestamp adjustedTimestamp = new Timestamp(date);
-
-        Timestamp today1159AMTimestamp = getToday1159AMTimestamp();
-        Timestamp yesterdayNoonTimestamp = getYesterdayNoonTimestamp();
-
-        return adjustedTimestamp.compareTo(yesterdayNoonTimestamp) >= 0 && adjustedTimestamp.compareTo(today1159AMTimestamp) <= 0;
+    private Timestamp getEndTimestamp(LocalDateTime dateTime) {
+        ZoneId zone = ZoneId.systemDefault();
+        LocalDateTime endDateTime = dateTime.plusDays(1).with(LocalTime.of(11, 59, 59, 999999999));
+        ZonedDateTime endZonedDateTime = ZonedDateTime.of(endDateTime, zone);
+        return new Timestamp(endZonedDateTime.toInstant().getEpochSecond(), endZonedDateTime.toInstant().getNano());
     }
 }
 

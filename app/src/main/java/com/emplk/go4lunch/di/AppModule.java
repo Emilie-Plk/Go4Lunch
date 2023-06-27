@@ -91,8 +91,8 @@ public class AppModule {
         return Clock.systemDefaultZone();
     }
 
-    @Singleton
     @Provides
+    @Singleton
     public WorkManager provideWorkManager(@NonNull Application application) {
         return WorkManager.getInstance(application);
     }

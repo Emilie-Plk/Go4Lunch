@@ -3,6 +3,7 @@ package com.emplk.go4lunch;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,7 +19,6 @@ import com.emplk.go4lunch.workmanager.NotificationWorker;
 
 import java.time.Clock;
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.concurrent.TimeUnit;
 
@@ -52,20 +52,19 @@ public class MainApplication extends Application implements Application.Activity
         super.onCreate();
         registerActivityLifecycleCallbacks(this);
         createWorkRequest();
-
     }
 
     private void createWorkRequest() {
-        long delayUntilNoon = calculateDelayUntilNoon();
         PeriodicWorkRequest workRequest = new PeriodicWorkRequest.Builder(
             NotificationWorker.class,
             24,
             TimeUnit.HOURS)
-            .setInitialDelay(delayUntilNoon, TimeUnit.MILLISECONDS)
+            .setInitialDelay(calculateDelayUntilNoon(), TimeUnit.MILLISECONDS)
             .build();
 
-        WorkManager
-            .getInstance(this)
+        Log.d("MainApplication", "Scheduled time: " + workRequest.getWorkSpec().initialDelay + " " + workRequest.getWorkSpec().constraints);
+
+      workManager
             .enqueueUniquePeriodicWork(
                 NOTIFICATION_WORKER,
                 ExistingPeriodicWorkPolicy.KEEP,
@@ -126,17 +125,11 @@ public class MainApplication extends Application implements Application.Activity
     }
 
     private long calculateDelayUntilNoon() {
-        LocalDateTime currentDateTime = LocalDateTime.now(clock);
-        LocalTime notificationTime = LocalTime.of(8, 29);
+        Duration delay = Duration.between(LocalTime.now(clock), LocalTime.of(12, 40));
 
-        LocalDateTime desiredDateTime = currentDateTime.with(notificationTime);
-
-        // If the notification time has already passed today, move to the day after
-        if (currentDateTime.isAfter(desiredDateTime)) {
-            desiredDateTime = desiredDateTime.plusDays(1);
+        if (delay.isNegative()) {
+            delay = delay.plusDays(1);
         }
-
-        // Calculate the duration until the desired time
-        return Duration.between(currentDateTime, desiredDateTime).toMillis();
+        return delay.toMillis();
     }
 }
