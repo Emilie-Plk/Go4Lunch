@@ -64,25 +64,23 @@ public class MainApplication extends Application implements Application.Activity
 
         Log.d("MainApplication", "Scheduled time: " + workRequest.getWorkSpec().initialDelay + " " + workRequest.getWorkSpec().constraints);
 
-      workManager
+        workManager
             .enqueueUniquePeriodicWork(
                 NOTIFICATION_WORKER,
                 ExistingPeriodicWorkPolicy.KEEP,
-                workRequest);
+                workRequest
+            );
     }
-
 
     @Override
     public void onActivityCreated(
         @NonNull Activity activity,
         @Nullable Bundle savedInstanceState
     ) {
-
     }
 
     @Override
     public void onActivityStarted(@NonNull Activity activity) {
-
     }
 
     @Override
@@ -109,7 +107,6 @@ public class MainApplication extends Application implements Application.Activity
         @NonNull Activity activity,
         @NonNull Bundle outState
     ) {
-
     }
 
     @Override
@@ -125,8 +122,7 @@ public class MainApplication extends Application implements Application.Activity
     }
 
     private long calculateDelayUntilNoon() {
-        Duration delay = Duration.between(LocalTime.now(clock), LocalTime.of(12, 40));
-
+        Duration delay = Duration.between(LocalTime.now(clock), LocalTime.of(16, 30));
         if (delay.isNegative()) {
             delay = delay.plusDays(1);
         }

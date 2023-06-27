@@ -28,40 +28,26 @@ public class NotificationWorker extends Worker {
     private static final String CHANNEL_ID = "channel_id";
     private static final CharSequence CHANNEL_NAME = "channel_name";
 
-    private final Context context;
-
     @AssistedInject
     public NotificationWorker(
         @Assisted @NonNull Context context,
         @Assisted @NonNull WorkerParameters workerParams
     ) {
         super(context, workerParams);
-        this.context = context;
     }
 
     @NonNull
     @Override
     public Result doWork() {
-        // Perform your background task here
-        Log.d("NotificationWorker", "Scheduled time: " + LocalDateTime.now());
 
+        Log.d("NotificationWorker", "doWork triggered at " + LocalDateTime.now());
         showNotification();
-
         return Result.success();
     }
 
     @SuppressLint("MissingPermission")
     private void showNotification() {
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                CHANNEL_ID,
-                CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_DEFAULT
-            );
-            notificationManager.createNotificationChannel(channel);
-        }
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
             .setSmallIcon(R.drawable.baseline_restaurant_24)
@@ -71,6 +57,17 @@ public class NotificationWorker extends Worker {
                 .bigText("salut peau de fesses"))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationManager.createNotificationChannel(
+                new NotificationChannel(
+                    CHANNEL_ID,
+                    CHANNEL_NAME,
+                    NotificationManager.IMPORTANCE_DEFAULT
+                )
+            );
+        }
 
         notificationManager.notify(NOTIFICATION_ID, builder.build());
     }

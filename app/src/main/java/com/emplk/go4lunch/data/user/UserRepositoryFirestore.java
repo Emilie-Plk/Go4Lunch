@@ -284,7 +284,7 @@ public class UserRepositoryFirestore implements UserRepository {
 
     private LocalDateTime getStartDateTime() {
         LocalDate currentDate = LocalDate.now(clock);
-        return LocalDateTime.of(currentDate, LocalTime.NOON);
+        return LocalDateTime.of(currentDate, LocalTime.of(12,10, 0, 0));
     }
 
     private Timestamp getStartTimestamp(LocalDateTime dateTime) {
@@ -295,7 +295,7 @@ public class UserRepositoryFirestore implements UserRepository {
 
     private Timestamp getEndTimestamp(LocalDateTime dateTime) {
         ZoneId zone = ZoneId.systemDefault();
-        LocalDateTime endDateTime = dateTime.plusDays(1).with(LocalTime.of(11, 59, 59, 999999999));
+        LocalDateTime endDateTime = dateTime.plusDays(1).with(LocalTime.of(12, 9, 59, 999999999));
         ZonedDateTime endZonedDateTime = ZonedDateTime.of(endDateTime, zone);
         return new Timestamp(endZonedDateTime.toInstant().getEpochSecond(), endZonedDateTime.toInstant().getNano());
     }
