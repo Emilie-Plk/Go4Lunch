@@ -1,8 +1,8 @@
 package com.emplk.go4lunch.ui.workmate_list;
 
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -104,11 +104,19 @@ public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, Rec
                 workmateName
             );
 
-            workmateNameAndAttendingRestaurant.setText(
-                (itemViewState.getAttendingRestaurantId() != null) ? workmateWithRestaurantChoice : workmateWithoutRestaurantChoice);
-
+            if (itemViewState.getAttendingRestaurantId() != null) {
+                workmateNameAndAttendingRestaurant.setText(workmateWithRestaurantChoice);
+                workmateNameAndAttendingRestaurant.setTextColor(binding.getRoot().getResources().getColor(R.color.darkest_gray));
+                workmateNameAndAttendingRestaurant.setTypeface(null, Typeface.NORMAL);
+            } else {
+                workmateNameAndAttendingRestaurant.setText(workmateWithoutRestaurantChoice);
+                workmateNameAndAttendingRestaurant.setTextColor(binding.getRoot().getResources().getColor(R.color.grey_text));
+                workmateNameAndAttendingRestaurant.setTypeface(null, Typeface.ITALIC);
+            }
             Glide.with(binding.getRoot())
                 .load(itemViewState.getPictureUrl())
+                .error(R.drawable.baseline_person_24)
+                .fallback(R.drawable.baseline_person_24)
                 .transform(new CenterCrop(), new RoundedCorners(50))
                 .into(workmateAvatar);
         }

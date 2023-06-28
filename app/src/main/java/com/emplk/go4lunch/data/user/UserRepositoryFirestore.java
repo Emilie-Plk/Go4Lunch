@@ -39,7 +39,7 @@ public class UserRepositoryFirestore implements UserRepository {
     @NonNull
     private final FirebaseFirestore firestore;
     @NonNull
-    private final Clock clock;  // can I use a Clock ? I injected it with Hilt
+    private final Clock clock;
 
     @Inject
     public UserRepositoryFirestore(
@@ -127,32 +127,32 @@ public class UserRepositoryFirestore implements UserRepository {
         firestore
             .collection(USERS_WITH_RESTAURANT_CHOICE)
             .addSnapshotListener((queryDocumentSnapshots, error) -> {
-                    if (error != null) {
-                        Log.e("UserRepositoryFirestore", "Error fetching users documents: " + error);
-                        usersWithRestaurantChoiceEntitiesMutableLiveData.setValue(null);
-                        return;
-                    }
-
-                    if (queryDocumentSnapshots != null) {
-                        List<UserWithRestaurantChoiceEntity> userWithRestaurantChoiceEntities = new ArrayList<>();
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            UserWithRestaurantChoiceDto userWithRestaurantChoiceDto = documentSnapshot.toObject(UserWithRestaurantChoiceDto.class);
-                            Timestamp timestamp = documentSnapshot.getTimestamp("timestamp");
-                            if (timestamp != null &&
-                                timestamp.compareTo(startTimestamp) >= 0 &&
-                                timestamp.compareTo(endTimestamp) <= 0) {
-                                String userId = documentSnapshot.getId();
-                                UserWithRestaurantChoiceEntity userWithRestaurantChoiceEntity = mapToUserWithRestaurantChoiceEntity(userWithRestaurantChoiceDto, userId);
-                                userWithRestaurantChoiceEntities.add(userWithRestaurantChoiceEntity);
-                            } else {
-                                usersWithRestaurantChoiceEntitiesMutableLiveData.setValue(null);
-                            }
+                if (error != null) {
+                    Log.e("UserRepositoryFirestore", "Error fetching users documents: " + error);
+                    usersWithRestaurantChoiceEntitiesMutableLiveData.setValue(null);
+                    return;
+                }
+                if (queryDocumentSnapshots != null) {
+                    List<UserWithRestaurantChoiceEntity> userWithRestaurantChoiceEntities = new ArrayList<>();
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        UserWithRestaurantChoiceDto userWithRestaurantChoiceDto = documentSnapshot.toObject(UserWithRestaurantChoiceDto.class);
+                        Timestamp timestamp = documentSnapshot.getTimestamp("timestamp");
+                        if (timestamp != null &&
+                            timestamp.compareTo(startTimestamp) >= 0 &&
+                            timestamp.compareTo(endTimestamp) <= 0) {
+                            String userId = documentSnapshot.getId();
+                            UserWithRestaurantChoiceEntity userWithRestaurantChoiceEntity = mapToUserWithRestaurantChoiceEntity(userWithRestaurantChoiceDto, userId);
+                            userWithRestaurantChoiceEntities.add(userWithRestaurantChoiceEntity);
                         }
+                    }
+                    if (userWithRestaurantChoiceEntities.isEmpty()) {
+                        usersWithRestaurantChoiceEntitiesMutableLiveData.setValue(null);
+                    } else {
                         usersWithRestaurantChoiceEntitiesMutableLiveData.setValue(userWithRestaurantChoiceEntities);
                     }
                 }
+            }
             );
-
         return usersWithRestaurantChoiceEntitiesMutableLiveData;
     }
 
@@ -284,7 +284,7 @@ public class UserRepositoryFirestore implements UserRepository {
 
     private LocalDateTime getStartDateTime() {
         LocalDate currentDate = LocalDate.now(clock);
-        return LocalDateTime.of(currentDate, LocalTime.of(12,10, 0, 0));
+        return LocalDateTime.of(currentDate, LocalTime.of(12,30, 0, 0));
     }
 
     private Timestamp getStartTimestamp(LocalDateTime dateTime) {
@@ -295,7 +295,7 @@ public class UserRepositoryFirestore implements UserRepository {
 
     private Timestamp getEndTimestamp(LocalDateTime dateTime) {
         ZoneId zone = ZoneId.systemDefault();
-        LocalDateTime endDateTime = dateTime.plusDays(1).with(LocalTime.of(12, 9, 59, 999999999));
+        LocalDateTime endDateTime = dateTime.plusDays(1).with(LocalTime.of(12, 29, 59, 999999999));
         ZonedDateTime endZonedDateTime = ZonedDateTime.of(endDateTime, zone);
         return new Timestamp(endZonedDateTime.toInstant().getEpochSecond(), endZonedDateTime.toInstant().getNano());
     }

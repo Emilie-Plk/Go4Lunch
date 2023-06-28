@@ -37,12 +37,14 @@ public class GetAttendantsByRestaurantIdsUseCase {
         return Transformations.map(userWithRestaurantChoiceEntitiesLiveData, userWithRestaurantChoiceEntities -> {
                 Map<String, Integer> attendantsByRestaurantIdsMap = new HashMap<>();
                 String currentUserId = getCurrentLoggedUserIdUseCase.invoke();
-                for (UserWithRestaurantChoiceEntity userWithRestaurantChoice : userWithRestaurantChoiceEntities) {
-                    if (!userWithRestaurantChoice.getId().equals(currentUserId)) {
-                        String restaurantId = userWithRestaurantChoice.getAttendingRestaurantId();
-                        Integer count = attendantsByRestaurantIdsMap.get(restaurantId);
-                        int totalCount = count != null ? count : 0;
-                        attendantsByRestaurantIdsMap.put(restaurantId, totalCount + 1);
+                if (userWithRestaurantChoiceEntities != null) {
+                    for (UserWithRestaurantChoiceEntity userWithRestaurantChoice : userWithRestaurantChoiceEntities) {
+                        if (!userWithRestaurantChoice.getId().equals(currentUserId)) {
+                            String restaurantId = userWithRestaurantChoice.getAttendingRestaurantId();
+                            Integer count = attendantsByRestaurantIdsMap.get(restaurantId);
+                            int totalCount = count != null ? count : 0;
+                            attendantsByRestaurantIdsMap.put(restaurantId, totalCount + 1);
+                        }
                     }
                 }
                 return attendantsByRestaurantIdsMap;
