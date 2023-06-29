@@ -119,7 +119,7 @@ public class UserRepositoryFirestore implements UserRepository {
     public LiveData<List<UserWithRestaurantChoiceEntity>> getUsersWithRestaurantChoiceEntities() {
         MutableLiveData<List<UserWithRestaurantChoiceEntity>> usersWithRestaurantChoiceEntitiesMutableLiveData = new MutableLiveData<>();
 
-        LocalDateTime startDateTime = getTodayDate();
+        LocalDateTime startDateTime = getTodayDateTime();
         Timestamp startTimestamp = getStartTimestamp(startDateTime);
         Timestamp endTimestamp = getEndTimestamp(startDateTime);
 
@@ -158,7 +158,7 @@ public class UserRepositoryFirestore implements UserRepository {
     public LiveData<UserWithRestaurantChoiceEntity> getUserWithRestaurantChoiceEntity(@NonNull String userId) {
         MutableLiveData<UserWithRestaurantChoiceEntity> userWithRestaurantChoiceEntityMutableLiveData = new MutableLiveData<>();
 
-        LocalDateTime startDateTime = getTodayDate();
+        LocalDateTime startDateTime = getTodayDateTime();
         Timestamp startTimestamp = getStartTimestamp(startDateTime);
         Timestamp endTimestamp = getEndTimestamp(startDateTime);
 
@@ -281,20 +281,40 @@ public class UserRepositoryFirestore implements UserRepository {
         }
     }
 
-    private LocalDateTime getTodayDate() {
+    private LocalDateTime getTodayDateTime() {
         return LocalDateTime.now();
     }
 
-    private Timestamp getStartTimestamp(LocalDateTime dateTime) {
+    private Timestamp getStartTimestamp(LocalDateTime todayDateTime) {
+        LocalDateTime startDateTime;
+        LocalTime currentTime = LocalTime.now();
+
+        if (currentTime.isBefore(LocalTime.of(12, 30))) {
+            // If current time is before 12:30 PM, use yesterday's lunch as the start time
+            startDateTime = todayDateTime.with(LocalTime.of(12, 30)).minusDays(1);
+        } else {
+            // Otherwise, use today's lunch as the start time
+            startDateTime = todayDateTime.with(LocalTime.of(12, 30));
+        }
+
         ZoneId zone = ZoneId.systemDefault();
-        LocalDateTime startDateTime = dateTime.with(LocalTime.of(12, 30, 0, 0)).minusDays(1);
         ZonedDateTime startZonedDateTime = ZonedDateTime.of(startDateTime, zone);
         return new Timestamp(startZonedDateTime.toInstant().getEpochSecond(), startZonedDateTime.toInstant().getNano());
     }
 
-    private Timestamp getEndTimestamp(LocalDateTime dateTime) {
+    private Timestamp getEndTimestamp(LocalDateTime todayDateTime) {
+        LocalDateTime endDateTime;
+        LocalTime currentTime = LocalTime.now();
+
+        if (currentTime.isBefore(LocalTime.of(12, 30))) {
+            // If current time is before 12:30PM, use today's lunch as end time
+            endDateTime = todayDateTime.with(LocalTime.of(12, 29, 59, 999999999));
+        } else {
+            // Otherwise, use tomorrow's lunch as end time
+            endDateTime = todayDateTime.with(LocalTime.of(12, 29, 59, 999999999)).plusDays(1);
+        }
+
         ZoneId zone = ZoneId.systemDefault();
-        LocalDateTime endDateTime = dateTime.with(LocalTime.of(12, 29, 59, 999999999));
         ZonedDateTime endZonedDateTime = ZonedDateTime.of(endDateTime, zone);
         return new Timestamp(endZonedDateTime.toInstant().getEpochSecond(), endZonedDateTime.toInstant().getNano());
     }

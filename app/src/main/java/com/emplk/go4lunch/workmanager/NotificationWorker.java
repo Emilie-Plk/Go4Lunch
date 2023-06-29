@@ -39,6 +39,7 @@ public class NotificationWorker extends Worker {
 
     private static final String USERS_COLLECTION = "users";
 
+    private final Context context;
     private final FirebaseUser currentUser;
 
     private final FirebaseFirestore firestore;
@@ -51,10 +52,12 @@ public class NotificationWorker extends Worker {
         @NonNull FirebaseAuth firebaseAuth
     ) {
         super(context, workerParams);
+        this.context = context;
         currentUser = firebaseAuth.getCurrentUser();
         this.firestore = firestore;
     }
 
+    @NonNull
     @Override
     public Result doWork() {
         Task<String> restaurantIdTask = getCurrentUserChosenRestaurantId();
@@ -106,34 +109,6 @@ public class NotificationWorker extends Worker {
         return Result.success();
     }
 
-
-    @SuppressLint("MissingPermission")
-    private void showNotification() {
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
-            .setSmallIcon(R.drawable.baseline_restaurant_24)
-            .setContentTitle("Time to Go4Lunch!")
-            .setContentText("salut peau de fesses")
-            .setStyle(new NotificationCompat.BigTextStyle()
-                .bigText("salut peau de fesses"))
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setAutoCancel(true);
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationManager.createNotificationChannel(
-                new NotificationChannel(
-                    CHANNEL_ID,
-                    CHANNEL_NAME,
-                    NotificationManager.IMPORTANCE_DEFAULT
-                )
-            );
-        }
-
-        notificationManager.notify(NOTIFICATION_ID, builder.build());
-    }
-
     @SuppressLint("MissingPermission")
     private void displayNotification(
         String restaurantName,
@@ -160,14 +135,14 @@ public class NotificationWorker extends Worker {
                 .append(restaurantName);
         }
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.baseline_restaurant_24)
             .setContentTitle("Time to Go4Lunch!")
-            .setContentText("salut peau de fesses")
+            .setContentText(contentText)
             .setStyle(new NotificationCompat.BigTextStyle()
-                .bigText("salut peau de fesses"))
+                .bigText(contentText))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true);
 
