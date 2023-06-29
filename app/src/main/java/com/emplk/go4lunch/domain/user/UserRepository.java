@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public interface UserRepository {
 
