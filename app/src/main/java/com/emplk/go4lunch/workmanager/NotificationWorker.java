@@ -53,8 +53,8 @@ public class NotificationWorker extends Worker {
 
     @AssistedInject
     public NotificationWorker(
-        @Assisted @NonNull Context context,
-        @Assisted @NonNull WorkerParameters workerParams,
+        @Assisted Context context,
+        @Assisted WorkerParameters workerParams,
         @NonNull Clock clock,
         @NonNull FirebaseFirestore firestore,
         @NonNull FirebaseAuth firebaseAuth
@@ -155,10 +155,11 @@ public class NotificationWorker extends Worker {
     }
 
     private String getCurrentUserChosenRestaurantId() {
-        Task<DocumentSnapshot> task = firestore
-            .collection(USERS_WITH_RESTAURANT_CHOICE)
-            .document(currentUser.getUid())
-            .get();
+        Task<DocumentSnapshot> task =
+            firestore
+                .collection(USERS_WITH_RESTAURANT_CHOICE)
+                .document(currentUser.getUid())
+                .get();
 
         try {
             Tasks.await(task); // Wait for the task to complete synchronously
@@ -185,25 +186,25 @@ public class NotificationWorker extends Worker {
             .whereEqualTo("attendingRestaurantId", restaurantId)
             .get()
             .addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    QuerySnapshot querySnapshot = task.getResult();
-                    if (querySnapshot != null) {
-                        List<UserWithRestaurantChoiceEntity> userWithRestaurantChoiceEntities = new ArrayList<>();
-                        for (DocumentSnapshot documentSnapshot : querySnapshot.getDocuments()) {
-                            UserWithRestaurantChoiceEntity userWithRestaurantChoiceEntity = documentSnapshot.toObject(UserWithRestaurantChoiceEntity.class);
-                            if (userWithRestaurantChoiceEntity != null) {
-                                userWithRestaurantChoiceEntities.add(userWithRestaurantChoiceEntity);
+                    if (task.isSuccessful()) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        if (querySnapshot != null) {
+                            List<UserWithRestaurantChoiceEntity> userWithRestaurantChoiceEntities = new ArrayList<>();
+                            for (DocumentSnapshot documentSnapshot : querySnapshot.getDocuments()) {
+                                UserWithRestaurantChoiceEntity userWithRestaurantChoiceEntity = documentSnapshot.toObject(UserWithRestaurantChoiceEntity.class);
+                                if (userWithRestaurantChoiceEntity != null) {
+                                    userWithRestaurantChoiceEntities.add(userWithRestaurantChoiceEntity);
+                                }
                             }
+                            taskCompletionSource.setResult(userWithRestaurantChoiceEntities);
+                        } else {
+                            taskCompletionSource.setResult(new ArrayList<>());
                         }
-                        taskCompletionSource.setResult(userWithRestaurantChoiceEntities);
                     } else {
-                        taskCompletionSource.setResult(new ArrayList<>());
+                        taskCompletionSource.setException(task.getException());
                     }
-                } else {
-                    taskCompletionSource.setException(task.getException());
                 }
-            });
-
+            );
         try {
             return Tasks.await(taskCompletionSource.getTask());
         } catch (ExecutionException | InterruptedException e) {

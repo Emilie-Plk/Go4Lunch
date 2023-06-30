@@ -55,6 +55,7 @@ public class MainApplication extends Application implements Application.Activity
     @Override
     public void onCreate() {
         super.onCreate();
+
         registerActivityLifecycleCallbacks(this);
         registerGpsReceiver();
         createWorkRequest();
@@ -136,7 +137,7 @@ public class MainApplication extends Application implements Application.Activity
     }
 
     private long calculateDelayUntilNoon() {
-        Duration delay = Duration.between(LocalTime.now(clock), LocalTime.of(11, 7));
+        Duration delay = Duration.between(LocalTime.now(clock), LocalTime.of(14,18));
         if (delay.isNegative()) {
             delay = delay.plusDays(1);
         }
