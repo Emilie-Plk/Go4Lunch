@@ -3,7 +3,9 @@ package com.emplk.go4lunch.workmanager;
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
@@ -16,14 +18,22 @@ import androidx.work.WorkerParameters;
 
 import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.domain.user.UserWithRestaurantChoiceEntity;
+import com.emplk.go4lunch.ui.restaurant_detail.RestaurantDetailActivity;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.time.Clock;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedInject;
@@ -34,86 +44,74 @@ public class NotificationWorker extends Worker {
     private static final int NOTIFICATION_ID = 0;
     private static final String CHANNEL_ID = "channel_id";
     private static final CharSequence CHANNEL_NAME = "channel_name";
-
     private static final String USERS_WITH_RESTAURANT_CHOICE = "usersWithRestaurantChoice";
 
-    private static final String USERS_COLLECTION = "users";
-
     private final Context context;
-    private final FirebaseUser currentUser;
-
+    private final Clock clock;
     private final FirebaseFirestore firestore;
+    private final FirebaseUser currentUser;
 
     @AssistedInject
     public NotificationWorker(
         @Assisted @NonNull Context context,
         @Assisted @NonNull WorkerParameters workerParams,
+        @NonNull Clock clock,
         @NonNull FirebaseFirestore firestore,
         @NonNull FirebaseAuth firebaseAuth
     ) {
         super(context, workerParams);
         this.context = context;
-        currentUser = firebaseAuth.getCurrentUser();
+        this.clock = clock;
         this.firestore = firestore;
+        this.currentUser = firebaseAuth.getCurrentUser();
     }
 
     @NonNull
     @Override
     public Result doWork() {
-        Task<String> restaurantIdTask = getCurrentUserChosenRestaurantId();
 
-        restaurantIdTask.addOnSuccessListener(restaurantId -> {
-                Task<List<UserWithRestaurantChoiceEntity>> getUsersTask = getUsersWithRestaurantChoiceEntities(restaurantId);
+        DayOfWeek dayOfWeek = LocalDate.now(clock).getDayOfWeek();
 
-                getUsersTask.addOnSuccessListener(usersWithRestaurant -> {
-                        if (usersWithRestaurant != null) {
-                            List<String> workmates = new ArrayList<>();
-                            String userId = "123";
+        if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) {
+            return Result.success();
+        }
 
-                            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                                userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                            }
+        String currentUserChosenRestaurantId = getCurrentUserChosenRestaurantId();
 
-                            String restaurantName = "";
+        if (currentUserChosenRestaurantId != null) {
+            List<UserWithRestaurantChoiceEntity> usersWithRestaurantChoice = getUsersWithRestaurantChoiceEntities(currentUserChosenRestaurantId);
 
-                            for (UserWithRestaurantChoiceEntity user : usersWithRestaurant) {
-                                if (user.getAttendingRestaurantId().equals(restaurantId) && !user.getId().equals(userId)) {
-                                    workmates.add(user.getAttendingRestaurantName());
-                                }
+            List<String> workmates = new ArrayList<>();
+            String userId = currentUser.getUid();
+            String restaurantName = "";
 
-                                // Get the restaurant name
-                                if (user.getAttendingRestaurantId().equals(restaurantId)) {
-                                    restaurantName = user.getAttendingRestaurantName();
-                                }
-                            }
+            for (UserWithRestaurantChoiceEntity user : usersWithRestaurantChoice) {
+                if (user.getAttendingRestaurantId().equals(currentUserChosenRestaurantId) && !user.getId().equals(userId)) {
+                    workmates.add(user.getAttendingRestaurantName());
+                }
 
-                            displayNotification(restaurantName, workmates);
-                        }
-                    }
-                );
-
-                getUsersTask.addOnFailureListener(e -> {
-                        // Handle the failure to get users with restaurant choice
-                        Log.e("NotificationWorker", "Error while getting users with restaurant choice entities", e);
-                    }
-                );
+                // Get the restaurant name
+                if (user.getAttendingRestaurantId().equals(currentUserChosenRestaurantId)) {
+                    restaurantName = user.getAttendingRestaurantName();
+                }
             }
-        );
 
-        restaurantIdTask.addOnFailureListener(e -> {
-                // Handle the failure to get current user's chosen restaurant id
-                Log.e("NotificationWorker", "Error while getting current user's chosen restaurant id", e);
-            }
-        );
-
+            displayNotification(restaurantName, workmates, currentUserChosenRestaurantId);
+        }
         return Result.success();
     }
 
     @SuppressLint("MissingPermission")
     private void displayNotification(
         String restaurantName,
-        List<String> workmates
+        List<String> workmates,
+        String restaurantId
     ) {
+        Intent intent = new Intent(context, RestaurantDetailActivity.class);
+        intent.putExtra("restaurantId", restaurantId);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent =
+            PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         StringBuilder contentText = new StringBuilder();
 
@@ -135,63 +133,82 @@ public class NotificationWorker extends Worker {
                 .append(restaurantName);
         }
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.baseline_restaurant_24)
             .setContentTitle("Time to Go4Lunch!")
-            .setContentText(contentText)
+            .setContentText(contentText.toString())
             .setStyle(new NotificationCompat.BigTextStyle()
-                .bigText(contentText))
+                .bigText(contentText.toString()))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
             .setAutoCancel(true);
 
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationManager.createNotificationChannel(
-                new NotificationChannel(
-                    CHANNEL_ID,
-                    CHANNEL_NAME,
-                    NotificationManager.IMPORTANCE_DEFAULT
-                )
-            );
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_DEFAULT);
+            notificationManager.createNotificationChannel(channel);
         }
 
         notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
 
-    private Task<String> getCurrentUserChosenRestaurantId() {
-        final TaskCompletionSource<String> taskCompletionSource = new TaskCompletionSource<>();
-
-        firestore.collection(USERS_WITH_RESTAURANT_CHOICE)
+    private String getCurrentUserChosenRestaurantId() {
+        Task<DocumentSnapshot> task = firestore
+            .collection(USERS_WITH_RESTAURANT_CHOICE)
             .document(currentUser.getUid())
-            .get()
-            .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot != null) {
-                        String restaurantId = documentSnapshot.getString("attendingRestaurantId");
-                        taskCompletionSource.setResult(restaurantId);
-                    } else {
-                        taskCompletionSource.setException(new Exception("Document not found"));
+            .get();
+
+        try {
+            Tasks.await(task); // Wait for the task to complete synchronously
+            if (task.isSuccessful()) {
+                DocumentSnapshot documentSnapshot = task.getResult();
+                if (documentSnapshot != null) {
+                    UserWithRestaurantChoiceEntity userWithRestaurantChoiceEntity = documentSnapshot.toObject(UserWithRestaurantChoiceEntity.class);
+                    if (userWithRestaurantChoiceEntity != null) {
+                        return userWithRestaurantChoiceEntity.getAttendingRestaurantId();
                     }
                 }
-            )
-            .addOnFailureListener(taskCompletionSource::setException);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            Log.e("NotificationWorker", "Error while getting current user chosen restaurant ID", e);
+        }
 
-        return taskCompletionSource.getTask();
+        return null; // Return null if an error occurred or no restaurant ID is found
     }
 
-    private Task<List<UserWithRestaurantChoiceEntity>> getUsersWithRestaurantChoiceEntities(String restaurantId) {
+    private List<UserWithRestaurantChoiceEntity> getUsersWithRestaurantChoiceEntities(String restaurantId) {
         TaskCompletionSource<List<UserWithRestaurantChoiceEntity>> taskCompletionSource = new TaskCompletionSource<>();
 
         firestore.collection(USERS_WITH_RESTAURANT_CHOICE)
             .whereEqualTo("attendingRestaurantId", restaurantId)
             .get()
-            .addOnSuccessListener(querySnapshot -> {
-                List<UserWithRestaurantChoiceEntity> users = querySnapshot.toObjects(UserWithRestaurantChoiceEntity.class);
-                taskCompletionSource.setResult(users);
-            })
-            .addOnFailureListener(taskCompletionSource::setException);
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    QuerySnapshot querySnapshot = task.getResult();
+                    if (querySnapshot != null) {
+                        List<UserWithRestaurantChoiceEntity> userWithRestaurantChoiceEntities = new ArrayList<>();
+                        for (DocumentSnapshot documentSnapshot : querySnapshot.getDocuments()) {
+                            UserWithRestaurantChoiceEntity userWithRestaurantChoiceEntity = documentSnapshot.toObject(UserWithRestaurantChoiceEntity.class);
+                            if (userWithRestaurantChoiceEntity != null) {
+                                userWithRestaurantChoiceEntities.add(userWithRestaurantChoiceEntity);
+                            }
+                        }
+                        taskCompletionSource.setResult(userWithRestaurantChoiceEntities);
+                    } else {
+                        taskCompletionSource.setResult(new ArrayList<>());
+                    }
+                } else {
+                    taskCompletionSource.setException(task.getException());
+                }
+            });
 
-        return taskCompletionSource.getTask();
+        try {
+            return Tasks.await(taskCompletionSource.getTask());
+        } catch (ExecutionException | InterruptedException e) {
+            Log.e("NotificationWorker", "Error while getting users with restaurant choice entities", e);
+            return new ArrayList<>();
+        }
     }
 }

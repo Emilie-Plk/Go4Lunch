@@ -99,8 +99,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         );
                     snackbar.show();
-                }
-                else {
+                } else {
                     if (snackbar != null && snackbar.isShown()) {
                         snackbar.dismiss();
                     }

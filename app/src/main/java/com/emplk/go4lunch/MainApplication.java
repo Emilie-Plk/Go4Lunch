@@ -2,6 +2,9 @@ package com.emplk.go4lunch;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -45,13 +48,23 @@ public class MainApplication extends Application implements Application.Activity
 
     private int activityCount;
 
+    private boolean isGpsReceiverRegistered = false;
+
     private final static String NOTIFICATION_WORKER = "NOTIFICATION_WORKER";
 
     @Override
     public void onCreate() {
         super.onCreate();
         registerActivityLifecycleCallbacks(this);
+        registerGpsReceiver();
         createWorkRequest();
+    }
+
+    private void registerGpsReceiver() {
+        IntentFilter intentFilter = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
+        intentFilter.addAction(Intent.ACTION_PROVIDER_CHANGED);
+        registerReceiver(gpsLocationRepositoryBroadcastReceiver, intentFilter);
+        isGpsReceiverRegistered = true;
     }
 
     private void createWorkRequest() {
@@ -96,9 +109,10 @@ public class MainApplication extends Application implements Application.Activity
     @Override
     public void onActivityStopped(@NonNull Activity activity) {
         activityCount--;
-        if (activityCount == 0) {
+        if (activityCount == 0 && isGpsReceiverRegistered) {
             gpsLocationRepositoryBroadcastReceiver.stopLocationRequest();
             unregisterReceiver(gpsLocationRepositoryBroadcastReceiver);
+            isGpsReceiverRegistered = false;
         }
     }
 
@@ -122,7 +136,7 @@ public class MainApplication extends Application implements Application.Activity
     }
 
     private long calculateDelayUntilNoon() {
-        Duration delay = Duration.between(LocalTime.now(clock), LocalTime.of(12, 55));
+        Duration delay = Duration.between(LocalTime.now(clock), LocalTime.of(11, 7));
         if (delay.isNegative()) {
             delay = delay.plusDays(1);
         }

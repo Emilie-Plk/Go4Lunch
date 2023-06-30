@@ -30,7 +30,7 @@
     <string name="showRationaleGpsPermissionMessage">Cette application fonctionne mieux avec votre autorisation de localisation GPS. Si vous souhaitez fournir cette autorisation, veuillez cliquer sur \"Modifier les paramètres\" pour l\'accorder.</string>
     <string name="change_settings_dialog_button">modifier paramètres</string>
     <string name="list_error_message_no_results">Aucun résultat ici !</string>
-    <string name="list_error_message_no_gps">Permettre la permission GPS ?</string>
+    <string name="list_error_message_no_gps">Oups, votre GPS\nest désactivé !</string>
     <string name="list_restaurant_opening_text_open">Ouvert</string>
     <string name="list_restaurant_opening_text_closed">Fermé</string>
     <string name="no_workmate_text">Aucun collègue n\'a choisi\nce restaurant pour le moment !</string>

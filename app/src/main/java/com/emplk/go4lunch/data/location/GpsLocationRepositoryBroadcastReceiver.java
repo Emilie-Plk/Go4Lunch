@@ -78,10 +78,6 @@ public class GpsLocationRepositoryBroadcastReceiver extends BroadcastReceiver im
         this.context = context;
         this.fusedLocationProviderClient = fusedLocationProviderClient;
 
-        IntentFilter intentFilter = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
-        intentFilter.addAction(Intent.ACTION_PROVIDER_CHANGED);
-        context.registerReceiver(this, intentFilter);
-
         isGpsEnabledMutableLiveData = new MutableLiveData<>();
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         if (locationManager != null) {
