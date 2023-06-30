@@ -15,6 +15,9 @@ public class UserWithRestaurantChoiceEntity {
     private final Timestamp timestamp;
 
     @NonNull
+    private final String attendingUsername;
+
+    @NonNull
     private final String attendingRestaurantId;
 
     @NonNull
@@ -29,6 +32,7 @@ public class UserWithRestaurantChoiceEntity {
     public UserWithRestaurantChoiceEntity(
         @NonNull String id,
         @NonNull Timestamp timestamp,
+        @NonNull String attendingUsername,
         @NonNull String attendingRestaurantId,
         @NonNull String attendingRestaurantName,
         @NonNull String attendingRestaurantVicinity,
@@ -36,6 +40,7 @@ public class UserWithRestaurantChoiceEntity {
     ) {
         this.id = id;
         this.timestamp = timestamp;
+        this.attendingUsername = attendingUsername;
         this.attendingRestaurantId = attendingRestaurantId;
         this.attendingRestaurantName = attendingRestaurantName;
         this.attendingRestaurantVicinity = attendingRestaurantVicinity;
@@ -45,6 +50,11 @@ public class UserWithRestaurantChoiceEntity {
     @NonNull
     public String getId() {
         return id;
+    }
+
+    @NonNull
+    public String getAttendingUsername() {
+        return attendingUsername;
     }
 
     @NonNull
@@ -77,20 +87,20 @@ public class UserWithRestaurantChoiceEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserWithRestaurantChoiceEntity that = (UserWithRestaurantChoiceEntity) o;
-        return id.equals(that.id) && timestamp.equals(that.timestamp) && attendingRestaurantId.equals(that.attendingRestaurantId) && attendingRestaurantName.equals(that.attendingRestaurantName) && attendingRestaurantVicinity.equals(that.attendingRestaurantVicinity) && attendingRestaurantPictureUrl.equals(that.attendingRestaurantPictureUrl);
+        return id.equals(that.id) && timestamp.equals(that.timestamp) && attendingUsername.equals(that.attendingUsername) && attendingRestaurantId.equals(that.attendingRestaurantId) && attendingRestaurantName.equals(that.attendingRestaurantName) && attendingRestaurantVicinity.equals(that.attendingRestaurantVicinity) && attendingRestaurantPictureUrl.equals(that.attendingRestaurantPictureUrl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, timestamp, attendingRestaurantId, attendingRestaurantName, attendingRestaurantVicinity, attendingRestaurantPictureUrl);
+        return Objects.hash(id, timestamp, attendingUsername, attendingRestaurantId, attendingRestaurantName, attendingRestaurantVicinity, attendingRestaurantPictureUrl);
     }
 
-    @NonNull
     @Override
     public String toString() {
         return "UserWithRestaurantChoiceEntity{" +
             "id='" + id + '\'' +
             ", timestamp=" + timestamp +
+            ", attendingUsername='" + attendingUsername + '\'' +
             ", attendingRestaurantId='" + attendingRestaurantId + '\'' +
             ", attendingRestaurantName='" + attendingRestaurantName + '\'' +
             ", attendingRestaurantVicinity='" + attendingRestaurantVicinity + '\'' +

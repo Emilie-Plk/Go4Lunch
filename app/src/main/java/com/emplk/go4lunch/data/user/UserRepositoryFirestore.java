@@ -11,6 +11,8 @@ import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.user.ChosenRestaurantEntity;
 import com.emplk.go4lunch.domain.user.UserRepository;
 import com.emplk.go4lunch.domain.user.UserWithRestaurantChoiceEntity;
+import com.google.android.gms.tasks.TaskCompletionSource;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -23,6 +25,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -96,6 +99,7 @@ public class UserRepositoryFirestore implements UserRepository {
                 .set(
                     new UserWithRestaurantChoiceDto(
                         chosenRestaurantEntity.getTimestamp(),
+                        loggedUserEntity.getName(),
                         chosenRestaurantEntity.getAttendingRestaurantId(),
                         chosenRestaurantEntity.getAttendingRestaurantName(),
                         chosenRestaurantEntity.getAttendingRestaurantVicinity(),
@@ -240,6 +244,50 @@ public class UserRepositoryFirestore implements UserRepository {
         return loggedUserEntitiesMutableLiveData;
     }
 
+    @Override
+    public List<UserWithRestaurantChoiceEntity> getUsersWithRestaurantChoiceEntitiesAsync() {
+        TaskCompletionSource<List<UserWithRestaurantChoiceEntity>> taskCompletionSource = new TaskCompletionSource<>();
+
+        LocalDateTime startDateTime = getTodayDateTime();
+        Timestamp startTimestamp = getStartTimestamp(startDateTime);
+        Timestamp endTimestamp = getEndTimestamp(startDateTime);
+
+        firestore
+            .collection(USERS_WITH_RESTAURANT_CHOICE)
+            .get()
+            .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<UserWithRestaurantChoiceEntity> userWithRestaurantChoiceEntities = new ArrayList<>();
+                        for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                            UserWithRestaurantChoiceDto userWithRestaurantChoiceDto = documentSnapshot.toObject(UserWithRestaurantChoiceDto.class);
+                            Timestamp timestamp = documentSnapshot.getTimestamp("timestamp");
+                            if (timestamp != null &&
+                                timestamp.compareTo(startTimestamp) >= 0 &&
+                                timestamp.compareTo(endTimestamp) <= 0) {
+                                String userId = documentSnapshot.getId();
+                                UserWithRestaurantChoiceEntity userWithRestaurantChoiceEntity = mapToUserWithRestaurantChoiceEntity(userWithRestaurantChoiceDto, userId);
+                                userWithRestaurantChoiceEntities.add(userWithRestaurantChoiceEntity);
+                            }
+                        }
+                        if (userWithRestaurantChoiceEntities.isEmpty()) {
+                            taskCompletionSource.setResult(null);
+                        } else {
+                            taskCompletionSource.setResult(userWithRestaurantChoiceEntities);
+                        }
+                    } else {
+                        taskCompletionSource.setException(task.getException());
+                    }
+                }
+            );
+        try {
+            return Tasks.await(taskCompletionSource.getTask());
+        } catch (ExecutionException | InterruptedException e) {
+            Log.e("UserRepositoryFirestore", "Error fetching users documents: " + e);
+            return null;
+        }
+    }
+
+
     private LoggedUserEntity mapToLoggedUserEntity(@Nullable LoggedUserDto result) {
         if (result != null &&
             result.getId() != null &&
@@ -263,6 +311,7 @@ public class UserRepositoryFirestore implements UserRepository {
         String userId
     ) {
         if (userWithRestaurantChoiceDto.getTimestamp() != null &&
+            userWithRestaurantChoiceDto.getAttendingUsername() != null &&
             userWithRestaurantChoiceDto.getAttendingRestaurantId() != null &&
             userWithRestaurantChoiceDto.getAttendingRestaurantName() != null &&
             userWithRestaurantChoiceDto.getAttendingRestaurantVicinity() != null &&
@@ -271,6 +320,7 @@ public class UserRepositoryFirestore implements UserRepository {
             return new UserWithRestaurantChoiceEntity(
                 userId,
                 userWithRestaurantChoiceDto.getTimestamp(),
+                userWithRestaurantChoiceDto.getAttendingUsername(),
                 userWithRestaurantChoiceDto.getAttendingRestaurantId(),
                 userWithRestaurantChoiceDto.getAttendingRestaurantName(),
                 userWithRestaurantChoiceDto.getAttendingRestaurantVicinity(),

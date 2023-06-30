@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData;
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 public interface UserRepository {
 
@@ -26,4 +25,6 @@ public interface UserRepository {
     LiveData<UserWithRestaurantChoiceEntity> getUserWithRestaurantChoiceEntity(@NonNull String userId);
 
     void deleteUserRestaurantChoice(@Nullable LoggedUserEntity loggedUserEntity);
+
+    List<UserWithRestaurantChoiceEntity> getUsersWithRestaurantChoiceEntitiesAsync();
 }

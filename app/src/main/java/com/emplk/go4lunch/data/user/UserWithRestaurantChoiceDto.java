@@ -13,6 +13,9 @@ public class UserWithRestaurantChoiceDto {
     private final Timestamp timestamp;
 
     @Nullable
+    private final String attendingUsername;
+
+    @Nullable
     private final String attendingRestaurantId;
 
     @Nullable
@@ -25,17 +28,19 @@ public class UserWithRestaurantChoiceDto {
     private final String attendingRestaurantPictureUrl;
 
     public UserWithRestaurantChoiceDto() {
-        this(null, null, null, null, null);
+        this(null, null, null, null, null, null);
     }
 
     public UserWithRestaurantChoiceDto(
         @Nullable Timestamp timestamp,
+        @Nullable String attendingUsername,
         @Nullable String attendingRestaurantId,
         @Nullable String attendingRestaurantName,
         @Nullable String attendingRestaurantVicinity,
         @Nullable String attendingRestaurantPictureUrl
     ) {
         this.timestamp = timestamp;
+        this.attendingUsername = attendingUsername;
         this.attendingRestaurantId = attendingRestaurantId;
         this.attendingRestaurantName = attendingRestaurantName;
         this.attendingRestaurantVicinity = attendingRestaurantVicinity;
@@ -45,6 +50,11 @@ public class UserWithRestaurantChoiceDto {
     @Nullable
     public Timestamp getTimestamp() {
         return timestamp;
+    }
+
+    @Nullable
+    public String getAttendingUsername() {
+        return attendingUsername;
     }
 
     @Nullable
@@ -72,12 +82,12 @@ public class UserWithRestaurantChoiceDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserWithRestaurantChoiceDto that = (UserWithRestaurantChoiceDto) o;
-        return Objects.equals(timestamp, that.timestamp) && Objects.equals(attendingRestaurantId, that.attendingRestaurantId) && Objects.equals(attendingRestaurantName, that.attendingRestaurantName) && Objects.equals(attendingRestaurantVicinity, that.attendingRestaurantVicinity) && Objects.equals(attendingRestaurantPictureUrl, that.attendingRestaurantPictureUrl);
+        return Objects.equals(timestamp, that.timestamp) && Objects.equals(attendingUsername, that.attendingUsername) && Objects.equals(attendingRestaurantId, that.attendingRestaurantId) && Objects.equals(attendingRestaurantName, that.attendingRestaurantName) && Objects.equals(attendingRestaurantVicinity, that.attendingRestaurantVicinity) && Objects.equals(attendingRestaurantPictureUrl, that.attendingRestaurantPictureUrl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(timestamp, attendingRestaurantId, attendingRestaurantName, attendingRestaurantVicinity, attendingRestaurantPictureUrl);
+        return Objects.hash(timestamp, attendingUsername, attendingRestaurantId, attendingRestaurantName, attendingRestaurantVicinity, attendingRestaurantPictureUrl);
     }
 
     @NonNull
@@ -85,6 +95,7 @@ public class UserWithRestaurantChoiceDto {
     public String toString() {
         return "UserWithRestaurantChoiceDto{" +
             "timestamp=" + timestamp +
+            ", attendingUsername='" + attendingUsername + '\'' +
             ", attendingRestaurantId='" + attendingRestaurantId + '\'' +
             ", attendingRestaurantName='" + attendingRestaurantName + '\'' +
             ", attendingRestaurantVicinity='" + attendingRestaurantVicinity + '\'' +

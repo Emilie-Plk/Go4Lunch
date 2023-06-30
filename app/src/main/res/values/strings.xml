@@ -56,5 +56,12 @@
     <string name="list_workmate_not_attending">%s has not chosen yet!</string>
     <string name="no_workmate_text">No workmate is going to eat\n at this restaurant so far!</string>
     <string name="toast_message_user_no_restaurant_chosen">You didn\'t chose where to lunch yet!</string>
+    <string name="notification_content_title">Time to Go4Lunch!</string>
+    <string name="notification_content_start">You</string>
+    <string name="notification_content_and">" and "</string>
+    <string name="notification_content_last_and">", and "</string>
+    <string name="notification_content_going_to_eat_at">" are going to eat at "</string>
+    <string name="notification_content_located_at">" located at "</string>
+    <string name="notification_content_solo_user">"You are going to eat at "</string>
 
 </resources>

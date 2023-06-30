@@ -137,7 +137,7 @@ public class MainApplication extends Application implements Application.Activity
     }
 
     private long calculateDelayUntilNoon() {
-        Duration delay = Duration.between(LocalTime.now(clock), LocalTime.of(14,18));
+        Duration delay = Duration.between(LocalTime.now(clock), LocalTime.of(18,20));
         if (delay.isNegative()) {
             delay = delay.plusDays(1);
         }
