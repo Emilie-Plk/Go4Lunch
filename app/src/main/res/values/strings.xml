@@ -63,5 +63,7 @@
     <string name="notification_content_going_to_eat_at">" are going to eat at "</string>
     <string name="notification_content_located_at">" located at "</string>
     <string name="notification_content_solo_user">"You are going to eat at "</string>
+    <string name="settings_activity_title">Settings</string>
+    <string name="lunch_reminder_notifications">Lunch reminder notifications</string>
 
 </resources>
