@@ -2,6 +2,7 @@ package com.emplk.go4lunch.di;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 
 import androidx.annotation.NonNull;
@@ -95,5 +96,11 @@ public class AppModule {
     @Singleton
     public WorkManager provideWorkManager(@NonNull Application application) {
         return WorkManager.getInstance(application);
+    }
+
+    @Provides
+    @Singleton
+    public SharedPreferences provideSharedPreferences(@NonNull Application application) {
+        return application.getSharedPreferences("NOTIFICATION_PREFERENCES", Context.MODE_PRIVATE);
     }
 }

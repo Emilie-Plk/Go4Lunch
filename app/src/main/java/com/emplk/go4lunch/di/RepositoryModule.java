@@ -7,6 +7,7 @@ import com.emplk.go4lunch.data.favorite_restaurant.FavoriteRestaurantRepositoryF
 import com.emplk.go4lunch.data.location.GpsLocationRepositoryBroadcastReceiver;
 import com.emplk.go4lunch.data.nearbySearchRestaurants.NearbySearchRepositoryGooglePlaces;
 import com.emplk.go4lunch.data.permission.GpsPermissionRepositoryImpl;
+import com.emplk.go4lunch.data.settings.NotificationRepositorySharedPreferences;
 import com.emplk.go4lunch.data.user.UserRepositoryFirestore;
 import com.emplk.go4lunch.domain.authentication.AuthRepository;
 import com.emplk.go4lunch.domain.autocomplete.AutocompleteRepository;
@@ -15,6 +16,7 @@ import com.emplk.go4lunch.domain.favorite_restaurant.FavoriteRestaurantRepositor
 import com.emplk.go4lunch.domain.gps.GpsLocationRepository;
 import com.emplk.go4lunch.domain.nearby_search.NearbySearchRepository;
 import com.emplk.go4lunch.domain.permission.GpsPermissionRepository;
+import com.emplk.go4lunch.domain.settings.NotificationRepository;
 import com.emplk.go4lunch.domain.user.UserRepository;
 
 import javax.inject.Singleton;
@@ -49,12 +51,18 @@ public abstract class RepositoryModule {
     public abstract DetailsRestaurantRepository bindsDetailsRestaurantRepository(DetailsRestaurantRepositoryGooglePlaces detailsRestaurantRepositoryGooglePlaces);
 
     @Binds
+    @Singleton
     public abstract AutocompleteRepository bindsAutocompleteRepository(AutocompleteRepositoryGooglePlaces autocompleteRepositoryGooglePlaces);
 
     @Binds
+    @Singleton
     public abstract FavoriteRestaurantRepository bindsFavoriteRestaurantRepository(FavoriteRestaurantRepositoryFirestore favoriteRestaurantRepositoryFirestore);
 
     @Binds
+    @Singleton
     public abstract UserRepository bindsUserRepository(UserRepositoryFirestore userRepositoryFirestore);
 
+    @Singleton
+    @Binds
+    public abstract NotificationRepository bindNotificationRepository(NotificationRepositorySharedPreferences notificationRepositorySharedPreferences);
 }

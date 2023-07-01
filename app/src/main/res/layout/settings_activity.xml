@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.settings.SettingsActivity">
+    tools:context=".ui.main.settings.SettingsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/settings_toolbar_layout"
@@ -51,9 +51,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
-            app:drawableTint="@color/pumpkin_orange"
+            android:drawablePadding="8dp"
             android:text="@string/lunch_reminder_notifications"
             app:drawableStartCompat="@drawable/outline_notifications_24"
+            app:drawableTint="@color/pumpkin_orange"
             app:layout_constraintBottom_toTopOf="@id/divider"
             app:layout_constraintStart_toStartOf="@id/settings_title"
             app:layout_constraintTop_toBottomOf="@id/settings_title" />
@@ -79,12 +80,14 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/settings_gps_button"
-         android:backgroundTint="@color/pumpkin_orange_translucent"
+            app:iconTint="@color/pumpkin_orange"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
-            android:text="GPS settings"
+            android:backgroundTint="@color/pumpkin_orange_translucent"
+            android:text="@string/settings_activity_gps_button"
             android:textColor="@color/darkest_gray"
+            app:icon="@drawable/baseline_gps_fixed_24"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider" />
     </androidx.constraintlayout.widget.ConstraintLayout>

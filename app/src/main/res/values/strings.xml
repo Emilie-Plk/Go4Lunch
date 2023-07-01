@@ -65,5 +65,6 @@
     <string name="notification_content_solo_user">"You are going to eat at "</string>
     <string name="settings_activity_title">Settings</string>
     <string name="lunch_reminder_notifications">Lunch reminder notifications</string>
+    <string name="settings_activity_gps_button">GPS settings</string>
 
 </resources>

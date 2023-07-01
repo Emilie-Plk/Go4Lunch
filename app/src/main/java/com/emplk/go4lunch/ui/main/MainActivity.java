@@ -4,9 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -23,6 +21,7 @@ import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.MainActivityBinding;
 import com.emplk.go4lunch.databinding.MainNavigationHeaderBinding;
 import com.emplk.go4lunch.ui.dispatcher.DispatcherActivity;
+import com.emplk.go4lunch.ui.main.settings.SettingsActivity;
 import com.emplk.go4lunch.ui.restaurant_detail.RestaurantDetailActivity;
 import com.emplk.go4lunch.ui.restaurant_list.RestaurantListFragment;
 import com.emplk.go4lunch.ui.restaurant_map.MapFragment;
@@ -149,13 +148,9 @@ public class MainActivity extends AppCompatActivity {
                                 }
                                 break;
                             case R.id.nav_settings:
-                                Log.i(TAG, "Clicked on 'Settings' nav item");
-                                break;
-                            case R.id.nav_gps_permission:
-                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                Uri uri = Uri.fromParts("package", getPackageName(), null);
-                                intent.setData(uri);
-                                startActivity(intent);
+                                startActivity(
+                                    SettingsActivity.navigate(this)
+                                );
                                 break;
                             case R.id.nav_logout:
                                 viewModel.signOut();
