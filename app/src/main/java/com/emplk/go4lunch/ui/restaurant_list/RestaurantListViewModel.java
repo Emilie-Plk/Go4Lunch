@@ -116,15 +116,15 @@ public class RestaurantListViewModel extends ViewModel {
         }
         List<RestaurantListViewStateItem> result = new ArrayList<>();
 
-            if (hasGpsPermission != null && !hasGpsPermission) {
-                result.add(
-                    new RestaurantListViewStateItem.RestaurantListErrorItem(
-                        resources.getString(R.string.list_error_message_no_gps),
-                        NO_GPS_FOUND
-                    )
-                );
-                restaurantListMediatorLiveData.setValue(result);
-            }
+        if (hasGpsPermission != null && !hasGpsPermission) {
+            result.add(
+                new RestaurantListViewStateItem.RestaurantListErrorItem(
+                    resources.getString(R.string.list_error_message_no_gps),
+                    NO_GPS_FOUND
+                )
+            );
+            restaurantListMediatorLiveData.setValue(result);
+        }
 
         if (locationStateEntity instanceof LocationStateEntity.GpsProviderDisabled) {
             result.add(

@@ -8,7 +8,6 @@ import androidx.lifecycle.Transformations;
 import com.emplk.go4lunch.domain.gps.entity.LocationStateEntity;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 public class IsGpsEnabledUseCase {
 

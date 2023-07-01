@@ -5,5 +5,6 @@ import androidx.annotation.NonNull;
 
 public interface OnWorkmateClickedListener {
     void onChatButtonClicked(@NonNull String workmateId);
+
     void onWorkmateClicked(@NonNull String restaurantId);
 }

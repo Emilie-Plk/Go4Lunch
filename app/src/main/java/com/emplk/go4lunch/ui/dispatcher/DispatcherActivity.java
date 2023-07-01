@@ -1,21 +1,16 @@
 package com.emplk.go4lunch.ui.dispatcher;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.ui.login.LoginActivity;
 import com.emplk.go4lunch.ui.main.MainActivity;
 import com.emplk.go4lunch.ui.onboarding.OnBoardingActivity;
-import com.google.android.material.snackbar.Snackbar;
 
 import dagger.hilt.android.AndroidEntryPoint;
 

@@ -7,7 +7,6 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Looper;
