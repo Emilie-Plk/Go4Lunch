@@ -21,10 +21,9 @@ public class NotificationRepositorySharedPreferences implements NotificationRepo
         this.sharedPreferences = sharedPreferences;
     }
 
-
     @Override
     public boolean isNotificationEnabled() {
-        return sharedPreferences.getBoolean(KEY_NOTIFICATION_ENABLED, false);
+        return sharedPreferences.getBoolean(KEY_NOTIFICATION_ENABLED, true);
     }
 
     @Override
