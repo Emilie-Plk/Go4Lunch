@@ -4,11 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.Objects;
 
 public class ChosenRestaurantEntity {
     @NonNull
+    @ServerTimestamp
     private final Timestamp timestamp;
     @NonNull
     private final String attendingRestaurantId;
@@ -37,6 +39,7 @@ public class ChosenRestaurantEntity {
     }
 
     @NonNull
+    @ServerTimestamp
     public Timestamp getTimestamp() {
         return timestamp;
     }

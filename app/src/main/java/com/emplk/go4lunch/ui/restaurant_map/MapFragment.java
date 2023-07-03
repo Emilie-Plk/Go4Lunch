@@ -54,9 +54,11 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         getMapAsync(this);
     }
 
-    @SuppressLint("PotentialBehaviorOverride")
+    @SuppressLint({"PotentialBehaviorOverride", "MissingPermission"})
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
+        googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        googleMap.setMyLocationEnabled(true);
 
         viewModel.getMapViewState().observe(getViewLifecycleOwner(), mapViewState -> {
                 clearMarkers();
@@ -91,7 +93,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
         viewModel.getLocationState().observe(getViewLifecycleOwner(), locationState -> {
                 if (locationState instanceof LocationStateEntity.Success) {
-                    // Remove the previous user marker if it exists
+
                     if (userMarker != null) {
                         userMarker.remove();
                     }
@@ -100,12 +102,10 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                     float zoomLevel = 15f;
 
-                    // Create a new user marker
                     MarkerOptions userMarkerOptions = new MarkerOptions()
                         .position(latLng)
                         .title(getString(R.string.map_user_maker_message));
 
-                    // Add the new user marker to the map
                     userMarker = googleMap.addMarker(userMarkerOptions);
 
                     CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -124,7 +124,6 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     public void onMarkerClicked(@NonNull String restaurantId) {
         startActivity(RestaurantDetailActivity.navigate(requireActivity(), restaurantId));
     }
-
 
     private void clearMarkers() {
         for (Marker marker : markers) {

@@ -3,6 +3,7 @@ package com.emplk.go4lunch.domain.user;
 import androidx.annotation.NonNull;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.Objects;
 
@@ -12,6 +13,7 @@ public class UserWithRestaurantChoiceEntity {
     private final String id;
 
     @NonNull
+    @ServerTimestamp
     private final Timestamp timestamp;
 
     @NonNull
@@ -58,6 +60,7 @@ public class UserWithRestaurantChoiceEntity {
     }
 
     @NonNull
+    @ServerTimestamp
     public Timestamp getTimestamp() {
         return timestamp;
     }

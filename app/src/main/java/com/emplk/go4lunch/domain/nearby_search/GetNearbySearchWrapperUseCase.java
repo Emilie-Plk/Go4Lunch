@@ -16,7 +16,7 @@ import javax.inject.Inject;
 
 public class GetNearbySearchWrapperUseCase {
 
-    private static final int RADIUS = 1_500;
+    private static final int RADIUS = 1_000;
     @NonNull
     private final NearbySearchRepository nearbySearchRepository;
 
