@@ -90,7 +90,7 @@ public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, Rec
                 }
             );
 
-            binding.listWorkmateChatButton.setOnClickListener(v -> listener.onChatButtonClicked(itemViewState.getId()));
+            binding.listWorkmateChatButton.setOnClickListener(v -> listener.onChatButtonClicked(itemViewState.getId(), itemViewState.getName()));
 
             String workmateName = itemViewState.getName();
             String attendingRestaurant = itemViewState.getAttendingRestaurantName();
@@ -135,7 +135,7 @@ public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, Rec
             @NonNull OnWorkmateClickedListener listener
         ) {
             binding.listWorkmateChatButton.setOnClickListener(v ->
-                listener.onChatButtonClicked(itemViewState.getId()
+                listener.onChatButtonClicked(itemViewState.getId(), itemViewState.getName()
                 )
             );
 

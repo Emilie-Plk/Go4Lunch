@@ -2,6 +2,7 @@ package com.emplk.go4lunch.di;
 
 import com.emplk.go4lunch.data.authentication.AuthRepositoryFirebaseAuth;
 import com.emplk.go4lunch.data.autocomplete.AutocompleteRepositoryGooglePlaces;
+import com.emplk.go4lunch.data.chat.ChatRepositoryFirestore;
 import com.emplk.go4lunch.data.details.DetailsRestaurantRepositoryGooglePlaces;
 import com.emplk.go4lunch.data.favorite_restaurant.FavoriteRestaurantRepositoryFirestore;
 import com.emplk.go4lunch.data.location.GpsLocationRepositoryBroadcastReceiver;
@@ -11,6 +12,7 @@ import com.emplk.go4lunch.data.settings.NotificationRepositorySharedPreferences;
 import com.emplk.go4lunch.data.user.UserRepositoryFirestore;
 import com.emplk.go4lunch.domain.authentication.AuthRepository;
 import com.emplk.go4lunch.domain.autocomplete.AutocompleteRepository;
+import com.emplk.go4lunch.domain.chat.ChatRepository;
 import com.emplk.go4lunch.domain.detail.DetailsRestaurantRepository;
 import com.emplk.go4lunch.domain.favorite_restaurant.FavoriteRestaurantRepository;
 import com.emplk.go4lunch.domain.gps.GpsLocationRepository;
@@ -30,24 +32,24 @@ import dagger.hilt.components.SingletonComponent;
 @InstallIn(SingletonComponent.class)
 @Module
 public abstract class RepositoryModule {
-    @Singleton
     @Binds
+    @Singleton
     public abstract AuthRepository bindAuthRepository(AuthRepositoryFirebaseAuth authRepository);
 
-    @Singleton
     @Binds
+    @Singleton
     public abstract GpsLocationRepository bindGpsLocationRepository(GpsLocationRepositoryBroadcastReceiver gpsLocationRepositoryBroadcastReceiver);
 
-    @Singleton
     @Binds
+    @Singleton
     public abstract NearbySearchRepository bindsNearbySearchRepository(NearbySearchRepositoryGooglePlaces nearbySearchRepositoryGooglePlaces);
 
-    @Singleton
     @Binds
+    @Singleton
     public abstract GpsPermissionRepository bindsGpsPermissionRepository(GpsPermissionRepositoryImpl gpsPermissionRepositoryImpl);
 
-    @Singleton
     @Binds
+    @Singleton
     public abstract DetailsRestaurantRepository bindsDetailsRestaurantRepository(DetailsRestaurantRepositoryGooglePlaces detailsRestaurantRepositoryGooglePlaces);
 
     @Binds
@@ -62,7 +64,11 @@ public abstract class RepositoryModule {
     @Singleton
     public abstract UserRepository bindsUserRepository(UserRepositoryFirestore userRepositoryFirestore);
 
-    @Singleton
     @Binds
+    @Singleton
     public abstract NotificationRepository bindNotificationRepository(NotificationRepositorySharedPreferences notificationRepositorySharedPreferences);
+
+    @Binds
+    @Singleton
+    public abstract ChatRepository bindChatRepository(ChatRepositoryFirestore chatRepositoryFirestore);
 }

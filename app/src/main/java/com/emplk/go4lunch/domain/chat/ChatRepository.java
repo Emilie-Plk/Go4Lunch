@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ChatRepository {
 
-    void sendMessage(@NonNull String receiverId, @NonNull String message, @NonNull String timeStamp);
+    void sendMessage(@NonNull SendMessageEntity sendMessageEntity);
 
     @NonNull
     LiveData<List<ChatConversationEntity>> getUserChatMessages();
