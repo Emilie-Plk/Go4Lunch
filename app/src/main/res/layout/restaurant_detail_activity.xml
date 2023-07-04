@@ -217,7 +217,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/detail_restaurant_buttons"
-            tools:listitem="@layout/workmates_item" />
+            tools:listitem="@layout/workmate_list_item" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

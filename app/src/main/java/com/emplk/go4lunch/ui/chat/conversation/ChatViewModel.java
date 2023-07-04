@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.ui.chat;
+package com.emplk.go4lunch.ui.chat.conversation;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;

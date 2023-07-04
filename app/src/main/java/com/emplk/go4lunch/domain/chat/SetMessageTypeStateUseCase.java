@@ -3,7 +3,7 @@ package com.emplk.go4lunch.domain.chat;
 import androidx.annotation.NonNull;
 
 import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserIdUseCase;
-import com.emplk.go4lunch.ui.chat.MessageTypeState;
+import com.emplk.go4lunch.ui.chat.conversation.MessageTypeState;
 
 import javax.inject.Inject;
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.chat.ChatActivity">
+    tools:context=".ui.chat.conversation.ChatActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/chat_toolbar_layout"
@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/settings_toolbar"
+            android:id="@+id/chat_toolbar"
             style="@style/Theme.Go4Lunch.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -27,21 +27,23 @@
         android:id="@+id/chat_rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/chat_message_input_et"
+        android:layout_marginBottom="4dp"
+
+        app:layout_constraintBottom_toTopOf="@id/chat_divider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/chat_toolbar_layout"
         tools:listitem="@layout/chat_recipient_message_item" />
 
 
-    <!--    <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/chat_divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            app:layout_constraintBottom_toTopOf="@id/chat_message_input_et"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/chat_fragment_container" />-->
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/chat_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chat_rv"
+        app:layout_constraintBottom_toTopOf="@id/chat_send_fab_button"/>
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/chat_message_input_et"
@@ -54,21 +56,23 @@
         android:lines="2"
         android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/chat_send_button"
+        app:layout_constraintEnd_toStartOf="@+id/chat_send_fab_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/chat_rv" />
 
-    <Button
-        android:id="@+id/chat_send_button"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/chat_send_fab_button"
+        style="?attr/materialIconButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Send"
-
+        android:layout_marginTop="8dp"
+        android:contentDescription="@string/chat_send_message_btn_a11y"
+        android:src="@drawable/baseline_send_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/chat_message_input_et" />
-
+        app:layout_constraintStart_toEndOf="@id/chat_message_input_et"
+        app:layout_constraintTop_toBottomOf="@+id/chat_rv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

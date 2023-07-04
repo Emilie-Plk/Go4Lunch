@@ -15,7 +15,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.emplk.go4lunch.R;
-import com.emplk.go4lunch.databinding.WorkmatesItemBinding;
+import com.emplk.go4lunch.databinding.WorkmateListItemBinding;
+import com.emplk.go4lunch.databinding.WorkmateListItemBinding;
 
 public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, RecyclerView.ViewHolder> {
 
@@ -36,12 +37,12 @@ public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, Rec
         switch (WorkmatesViewStateItem.Type.values()[viewType]) {
             case ALL_WORKMATES:
                 return new AllWorkMatesViewHolder(
-                    WorkmatesItemBinding.inflate(
+                    WorkmateListItemBinding.inflate(
                         LayoutInflater.from(parent.getContext()), parent, false)
                 );
             case WORKMATES_GOING_TO_SAME_RESTAURANT:
                 return new WorkmatesGoingToSameRestaurantViewHolder(
-                    WorkmatesItemBinding.inflate(
+                    WorkmateListItemBinding.inflate(
                         LayoutInflater.from(parent.getContext()), parent, false)
                 );
             default:
@@ -70,9 +71,9 @@ public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, Rec
     public static class AllWorkMatesViewHolder extends RecyclerView.ViewHolder {
         private final TextView workmateNameAndAttendingRestaurant;
         private final ImageView workmateAvatar;
-        private final WorkmatesItemBinding binding;
+        private final WorkmateListItemBinding binding;
 
-        public AllWorkMatesViewHolder(@NonNull WorkmatesItemBinding binding) {
+        public AllWorkMatesViewHolder(@NonNull WorkmateListItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
             this.workmateNameAndAttendingRestaurant = binding.listWorkmateNameAndRestaurant;
@@ -123,9 +124,9 @@ public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, Rec
     }
 
     public static class WorkmatesGoingToSameRestaurantViewHolder extends RecyclerView.ViewHolder {
-        private final WorkmatesItemBinding binding;
+        private final WorkmateListItemBinding binding;
 
-        public WorkmatesGoingToSameRestaurantViewHolder(@NonNull WorkmatesItemBinding binding) {
+        public WorkmatesGoingToSameRestaurantViewHolder(@NonNull WorkmateListItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

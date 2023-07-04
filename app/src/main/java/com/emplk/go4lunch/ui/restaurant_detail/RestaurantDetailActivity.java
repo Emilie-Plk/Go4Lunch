@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
 import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.RestaurantDetailActivityBinding;
-import com.emplk.go4lunch.ui.chat.ChatActivity;
+import com.emplk.go4lunch.ui.chat.conversation.ChatActivity;
 import com.emplk.go4lunch.ui.utils.RestaurantDetailsFavoriteState;
 import com.emplk.go4lunch.ui.workmate_list.OnWorkmateClickedListener;
 import com.emplk.go4lunch.ui.workmate_list.WorkmateListAdapter;

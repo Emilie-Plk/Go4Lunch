@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.ui.chat;
+package com.emplk.go4lunch.ui.chat.conversation;
 
 import android.content.Context;
 import android.content.Intent;
@@ -42,6 +42,12 @@ public class ChatActivity extends AppCompatActivity {
         binding = ChatActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        setSupportActionBar(binding.chatToolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(null);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         viewModel = new ViewModelProvider(this).get(ChatViewModel.class);
 
         initRecyclerView();
@@ -54,7 +60,6 @@ public class ChatActivity extends AppCompatActivity {
                 int count,
                 int after
             ) {
-
             }
 
             @Override
@@ -68,21 +73,23 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
 
-        binding.chatSendButton.setOnClickListener(v -> {
-            String message = binding.chatMessageInputEt.getText().toString();
-            if (!message.isEmpty()) {
-                viewModel.sendMessage(
-                    getIntent().getStringExtra(WORKMATE_ID),
-                    getIntent().getStringExtra(WORKMATE_NAME),
-                    message
-                );
-                binding.chatMessageInputEt.setText("");
+        binding.chatSendFabButton.setOnClickListener(v -> {
+                if (binding.chatMessageInputEt.getText() != null) {
+                    String message = binding.chatMessageInputEt.getText().toString();
+                    if (!message.isEmpty()) {
+                        viewModel.sendMessage(
+                            getIntent().getStringExtra(WORKMATE_ID),
+                            getIntent().getStringExtra(WORKMATE_NAME),
+                            message
+                        );
+                        binding.chatMessageInputEt.setText("");
+                    }
+                }
             }
-        });
+        );
     }
 
     private void initRecyclerView() {
@@ -94,8 +101,7 @@ public class ChatActivity extends AppCompatActivity {
             if (chatMessageViewStateItems != null && !chatMessageViewStateItems.isEmpty()) {
                 adapter.submitList(chatMessageViewStateItems);
             }
-
-            // binding.chatRv.smoothScrollToPosition(adapter.getItemCount());
+            binding.chatRv.smoothScrollToPosition(adapter.getItemCount());
         });
 
     }

@@ -22,7 +22,7 @@
         tools:ignore="DataExtractionRules"
         tools:targetApi="31">
         <activity
-            android:name=".ui.chat.ChatActivity"
+            android:name=".ui.chat.conversation.ChatActivity"
             android:exported="false" />
         <activity
             android:name=".ui.main.settings.SettingsActivity"
