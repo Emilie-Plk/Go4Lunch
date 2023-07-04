@@ -3,60 +3,60 @@ package com.emplk.go4lunch.data.chat;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.ServerTimestamp;
 
-import java.util.List;
 import java.util.Objects;
 
 public class ChatConversationDto {
 
     @Nullable
-    private final String userId;
+    private final String recipientId;
 
     @Nullable
-    private final String userName;
+    private final String recipientName;
 
     @Nullable
-    private final List<String> messages;
+    private final String message;
 
     @Nullable
     @ServerTimestamp
-    private final List<String> timeStamps;
+    private final Timestamp timestamp;
 
     public ChatConversationDto() {
         this(null, null, null, null);
     }
 
     public ChatConversationDto(
-        @Nullable String userId,
-        @Nullable String userName,
-        @Nullable List<String> messages,
-        @Nullable List<String> timeStamps
+        @Nullable String recipientId,
+        @Nullable String recipientName,
+        @Nullable String message,
+        @Nullable Timestamp timestamp
     ) {
-        this.userId = userId;
-        this.userName = userName;
-        this.messages = messages;
-        this.timeStamps = timeStamps;
+        this.recipientId = recipientId;
+        this.recipientName = recipientName;
+        this.message = message;
+        this.timestamp = timestamp;
     }
 
     @Nullable
-    public String getUserId() {
-        return userId;
+    public String getRecipientId() {
+        return recipientId;
     }
 
     @Nullable
-    public String getUserName() {
-        return userName;
+    public String getRecipientName() {
+        return recipientName;
     }
 
     @Nullable
-    public List<String> getMessages() {
-        return messages;
+    public String getMessage() {
+        return message;
     }
 
     @Nullable
-    public List<String> getTimeStamps() {
-        return timeStamps;
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
     @Override
@@ -64,22 +64,22 @@ public class ChatConversationDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChatConversationDto that = (ChatConversationDto) o;
-        return Objects.equals(userId, that.userId) && Objects.equals(userName, that.userName) && Objects.equals(messages, that.messages) && Objects.equals(timeStamps, that.timeStamps);
+        return Objects.equals(recipientId, that.recipientId) && Objects.equals(recipientName, that.recipientName) && Objects.equals(message, that.message) && Objects.equals(timestamp, that.timestamp);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, userName, messages, timeStamps);
+        return Objects.hash(recipientId, recipientName, message, timestamp);
     }
 
     @NonNull
     @Override
     public String toString() {
         return "ChatConversationDto{" +
-            "id='" + userId + '\'' +
-            ", name='" + userName + '\'' +
-            ", message='" + messages + '\'' +
-            ", timeStamp='" + timeStamps + '\'' +
+            "recipientId='" + recipientId + '\'' +
+            ", recipientName='" + recipientName + '\'' +
+            ", message='" + message + '\'' +
+            ", timestamp='" + timestamp + '\'' +
             '}';
     }
 }

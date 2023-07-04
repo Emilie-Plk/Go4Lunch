@@ -11,42 +11,42 @@ import java.util.Objects;
 public class SendMessageDto {
 
     @Nullable
-    private final String receiverId;
+    private final String recipientId;
 
     @Nullable
-    private final String receiverName;
+    private final String recipientName;
 
     @Nullable
     private final String message;
 
     @Nullable
     @ServerTimestamp
-    private final Timestamp timeStamp;
+    private final Timestamp timestamp;
 
     public SendMessageDto() {
         this(null, null, null, null);
     }
 
     public SendMessageDto(
-        @Nullable String receiverId,
-        @Nullable String receiverName,
+        @Nullable String recipientId,
+        @Nullable String recipientName,
         @Nullable String message,
-        @Nullable Timestamp timeStamp
+        @Nullable Timestamp timestamp
     ) {
-        this.receiverId = receiverId;
-        this.receiverName = receiverName;
+        this.recipientId = recipientId;
+        this.recipientName = recipientName;
         this.message = message;
-        this.timeStamp = timeStamp;
+        this.timestamp = timestamp;
     }
 
     @Nullable
-    public String getReceiverId() {
-        return receiverId;
+    public String getRecipientId() {
+        return recipientId;
     }
 
     @Nullable
-    public String getReceiverName() {
-        return receiverName;
+    public String getRecipientName() {
+        return recipientName;
     }
 
     @Nullable
@@ -55,31 +55,32 @@ public class SendMessageDto {
     }
 
     @Nullable
-    public Timestamp getTimeStamp() {
-        return timeStamp;
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SendMessageDto that = (SendMessageDto) o;
-        return Objects.equals(receiverId, that.receiverId) && Objects.equals(receiverName, that.receiverName) && Objects.equals(message, that.message) && Objects.equals(timeStamp, that.timeStamp);
+        return Objects.equals(recipientId, that.recipientId) && Objects.equals(recipientName, that.recipientName) && Objects.equals(message, that.message) && Objects.equals(timestamp, that.timestamp);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(receiverId, receiverName, message, timeStamp);
+        return Objects.hash(recipientId, recipientName, message, timestamp);
     }
 
     @NonNull
     @Override
     public String toString() {
         return "SendMessageDto{" +
-            "receiverId='" + receiverId + '\'' +
-            ", receiverName='" + receiverName + '\'' +
+            "recipientId='" + recipientId + '\'' +
+            ", recipientName='" + recipientName + '\'' +
             ", message='" + message + '\'' +
-            ", timeStamp=" + timeStamp +
+            ", timestamp=" + timestamp +
             '}';
     }
 }

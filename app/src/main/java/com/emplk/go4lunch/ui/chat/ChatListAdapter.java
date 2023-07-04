@@ -4,13 +4,15 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.ChatSentMessageBinding;
 
-public class ChatListAdapter extends ListAdapter<ChatMessageViewStateItem, RecyclerView.ViewHolder> {
+public class ChatListAdapter extends ListAdapter<ChatMessageViewStateItem, ChatListAdapter.ChatListViewHolder> {
 
     public ChatListAdapter() {
         super(new ListChatItemCallback());
@@ -18,23 +20,22 @@ public class ChatListAdapter extends ListAdapter<ChatMessageViewStateItem, Recyc
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(
+    public ChatListViewHolder onCreateViewHolder(
         @NonNull ViewGroup parent,
         int viewType
     ) {
         ChatSentMessageBinding binding = ChatSentMessageBinding.inflate(
             LayoutInflater.from(parent.getContext()), parent, false
         );
-        return new RecyclerView.ViewHolder(binding.getRoot()) {
-        };
+        return new ChatListViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(
-        @NonNull RecyclerView.ViewHolder holder,
+        @NonNull ChatListViewHolder holder,
         int position
     ) {
-        ((ChatListViewHolder) holder).bind(getItem(position));
+       holder.bind(getItem(position));
     }
 
     public static class ChatListViewHolder extends RecyclerView.ViewHolder {
@@ -47,9 +48,31 @@ public class ChatListAdapter extends ListAdapter<ChatMessageViewStateItem, Recyc
         }
 
         public void bind(@NonNull ChatMessageViewStateItem item) {
-            binding.chatSenderNameTv.setText(item.getName());
+
+            boolean isUserMessage = (item.getMessageTypeState() == MessageTypeState.SENDER);
+
+            // Set message alignment based on the message type
+            ConstraintSet constraintSet = new ConstraintSet();
+            constraintSet.clone(binding.getRoot());
+            if (isUserMessage) {
+                constraintSet.clear(R.id.chat_content_message_tv, ConstraintSet.START);
+                constraintSet.connect(R.id.chat_content_message_tv, ConstraintSet.END, R.id.chat_sender_name_tv, ConstraintSet.END);
+            } else {
+                constraintSet.clear(R.id.chat_content_message_tv, ConstraintSet.END);
+                constraintSet.connect(R.id.chat_content_message_tv, ConstraintSet.START, R.id.chat_sender_name_tv, ConstraintSet.START);
+            }
+            constraintSet.applyTo(binding.getRoot());
+
+            // Bind other data as before
             binding.chatContentMessageTv.setText(item.getMessage());
             binding.chatDateTv.setText(item.getDate());
+            if (isUserMessage) {
+                binding.chatSenderNameTv.setText(R.string.chat_sender_name);
+                binding.chatSenderNameTv.setTextColor(binding.getRoot().getResources().getColor(R.color.light_gray));
+            } else {
+                binding.chatSenderNameTv.setText(item.getName());
+                binding.chatSenderNameTv.setTextColor(binding.getRoot().getResources().getColor(R.color.light_peach));
+            }
         }
     }
 
@@ -59,7 +82,7 @@ public class ChatListAdapter extends ListAdapter<ChatMessageViewStateItem, Recyc
             @NonNull ChatMessageViewStateItem oldItem,
             @NonNull ChatMessageViewStateItem newItem
         ) {
-            return false;
+            return oldItem.getDate().equals(newItem.getDate());
         }
 
         @Override

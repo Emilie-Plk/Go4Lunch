@@ -16,11 +16,18 @@ public class SendMessageUseCase {
     }
 
     public void invoke(
-        @NonNull String receiverId,
-        @NonNull String receiverName,
+        @NonNull String recipientId,
+        @NonNull String recipientName,
         @NonNull String message,
-        @NonNull Timestamp timeStamp
+        @NonNull Timestamp timestamp
     ) {
-        chatRepository.sendMessage(new SendMessageEntity(receiverId, receiverName, message, timeStamp));
+        chatRepository.sendMessage(
+            new SendMessageEntity(
+                recipientId,
+                recipientName,
+                message,
+                timestamp
+            )
+        );
     }
 }

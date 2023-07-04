@@ -6,40 +6,70 @@ import java.util.Objects;
 
 public class ChatMessageViewStateItem {
 
-    private final String receiverId;
+    @NonNull
+    private final String userId;
 
+    @NonNull
     private final String name;
 
+
+    @NonNull
     private final String message;
 
+    @NonNull
     private final String date;
 
+    @NonNull
+    private final MessageTypeState messageTypeState;
+
     public ChatMessageViewStateItem(
-        String receiverId,
-        String name,
-        String message,
-        String date
+        @NonNull String userId,
+        @NonNull String name,
+        @NonNull String message,
+        @NonNull String date,
+        @NonNull MessageTypeState messageTypeState
     ) {
-        this.receiverId = receiverId;
+        this.userId = userId;
         this.name = name;
         this.message = message;
         this.date = date;
+        this.messageTypeState = messageTypeState;
     }
 
-    public String getReceiverId() {
-        return receiverId;
+    @NonNull
+    public String getUserId() {
+        return userId;
     }
 
+    @NonNull
     public String getName() {
         return name;
     }
 
+    @NonNull
     public String getMessage() {
         return message;
     }
 
+    @NonNull
     public String getDate() {
         return date;
+    }
+
+    @NonNull
+    public MessageTypeState getMessageTypeState() {
+        return messageTypeState;
+    }
+
+    @Override
+    public String toString() {
+        return "ChatMessageViewStateItem{" +
+            "userId='" + userId + '\'' +
+            ", name='" + name + '\'' +
+            ", message='" + message + '\'' +
+            ", date='" + date + '\'' +
+            ", messageTypeState=" + messageTypeState +
+            '}';
     }
 
     @Override
@@ -47,22 +77,11 @@ public class ChatMessageViewStateItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChatMessageViewStateItem that = (ChatMessageViewStateItem) o;
-        return Objects.equals(receiverId, that.receiverId) && Objects.equals(name, that.name) && Objects.equals(message, that.message) && Objects.equals(date, that.date);
+        return userId.equals(that.userId) && name.equals(that.name) && message.equals(that.message) && date.equals(that.date) && messageTypeState == that.messageTypeState;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(receiverId, name, message, date);
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "ChatMessageViewStateItem{" +
-            "receiverId='" + receiverId + '\'' +
-            ", name='" + name + '\'' +
-            ", message='" + message + '\'' +
-            ", date='" + date + '\'' +
-            '}';
+        return Objects.hash(userId, name, message, date, messageTypeState);
     }
 }

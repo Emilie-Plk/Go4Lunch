@@ -2,6 +2,7 @@ package com.emplk.go4lunch.data.chat;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.emplk.go4lunch.domain.chat.ChatConversationEntity;
 import com.emplk.go4lunch.domain.chat.ChatRepository;
@@ -11,8 +12,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.time.Clock;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,6 +28,8 @@ public class ChatRepositoryFirestore implements ChatRepository {
     private static final String CHAT_COLLECTION = "chat_conversations";
 
     private static final String USERS_SUBCOLLECTION = "users";
+
+    private static final String MESSAGES_SUBCOLLECTION = "messages";
     private static final String USER_ID = "userId";
     private static final String USER_NAME = "userName";
 
@@ -64,50 +69,73 @@ public class ChatRepositoryFirestore implements ChatRepository {
 
     @Override
     public void sendMessage(@NonNull SendMessageEntity sendMessageEntity) {
-        String receiverId = sendMessageEntity.getReceiverId();
-        String receiverName = sendMessageEntity.getReceiverName();
-        Timestamp timeStamp = sendMessageEntity.getTimeStamp();
-        String conversationUid = generateConversationId(currentUserId, sendMessageEntity.getReceiverId());
+        String recipientId = sendMessageEntity.getRecipientId();
+        String recipientName = sendMessageEntity.getRecipientName();
+        Timestamp timestamp = sendMessageEntity.getTimestamp();
+        String conversationUid = generateConversationId(currentUserId, sendMessageEntity.getRecipientId());
 
         DocumentReference documentReference = firestore  // Upsert subcollection "users"
             .collection(CHAT_COLLECTION)
             .document(conversationUid);
 
-        CollectionReference conversationRef = documentReference.collection(USERS_SUBCOLLECTION); // I want to add two fields "userId" and "userName" to this subcollection
-
+        CollectionReference usersRef = documentReference.collection(USERS_SUBCOLLECTION);
 
         HashMap<String, Object> currentUserData = new HashMap<>();
         currentUserData.put(USER_ID, currentUserId);
         currentUserData.put(USER_NAME, currentUserName);
-        conversationRef.document(currentUserId)
+        usersRef.document(currentUserId)
             .set(currentUserData);
 
         HashMap<String, Object> receiverData = new HashMap<>();
-        receiverData.put(USER_ID, receiverId);
-        receiverData.put(USER_NAME, receiverName);
-        conversationRef.document(receiverId)
+        receiverData.put(USER_ID, recipientId);
+        receiverData.put(USER_NAME, recipientName);
+        usersRef.document(recipientId)
             .set(receiverData);
 
-        documentReference.set(
+        CollectionReference messagesRef = documentReference.collection(MESSAGES_SUBCOLLECTION);
+
+        messagesRef.document(conversationUid + "_" + timestamp).set(
             new SendMessageDto(
-                receiverId,
-                receiverName,
+                recipientId,
+                recipientName,
                 sendMessageEntity.getMessage(),
-                timeStamp
+                timestamp
             )
         );
     }
 
     @NonNull
     @Override
-    public LiveData<List<ChatConversationEntity>> getUserChatMessages() {
-        return null;
+    public LiveData<List<ChatConversationEntity>> getChatMessagesList() {
+        return new MutableLiveData<>();
     }
 
     @NonNull
     @Override
-    public LiveData<List<ChatConversationEntity>> getUserChatConversation() {
-        return null;
+    public LiveData<List<ChatConversationEntity>> getChatConversation(@NonNull String receiverId) {
+        MutableLiveData<List<ChatConversationEntity>> chatMessagesList = new MutableLiveData<>();
+        String conversationUid = generateConversationId(currentUserId, receiverId);
+
+        CollectionReference messagesRef = firestore
+            .collection(CHAT_COLLECTION)
+            .document(conversationUid)
+            .collection(MESSAGES_SUBCOLLECTION);
+
+
+        Query query = messagesRef.orderBy("timestamp", Query.Direction.ASCENDING);
+
+        query.addSnapshotListener((value, error) -> {
+                if (value != null) {
+                    List<ChatConversationDto> chatMessages = value.toObjects(ChatConversationDto.class);
+                    List<ChatConversationEntity> chatMessagesEntities = new ArrayList<>();
+                    for (ChatConversationDto chatMessage : chatMessages) {
+                        chatMessagesEntities.add(mapToChatConversationEntity(chatMessage));
+                    }
+                    chatMessagesList.setValue(chatMessagesEntities);
+                }
+            }
+        );
+        return chatMessagesList;
     }
 
     private String generateConversationId(
@@ -118,5 +146,21 @@ public class ChatRepositoryFirestore implements ChatRepository {
         String largerId = userId1.compareTo(userId2) >= 0 ? userId1 : userId2;
 
         return smallerId + "_" + largerId;
+    }
+
+    private ChatConversationEntity mapToChatConversationEntity(
+        ChatConversationDto chatConversationDto
+    ) {
+        if (chatConversationDto.getRecipientId() != null &&
+            chatConversationDto.getRecipientName() != null &&
+            chatConversationDto.getMessage() != null &&
+            chatConversationDto.getTimestamp() != null) {
+            return new ChatConversationEntity(
+                chatConversationDto.getRecipientId(),
+                chatConversationDto.getRecipientName(),
+                chatConversationDto.getMessage(),
+                chatConversationDto.getTimestamp()
+            );
+        } else return null;
     }
 }

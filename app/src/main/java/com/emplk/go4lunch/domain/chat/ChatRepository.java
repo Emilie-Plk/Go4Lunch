@@ -10,8 +10,8 @@ public interface ChatRepository {
     void sendMessage(@NonNull SendMessageEntity sendMessageEntity);
 
     @NonNull
-    LiveData<List<ChatConversationEntity>> getUserChatMessages();
+    LiveData<List<ChatConversationEntity>> getChatMessagesList();
 
     @NonNull
-    LiveData<List<ChatConversationEntity>> getUserChatConversation();
+    LiveData<List<ChatConversationEntity>> getChatConversation(@NonNull String receiverId);
 }

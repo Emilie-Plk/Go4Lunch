@@ -2,56 +2,56 @@ package com.emplk.go4lunch.domain.chat;
 
 import androidx.annotation.NonNull;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.ServerTimestamp;
 
-import java.util.List;
 import java.util.Objects;
 
 public class ChatConversationEntity {
 
     @NonNull
-    private final String userId;
+    private final String recipientId;
 
     @NonNull
-    private final String userName;
+    private final String recipientName;
 
     @NonNull
-    private final List<String> messages;
+    private final String message;
 
     @NonNull
     @ServerTimestamp
-    private final List<String> timeStamps;
+    private final Timestamp timestamp;
 
     public ChatConversationEntity(
-        @NonNull String userId,
-        @NonNull String userName,
-        @NonNull List<String> messages,
-        @NonNull List<String> timeStamps
+        @NonNull String recipientId,
+        @NonNull String recipientName,
+        @NonNull String message,
+        @NonNull Timestamp timestamp
     ) {
-        this.userId = userId;
-        this.userName = userName;
-        this.messages = messages;
-        this.timeStamps = timeStamps;
+        this.recipientId = recipientId;
+        this.recipientName = recipientName;
+        this.message = message;
+        this.timestamp = timestamp;
     }
 
     @NonNull
-    public String getUserId() {
-        return userId;
+    public String getRecipientId() {
+        return recipientId;
     }
 
     @NonNull
-    public String getUserName() {
-        return userName;
+    public String getRecipientName() {
+        return recipientName;
     }
 
     @NonNull
-    public List<String> getMessages() {
-        return messages;
+    public String getMessage() {
+        return message;
     }
 
     @NonNull
-    public List<String> getTimeStamps() {
-        return timeStamps;
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
     @Override
@@ -59,22 +59,22 @@ public class ChatConversationEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChatConversationEntity that = (ChatConversationEntity) o;
-        return userId.equals(that.userId) && userName.equals(that.userName) && messages.equals(that.messages) && timeStamps.equals(that.timeStamps);
+        return recipientId.equals(that.recipientId) && recipientName.equals(that.recipientName) && message.equals(that.message) && timestamp.equals(that.timestamp);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, userName, messages, timeStamps);
+        return Objects.hash(recipientId, recipientName, message, timestamp);
     }
 
     @NonNull
     @Override
     public String toString() {
         return "ChatConversationEntity{" +
-            "userId='" + userId + '\'' +
-            ", userName='" + userName + '\'' +
-            ", messages=" + messages +
-            ", timeStamps='" + timeStamps + '\'' +
+            "recipientId='" + recipientId + '\'' +
+            ", recipientName='" + recipientName + '\'' +
+            ", message=" + message +
+            ", timestamp='" + timestamp + '\'' +
             '}';
     }
 }

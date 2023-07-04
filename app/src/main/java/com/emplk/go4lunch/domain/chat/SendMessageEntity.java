@@ -9,38 +9,38 @@ import java.util.Objects;
 
 public class SendMessageEntity {
     @NonNull
-    private final String receiverId;
+    private final String recipientId;
 
     @NonNull
-    private final String receiverName;
+    private final String recipientName;
 
     @NonNull
     private final String message;
 
     @NonNull
     @ServerTimestamp
-    private final Timestamp timeStamp;
+    private final Timestamp timestamp;
 
     public SendMessageEntity(
-        @NonNull String receiverId,
-        @NonNull String receiverName,
+        @NonNull String recipientId,
+        @NonNull String recipientName,
         @NonNull String message,
-        @NonNull Timestamp timeStamp
+        @NonNull Timestamp timestamp
     ) {
-        this.receiverId = receiverId;
-        this.receiverName = receiverName;
+        this.recipientId = recipientId;
+        this.recipientName = recipientName;
         this.message = message;
-        this.timeStamp = timeStamp;
+        this.timestamp = timestamp;
     }
 
     @NonNull
-    public String getReceiverId() {
-        return receiverId;
+    public String getRecipientId() {
+        return recipientId;
     }
 
     @NonNull
-    public String getReceiverName() {
-        return receiverName;
+    public String getRecipientName() {
+        return recipientName;
     }
 
     @NonNull
@@ -49,8 +49,8 @@ public class SendMessageEntity {
     }
 
     @NonNull
-    public Timestamp getTimeStamp() {
-        return timeStamp;
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
     @Override
@@ -58,22 +58,22 @@ public class SendMessageEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SendMessageEntity that = (SendMessageEntity) o;
-        return receiverId.equals(that.receiverId) && receiverName.equals(that.receiverName) && message.equals(that.message) && timeStamp.equals(that.timeStamp);
+        return recipientId.equals(that.recipientId) && recipientName.equals(that.recipientName) && message.equals(that.message) && timestamp.equals(that.timestamp);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(receiverId, receiverName, message, timeStamp);
+        return Objects.hash(recipientId, recipientName, message, timestamp);
     }
 
     @NonNull
     @Override
     public String toString() {
         return "SendMessageEntity{" +
-            "receiverId='" + receiverId + '\'' +
-            ", receiverName='" + receiverName + '\'' +
+            "recipientId='" + recipientId + '\'' +
+            ", recipientName='" + recipientName + '\'' +
             ", message='" + message + '\'' +
-            ", timeStamp='" + timeStamp + '\'' +
+            ", timestamp='" + timestamp + '\'' +
             '}';
     }
 }

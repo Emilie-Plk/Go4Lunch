@@ -64,5 +64,6 @@
     <string name="settings_activity_title">Settings</string>
     <string name="lunch_reminder_notifications">Lunch reminder notifications</string>
     <string name="settings_activity_gps_button">GPS settings</string>
+    <string name="chat_sender_name">You</string>
 
 </resources>
