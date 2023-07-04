@@ -31,8 +31,8 @@ android {
         }
     }
 
-      Properties properties = new Properties()
-       properties.load(project.rootProject.file("local.properties").newDataInputStream())
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file("local.properties").newDataInputStream())
     def facebook_app_id = properties.getProperty("FACEBOOK_APP_ID")
     def facebook_client_token = properties.getProperty("FACEBOOK_CLIENT_TOKEN")
 
@@ -42,7 +42,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-       debug {
+        debug {
             resValue "string", "facebook_app_id", properties.getProperty("FACEBOOK_APP_ID")
             resValue "string", "facebook_client_token", properties.getProperty("FACEBOOK_CLIENT_TOKEN")
         }

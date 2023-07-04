@@ -14,7 +14,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-import java.time.Clock;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,26 +36,17 @@ public class ChatRepositoryFirestore implements ChatRepository {
     private final FirebaseFirestore firestore;
 
     @NonNull
-    private final FirebaseAuth firebaseAuth;
+    private final String currentUserId;
 
     @NonNull
-    private String currentUserId;
-
-    @NonNull
-    private String currentUserName;
-
-    @NonNull
-    private final Clock clock;
+    private final String currentUserName;
 
     @Inject
     public ChatRepositoryFirestore(
         @NonNull FirebaseFirestore firestore,
-        @NonNull FirebaseAuth firebaseAuth,
-        @NonNull Clock clock
+        @NonNull FirebaseAuth firebaseAuth
     ) {
         this.firestore = firestore;
-        this.firebaseAuth = firebaseAuth;
-        this.clock = clock;
 
         if (firebaseAuth.getCurrentUser() != null && firebaseAuth.getCurrentUser().getDisplayName() != null) {
             currentUserId = firebaseAuth.getCurrentUser().getUid();

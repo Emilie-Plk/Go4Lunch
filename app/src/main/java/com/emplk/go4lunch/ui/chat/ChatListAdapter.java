@@ -4,15 +4,18 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.emplk.go4lunch.R;
-import com.emplk.go4lunch.databinding.ChatSentMessageBinding;
+import com.emplk.go4lunch.databinding.ChatRecipientMessageItemBinding;
+import com.emplk.go4lunch.databinding.ChatSenderMessageItemBinding;
 
-public class ChatListAdapter extends ListAdapter<ChatMessageViewStateItem, ChatListAdapter.ChatListViewHolder> {
+public class ChatListAdapter extends ListAdapter<ChatMessageViewStateItem, RecyclerView.ViewHolder> {
+
+    private static final int VIEW_TYPE_SENDER = 1;
+    private static final int VIEW_TYPE_RECIPIENT = 2;
 
     public ChatListAdapter() {
         super(new ListChatItemCallback());
@@ -20,59 +23,67 @@ public class ChatListAdapter extends ListAdapter<ChatMessageViewStateItem, ChatL
 
     @NonNull
     @Override
-    public ChatListViewHolder onCreateViewHolder(
+    public RecyclerView.ViewHolder onCreateViewHolder(
         @NonNull ViewGroup parent,
         int viewType
     ) {
-        ChatSentMessageBinding binding = ChatSentMessageBinding.inflate(
-            LayoutInflater.from(parent.getContext()), parent, false
-        );
-        return new ChatListViewHolder(binding);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        if (viewType == VIEW_TYPE_SENDER) {
+            ChatSenderMessageItemBinding sentMessageBinding = ChatSenderMessageItemBinding.inflate(inflater, parent, false);
+            return new SenderViewHolder(sentMessageBinding);
+        } else if (viewType == VIEW_TYPE_RECIPIENT) {
+            ChatRecipientMessageItemBinding receivedMessageBinding = ChatRecipientMessageItemBinding.inflate(inflater, parent, false);
+            return new RecipientViewHolder(receivedMessageBinding);
+        }
+        throw new IllegalArgumentException("Invalid view type: " + viewType);
     }
 
     @Override
     public void onBindViewHolder(
-        @NonNull ChatListViewHolder holder,
+        @NonNull RecyclerView.ViewHolder holder,
         int position
     ) {
-       holder.bind(getItem(position));
+        ChatMessageViewStateItem item = getItem(position);
+        if (holder instanceof SenderViewHolder) {
+            ((SenderViewHolder) holder).bind(item);
+        } else if (holder instanceof RecipientViewHolder) {
+            ((RecipientViewHolder) holder).bind(item);
+        }
     }
 
-    public static class ChatListViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public int getItemViewType(int position) {
+        ChatMessageViewStateItem item = getItem(position);
+        return (item.getMessageTypeState() == MessageTypeState.SENDER) ? VIEW_TYPE_SENDER : VIEW_TYPE_RECIPIENT;
+    }
 
-        private final ChatSentMessageBinding binding;
+    private static class SenderViewHolder extends RecyclerView.ViewHolder {
+        private final ChatSenderMessageItemBinding binding;
 
-        public ChatListViewHolder(@NonNull ChatSentMessageBinding binding) {
+        public SenderViewHolder(@NonNull ChatSenderMessageItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        public void bind(@NonNull ChatMessageViewStateItem item) {
-
-            boolean isUserMessage = (item.getMessageTypeState() == MessageTypeState.SENDER);
-
-            // Set message alignment based on the message type
-            ConstraintSet constraintSet = new ConstraintSet();
-            constraintSet.clone(binding.getRoot());
-            if (isUserMessage) {
-                constraintSet.clear(R.id.chat_content_message_tv, ConstraintSet.START);
-                constraintSet.connect(R.id.chat_content_message_tv, ConstraintSet.END, R.id.chat_sender_name_tv, ConstraintSet.END);
-            } else {
-                constraintSet.clear(R.id.chat_content_message_tv, ConstraintSet.END);
-                constraintSet.connect(R.id.chat_content_message_tv, ConstraintSet.START, R.id.chat_sender_name_tv, ConstraintSet.START);
-            }
-            constraintSet.applyTo(binding.getRoot());
-
-            // Bind other data as before
+        public void bind(ChatMessageViewStateItem item) {
+            binding.chatSenderNameTv.setText(R.string.chat_sender_name);
             binding.chatContentMessageTv.setText(item.getMessage());
             binding.chatDateTv.setText(item.getDate());
-            if (isUserMessage) {
-                binding.chatSenderNameTv.setText(R.string.chat_sender_name);
-                binding.chatSenderNameTv.setTextColor(binding.getRoot().getResources().getColor(R.color.light_gray));
-            } else {
-                binding.chatSenderNameTv.setText(item.getName());
-                binding.chatSenderNameTv.setTextColor(binding.getRoot().getResources().getColor(R.color.light_peach));
-            }
+        }
+    }
+
+    private static class RecipientViewHolder extends RecyclerView.ViewHolder {
+        private final ChatRecipientMessageItemBinding binding;
+
+        public RecipientViewHolder(@NonNull ChatRecipientMessageItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+        public void bind(ChatMessageViewStateItem item) {
+            binding.chatSenderNameTv.setText(item.getName());
+            binding.chatContentMessageTv.setText(item.getMessage());
+            binding.chatDateTv.setText(item.getDate());
         }
     }
 

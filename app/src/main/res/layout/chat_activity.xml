@@ -31,7 +31,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/chat_toolbar_layout"
-        tools:listitem="@layout/chat_sent_message" />
+        tools:listitem="@layout/chat_recipient_message_item" />
 
 
     <!--    <com.google.android.material.divider.MaterialDivider

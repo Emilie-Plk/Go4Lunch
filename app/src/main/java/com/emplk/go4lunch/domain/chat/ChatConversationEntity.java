@@ -10,10 +10,10 @@ import java.util.Objects;
 public class ChatConversationEntity {
 
     @NonNull
-    private final String recipientId;
+    private final String userId;
 
     @NonNull
-    private final String recipientName;
+    private final String userName;
 
     @NonNull
     private final String message;
@@ -23,25 +23,25 @@ public class ChatConversationEntity {
     private final Timestamp timestamp;
 
     public ChatConversationEntity(
-        @NonNull String recipientId,
-        @NonNull String recipientName,
+        @NonNull String userId,
+        @NonNull String userName,
         @NonNull String message,
         @NonNull Timestamp timestamp
     ) {
-        this.recipientId = recipientId;
-        this.recipientName = recipientName;
+        this.userId = userId;
+        this.userName = userName;
         this.message = message;
         this.timestamp = timestamp;
     }
 
     @NonNull
-    public String getRecipientId() {
-        return recipientId;
+    public String getUserId() {
+        return userId;
     }
 
     @NonNull
-    public String getRecipientName() {
-        return recipientName;
+    public String getUserName() {
+        return userName;
     }
 
     @NonNull
@@ -59,20 +59,20 @@ public class ChatConversationEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChatConversationEntity that = (ChatConversationEntity) o;
-        return recipientId.equals(that.recipientId) && recipientName.equals(that.recipientName) && message.equals(that.message) && timestamp.equals(that.timestamp);
+        return userId.equals(that.userId) && userName.equals(that.userName) && message.equals(that.message) && timestamp.equals(that.timestamp);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(recipientId, recipientName, message, timestamp);
+        return Objects.hash(userId, userName, message, timestamp);
     }
 
     @NonNull
     @Override
     public String toString() {
         return "ChatConversationEntity{" +
-            "recipientId='" + recipientId + '\'' +
-            ", recipientName='" + recipientName + '\'' +
+            "userId='" + userId + '\'' +
+            ", userName='" + userName + '\'' +
             ", message=" + message +
             ", timestamp='" + timestamp + '\'' +
             '}';

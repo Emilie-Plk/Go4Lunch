@@ -7,12 +7,13 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/chat_sent_message_cv"
+        style="@style/Widget.Material3.CardView.Filled"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
-        android:backgroundTint="@color/dirty_white"
+        android:backgroundTint="@color/light_peach_translucent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,6 +30,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                android:textAlignment="viewEnd"
                 tools:text="John Doe" />
 
             <TextView
@@ -37,13 +39,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:maxWidth="240dp"
-                android:minWidth="120dp"
+                android:minWidth="80dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/chat_sender_name_tv"
                 app:layout_constraintTop_toBottomOf="@+id/chat_sender_name_tv"
-                tools:text="Hello, how about a pizza for lunch? I'm sooo hungry! What do you think about it? I think it's a great idea!"
-                tools:textAlignment="viewStart" />
+                tools:text="yo"
+                tools:textAlignment="viewEnd" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>

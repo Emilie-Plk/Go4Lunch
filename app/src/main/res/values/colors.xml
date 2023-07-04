@@ -15,8 +15,9 @@
     <color name="light_peach_translucent">#37EBA98F</color>
     <color name="pumpkin_orange_translucent">#1EDC9A81</color>
     <color name="dirty_white">#FFF7F1</color>
-    <color name="lemon_chiffon">#FBF2C0</color>
+    <color name="lemon_chiffon">#FEFFD6</color>
     <color name="reseda_green">#75704e</color>
+    <color name="reseda_green_dimmed">#F5F4E1</color>
     <color name="green_teal">#42D8AE</color>
     <color name="grayish_black">#1B1818</color>
     <color name="licorice_gray">#221A19</color>

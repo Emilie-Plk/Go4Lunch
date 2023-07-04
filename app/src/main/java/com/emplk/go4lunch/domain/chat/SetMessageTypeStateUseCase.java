@@ -26,6 +26,5 @@ public class SetMessageTypeStateUseCase {
         } else {
             return MessageTypeState.RECIPIENT;
         }
-
     }
 }

@@ -15,6 +15,7 @@ import com.google.firebase.Timestamp;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -61,11 +62,11 @@ public class ChatViewModel extends ViewModel {
                 if (chatConversationEntities != null) {
                     for (ChatConversationEntity chatConversationEntity : chatConversationEntities) {
                         chatMessageViewStateItems.add(new ChatMessageViewStateItem(
-                                chatConversationEntity.getRecipientId(),
-                                chatConversationEntity.getRecipientName(),
+                                chatConversationEntity.getUserId(),
+                                chatConversationEntity.getUserName(),
                                 chatConversationEntity.getMessage(),
                                 formatTimestamp(chatConversationEntity.getTimestamp()),
-                                setMessageTypeStateUseCase.invoke(chatConversationEntity.getRecipientId())
+                                setMessageTypeStateUseCase.invoke(chatConversationEntity.getUserId())
                             )
                         );
                     }
@@ -76,7 +77,8 @@ public class ChatViewModel extends ViewModel {
     }
 
     private String formatTimestamp(@NonNull Timestamp timestamp) {
-        DateFormat dateFormat = DateFormat.getDateTimeInstance();
+        Locale locale = Locale.getDefault();
+        DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale);
         return dateFormat.format(timestamp.toDate());
     }
 }

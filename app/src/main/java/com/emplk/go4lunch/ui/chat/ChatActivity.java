@@ -95,7 +95,7 @@ public class ChatActivity extends AppCompatActivity {
                 adapter.submitList(chatMessageViewStateItems);
             }
 
-           // binding.chatRv.smoothScrollToPosition(adapter.getItemCount());
+            // binding.chatRv.smoothScrollToPosition(adapter.getItemCount());
         });
 
     }
