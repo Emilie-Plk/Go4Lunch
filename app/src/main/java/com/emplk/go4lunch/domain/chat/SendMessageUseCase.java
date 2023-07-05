@@ -2,8 +2,6 @@ package com.emplk.go4lunch.domain.chat;
 
 import androidx.annotation.NonNull;
 
-import com.google.firebase.Timestamp;
-
 import javax.inject.Inject;
 
 public class SendMessageUseCase {
@@ -18,15 +16,13 @@ public class SendMessageUseCase {
     public void invoke(
         @NonNull String recipientId,
         @NonNull String recipientName,
-        @NonNull String message,
-        @NonNull Timestamp timestamp
+        @NonNull String message
     ) {
         chatRepository.sendMessage(
             new SendMessageEntity(
                 recipientId,
                 recipientName,
-                message,
-                timestamp
+                message
             )
         );
     }

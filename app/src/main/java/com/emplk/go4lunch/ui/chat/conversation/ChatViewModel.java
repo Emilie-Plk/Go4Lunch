@@ -49,8 +49,7 @@ public class ChatViewModel extends ViewModel {
         sendMessageUseCase.invoke(
             recipientId,
             recipientName,
-            message,
-            Timestamp.now()
+            message
         );
     }
 
@@ -59,7 +58,7 @@ public class ChatViewModel extends ViewModel {
             getChatConversationUseCase.invoke(workmateId),
             chatConversationEntities -> {
                 List<ChatMessageViewStateItem> chatMessageViewStateItems = new ArrayList<>();
-                if (chatConversationEntities != null) {
+                if (chatConversationEntities != null && !chatConversationEntities.isEmpty()) {
                     for (ChatConversationEntity chatConversationEntity : chatConversationEntities) {
                         chatMessageViewStateItems.add(new ChatMessageViewStateItem(
                                 chatConversationEntity.getUserId(),

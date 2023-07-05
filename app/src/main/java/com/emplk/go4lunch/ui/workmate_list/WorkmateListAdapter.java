@@ -16,7 +16,6 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.WorkmateListItemBinding;
-import com.emplk.go4lunch.databinding.WorkmateListItemBinding;
 
 public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, RecyclerView.ViewHolder> {
 

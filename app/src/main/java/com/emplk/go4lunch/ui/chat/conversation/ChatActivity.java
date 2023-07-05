@@ -96,13 +96,14 @@ public class ChatActivity extends AppCompatActivity {
         binding.chatRv.setAdapter(adapter);
         binding.chatRv.setLayoutManager(new LinearLayoutManager(this));
 
-        viewModel.getChatMessages(getIntent().getStringExtra(WORKMATE_ID)).observe(this, chatMessageViewStateItems -> {
-            if (chatMessageViewStateItems != null && !chatMessageViewStateItems.isEmpty()) {
-                adapter.submitList(chatMessageViewStateItems);
-            }
-            binding.chatRv.smoothScrollToPosition(adapter.getItemCount());
-        });
 
+        viewModel.getChatMessages(getIntent().getStringExtra(WORKMATE_ID)).observe(this, chatMessageViewStateItems -> {
+                if (chatMessageViewStateItems != null && !chatMessageViewStateItems.isEmpty()) {
+                    adapter.submitList(chatMessageViewStateItems);
+                    binding.chatRv.scrollToPosition(adapter.getItemCount()); // doesn't work
+                }
+            }
+        );
     }
 
 

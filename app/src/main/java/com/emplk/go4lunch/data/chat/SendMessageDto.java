@@ -19,7 +19,6 @@ public class SendMessageDto {
     @Nullable
     private final String message;
 
-    @Nullable
     @ServerTimestamp
     private final Timestamp timestamp;
 
@@ -54,7 +53,7 @@ public class SendMessageDto {
         return message;
     }
 
-    @Nullable
+    @ServerTimestamp
     public Timestamp getTimestamp() {
         return timestamp;
     }

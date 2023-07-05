@@ -2,9 +2,6 @@ package com.emplk.go4lunch.domain.chat;
 
 import androidx.annotation.NonNull;
 
-import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.ServerTimestamp;
-
 import java.util.Objects;
 
 public class SendMessageEntity {
@@ -17,20 +14,14 @@ public class SendMessageEntity {
     @NonNull
     private final String message;
 
-    @NonNull
-    @ServerTimestamp
-    private final Timestamp timestamp;
-
     public SendMessageEntity(
         @NonNull String recipientId,
         @NonNull String recipientName,
-        @NonNull String message,
-        @NonNull Timestamp timestamp
+        @NonNull String message
     ) {
         this.recipientId = recipientId;
         this.recipientName = recipientName;
         this.message = message;
-        this.timestamp = timestamp;
     }
 
     @NonNull
@@ -48,22 +39,18 @@ public class SendMessageEntity {
         return message;
     }
 
-    @NonNull
-    public Timestamp getTimestamp() {
-        return timestamp;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SendMessageEntity that = (SendMessageEntity) o;
-        return recipientId.equals(that.recipientId) && recipientName.equals(that.recipientName) && message.equals(that.message) && timestamp.equals(that.timestamp);
+        return recipientId.equals(that.recipientId) && recipientName.equals(that.recipientName) && message.equals(that.message);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(recipientId, recipientName, message, timestamp);
+        return Objects.hash(recipientId, recipientName, message);
     }
 
     @NonNull
@@ -73,7 +60,6 @@ public class SendMessageEntity {
             "recipientId='" + recipientId + '\'' +
             ", recipientName='" + recipientName + '\'' +
             ", message='" + message + '\'' +
-            ", timestamp='" + timestamp + '\'' +
             '}';
     }
 }

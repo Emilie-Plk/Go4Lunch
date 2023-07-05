@@ -3,7 +3,6 @@ package com.emplk.go4lunch.domain.chat;
 import androidx.annotation.NonNull;
 
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.Objects;
 
@@ -19,7 +18,6 @@ public class ChatConversationEntity {
     private final String message;
 
     @NonNull
-    @ServerTimestamp
     private final Timestamp timestamp;
 
     public ChatConversationEntity(
