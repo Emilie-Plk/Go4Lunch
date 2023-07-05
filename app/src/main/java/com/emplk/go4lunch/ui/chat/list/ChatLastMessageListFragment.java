@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.emplk.go4lunch.databinding.ChatListFragmentBinding;
 import com.emplk.go4lunch.ui.chat.conversation.ChatConversationActivity;
-import com.emplk.go4lunch.ui.chat.conversation.ChatConversationListAdapter;
 
 import dagger.hilt.android.AndroidEntryPoint;
 

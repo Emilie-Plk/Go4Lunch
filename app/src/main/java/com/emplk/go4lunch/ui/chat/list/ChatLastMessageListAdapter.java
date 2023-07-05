@@ -48,12 +48,16 @@ public class ChatLastMessageListAdapter extends ListAdapter<ChatLastMessageViewS
     private static class ChatLastMessageViewHolder extends RecyclerView.ViewHolder {
 
         private final ChatLastMessageItemBinding binding;
+
         public ChatLastMessageViewHolder(ChatLastMessageItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        public void bind(@NonNull ChatLastMessageViewStateItem item, @NonNull OnLastMessageClickListener listener) {
+        public void bind(
+            @NonNull ChatLastMessageViewStateItem item,
+            @NonNull OnLastMessageClickListener listener
+        ) {
 
             binding.getRoot().setOnClickListener(v -> listener.onLastMessageClicked(item.getUserId(), item.getPhotoUrl()));
             Glide.with(binding.getRoot())

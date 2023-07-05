@@ -111,7 +111,7 @@ public class ChatRepositoryFirestore implements ChatRepository {
 
     @NonNull
     @Override
-    public LiveData<List<ChatConversationEntity>> getChatMessagesList() {
+    public LiveData<List<ChatConversationEntity>> getLastChatMessagesList() {
         MutableLiveData<List<ChatConversationEntity>> lastChatMessageReceivedList = new MutableLiveData<>();
 
         firestore
