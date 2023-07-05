@@ -12,13 +12,13 @@ import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.ChatRecipientMessageItemBinding;
 import com.emplk.go4lunch.databinding.ChatSenderMessageItemBinding;
 
-public class ChatListAdapter extends ListAdapter<ChatMessageViewStateItem, RecyclerView.ViewHolder> {
+public class ChatConversationListAdapter extends ListAdapter<ChatMessageViewStateItem, RecyclerView.ViewHolder> {
 
     private static final int VIEW_TYPE_SENDER = 1;
     private static final int VIEW_TYPE_RECIPIENT = 2;
 
-    public ChatListAdapter() {
-        super(new ListChatItemCallback());
+    public ChatConversationListAdapter() {
+        super(new ChatConversationListAdapter.ListChatItemCallback());
     }
 
     @NonNull

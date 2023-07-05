@@ -122,7 +122,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
     @Override
     public void onMarkerClicked(@NonNull String restaurantId) {
-        startActivity(RestaurantDetailActivity.navigate(requireActivity(), restaurantId));
+        startActivity(RestaurantDetailActivity.navigate(requireContext(), restaurantId));
     }
 
     private void clearMarkers() {

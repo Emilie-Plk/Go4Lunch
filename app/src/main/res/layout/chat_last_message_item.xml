@@ -7,7 +7,7 @@
     android:layout_margin="8dp">
 
     <ImageView
-        android:id="@+id/list_workmate_avatar"
+        android:id="@+id/chat_workmate_avatar"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:contentDescription="@string/list_avatar_workmate_a11y"
@@ -17,34 +17,34 @@
         tools:src="@drawable/baseline_person_24" />
 
     <TextView
-        android:id="@+id/chat_user_name_tv"
+        android:id="@+id/chat_workmate_name_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:ellipsize="end"
         android:maxLines="1"
-        app:layout_constraintBottom_toTopOf="@id/chat_user_last_message_tv"
+        app:layout_constraintBottom_toTopOf="@id/chat_workmate_last_message_tv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/list_workmate_avatar"
-        app:layout_constraintTop_toTopOf="@id/list_workmate_avatar"
+        app:layout_constraintStart_toEndOf="@id/chat_workmate_avatar"
+        app:layout_constraintTop_toTopOf="@id/chat_workmate_avatar"
         tools:text="Marta K" />
 
 
     <TextView
-        android:id="@+id/chat_user_last_message_tv"
+        android:id="@+id/chat_workmate_last_message_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="@color/grey_text"
-        app:layout_constraintBottom_toTopOf="@+id/chat_user_timestamp_tv"
+        app:layout_constraintBottom_toTopOf="@+id/chat_workmate_timestamp_tv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/chat_user_name_tv"
-        app:layout_constraintTop_toBottomOf="@+id/chat_user_name_tv"
+        app:layout_constraintStart_toStartOf="@+id/chat_workmate_name_tv"
+        app:layout_constraintTop_toBottomOf="@+id/chat_workmate_name_tv"
         tools:text="How about a pizza? It's been a long time we didn't have a slice!" />
 
     <TextView
-        android:id="@+id/chat_user_timestamp_tv"
+        android:id="@+id/chat_workmate_timestamp_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:maxLines="1"
@@ -52,8 +52,8 @@
         android:textColor="@color/grey_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/chat_user_last_message_tv"
-        app:layout_constraintTop_toBottomOf="@id/chat_user_last_message_tv"
+        app:layout_constraintStart_toStartOf="@+id/chat_workmate_last_message_tv"
+        app:layout_constraintTop_toBottomOf="@id/chat_workmate_last_message_tv"
         tools:text="4/07/23, 12h30" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

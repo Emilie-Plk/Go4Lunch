@@ -16,7 +16,7 @@ import com.emplk.go4lunch.databinding.ChatActivityBinding;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class ChatActivity extends AppCompatActivity {
+public class ChatConversationActivity extends AppCompatActivity {
 
     private ChatActivityBinding binding;
 
@@ -30,7 +30,7 @@ public class ChatActivity extends AppCompatActivity {
         @NonNull String workmateId,
         @NonNull String workmateName
     ) {
-        Intent intent = new Intent(context, ChatActivity.class);
+        Intent intent = new Intent(context, ChatConversationActivity.class);
         intent.putExtra(WORKMATE_ID, workmateId);
         intent.putExtra(WORKMATE_NAME, workmateName);
         return intent;
@@ -92,7 +92,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void initRecyclerView() {
-        ChatListAdapter adapter = new ChatListAdapter();
+        ChatConversationListAdapter adapter = new ChatConversationListAdapter();
         binding.chatRv.setAdapter(adapter);
         binding.chatRv.setLayoutManager(new LinearLayoutManager(this));
 
