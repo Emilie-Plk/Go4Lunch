@@ -44,7 +44,6 @@ public class ChatActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.chatToolbar);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(null);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 

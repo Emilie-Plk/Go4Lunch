@@ -9,7 +9,7 @@ import com.google.firebase.firestore.ServerTimestamp;
 import java.util.Objects;
 
 public class ChosenRestaurantEntity {
-    @NonNull
+
     @ServerTimestamp
     private final Timestamp timestamp;
     @NonNull
@@ -25,7 +25,7 @@ public class ChosenRestaurantEntity {
     private final String attendingRestaurantPictureUrl;
 
     public ChosenRestaurantEntity(
-        @NonNull Timestamp timestamp,
+        Timestamp timestamp,
         @NonNull String attendingRestaurantId,
         @NonNull String attendingRestaurantName,
         @NonNull String attendingRestaurantVicinity,
@@ -38,7 +38,6 @@ public class ChosenRestaurantEntity {
         this.attendingRestaurantPictureUrl = attendingRestaurantPictureUrl;
     }
 
-    @NonNull
     @ServerTimestamp
     public Timestamp getTimestamp() {
         return timestamp;

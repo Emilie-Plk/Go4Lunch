@@ -112,7 +112,9 @@ public class ChatRepositoryFirestore implements ChatRepository {
             .collection(MESSAGES_SUBCOLLECTION);
 
 
-        Query query = messagesRef.orderBy("timestamp", Query.Direction.ASCENDING);
+        Query query = messagesRef
+            .orderBy("timestamp", Query.Direction.ASCENDING)
+            .limit(30);
 
         query.addSnapshotListener((value, error) -> {
                 if (value != null) {

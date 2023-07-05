@@ -206,7 +206,6 @@ public class RestaurantDetailViewModel extends ViewModel {
         @Nullable String photoReferenceUrl
     ) {
         addUserRestaurantChoiceUseCase.invoke(
-            Timestamp.now(),
             restaurantId,
             restaurantName,
             vicinity,

@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -98,7 +99,7 @@ public class UserRepositoryFirestore implements UserRepository {
             userWithRestaurantChoiceDocumentRef
                 .set(
                     new UserWithRestaurantChoiceDto(
-                        chosenRestaurantEntity.getTimestamp(),
+                       null,
                         loggedUserEntity.getName(),
                         chosenRestaurantEntity.getAttendingRestaurantId(),
                         chosenRestaurantEntity.getAttendingRestaurantName(),

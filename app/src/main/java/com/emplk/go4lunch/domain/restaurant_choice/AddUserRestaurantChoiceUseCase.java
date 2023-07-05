@@ -28,7 +28,6 @@ public class AddUserRestaurantChoiceUseCase {
     }
 
     public void invoke(
-        @NonNull Timestamp timestamp,
         @Nullable String restaurantId,
         @Nullable String restaurantName,
         @Nullable String vicinity,
@@ -41,7 +40,7 @@ public class AddUserRestaurantChoiceUseCase {
             userRepository.upsertUserRestaurantChoice(
                 getCurrentLoggedUserUseCase.invoke(),
                 new ChosenRestaurantEntity(
-                    timestamp,
+                    null,
                     restaurantId,
                     restaurantName,
                     vicinity,
