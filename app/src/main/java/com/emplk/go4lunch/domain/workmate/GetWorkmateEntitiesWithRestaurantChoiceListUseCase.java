@@ -73,8 +73,7 @@ public class GetWorkmateEntitiesWithRestaurantChoiceListUseCase {
                             ),
                             userWithRestaurantChoice.getAttendingRestaurantId(),
                             userWithRestaurantChoice.getAttendingRestaurantName(),
-                            userWithRestaurantChoice.getAttendingRestaurantVicinity(),
-                            userWithRestaurantChoice.getAttendingRestaurantPictureUrl()
+                            userWithRestaurantChoice.getAttendingRestaurantVicinity()
                         )
                     );
                 }

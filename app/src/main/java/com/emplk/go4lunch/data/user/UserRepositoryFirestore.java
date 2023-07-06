@@ -102,8 +102,7 @@ public class UserRepositoryFirestore implements UserRepository {
                         loggedUserEntity.getName(),
                         chosenRestaurantEntity.getAttendingRestaurantId(),
                         chosenRestaurantEntity.getAttendingRestaurantName(),
-                        chosenRestaurantEntity.getAttendingRestaurantVicinity(),
-                        chosenRestaurantEntity.getAttendingRestaurantPictureUrl()
+                        chosenRestaurantEntity.getAttendingRestaurantVicinity()
                     )
                 )
                 .addOnSuccessListener(aVoid -> {
@@ -314,8 +313,7 @@ public class UserRepositoryFirestore implements UserRepository {
             userWithRestaurantChoiceDto.getAttendingUsername() != null &&
             userWithRestaurantChoiceDto.getAttendingRestaurantId() != null &&
             userWithRestaurantChoiceDto.getAttendingRestaurantName() != null &&
-            userWithRestaurantChoiceDto.getAttendingRestaurantVicinity() != null &&
-            userWithRestaurantChoiceDto.getAttendingRestaurantPictureUrl() != null
+            userWithRestaurantChoiceDto.getAttendingRestaurantVicinity() != null
         ) {
             return new UserWithRestaurantChoiceEntity(
                 userId,
@@ -323,8 +321,7 @@ public class UserRepositoryFirestore implements UserRepository {
                 userWithRestaurantChoiceDto.getAttendingUsername(),
                 userWithRestaurantChoiceDto.getAttendingRestaurantId(),
                 userWithRestaurantChoiceDto.getAttendingRestaurantName(),
-                userWithRestaurantChoiceDto.getAttendingRestaurantVicinity(),
-                userWithRestaurantChoiceDto.getAttendingRestaurantPictureUrl()
+                userWithRestaurantChoiceDto.getAttendingRestaurantVicinity()
             );
         } else {
             return null;

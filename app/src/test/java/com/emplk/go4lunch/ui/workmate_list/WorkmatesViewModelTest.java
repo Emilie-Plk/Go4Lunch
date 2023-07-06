@@ -71,15 +71,15 @@ public class WorkmatesViewModelTest {
         List<WorkmateEntity> workmateEntitiesWithAndWithoutChoice = new ArrayList<>();
 
         LoggedUserEntity loggedUser1 = new LoggedUserEntity("uid1", "username1", "email1", "urlPicture1");
-        WorkmateEntity workmate1 = new WorkmateEntity(loggedUser1, "restaurantId1", "restaurantName1", "restaurantVicinity1", "restaurantPictureUrl1");
+        WorkmateEntity workmate1 = new WorkmateEntity(loggedUser1, "restaurantId1", "restaurantName1", "restaurantVicinity1");
         workmateEntitiesWithAndWithoutChoice.add(workmate1);
 
         LoggedUserEntity loggedUser2 = new LoggedUserEntity("uid2", "username2", "email2", "urlPicture2");
-        WorkmateEntity workmate2 = new WorkmateEntity(loggedUser2, "restaurantId2", "restaurantName2", "restaurantVicinity2", "restaurantPictureUrl2");
+        WorkmateEntity workmate2 = new WorkmateEntity(loggedUser2, "restaurantId2", "restaurantName2", "restaurantVicinity2");
         workmateEntitiesWithAndWithoutChoice.add(workmate2);
 
         LoggedUserEntity loggedUser3 = new LoggedUserEntity("uid3", "username3", "email3", "urlPicture3");
-        WorkmateEntity workmate3 = new WorkmateEntity(loggedUser3, null, null, null, null);
+        WorkmateEntity workmate3 = new WorkmateEntity(loggedUser3, null, null, null);
         workmateEntitiesWithAndWithoutChoice.add(workmate3);
 
         return workmateEntitiesWithAndWithoutChoice;

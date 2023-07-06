@@ -91,7 +91,6 @@ public class GetWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase {
                             ),
                             null,
                             null,
-                            null,
                             null
                         )
                     );

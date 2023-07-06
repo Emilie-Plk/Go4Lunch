@@ -20,6 +20,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.MainActivityBinding;
 import com.emplk.go4lunch.databinding.MainNavigationHeaderBinding;
+import com.emplk.go4lunch.ui.chat.list.ChatLastMessageListFragment;
 import com.emplk.go4lunch.ui.dispatcher.DispatcherActivity;
 import com.emplk.go4lunch.ui.main.settings.SettingsActivity;
 import com.emplk.go4lunch.ui.restaurant_detail.RestaurantDetailActivity;
@@ -117,6 +118,9 @@ public class MainActivity extends AppCompatActivity {
                     case WORKMATES_FRAGMENT:
                         replaceFragment(WorkmateListFragment.newInstance());
                         break;
+                    case CHAT_FRAGMENT:
+                        replaceFragment(ChatLastMessageListFragment.newInstance());
+                        break;
                 }
             }
         );
@@ -183,6 +187,9 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.bottom_bar_workmate_list:
                         viewModel.onChangeFragmentView(FragmentState.WORKMATES_FRAGMENT);
+                        return true;
+                    case R.id.bottom_bar_chat_list:
+                        viewModel.onChangeFragmentView(FragmentState.CHAT_FRAGMENT);
                         return true;
                 }
                 return false;

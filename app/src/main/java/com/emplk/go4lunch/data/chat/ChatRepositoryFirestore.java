@@ -10,15 +10,15 @@ import com.emplk.go4lunch.domain.chat.ChatConversationEntity;
 import com.emplk.go4lunch.domain.chat.ChatRepository;
 import com.emplk.go4lunch.domain.chat.SendMessageEntity;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -28,8 +28,6 @@ import javax.inject.Singleton;
 public class ChatRepositoryFirestore implements ChatRepository {
 
     private static final String CHAT_COLLECTION = "chat_conversations";
-
-    private static final String USERS_SUBCOLLECTION = "users";
 
     private static final String MESSAGES_SUBCOLLECTION = "messages";
     private static final String USER_ID = "userId";
@@ -66,32 +64,11 @@ public class ChatRepositoryFirestore implements ChatRepository {
         String recipientName = sendMessageEntity.getRecipientName();
         String conversationUid = generateConversationId(currentUserId, sendMessageEntity.getRecipientId());
 
-        DocumentReference documentReference = firestore  // Upsert subcollection "users"
+        firestore
             .collection(CHAT_COLLECTION)
-            .document(conversationUid);
-
-        CollectionReference usersRef = documentReference.collection(USERS_SUBCOLLECTION);
-
-        HashMap<String, Object> currentUserData = new HashMap<>();
-        currentUserData.put(USER_ID, currentUserId);
-        currentUserData.put(USER_NAME, currentUserName);
-        usersRef.document(currentUserId)
-            .set(currentUserData);
-
-
-        HashMap<String, Object> receiverData = new HashMap<>();
-        receiverData.put(USER_ID, recipientId);
-        receiverData.put(USER_NAME, recipientName);
-        usersRef.document(recipientId)
-            .set(receiverData);
-
-        CollectionReference messagesRef = documentReference.collection(MESSAGES_SUBCOLLECTION);
-
-        DocumentReference messageDocumentRef = messagesRef.document();
-
-        messagesRef
-            .document(conversationUid + "_" + messageDocumentRef.getId())
-            .set(
+            .document(conversationUid)
+            .collection(MESSAGES_SUBCOLLECTION)
+            .add(
                 new SendMessageDto(
                     recipientId,
                     recipientName,
@@ -114,29 +91,56 @@ public class ChatRepositoryFirestore implements ChatRepository {
     public LiveData<List<ChatConversationEntity>> getLastChatMessagesList() {
         MutableLiveData<List<ChatConversationEntity>> lastChatMessageReceivedList = new MutableLiveData<>();
 
+        String currentUserIdWithSuffix = currentUserId + "\uFFFD";
+
         firestore
             .collection(CHAT_COLLECTION)
-            .whereArrayContains(FieldPath.documentId(), currentUserId)
-            .orderBy("timestamp", Query.Direction.DESCENDING)
+            .whereGreaterThanOrEqualTo(FieldPath.documentId(), currentUserId)
+            .whereLessThan(FieldPath.documentId(), currentUserIdWithSuffix)
             .addSnapshotListener((queryDocumentSnapshots, error) -> {
-                    if (error != null) {
-                        Log.e("ChatRepositoryFirestore", "Error getting chat messages list", error);
-                        lastChatMessageReceivedList.setValue(null);
-                    }
-                    if (queryDocumentSnapshots != null) {
-                        List<ChatConversationEntity> chatMessagesEntities = new ArrayList<>();
-                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            // I want to get something like the "first" document as is is timestamp sorted already
-                            ChatConversationDto chatMessage = queryDocumentSnapshot.toObject(ChatConversationDto.class);
-                            ChatConversationEntity conversation = mapToChatConversationEntity(chatMessage);
-                            chatMessagesEntities.add(conversation);
-                        }
-                        lastChatMessageReceivedList.setValue(chatMessagesEntities);
-                    }
+                if (error != null) {
+                    Log.e("ChatRepositoryFirestore", "Error getting chat messages list", error);
+                    lastChatMessageReceivedList.setValue(null);
+                    return;
                 }
-            );
+
+                if (queryDocumentSnapshots != null) {
+                    List<ChatConversationEntity> chatMessagesEntities = new ArrayList<>();
+
+                    for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                        String conversationId = queryDocumentSnapshot.getId();
+
+                        firestore
+                            .collection(CHAT_COLLECTION)
+                            .document(conversationId)
+                            .collection(MESSAGES_SUBCOLLECTION)
+                            .orderBy("timestamp", Query.Direction.DESCENDING)
+                            .limit(1)
+                            .get()
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    QuerySnapshot messageQuerySnapshot = task.getResult();
+                                    if (messageQuerySnapshot != null && !messageQuerySnapshot.isEmpty()) {
+                                        DocumentSnapshot lastMessageSnapshot = messageQuerySnapshot.getDocuments().get(0);
+                                        ChatConversationDto chatMessage = lastMessageSnapshot.toObject(ChatConversationDto.class);
+                                        ChatConversationEntity conversation = mapToChatConversationEntity(chatMessage);
+                                        chatMessagesEntities.add(conversation);
+                                    }
+                                    lastChatMessageReceivedList.setValue(chatMessagesEntities);
+                                } else {
+                                    Log.e("ChatRepositoryFirestore", "Error getting chat messages", task.getException());
+                                }
+                            });
+                    }
+                } else {
+                    lastChatMessageReceivedList.setValue(new ArrayList<>());
+                }
+            });
+
         return lastChatMessageReceivedList;
     }
+
+
 
     @NonNull
     @Override
