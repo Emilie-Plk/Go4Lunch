@@ -90,7 +90,11 @@ public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, Rec
                 }
             );
 
-            binding.listWorkmateChatButton.setOnClickListener(v -> listener.onChatButtonClicked(itemViewState.getId(), itemViewState.getName()));
+            binding.listWorkmateChatButton.setOnClickListener(v -> {
+                if (itemViewState.getPictureUrl() != null) {
+                    listener.onChatButtonClicked(itemViewState.getId(), itemViewState.getName(), itemViewState.getPictureUrl());
+                }
+            });
 
             String workmateName = itemViewState.getName();
             String attendingRestaurant = itemViewState.getAttendingRestaurantName();
@@ -134,9 +138,12 @@ public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, Rec
             @NonNull WorkmatesViewStateItem.WorkmatesGoingToSameRestaurant itemViewState,
             @NonNull OnWorkmateClickedListener listener
         ) {
-            binding.listWorkmateChatButton.setOnClickListener(v ->
-                listener.onChatButtonClicked(itemViewState.getId(), itemViewState.getName()
-                )
+            binding.listWorkmateChatButton.setOnClickListener(v -> {
+                    if (itemViewState.getPictureUrl() != null) {
+                        listener.onChatButtonClicked(itemViewState.getId(), itemViewState.getName(), itemViewState.getPictureUrl()
+                        );
+                    }
+                }
             );
 
             binding.listWorkmateNameAndRestaurant.setText(binding.getRoot().getContext().getString(

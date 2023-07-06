@@ -59,7 +59,8 @@ public class ChatLastMessageListAdapter extends ListAdapter<ChatLastMessageViewS
             @NonNull OnLastMessageClickListener listener
         ) {
 
-            binding.getRoot().setOnClickListener(v -> listener.onLastMessageClicked(item.getUserId(), item.getPhotoUrl()));
+            binding.getRoot().setOnClickListener(v -> listener.onLastMessageClicked(item.getUserId(), item.getName(), item.getPhotoUrl()));
+
             Glide.with(binding.getRoot())
                 .load(item.getPhotoUrl())
                 .circleCrop()

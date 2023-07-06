@@ -70,9 +70,10 @@ public class RestaurantDetailActivity extends AppCompatActivity {
             @Override
             public void onChatButtonClicked(
                 @NonNull String workmateId,
-                @NonNull String workmateName
+                @NonNull String workmateName,
+                @NonNull String workmatePhotoUrl
             ) {
-                startActivity(ChatConversationActivity.navigate(RestaurantDetailActivity.this, workmateId, workmateName));
+                startActivity(ChatConversationActivity.navigate(RestaurantDetailActivity.this, workmateId, workmateName, workmatePhotoUrl));
             }
 
             @Override

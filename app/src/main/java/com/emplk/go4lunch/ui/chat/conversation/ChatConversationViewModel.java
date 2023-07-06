@@ -22,7 +22,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class ChatViewModel extends ViewModel {
+public class ChatConversationViewModel extends ViewModel {
 
     private final SendMessageUseCase sendMessageUseCase;
 
@@ -31,7 +31,7 @@ public class ChatViewModel extends ViewModel {
     private final SetMessageTypeStateUseCase setMessageTypeStateUseCase;
 
     @Inject
-    public ChatViewModel(
+    public ChatConversationViewModel(
         SendMessageUseCase sendMessageUseCase,
         GetChatConversationUseCase getChatConversationUseCase,
         SetMessageTypeStateUseCase setMessageTypeStateUseCase
@@ -44,11 +44,13 @@ public class ChatViewModel extends ViewModel {
     public void sendMessage(
         @NonNull String recipientId,
         @NonNull String recipientName,
+        @NonNull String recipientPhotoUrl,
         @NonNull String message
     ) {
         sendMessageUseCase.invoke(
             recipientId,
             recipientName,
+            recipientPhotoUrl,
             message
         );
     }

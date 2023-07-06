@@ -20,7 +20,7 @@ public class GetChatConversationUseCase {
         this.chatRepository = chatRepository;
     }
 
-    public LiveData<List<ChatConversationEntity>> invoke(@NonNull String receiverId) {
-        return chatRepository.getChatConversation(receiverId);
+    public LiveData<List<ChatConversationEntity>> invoke(@NonNull String recipientId) {
+        return chatRepository.getChatConversation(recipientId);
     }
 }

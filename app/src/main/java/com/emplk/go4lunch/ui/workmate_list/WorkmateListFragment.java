@@ -57,9 +57,10 @@ public class WorkmateListFragment extends Fragment {
             @Override
             public void onChatButtonClicked(
                 @NonNull String workmateId,
-                @NonNull String workmateName
+                @NonNull String workmateName,
+                @NonNull String workmateAvatarUrl
             ) {
-                startActivity(ChatConversationActivity.navigate(requireContext(), workmateId, workmateName));
+                startActivity(ChatConversationActivity.navigate(requireContext(), workmateId, workmateName, workmateAvatarUrl));
             }
 
             @Override

@@ -3,7 +3,7 @@ package com.emplk.go4lunch.domain.chat;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
-import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserIdUseCase;
+import com.emplk.go4lunch.domain.chat.last_message.LastChatMessageEntity;
 
 import java.util.List;
 
@@ -14,7 +14,6 @@ public class GetLastChatMessageUseCase {
     @NonNull
     private final ChatRepository chatRepository;
 
-
     @Inject
     public GetLastChatMessageUseCase(
         @NonNull ChatRepository chatRepository
@@ -22,7 +21,7 @@ public class GetLastChatMessageUseCase {
         this.chatRepository = chatRepository;
     }
 
-    public LiveData<List<ChatConversationEntity>> invoke() {
-     return chatRepository.getLastChatMessagesList();
+    public LiveData<List<LastChatMessageEntity>> invoke() {
+        return chatRepository.getLastChatMessagesList();
     }
 }

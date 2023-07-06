@@ -20,19 +20,23 @@ public class ChatConversationActivity extends AppCompatActivity {
 
     private ChatActivityBinding binding;
 
-    private ChatViewModel viewModel;
+    private ChatConversationViewModel viewModel;
 
     private static final String WORKMATE_ID = "workmateId";
     private static final String WORKMATE_NAME = "workmateName";
 
+    private static final String WORKMATE_PHOTO_URL = "workmatePhotoUrl";
+
     public static Intent navigate(
         @NonNull Context context,
         @NonNull String workmateId,
-        @NonNull String workmateName
+        @NonNull String workmateName,
+        @NonNull String workmatePhotoUrl
     ) {
         Intent intent = new Intent(context, ChatConversationActivity.class);
         intent.putExtra(WORKMATE_ID, workmateId);
         intent.putExtra(WORKMATE_NAME, workmateName);
+        intent.putExtra(WORKMATE_PHOTO_URL, workmatePhotoUrl);   // TODO: not ideal...
         return intent;
     }
 
@@ -47,7 +51,7 @@ public class ChatConversationActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        viewModel = new ViewModelProvider(this).get(ChatViewModel.class);
+        viewModel = new ViewModelProvider(this).get(ChatConversationViewModel.class);
 
         initRecyclerView();
 
@@ -82,6 +86,7 @@ public class ChatConversationActivity extends AppCompatActivity {
                         viewModel.sendMessage(
                             getIntent().getStringExtra(WORKMATE_ID),
                             getIntent().getStringExtra(WORKMATE_NAME),
+                            getIntent().getStringExtra(WORKMATE_PHOTO_URL),
                             message
                         );
                         binding.chatMessageInputEt.setText("");

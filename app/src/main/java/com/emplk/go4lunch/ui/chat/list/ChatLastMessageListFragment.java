@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.emplk.go4lunch.databinding.ChatListFragmentBinding;
@@ -53,13 +55,21 @@ public class ChatLastMessageListFragment extends Fragment {
             @Override
             public void onLastMessageClicked(
                 @NonNull String workmateId,
+                @NonNull String workmateName,
                 @NonNull String workmatePictureUrl
             ) {
-                startActivity(ChatConversationActivity.navigate(requireContext(), workmateId, workmatePictureUrl));
+                startActivity(ChatConversationActivity.navigate(requireContext(), workmateId, workmateName, workmatePictureUrl));
             }
         });
         RecyclerView recyclerView = binding.getRoot();
         recyclerView.setAdapter(adapter);
-        viewModel.getChatLastMessageViewStateItems().observe(getViewLifecycleOwner(), adapter::submitList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+
+        viewModel.getChatLastMessageViewStateItems().observe(getViewLifecycleOwner(), chatLastMessageViewStateItems -> {
+            adapter.submitList(chatLastMessageViewStateItems);
+        });
     }
 }

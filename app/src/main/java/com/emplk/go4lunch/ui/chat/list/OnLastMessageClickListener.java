@@ -6,6 +6,7 @@ public interface OnLastMessageClickListener {
 
     void onLastMessageClicked(
         @NonNull String workmateId,
+        @NonNull String workmateName,
         @NonNull String workmatePictureUrl
     );
 }

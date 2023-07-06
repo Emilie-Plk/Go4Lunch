@@ -1,16 +1,22 @@
 package com.emplk.go4lunch.ui.chat.list;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
-import com.emplk.go4lunch.domain.chat.ChatConversationEntity;
+import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
+import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserUseCase;
 import com.emplk.go4lunch.domain.chat.GetLastChatMessageUseCase;
+import com.emplk.go4lunch.domain.chat.last_message.LastChatMessageEntity;
+import com.google.firebase.Timestamp;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -22,27 +28,88 @@ public class ChatLastMessageListViewModel extends ViewModel {
     @NonNull
     private final GetLastChatMessageUseCase getLastChatMessageUseCase;
 
+    @Nullable
+    private final LoggedUserEntity currentUser;
+
     @Inject
-    public ChatLastMessageListViewModel(@NonNull GetLastChatMessageUseCase getLastChatMessageUseCase) {
+    public ChatLastMessageListViewModel(
+        @NonNull GetLastChatMessageUseCase getLastChatMessageUseCase,
+        @NonNull GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase
+    ) {
         this.getLastChatMessageUseCase = getLastChatMessageUseCase;
+
+        if (getCurrentLoggedUserUseCase.invoke() != null) {
+            this.currentUser = getCurrentLoggedUserUseCase.invoke();
+        } else {
+            this.currentUser = null;
+        }
     }
 
     public LiveData<List<ChatLastMessageViewStateItem>> getChatLastMessageViewStateItems() {
         return Transformations.switchMap(
             getLastChatMessageUseCase.invoke(),
-            chatConversationEntities -> {
+            lastChatMessageEntities -> {
                 List<ChatLastMessageViewStateItem> chatLastMessageViewStateItemList = new ArrayList<>();
-                for (ChatConversationEntity chatConversationEntity : chatConversationEntities) {
+                for (LastChatMessageEntity lastChatMessageEntity : lastChatMessageEntities) {
+                    String workmateId = getWorkmateId(lastChatMessageEntity.getRecipientId(), lastChatMessageEntity.getSenderId());
+                    String workmateName = getWorkmateUserName(lastChatMessageEntity.getRecipientName(), lastChatMessageEntity.getSenderName());
+                    String workmatePhotoUrl = getWorkmatePhotoUrl(lastChatMessageEntity.getRecipientPhotoUrl(), lastChatMessageEntity.getSenderPhotoUrl());
+
                     chatLastMessageViewStateItemList.add(new ChatLastMessageViewStateItem(
-                        chatConversationEntity.getUserId(),
-                        chatConversationEntity.getUserName(),
-                        chatConversationEntity.getMessage(),
-                        "https://picsum.photos/200/300",
-                        chatConversationEntity.getTimestamp().toDate().toString()
+                        workmateId,
+                        workmateName,
+                        lastChatMessageEntity.getLastMessage(),
+                        workmatePhotoUrl,
+                        formatTimestamp(lastChatMessageEntity.getTimestamp())
                     ));
                 }
                 return new MutableLiveData<>(chatLastMessageViewStateItemList);
             }
         );
+    }
+
+    private String getWorkmatePhotoUrl(
+        String recipientPhotoUrl,
+        String senderPhotoUrl
+    ) {
+        if (currentUser != null &&
+            recipientPhotoUrl.equals(currentUser.getPictureUrl())
+        ) {
+            return senderPhotoUrl;
+        } else {
+            return recipientPhotoUrl;
+        }
+    }
+
+    private String getWorkmateUserName(
+        String recipientName,
+        String senderName
+    ) {
+        if (currentUser != null &&
+            recipientName.equals(currentUser.getName())
+        ) {
+            return senderName;
+        } else {
+            return recipientName;
+        }
+    }
+
+    private String getWorkmateId(
+        String recipientId,
+        String senderId
+    ) {
+        if (currentUser != null &&
+            recipientId.equals(currentUser.getId())
+        ) {
+            return senderId;
+        } else {
+            return recipientId;
+        }
+    }
+
+    private String formatTimestamp(@NonNull Timestamp timestamp) {
+        Locale locale = Locale.getDefault();
+        DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale);
+        return dateFormat.format(timestamp.toDate());
     }
 }
