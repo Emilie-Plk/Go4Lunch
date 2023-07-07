@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.dispatcher;
+package com.emplk.go4lunch.ui.dispatcher;
 
 import static com.emplk.util.TestUtil.getValueForTesting;
 import static org.junit.Assert.assertEquals;
@@ -30,28 +30,22 @@ public class DispatcherViewModelTest {
 
     private final StartLocationRequestUseCase startLocationRequestUseCase = mock(StartLocationRequestUseCase.class);
 
-    private final IsGpsEnabledUseCase isGpsEnabledUseCase = mock(IsGpsEnabledUseCase.class);
 
     private MutableLiveData<Boolean> hasPermissionMutableLiveData;
 
     private MutableLiveData<Boolean> isUserLoggedInMutableLiveData;
 
-    private MutableLiveData<Boolean> isGpsEnabledMutableLiveData;
-
     private DispatcherViewModel viewModel;
 
     @Before
     public void setUp() {
-
         hasPermissionMutableLiveData = new MutableLiveData<>();
         isUserLoggedInMutableLiveData = new MutableLiveData<>();
-        isGpsEnabledMutableLiveData = new MutableLiveData<>();
 
         doReturn(hasPermissionMutableLiveData).when(hasGpsPermissionUseCase).invoke();
         doReturn(isUserLoggedInMutableLiveData).when(isUserLoggedInUseCase).invoke();
-        doReturn(isGpsEnabledMutableLiveData).when(isGpsEnabledUseCase).invoke();
 
-        viewModel = new DispatcherViewModel(hasGpsPermissionUseCase, isUserLoggedInUseCase, startLocationRequestUseCase, isGpsEnabledUseCase);
+        viewModel = new DispatcherViewModel(hasGpsPermissionUseCase, isUserLoggedInUseCase, startLocationRequestUseCase);
     }
 
 
@@ -60,7 +54,6 @@ public class DispatcherViewModelTest {
         // GIVEN
         hasPermissionMutableLiveData.setValue(true);
         isUserLoggedInMutableLiveData.setValue(true);
-        isGpsEnabledMutableLiveData.setValue(true);
 
         // WHEN
         DispatcherViewAction result = getValueForTesting(viewModel.getDispatcherViewAction());
@@ -74,7 +67,6 @@ public class DispatcherViewModelTest {
         // GIVEN
         hasPermissionMutableLiveData.setValue(false);
         isUserLoggedInMutableLiveData.setValue(false);
-        isGpsEnabledMutableLiveData.setValue(false);
 
         // WHEN
         DispatcherViewAction result = getValueForTesting(viewModel.getDispatcherViewAction());
@@ -88,7 +80,6 @@ public class DispatcherViewModelTest {
         // GIVEN
         hasPermissionMutableLiveData.setValue(false);
         isUserLoggedInMutableLiveData.setValue(true);
-        isGpsEnabledMutableLiveData.setValue(true);
 
         // WHEN
         DispatcherViewAction result = getValueForTesting(viewModel.getDispatcherViewAction());
@@ -102,14 +93,10 @@ public class DispatcherViewModelTest {
         // GIVEN
         hasPermissionMutableLiveData.setValue(true);
         isUserLoggedInMutableLiveData.setValue(false);
-        isGpsEnabledMutableLiveData.setValue(true);
-
         // WHEN
         DispatcherViewAction result = getValueForTesting(viewModel.getDispatcherViewAction());
 
         // THEN
         assertEquals(result, DispatcherViewAction.GO_TO_LOGIN_ACTIVITY);
     }
-
-
 }

@@ -31,8 +31,7 @@ public class GpsLocationRepositoryBroadcastReceiverTest {
     public void setUp() {
         gpsLocationRepositoryBroadcastReceiver = new GpsLocationRepositoryBroadcastReceiver(
             context,
-            fusedLocationProviderClient,
-            context1);
+            fusedLocationProviderClient);
     }
 
     @Test

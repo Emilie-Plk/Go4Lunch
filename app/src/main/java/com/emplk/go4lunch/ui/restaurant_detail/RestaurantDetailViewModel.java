@@ -166,30 +166,6 @@ public class RestaurantDetailViewModel extends ViewModel {
         return restaurantDetailViewStateMediatorLiveData;
     }
 
-    private Float convertFiveToThreeRating(@Nullable Float fiveRating) {
-        if (fiveRating == null) {
-            return 0f;
-        } else {
-            float convertedRating = Math.round(fiveRating * 2) / 2f;
-            return Math.min(3f, convertedRating / 5f * 3f);
-        }
-    }
-
-    private String parseRestaurantPictureUrl(@Nullable String photoReferenceUrl) {
-        if (photoReferenceUrl != null && !photoReferenceUrl.isEmpty()) {
-            return resources
-                .getString(R.string.google_image_url, photoReferenceUrl, API_KEY);
-        } else {
-            Uri uri = Uri.parse("android.resource://com.emplk.go4lunch/" + R.drawable.restaurant_table);
-            return uri.toString();
-        }
-    }
-
-    private String checkIfResponseFieldExist(@Nullable String input) {
-        return input != null && !input.isEmpty() ? input : resources.getString(R.string.detail_missing_information);
-    }
-
-
     public void onAddFavoriteRestaurant() {
         addFavoriteRestaurantUseCase.invoke(restaurantId);
 
@@ -243,6 +219,29 @@ public class RestaurantDetailViewModel extends ViewModel {
                 return new MutableLiveData<>(workmatesViewStateItems);
             }
         );
+    }
+
+    private Float convertFiveToThreeRating(@Nullable Float fiveRating) {
+        if (fiveRating == null) {
+            return 0f;
+        } else {
+            float convertedRating = Math.round(fiveRating * 2) / 2f;
+            return Math.min(3f, convertedRating / 5f * 3f);
+        }
+    }
+
+    private String parseRestaurantPictureUrl(@Nullable String photoReferenceUrl) {
+        if (photoReferenceUrl != null && !photoReferenceUrl.isEmpty()) {
+            return resources
+                .getString(R.string.google_image_url, photoReferenceUrl, API_KEY);
+        } else {
+            Uri uri = Uri.parse("android.resource://com.emplk.go4lunch/" + R.drawable.restaurant_table);
+            return uri.toString();
+        }
+    }
+
+    private String checkIfResponseFieldExist(@Nullable String input) {
+        return input != null && !input.isEmpty() ? input : resources.getString(R.string.detail_missing_information);
     }
 }
 

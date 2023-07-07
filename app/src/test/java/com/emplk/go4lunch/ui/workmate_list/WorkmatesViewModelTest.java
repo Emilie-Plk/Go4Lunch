@@ -31,16 +31,12 @@ public class WorkmatesViewModelTest {
 
     private final GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase = mock(GetCurrentLoggedUserUseCase.class);
 
-    private LoggedUserEntity loggedUserEntity;
-
-    private MutableLiveData<List<WorkmateEntity>> workmateEntitiesWithAndWithoutChoiceMutableLiveData;
-
     private WorkmatesViewModel viewModel;
 
     @Before
     public void setUp() {
-        loggedUserEntity = mock(LoggedUserEntity.class);
-        workmateEntitiesWithAndWithoutChoiceMutableLiveData = new MutableLiveData<>();
+        LoggedUserEntity loggedUserEntity = mock(LoggedUserEntity.class);
+        MutableLiveData<List<WorkmateEntity>> workmateEntitiesWithAndWithoutChoiceMutableLiveData = new MutableLiveData<>();
 
         doReturn(workmateEntitiesWithAndWithoutChoiceMutableLiveData).when(getWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase).invoke();
         doReturn(loggedUserEntity).when(getCurrentLoggedUserUseCase).invoke();
