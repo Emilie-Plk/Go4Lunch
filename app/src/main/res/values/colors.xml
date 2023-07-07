@@ -24,6 +24,7 @@
     <color name="golden_yellow">#FFC823</color>
     <color name="sweet_pink">#E15887</color>
     <color name="tinted_gray_translucent">#1B52443C</color>
+    <color name="tinted_gray_super_light_translucent">#1BD1CAC5</color>
     <color name="detail_btn_disabled">@color/darker_gray</color>
     <color name="grey_text">@color/darker_gray</color>
     <color name="detail_btn_enabled">@color/crimson_rust</color>

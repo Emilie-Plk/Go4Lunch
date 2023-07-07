@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -100,16 +101,22 @@ public class ChatConversationActivity extends AppCompatActivity {
         ChatConversationListAdapter adapter = new ChatConversationListAdapter();
         binding.chatRv.setAdapter(adapter);
         binding.chatRv.setLayoutManager(new LinearLayoutManager(this));
-
-
-        viewModel.getChatMessages(getIntent().getStringExtra(WORKMATE_ID)).observe(this, chatMessageViewStateItems -> {
+        viewModel.getChatMessages(getIntent().getStringExtra(WORKMATE_ID)).observe(this,
+            chatMessageViewStateItems -> {
                 if (chatMessageViewStateItems != null && !chatMessageViewStateItems.isEmpty()) {
                     adapter.submitList(chatMessageViewStateItems);
-                    binding.chatRv.scrollToPosition(adapter.getItemCount()); // doesn't work
+                    binding.chatRv.scrollToPosition(adapter.getItemCount());
                 }
             }
         );
     }
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

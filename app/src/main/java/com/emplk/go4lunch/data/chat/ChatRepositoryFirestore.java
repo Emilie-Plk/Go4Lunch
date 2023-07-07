@@ -6,10 +6,10 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.emplk.go4lunch.domain.chat.conversation.ChatConversationEntity;
 import com.emplk.go4lunch.domain.chat.ChatRepository;
-import com.emplk.go4lunch.domain.chat.send_message.SendMessageEntity;
+import com.emplk.go4lunch.domain.chat.conversation.ChatConversationEntity;
 import com.emplk.go4lunch.domain.chat.last_message.LastChatMessageEntity;
+import com.emplk.go4lunch.domain.chat.send_message.SendMessageEntity;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;

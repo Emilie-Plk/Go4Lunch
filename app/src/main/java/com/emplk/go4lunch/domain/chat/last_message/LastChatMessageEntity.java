@@ -61,6 +61,7 @@ public class LastChatMessageEntity {
     public String getSenderId() {
         return senderId;
     }
+
     @NonNull
     public String getSenderName() {
         return senderName;
