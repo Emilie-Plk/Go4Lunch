@@ -1,8 +1,9 @@
-package com.emplk.go4lunch.domain.chat;
+package com.emplk.go4lunch.domain.chat.send_message;
 
 import androidx.annotation.NonNull;
 
-import com.emplk.go4lunch.domain.chat.last_message.SaveLastMessageSentUseCase;
+import com.emplk.go4lunch.domain.chat.ChatRepository;
+import com.emplk.go4lunch.domain.chat.last_message.SaveLastChatMessageSentUseCase;
 
 import javax.inject.Inject;
 
@@ -12,15 +13,15 @@ public class SendMessageUseCase {
     private final ChatRepository chatRepository;
 
     @NonNull
-    private final SaveLastMessageSentUseCase saveLastMessageSentUseCase;
+    private final SaveLastChatMessageSentUseCase saveLastChatMessageSentUseCase;
 
     @Inject
     public SendMessageUseCase(
         @NonNull ChatRepository chatRepository,
-        @NonNull SaveLastMessageSentUseCase saveLastMessageSentUseCase
+        @NonNull SaveLastChatMessageSentUseCase saveLastChatMessageSentUseCase
     ) {
         this.chatRepository = chatRepository;
-        this.saveLastMessageSentUseCase = saveLastMessageSentUseCase;
+        this.saveLastChatMessageSentUseCase = saveLastChatMessageSentUseCase;
     }
 
     public void invoke(
@@ -38,7 +39,7 @@ public class SendMessageUseCase {
             )
         );
 
-        saveLastMessageSentUseCase.invoke(
+        saveLastChatMessageSentUseCase.invoke(
             recipientId,
             recipientName,
             recipientPhotoUrl,

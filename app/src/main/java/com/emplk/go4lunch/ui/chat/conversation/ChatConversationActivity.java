@@ -34,9 +34,9 @@ public class ChatConversationActivity extends AppCompatActivity {
         @NonNull String workmatePhotoUrl
     ) {
         Intent intent = new Intent(context, ChatConversationActivity.class);
-        intent.putExtra(WORKMATE_ID, workmateId);
+        intent.putExtra(WORKMATE_ID, workmateId);  // TODO: not ideal... too many data passed?
         intent.putExtra(WORKMATE_NAME, workmateName);
-        intent.putExtra(WORKMATE_PHOTO_URL, workmatePhotoUrl);   // TODO: not ideal...
+        intent.putExtra(WORKMATE_PHOTO_URL, workmatePhotoUrl);
         return intent;
     }
 

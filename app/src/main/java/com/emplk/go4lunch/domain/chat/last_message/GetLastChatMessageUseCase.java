@@ -1,8 +1,9 @@
-package com.emplk.go4lunch.domain.chat;
+package com.emplk.go4lunch.domain.chat.last_message;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
+import com.emplk.go4lunch.domain.chat.ChatRepository;
 import com.emplk.go4lunch.domain.chat.last_message.LastChatMessageEntity;
 
 import java.util.List;

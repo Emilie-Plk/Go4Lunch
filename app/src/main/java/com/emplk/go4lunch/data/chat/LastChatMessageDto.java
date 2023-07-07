@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.domain.chat.last_message;
+package com.emplk.go4lunch.data.chat;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

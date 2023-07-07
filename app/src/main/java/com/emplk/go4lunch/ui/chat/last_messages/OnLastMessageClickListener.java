@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.ui.chat.list;
+package com.emplk.go4lunch.ui.chat.last_messages;
 
 import androidx.annotation.NonNull;
 

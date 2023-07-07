@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.domain.chat;
+package com.emplk.go4lunch.domain.chat.conversation;
 
 import androidx.annotation.NonNull;
 

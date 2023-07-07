@@ -12,7 +12,7 @@ import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.ChatRecipientMessageItemBinding;
 import com.emplk.go4lunch.databinding.ChatSenderMessageItemBinding;
 
-public class ChatConversationListAdapter extends ListAdapter<ChatMessageViewStateItem, RecyclerView.ViewHolder> {
+public class ChatConversationListAdapter extends ListAdapter<ChatConversationMessageViewStateItem, RecyclerView.ViewHolder> {
 
     private static final int VIEW_TYPE_SENDER = 1;
     private static final int VIEW_TYPE_RECIPIENT = 2;
@@ -43,7 +43,7 @@ public class ChatConversationListAdapter extends ListAdapter<ChatMessageViewStat
         @NonNull RecyclerView.ViewHolder holder,
         int position
     ) {
-        ChatMessageViewStateItem item = getItem(position);
+        ChatConversationMessageViewStateItem item = getItem(position);
         if (holder instanceof SenderViewHolder) {
             ((SenderViewHolder) holder).bind(item);
         } else if (holder instanceof RecipientViewHolder) {
@@ -53,7 +53,7 @@ public class ChatConversationListAdapter extends ListAdapter<ChatMessageViewStat
 
     @Override
     public int getItemViewType(int position) {
-        ChatMessageViewStateItem item = getItem(position);
+        ChatConversationMessageViewStateItem item = getItem(position);
         return (item.getMessageTypeState() == MessageTypeState.SENDER) ? VIEW_TYPE_SENDER : VIEW_TYPE_RECIPIENT;
     }
 
@@ -65,7 +65,7 @@ public class ChatConversationListAdapter extends ListAdapter<ChatMessageViewStat
             this.binding = binding;
         }
 
-        public void bind(ChatMessageViewStateItem item) {
+        public void bind(ChatConversationMessageViewStateItem item) {
             binding.chatSenderNameTv.setText(R.string.chat_sender_name);
             binding.chatContentMessageTv.setText(item.getMessage());
             binding.chatDateTv.setText(item.getDate());
@@ -80,26 +80,26 @@ public class ChatConversationListAdapter extends ListAdapter<ChatMessageViewStat
             this.binding = binding;
         }
 
-        public void bind(ChatMessageViewStateItem item) {
+        public void bind(ChatConversationMessageViewStateItem item) {
             binding.chatSenderNameTv.setText(item.getName());
             binding.chatContentMessageTv.setText(item.getMessage());
             binding.chatDateTv.setText(item.getDate());
         }
     }
 
-    private static class ListChatItemCallback extends DiffUtil.ItemCallback<ChatMessageViewStateItem> {
+    private static class ListChatItemCallback extends DiffUtil.ItemCallback<ChatConversationMessageViewStateItem> {
         @Override
         public boolean areItemsTheSame(
-            @NonNull ChatMessageViewStateItem oldItem,
-            @NonNull ChatMessageViewStateItem newItem
+            @NonNull ChatConversationMessageViewStateItem oldItem,
+            @NonNull ChatConversationMessageViewStateItem newItem
         ) {
             return oldItem.getDate().equals(newItem.getDate());
         }
 
         @Override
         public boolean areContentsTheSame(
-            @NonNull ChatMessageViewStateItem oldItem,
-            @NonNull ChatMessageViewStateItem newItem
+            @NonNull ChatConversationMessageViewStateItem oldItem,
+            @NonNull ChatConversationMessageViewStateItem newItem
         ) {
             return oldItem.equals(newItem);
         }

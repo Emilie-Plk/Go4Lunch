@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.ui.chat.list;
+package com.emplk.go4lunch.ui.chat.last_messages;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserUseCase;
-import com.emplk.go4lunch.domain.chat.GetLastChatMessageUseCase;
+import com.emplk.go4lunch.domain.chat.last_message.GetLastChatMessageUseCase;
 import com.emplk.go4lunch.domain.chat.last_message.LastChatMessageEntity;
 import com.google.firebase.Timestamp;
 
@@ -55,19 +55,22 @@ public class ChatLastMessageListViewModel extends ViewModel {
                     String workmateName = getWorkmateUserName(lastChatMessageEntity.getRecipientName(), lastChatMessageEntity.getSenderName());
                     String workmatePhotoUrl = getWorkmatePhotoUrl(lastChatMessageEntity.getRecipientPhotoUrl(), lastChatMessageEntity.getSenderPhotoUrl());
 
-                    chatLastMessageViewStateItemList.add(new ChatLastMessageViewStateItem(
-                        workmateId,
-                        workmateName,
-                        lastChatMessageEntity.getLastMessage(),
-                        workmatePhotoUrl,
-                        formatTimestamp(lastChatMessageEntity.getTimestamp())
-                    ));
+                    chatLastMessageViewStateItemList.add(
+                        new ChatLastMessageViewStateItem(
+                            workmateId,
+                            workmateName,
+                            lastChatMessageEntity.getLastMessage(),
+                            workmatePhotoUrl,
+                            formatTimestamp(lastChatMessageEntity.getTimestamp())
+                        )
+                    );
                 }
                 return new MutableLiveData<>(chatLastMessageViewStateItemList);
             }
         );
     }
 
+    @NonNull
     private String getWorkmatePhotoUrl(
         String recipientPhotoUrl,
         String senderPhotoUrl
@@ -81,6 +84,7 @@ public class ChatLastMessageListViewModel extends ViewModel {
         }
     }
 
+    @NonNull
     private String getWorkmateUserName(
         String recipientName,
         String senderName
@@ -94,6 +98,7 @@ public class ChatLastMessageListViewModel extends ViewModel {
         }
     }
 
+    @NonNull
     private String getWorkmateId(
         String recipientId,
         String senderId
@@ -107,6 +112,7 @@ public class ChatLastMessageListViewModel extends ViewModel {
         }
     }
 
+    @NonNull
     private String formatTimestamp(@NonNull Timestamp timestamp) {
         Locale locale = Locale.getDefault();
         DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale);

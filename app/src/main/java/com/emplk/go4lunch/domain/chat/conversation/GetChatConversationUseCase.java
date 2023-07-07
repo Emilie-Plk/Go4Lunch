@@ -1,7 +1,9 @@
-package com.emplk.go4lunch.domain.chat;
+package com.emplk.go4lunch.domain.chat.conversation;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+
+import com.emplk.go4lunch.domain.chat.ChatRepository;
 
 import java.util.List;
 

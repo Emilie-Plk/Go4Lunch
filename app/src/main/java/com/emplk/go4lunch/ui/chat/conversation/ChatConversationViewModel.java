@@ -6,10 +6,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
-import com.emplk.go4lunch.domain.chat.ChatConversationEntity;
-import com.emplk.go4lunch.domain.chat.GetChatConversationUseCase;
-import com.emplk.go4lunch.domain.chat.SendMessageUseCase;
-import com.emplk.go4lunch.domain.chat.SetMessageTypeStateUseCase;
+import com.emplk.go4lunch.domain.chat.conversation.ChatConversationEntity;
+import com.emplk.go4lunch.domain.chat.conversation.GetChatConversationUseCase;
+import com.emplk.go4lunch.domain.chat.send_message.SendMessageUseCase;
+import com.emplk.go4lunch.domain.chat.send_message.SetMessageTypeStateUseCase;
 import com.google.firebase.Timestamp;
 
 import java.text.DateFormat;
@@ -55,14 +55,14 @@ public class ChatConversationViewModel extends ViewModel {
         );
     }
 
-    public LiveData<List<ChatMessageViewStateItem>> getChatMessages(@NonNull String workmateId) {
+    public LiveData<List<ChatConversationMessageViewStateItem>> getChatMessages(@NonNull String workmateId) {
         return Transformations.switchMap(
             getChatConversationUseCase.invoke(workmateId),
             chatConversationEntities -> {
-                List<ChatMessageViewStateItem> chatMessageViewStateItems = new ArrayList<>();
+                List<ChatConversationMessageViewStateItem> chatConversationMessageViewStateItems = new ArrayList<>();
                 if (chatConversationEntities != null && !chatConversationEntities.isEmpty()) {
                     for (ChatConversationEntity chatConversationEntity : chatConversationEntities) {
-                        chatMessageViewStateItems.add(new ChatMessageViewStateItem(
+                        chatConversationMessageViewStateItems.add(new ChatConversationMessageViewStateItem(
                                 chatConversationEntity.getUserId(),
                                 chatConversationEntity.getUserName(),
                                 chatConversationEntity.getMessage(),
@@ -72,7 +72,7 @@ public class ChatConversationViewModel extends ViewModel {
                         );
                     }
                 }
-                return new MutableLiveData<>(chatMessageViewStateItems);
+                return new MutableLiveData<>(chatConversationMessageViewStateItems);
             }
         );
     }

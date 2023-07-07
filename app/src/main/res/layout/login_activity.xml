@@ -21,7 +21,11 @@
 
     <ImageView
         android:id="@+id/logo_image"
-        android:src="@drawable/plate_fork_spoon"
+        android:src="@drawable/baseline_restaurant_24"
+        app:tint="@color/pumpkin_orange"
+        android:layout_marginTop="80dp"
+        android:minWidth="100dp"
+        android:minHeight="100dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

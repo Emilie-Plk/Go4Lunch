@@ -3,17 +3,17 @@ package com.emplk.go4lunch.domain.chat.last_message;
 import androidx.annotation.NonNull;
 
 import com.emplk.go4lunch.domain.chat.ChatRepository;
-import com.emplk.go4lunch.domain.chat.SendMessageEntity;
+import com.emplk.go4lunch.domain.chat.send_message.SendMessageEntity;
 
 import javax.inject.Inject;
 
-public class SaveLastMessageSentUseCase {
+public class SaveLastChatMessageSentUseCase {
 
     @NonNull
     private final ChatRepository chatRepository;
 
     @Inject
-    public SaveLastMessageSentUseCase(@NonNull ChatRepository chatRepository) {
+    public SaveLastChatMessageSentUseCase(@NonNull ChatRepository chatRepository) {
         this.chatRepository = chatRepository;
     }
 

@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    tools:openDrawer="start"
     tools:context="com.emplk.go4lunch.ui.main.MainActivity">
 
     <com.google.android.material.navigation.NavigationView
@@ -13,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="false"
+        android:fitsSystemWindows="true"
         app:headerLayout="@layout/main_navigation_header"
         app:itemIconTint="@color/licorice_gray"
         app:itemTextColor="@color/licorice_gray"
@@ -23,8 +24,10 @@
             android:id="@+id/main_navigation_view_user_picture"
             android:layout_width="80dp"
             android:layout_height="80dp"
+            android:layout_marginBottom="24dp"
             android:layout_gravity="bottom|center"
-            android:src="@drawable/plate_fork_spoon" />
+            android:tint="@color/pumpkin_orange"
+            android:src="@drawable/baseline_restaurant_24" />
     </com.google.android.material.navigation.NavigationView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
