@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserUseCase;
-import com.emplk.go4lunch.domain.chat.last_message.GetLastChatMessageUseCase;
+import com.emplk.go4lunch.domain.chat.last_message.GetLastChatMessageSortedChronologicallyUseCase;
 import com.emplk.go4lunch.domain.chat.last_message.LastChatMessageEntity;
 import com.google.firebase.Timestamp;
 
@@ -26,17 +26,17 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class ChatLastMessageListViewModel extends ViewModel {
 
     @NonNull
-    private final GetLastChatMessageUseCase getLastChatMessageUseCase;
+    private final GetLastChatMessageSortedChronologicallyUseCase getLastChatMessageSortedChronologicallyUseCase;
 
     @Nullable
     private final LoggedUserEntity currentUser;
 
     @Inject
     public ChatLastMessageListViewModel(
-        @NonNull GetLastChatMessageUseCase getLastChatMessageUseCase,
+        @NonNull GetLastChatMessageSortedChronologicallyUseCase getLastChatMessageSortedChronologicallyUseCase,
         @NonNull GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase
     ) {
-        this.getLastChatMessageUseCase = getLastChatMessageUseCase;
+        this.getLastChatMessageSortedChronologicallyUseCase = getLastChatMessageSortedChronologicallyUseCase;
 
         if (getCurrentLoggedUserUseCase.invoke() != null) {
             this.currentUser = getCurrentLoggedUserUseCase.invoke();
@@ -47,7 +47,7 @@ public class ChatLastMessageListViewModel extends ViewModel {
 
     public LiveData<List<ChatLastMessageViewStateItem>> getChatLastMessageViewStateItems() {
         return Transformations.switchMap(
-            getLastChatMessageUseCase.invoke(),
+            getLastChatMessageSortedChronologicallyUseCase.invoke(),
             lastChatMessageEntities -> {
                 List<ChatLastMessageViewStateItem> chatLastMessageViewStateItemList = new ArrayList<>();
                 for (LastChatMessageEntity lastChatMessageEntity : lastChatMessageEntities) {
