@@ -70,5 +70,6 @@
     <string name="chat_send_message_btn_a11y">Send message</string>
     <string name="chat_bottom_nav">Chat</string>
     <string name="chat_textinput_et_hint">Type your message...</string>
+    <string name="chat_user_avatar_a11y">user avatar</string>
 
 </resources>

@@ -2,6 +2,8 @@ package com.emplk.go4lunch.domain.chat.last_message;
 
 import androidx.annotation.NonNull;
 
+import com.emplk.go4lunch.domain.chat.conversation.RecipientEntity;
+import com.emplk.go4lunch.domain.chat.conversation.SenderEntity;
 import com.google.firebase.Timestamp;
 
 import java.util.Objects;
@@ -12,43 +14,23 @@ public class LastChatMessageEntity {
     private final String lastMessage;
 
     @NonNull
-    private final String senderId;
+    private final SenderEntity senderEntity;
 
     @NonNull
-    private final String senderName;
-
-    @NonNull
-    private final String senderPhotoUrl;
-
-    @NonNull
-    private final String recipientId;
-
-    @NonNull
-    private final String recipientName;
-
-    @NonNull
-    private final String recipientPhotoUrl;
+    private final RecipientEntity recipientEntity;
 
     @NonNull
     private final Timestamp timestamp;
 
     public LastChatMessageEntity(
         @NonNull String lastMessage,
-        @NonNull String senderId,
-        @NonNull String senderName,
-        @NonNull String senderPhotoUrl,
-        @NonNull String recipientId,
-        @NonNull String recipientName,
-        @NonNull String recipientPhotoUrl,
+        @NonNull SenderEntity senderEntity,
+        @NonNull RecipientEntity recipientEntity,
         @NonNull Timestamp timestamp
     ) {
         this.lastMessage = lastMessage;
-        this.senderId = senderId;
-        this.senderName = senderName;
-        this.senderPhotoUrl = senderPhotoUrl;
-        this.recipientId = recipientId;
-        this.recipientName = recipientName;
-        this.recipientPhotoUrl = recipientPhotoUrl;
+        this.senderEntity = senderEntity;
+        this.recipientEntity = recipientEntity;
         this.timestamp = timestamp;
     }
 
@@ -58,35 +40,14 @@ public class LastChatMessageEntity {
     }
 
     @NonNull
-    public String getSenderId() {
-        return senderId;
+    public SenderEntity getSenderEntity() {
+        return senderEntity;
     }
 
     @NonNull
-    public String getSenderName() {
-        return senderName;
+    public RecipientEntity getRecipientEntity() {
+        return recipientEntity;
     }
-
-    @NonNull
-    public String getSenderPhotoUrl() {
-        return senderPhotoUrl;
-    }
-
-    @NonNull
-    public String getRecipientId() {
-        return recipientId;
-    }
-
-    @NonNull
-    public String getRecipientName() {
-        return recipientName;
-    }
-
-    @NonNull
-    public String getRecipientPhotoUrl() {
-        return recipientPhotoUrl;
-    }
-
 
     @NonNull
     public Timestamp getTimestamp() {
@@ -98,12 +59,12 @@ public class LastChatMessageEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LastChatMessageEntity that = (LastChatMessageEntity) o;
-        return lastMessage.equals(that.lastMessage) && senderId.equals(that.senderId) && senderName.equals(that.senderName) && senderPhotoUrl.equals(that.senderPhotoUrl) && recipientId.equals(that.recipientId) && recipientName.equals(that.recipientName) && recipientPhotoUrl.equals(that.recipientPhotoUrl) && timestamp.equals(that.timestamp);
+        return lastMessage.equals(that.lastMessage) && senderEntity.equals(that.senderEntity) && recipientEntity.equals(that.recipientEntity) && timestamp.equals(that.timestamp);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(lastMessage, senderId, senderName, senderPhotoUrl, recipientId, recipientName, recipientPhotoUrl, timestamp);
+        return Objects.hash(lastMessage, senderEntity, recipientEntity, timestamp);
     }
 
     @NonNull
@@ -111,12 +72,8 @@ public class LastChatMessageEntity {
     public String toString() {
         return "LastChatMessageEntity{" +
             "lastMessage='" + lastMessage + '\'' +
-            ", senderId='" + senderId + '\'' +
-            ", senderName='" + senderName + '\'' +
-            ", senderPhotoUrl='" + senderPhotoUrl + '\'' +
-            ", recipientId='" + recipientId + '\'' +
-            ", recipientName='" + recipientName + '\'' +
-            ", recipientPhotoUrl='" + recipientPhotoUrl + '\'' +
+            ", senderEntity=" + senderEntity +
+            ", recipientEntity=" + recipientEntity +
             ", timestamp=" + timestamp +
             '}';
     }

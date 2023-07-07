@@ -9,11 +9,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
 
 import com.emplk.go4lunch.domain.authentication.use_case.IsUserLoggedInUseCase;
-import com.emplk.go4lunch.domain.gps.IsGpsEnabledUseCase;
 import com.emplk.go4lunch.domain.location.StartLocationRequestUseCase;
 import com.emplk.go4lunch.domain.permission.HasGpsPermissionUseCase;
-import com.emplk.go4lunch.ui.dispatcher.DispatcherViewAction;
-import com.emplk.go4lunch.ui.dispatcher.DispatcherViewModel;
 
 import org.junit.Before;
 import org.junit.Rule;

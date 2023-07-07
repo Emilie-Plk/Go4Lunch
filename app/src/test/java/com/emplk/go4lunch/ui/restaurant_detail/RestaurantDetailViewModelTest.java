@@ -9,13 +9,11 @@ import static org.mockito.Mockito.verify;
 import android.content.res.Resources;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 
 import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserIdUseCase;
 import com.emplk.go4lunch.domain.detail.GetDetailsRestaurantWrapperUseCase;
-import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantEntity;
 import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantWrapper;
 import com.emplk.go4lunch.domain.favorite_restaurant.AddFavoriteRestaurantUseCase;
 import com.emplk.go4lunch.domain.favorite_restaurant.RemoveFavoriteRestaurantUseCase;
@@ -94,7 +92,7 @@ public class RestaurantDetailViewModelTest {
     public void nominal_case() {
         // WHEN
         RestaurantDetailViewState result = getValueForTesting(viewModel.getRestaurantDetails());
-   assertTrue(result instanceof RestaurantDetailViewState.RestaurantDetail);
+        assertTrue(result instanceof RestaurantDetailViewState.RestaurantDetail);
         verify(getDetailsRestaurantWrapperUseCase).invoke(savedStateHandle.get("restaurantId"));
         verify(getUserEntityUseCase).invoke();
     }

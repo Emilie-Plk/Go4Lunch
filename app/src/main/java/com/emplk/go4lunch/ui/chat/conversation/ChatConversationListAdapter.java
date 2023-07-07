@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.databinding.ChatRecipientMessageItemBinding;
 import com.emplk.go4lunch.databinding.ChatSenderMessageItemBinding;
@@ -69,6 +70,12 @@ public class ChatConversationListAdapter extends ListAdapter<ChatConversationMes
             binding.chatSenderNameTv.setText(R.string.chat_sender_name);
             binding.chatContentMessageTv.setText(item.getMessage());
             binding.chatDateTv.setText(item.getDate());
+
+            Glide.with(binding.getRoot())
+                .load(item.getPhotoUrl())
+                .override(60, 60)
+                .circleCrop()
+                .into(binding.chatSenderAvatarIv);
         }
     }
 
@@ -84,6 +91,12 @@ public class ChatConversationListAdapter extends ListAdapter<ChatConversationMes
             binding.chatSenderNameTv.setText(item.getName());
             binding.chatContentMessageTv.setText(item.getMessage());
             binding.chatDateTv.setText(item.getDate());
+
+            Glide.with(binding.getRoot())
+                .load(item.getPhotoUrl())
+                .override(60, 60)
+                .circleCrop()
+                .into(binding.chatSenderAvatarIv);
         }
     }
 

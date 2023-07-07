@@ -5,12 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <ImageView
+        android:id="@+id/chat_sender_avatar_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/chat_sent_message_cv"
+        tools:src="@drawable/baseline_person_24" />
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/chat_sent_message_cv"
         style="@style/Widget.Material3.CardView.Filled"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
+        android:layout_marginEnd="34dp"
+        android:layout_marginStart="12dp"
         android:backgroundTint="@color/light_peach_translucent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,12 +37,12 @@
                 android:id="@+id/chat_sender_name_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:textAlignment="viewEnd"
                 android:textColor="@color/light_gray"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:textAlignment="viewEnd"
                 tools:text="John Doe" />
 
             <TextView

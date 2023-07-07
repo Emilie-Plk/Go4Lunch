@@ -5,12 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <ImageView
+        android:id="@+id/chat_sender_avatar_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:contentDescription="@string/chat_user_avatar_a11y"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/chat_sent_message_cv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/baseline_person_24" />
+
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/chat_sent_message_cv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
         style="@style/Widget.Material3.CardView.Filled"
-        android:layout_margin="12dp"
+        android:layout_width="0dp"
+        android:layout_marginStart="34dp"
+        android:layout_marginEnd="12dp"
+        android:layout_height="wrap_content"
         android:backgroundTint="@color/reseda_green_dimmed"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -9,10 +9,10 @@ import java.util.Objects;
 public class ChatConversationEntity {
 
     @NonNull
-    private final String userId;
+    private final SenderEntity senderEntity;
 
     @NonNull
-    private final String userName;
+    private final RecipientEntity recipientEntity;
 
     @NonNull
     private final String message;
@@ -21,25 +21,25 @@ public class ChatConversationEntity {
     private final Timestamp timestamp;
 
     public ChatConversationEntity(
-        @NonNull String userId,
-        @NonNull String userName,
+        @NonNull SenderEntity senderEntity,
+        @NonNull RecipientEntity recipientEntity,
         @NonNull String message,
         @NonNull Timestamp timestamp
     ) {
-        this.userId = userId;
-        this.userName = userName;
+        this.senderEntity = senderEntity;
+        this.recipientEntity = recipientEntity;
         this.message = message;
         this.timestamp = timestamp;
     }
 
     @NonNull
-    public String getUserId() {
-        return userId;
+    public SenderEntity getSenderEntity() {
+        return senderEntity;
     }
 
     @NonNull
-    public String getUserName() {
-        return userName;
+    public RecipientEntity getRecipientEntity() {
+        return recipientEntity;
     }
 
     @NonNull
@@ -57,22 +57,22 @@ public class ChatConversationEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChatConversationEntity that = (ChatConversationEntity) o;
-        return userId.equals(that.userId) && userName.equals(that.userName) && message.equals(that.message) && timestamp.equals(that.timestamp);
+        return senderEntity.equals(that.senderEntity) && recipientEntity.equals(that.recipientEntity) && message.equals(that.message) && timestamp.equals(that.timestamp);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, userName, message, timestamp);
+        return Objects.hash(senderEntity, recipientEntity, message, timestamp);
     }
 
     @NonNull
     @Override
     public String toString() {
         return "ChatConversationEntity{" +
-            "userId='" + userId + '\'' +
-            ", userName='" + userName + '\'' +
-            ", message=" + message +
-            ", timestamp='" + timestamp + '\'' +
+            "senderEntity=" + senderEntity +
+            ", recipientEntity=" + recipientEntity +
+            ", message='" + message + '\'' +
+            ", timestamp=" + timestamp +
             '}';
     }
 }

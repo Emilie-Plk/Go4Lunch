@@ -54,7 +54,7 @@
         android:hint="@string/chat_textinput_et_hint"
         android:lines="2"
         android:singleLine="true"
-      android:inputType="textCapSentences"
+        android:inputType="textCapSentences"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/chat_send_fab_button"
         app:layout_constraintStart_toStartOf="parent"

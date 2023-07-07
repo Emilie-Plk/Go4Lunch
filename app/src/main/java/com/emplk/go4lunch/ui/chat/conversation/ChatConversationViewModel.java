@@ -28,6 +28,7 @@ public class ChatConversationViewModel extends ViewModel {
 
     private final GetChatConversationUseCase getChatConversationUseCase;
 
+
     private final SetMessageTypeStateUseCase setMessageTypeStateUseCase;
 
     @Inject
@@ -62,12 +63,14 @@ public class ChatConversationViewModel extends ViewModel {
                 List<ChatConversationMessageViewStateItem> chatConversationMessageViewStateItems = new ArrayList<>();
                 if (chatConversationEntities != null && !chatConversationEntities.isEmpty()) {
                     for (ChatConversationEntity chatConversationEntity : chatConversationEntities) {
-                        chatConversationMessageViewStateItems.add(new ChatConversationMessageViewStateItem(
-                                chatConversationEntity.getUserId(),
-                                chatConversationEntity.getUserName(),
+                        chatConversationMessageViewStateItems.add(
+                            new ChatConversationMessageViewStateItem(
+                                chatConversationEntity.getSenderEntity().getSenderId(),
+                                chatConversationEntity.getSenderEntity().getSenderName(),
+                                chatConversationEntity.getSenderEntity().getSenderPictureUrl(),
                                 chatConversationEntity.getMessage(),
                                 formatTimestamp(chatConversationEntity.getTimestamp()),
-                                setMessageTypeStateUseCase.invoke(chatConversationEntity.getUserId())
+                                setMessageTypeStateUseCase.invoke(chatConversationEntity.getRecipientEntity().getRecipientId())
                             )
                         );
                     }

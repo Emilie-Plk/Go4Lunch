@@ -2,46 +2,39 @@ package com.emplk.go4lunch.domain.chat.send_message;
 
 import androidx.annotation.NonNull;
 
+import com.emplk.go4lunch.domain.chat.conversation.RecipientEntity;
+import com.emplk.go4lunch.domain.chat.conversation.SenderEntity;
+
 import java.util.Objects;
 
 public class SendMessageEntity {
     @NonNull
-    private final String recipientId;
+    private final SenderEntity senderEntity;
 
     @NonNull
-    private final String recipientName;
-
-    @NonNull
-    private final String recipientPhotoUrl;
+    private final RecipientEntity recipientEntity;
 
     @NonNull
     private final String message;
 
     public SendMessageEntity(
-        @NonNull String recipientId,
-        @NonNull String recipientName,
-        @NonNull String recipientPhotoUrl,
+        @NonNull SenderEntity senderEntity,
+        @NonNull RecipientEntity recipientEntity,
         @NonNull String message
     ) {
-        this.recipientId = recipientId;
-        this.recipientName = recipientName;
-        this.recipientPhotoUrl = recipientPhotoUrl;
+        this.senderEntity = senderEntity;
+        this.recipientEntity = recipientEntity;
         this.message = message;
     }
 
     @NonNull
-    public String getRecipientId() {
-        return recipientId;
+    public SenderEntity getSenderEntity() {
+        return senderEntity;
     }
 
     @NonNull
-    public String getRecipientName() {
-        return recipientName;
-    }
-
-    @NonNull
-    public String getRecipientPhotoUrl() {
-        return recipientPhotoUrl;
+    public RecipientEntity getRecipientEntity() {
+        return recipientEntity;
     }
 
     @NonNull
@@ -49,27 +42,25 @@ public class SendMessageEntity {
         return message;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SendMessageEntity that = (SendMessageEntity) o;
-        return recipientId.equals(that.recipientId) && recipientName.equals(that.recipientName) && recipientPhotoUrl.equals(that.recipientPhotoUrl) && message.equals(that.message);
+        return senderEntity.equals(that.senderEntity) && recipientEntity.equals(that.recipientEntity) && message.equals(that.message);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(recipientId, recipientName, recipientPhotoUrl, message);
+        return Objects.hash(senderEntity, recipientEntity, message);
     }
 
     @NonNull
     @Override
     public String toString() {
         return "SendMessageEntity{" +
-            "recipientId='" + recipientId + '\'' +
-            ", recipientName='" + recipientName + '\'' +
-            ", recipientPhotoUrl='" + recipientPhotoUrl + '\'' +
+            "senderEntity=" + senderEntity +
+            ", recipientEntity=" + recipientEntity +
             ", message='" + message + '\'' +
             '}';
     }

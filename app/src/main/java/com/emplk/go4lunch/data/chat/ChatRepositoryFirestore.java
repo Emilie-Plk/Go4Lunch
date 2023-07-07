@@ -8,20 +8,18 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.emplk.go4lunch.domain.chat.ChatRepository;
 import com.emplk.go4lunch.domain.chat.conversation.ChatConversationEntity;
+import com.emplk.go4lunch.domain.chat.conversation.RecipientEntity;
+import com.emplk.go4lunch.domain.chat.conversation.SenderEntity;
 import com.emplk.go4lunch.domain.chat.last_message.LastChatMessageEntity;
 import com.emplk.go4lunch.domain.chat.send_message.SendMessageEntity;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -35,16 +33,14 @@ public class ChatRepositoryFirestore implements ChatRepository {
 
     private static final String LAST_MESSAGE_SUBCOLLECTION = "last_message";
 
+    private static final String RECIPIENT_ID = "recipientId";
 
     @NonNull
     private final FirebaseFirestore firestore;
 
     @NonNull
     private final String currentUserId;
-    @NonNull
-    private final String currentUserName;
-    @NonNull
-    private final String currentUserPictureUrl;
+
 
     @Inject
     public ChatRepositoryFirestore(
@@ -58,8 +54,6 @@ public class ChatRepositoryFirestore implements ChatRepository {
             firebaseAuth.getCurrentUser().getPhotoUrl() != null
         ) {
             currentUserId = firebaseAuth.getCurrentUser().getUid();
-            currentUserName = firebaseAuth.getCurrentUser().getDisplayName();
-            currentUserPictureUrl = firebaseAuth.getCurrentUser().getPhotoUrl().toString();
         } else {
             throw new IllegalStateException("User is not logged in!");
         }
@@ -68,104 +62,113 @@ public class ChatRepositoryFirestore implements ChatRepository {
 
     @Override
     public void sendMessage(@NonNull SendMessageEntity sendMessageEntity) {
-        String recipientId = sendMessageEntity.getRecipientId();
-        String recipientName = sendMessageEntity.getRecipientName();
-        String conversationUid = generateConversationId(currentUserId, sendMessageEntity.getRecipientId());
+        String senderId = sendMessageEntity.getSenderEntity().getSenderId();
+        String recipientId = sendMessageEntity.getRecipientEntity().getRecipientId();
+        String conversationUid = generateConversationId(senderId, recipientId);
 
         firestore
             .collection(CHAT_COLLECTION)
             .document(conversationUid)
             .collection(MESSAGES_SUBCOLLECTION)
             .add(
-                new SendMessageDto(
-                    recipientId,
-                    recipientName,
+                new ChatConversationDto(
+                    sendMessageEntity.getSenderEntity().getSenderId(),
+                    sendMessageEntity.getSenderEntity().getSenderName(),
+                    sendMessageEntity.getSenderEntity().getSenderPictureUrl(),
+                    sendMessageEntity.getRecipientEntity().getRecipientId(),
+                    sendMessageEntity.getRecipientEntity().getRecipientName(),
+                    sendMessageEntity.getRecipientEntity().getRecipientPhotoUrl(),
                     sendMessageEntity.getMessage(),
                     null
                 )
             )
-            .addOnSuccessListener(aVoid -> {
-                    Log.d("ChatRepositoryFirestore", "Message sent successfully");
-                }
-            )
-            .addOnFailureListener(e -> {
-                    Log.e("ChatRepositoryFirestore", "Error sending message", e);
+            .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("ChatRepositoryFirestore", "Message sent successfully");
+                    } else {
+                        Log.e("ChatRepositoryFirestore", "Message sent failed", task.getException());
+                    }
                 }
             );
     }
 
     @Override
     public void saveLastMessage(@NonNull SendMessageEntity sendMessageEntity) {
-        String recipientId = sendMessageEntity.getRecipientId();
+        String senderId = sendMessageEntity.getSenderEntity().getSenderId();
+        String recipientId = sendMessageEntity.getRecipientEntity().getRecipientId();
 
-        Map<String, Object> lastMessage = new HashMap<>();
-        lastMessage.put("message", sendMessageEntity.getMessage());
-        lastMessage.put("message_date", FieldValue.serverTimestamp());
-        lastMessage.put("sender_id", currentUserId);
-        lastMessage.put("sender_name", currentUserName);
-        lastMessage.put("sender_photo_url", currentUserPictureUrl);
-        lastMessage.put("recipient_id", sendMessageEntity.getRecipientId());
-        lastMessage.put("recipient_name", sendMessageEntity.getRecipientName());
-        lastMessage.put("recipient_photo_url", sendMessageEntity.getRecipientPhotoUrl());
+        ChatConversationDto lastMessageChatConversationDto = new ChatConversationDto(
+            sendMessageEntity.getSenderEntity().getSenderId(),
+            sendMessageEntity.getSenderEntity().getSenderName(),
+            sendMessageEntity.getSenderEntity().getSenderPictureUrl(),
+            sendMessageEntity.getRecipientEntity().getRecipientId(),
+            sendMessageEntity.getRecipientEntity().getRecipientName(),
+            sendMessageEntity.getRecipientEntity().getRecipientPhotoUrl(),
+            sendMessageEntity.getMessage(),
+            null
+        );
 
         firestore
             .collection(CHAT_LAST_MESSAGES_COLLECTION)
-            .document(currentUserId)
-            .collection(LAST_MESSAGE_SUBCOLLECTION)
             .document(recipientId)
-            .set(lastMessage)
-            .addOnSuccessListener(aVoid -> {
-                    Log.d("ChatRepositoryFirestore", "Last message saved successfully for currentUser");
-                }
-            ).addOnFailureListener(e -> {
-                    Log.e("ChatRepositoryFirestore", "Error saving last message for currentUser", e);
+            .collection(LAST_MESSAGE_SUBCOLLECTION)
+            .document(senderId)
+            .set(lastMessageChatConversationDto)
+            .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("ChatRepositoryFirestore", "Last message saved successfully for sender");
+                    } else {
+                        Log.e("ChatRepositoryFirestore", "Error saving last message for sender", task.getException());
+                    }
                 }
             );
 
         firestore
             .collection(CHAT_LAST_MESSAGES_COLLECTION)
-            .document(recipientId)
+            .document(senderId)
             .collection(LAST_MESSAGE_SUBCOLLECTION)
-            .document(currentUserId)
-            .set(lastMessage)
-            .addOnSuccessListener(aVoid -> {
-                    Log.d("ChatRepositoryFirestore", "Last message saved successfully for recipient");
-                }
-            ).addOnFailureListener(e -> {
-                    Log.e("ChatRepositoryFirestore", "Error saving last message for recipient", e);
+            .document(recipientId)
+            .set(lastMessageChatConversationDto)
+            .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("ChatRepositoryFirestore", "Last message saved successfully for recipient");
+                    } else {
+                        Log.e("ChatRepositoryFirestore", "Error saving last message for recipient", task.getException());
+                    }
                 }
             );
     }
 
     @NonNull
     @Override
-    public LiveData<List<LastChatMessageEntity>> getLastChatMessagesList() {
+    public LiveData<List<LastChatMessageEntity>> getLastChatMessagesList() { // TODO: maybe currentuserid in Usecase
         MutableLiveData<List<LastChatMessageEntity>> lastChatMessageReceivedList = new MutableLiveData<>();
 
         firestore.collection(CHAT_LAST_MESSAGES_COLLECTION)
             .document(currentUserId)
             .collection(LAST_MESSAGE_SUBCOLLECTION)
             .addSnapshotListener((querySnapshot, error) -> {
-                if (error != null) {
-                    Log.e("ChatRepositoryFirestore", "Error getting last chat messages list", error);
-                    return;
-                }
-
-                List<LastChatMessageEntity> lastChatMessageEntities = new ArrayList<>();
-                if (querySnapshot != null) {
-                    for (DocumentSnapshot documentSnapshot : querySnapshot.getDocuments()) {
-                        if (documentSnapshot != null) {
-                            LastChatMessageEntity lastChatMessageEntity = mapToLastChatMessageEntity(documentSnapshot);
-                            if (lastChatMessageEntity != null) {
-                                lastChatMessageEntities.add(lastChatMessageEntity);
+                    if (error != null) {
+                        Log.e("ChatRepositoryFirestore", "Error getting last chat messages list", error);
+                        return;
+                    }
+                    List<LastChatMessageEntity> lastChatMessageEntities = new ArrayList<>();
+                    if (querySnapshot != null) {
+                        for (DocumentSnapshot documentSnapshot : querySnapshot.getDocuments()) {
+                            if (documentSnapshot != null) {
+                                Log.d("ChatRepositoryFirestore", "Last chat message received: " + documentSnapshot.getData());
+                                LastChatMessageDto lastChatMessageDto = documentSnapshot.toObject(LastChatMessageDto.class);
+                                LastChatMessageEntity lastChatMessageEntity = mapToLastChatMessageEntity(lastChatMessageDto);
+                                if (lastChatMessageEntity != null) {
+                                    lastChatMessageEntities.add(lastChatMessageEntity);
+                                }
                             }
                         }
                     }
+
+                    lastChatMessageReceivedList.setValue(lastChatMessageEntities);
                 }
-
-                lastChatMessageReceivedList.setValue(lastChatMessageEntities);
-            });
-
+            );
         return lastChatMessageReceivedList;
     }
 
@@ -214,13 +217,27 @@ public class ChatRepositoryFirestore implements ChatRepository {
     }
 
     private ChatConversationEntity mapToChatConversationEntity(ChatConversationDto chatConversationDto) {
-        if (chatConversationDto.getRecipientId() != null &&
+        if (chatConversationDto != null &&
+            chatConversationDto.getSenderId() != null &&
+            chatConversationDto.getSenderName() != null &&
+            chatConversationDto.getSenderPictureUrl() != null &&
+            chatConversationDto.getRecipientId() != null &&
             chatConversationDto.getRecipientName() != null &&
+            chatConversationDto.getRecipientPictureUrl() != null &&
             chatConversationDto.getMessage() != null &&
-            chatConversationDto.getTimestamp() != null) {
+            chatConversationDto.getTimestamp() != null
+        ) {
             return new ChatConversationEntity(
-                chatConversationDto.getRecipientId(),
-                chatConversationDto.getRecipientName(),
+                new SenderEntity(
+                    chatConversationDto.getSenderId(),
+                    chatConversationDto.getSenderName(),
+                    chatConversationDto.getSenderPictureUrl()
+                ),
+                new RecipientEntity(
+                    chatConversationDto.getRecipientId(),
+                    chatConversationDto.getRecipientName(),
+                    chatConversationDto.getRecipientPictureUrl()
+                ),
                 chatConversationDto.getMessage(),
                 chatConversationDto.getTimestamp()
             );
@@ -229,31 +246,33 @@ public class ChatRepositoryFirestore implements ChatRepository {
         }
     }
 
-    private LastChatMessageEntity mapToLastChatMessageEntity(DocumentSnapshot documentSnapshot) {
-        Map<String, Object> data = documentSnapshot.getData();
-
-        if (data != null) {
-            String lastMessage = (String) data.get("message");
-            Timestamp timestamp = (Timestamp) data.get("message_date");
-            String senderId = (String) data.get("sender_id");
-            String senderName = (String) data.get("sender_name");
-            String senderPhotoUrl = (String) data.get("sender_photo_url");
-            String recipientId = (String) data.get("recipient_id");
-            String recipientName = (String) data.get("recipient_name");
-            String recipientPhotoUrl = (String) data.get("recipient_photo_url");
-
-            if (lastMessage != null &&
-                recipientId != null &&
-                recipientName != null &&
-                recipientPhotoUrl != null &&
-                senderId != null &&
-                senderName != null &&
-                senderPhotoUrl != null &&
-                timestamp != null
-            ) {
-                return new LastChatMessageEntity(lastMessage, senderId, senderName, senderPhotoUrl, recipientId, recipientName, recipientPhotoUrl, timestamp);
-            }
+    private LastChatMessageEntity mapToLastChatMessageEntity(LastChatMessageDto lastChatMessageDto) {
+        if (lastChatMessageDto != null &&
+            lastChatMessageDto.getMessage() != null &&
+            lastChatMessageDto.getSenderId() != null &&
+            lastChatMessageDto.getSenderName() != null &&
+            lastChatMessageDto.getSenderPictureUrl() != null &&
+            lastChatMessageDto.getRecipientId() != null &&
+            lastChatMessageDto.getRecipientName() != null &&
+            lastChatMessageDto.getRecipientPictureUrl() != null &&
+            lastChatMessageDto.getTimestamp() != null
+        ) {
+            return new LastChatMessageEntity(
+                lastChatMessageDto.getMessage(),
+                new SenderEntity(
+                    lastChatMessageDto.getSenderId(),
+                    lastChatMessageDto.getSenderName(),
+                    lastChatMessageDto.getSenderPictureUrl()
+                ),
+                new RecipientEntity(
+                    lastChatMessageDto.getRecipientId(),
+                    lastChatMessageDto.getRecipientName(),
+                    lastChatMessageDto.getRecipientPictureUrl()
+                ),
+                lastChatMessageDto.getTimestamp()
+            );
+        } else {
+            return null;
         }
-        return null;
     }
 }

@@ -51,9 +51,9 @@ public class ChatLastMessageListViewModel extends ViewModel {
             lastChatMessageEntities -> {
                 List<ChatLastMessageViewStateItem> chatLastMessageViewStateItemList = new ArrayList<>();
                 for (LastChatMessageEntity lastChatMessageEntity : lastChatMessageEntities) {
-                    String workmateId = getWorkmateId(lastChatMessageEntity.getRecipientId(), lastChatMessageEntity.getSenderId());
-                    String workmateName = getWorkmateUserName(lastChatMessageEntity.getRecipientName(), lastChatMessageEntity.getSenderName());
-                    String workmatePhotoUrl = getWorkmatePhotoUrl(lastChatMessageEntity.getRecipientPhotoUrl(), lastChatMessageEntity.getSenderPhotoUrl());
+                    String workmateId = getWorkmateId(lastChatMessageEntity.getSenderEntity().getSenderId(), lastChatMessageEntity.getRecipientEntity().getRecipientId());
+                    String workmateName = getWorkmateUserName(lastChatMessageEntity.getSenderEntity().getSenderName(), lastChatMessageEntity.getRecipientEntity().getRecipientName());
+                    String workmatePhotoUrl = getWorkmatePhotoUrl(lastChatMessageEntity.getSenderEntity().getSenderPictureUrl(), lastChatMessageEntity.getRecipientEntity().getRecipientPhotoUrl());
 
                     chatLastMessageViewStateItemList.add(
                         new ChatLastMessageViewStateItem(
@@ -72,8 +72,8 @@ public class ChatLastMessageListViewModel extends ViewModel {
 
     @NonNull
     private String getWorkmatePhotoUrl(
-        String recipientPhotoUrl,
-        String senderPhotoUrl
+        String senderPhotoUrl,
+        String recipientPhotoUrl
     ) {
         if (currentUser != null &&
             recipientPhotoUrl.equals(currentUser.getPictureUrl())
@@ -86,8 +86,8 @@ public class ChatLastMessageListViewModel extends ViewModel {
 
     @NonNull
     private String getWorkmateUserName(
-        String recipientName,
-        String senderName
+        String senderName,
+        String recipientName
     ) {
         if (currentUser != null &&
             recipientName.equals(currentUser.getName())
@@ -100,8 +100,8 @@ public class ChatLastMessageListViewModel extends ViewModel {
 
     @NonNull
     private String getWorkmateId(
-        String recipientId,
-        String senderId
+        String senderId,
+        String recipientId
     ) {
         if (currentUser != null &&
             recipientId.equals(currentUser.getId())
