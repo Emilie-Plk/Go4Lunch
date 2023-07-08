@@ -16,8 +16,11 @@ public interface ChatRepository {
     void saveLastMessage(@NonNull SendMessageEntity sendMessageEntity);
 
     @NonNull
-    LiveData<List<LastChatMessageEntity>> getLastChatMessagesList();
+    LiveData<List<LastChatMessageEntity>> getLastChatMessagesList(@NonNull String currentUserId);
 
     @NonNull
-    LiveData<List<ChatConversationEntity>> getChatConversation(@NonNull String recipientId);
+    LiveData<List<ChatConversationEntity>> getChatConversation(
+        @NonNull String currentUserId,
+        @NonNull String recipientId
+    );
 }

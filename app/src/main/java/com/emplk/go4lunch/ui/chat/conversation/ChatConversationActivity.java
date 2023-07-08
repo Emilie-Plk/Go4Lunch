@@ -105,7 +105,7 @@ public class ChatConversationActivity extends AppCompatActivity {
             chatMessageViewStateItems -> {
                 if (chatMessageViewStateItems != null && !chatMessageViewStateItems.isEmpty()) {
                     adapter.submitList(chatMessageViewStateItems);
-                    binding.chatRv.smoothScrollToPosition(adapter.getItemCount());
+                    binding.chatRv.smoothScrollToPosition(chatMessageViewStateItems.size() - 1);
                 }
             }
         );

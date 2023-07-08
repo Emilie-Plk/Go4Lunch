@@ -59,13 +59,13 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(RestaurantDetailViewModel.class);
 
-        setupWorkmatesRecyclerView();
+        initRecyclerView();
 
         setupObservers();
 
     }
 
-    private void setupWorkmatesRecyclerView() {
+    private void initRecyclerView() {
         WorkmateListAdapter adapter = new WorkmateListAdapter(new OnWorkmateClickedListener() {
             @Override
             public void onChatButtonClicked(

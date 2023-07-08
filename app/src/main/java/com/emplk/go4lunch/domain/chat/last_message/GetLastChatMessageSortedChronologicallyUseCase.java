@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 
+import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserIdUseCase;
 import com.emplk.go4lunch.domain.chat.ChatRepository;
 
 import java.util.Collections;
@@ -17,15 +18,20 @@ public class GetLastChatMessageSortedChronologicallyUseCase {
     @NonNull
     private final ChatRepository chatRepository;
 
+    @NonNull
+    private final GetCurrentLoggedUserIdUseCase getCurrentLoggedUserIdUseCase;
+
     @Inject
     public GetLastChatMessageSortedChronologicallyUseCase(
-        @NonNull ChatRepository chatRepository
+        @NonNull ChatRepository chatRepository,
+        @NonNull GetCurrentLoggedUserIdUseCase getCurrentLoggedUserIdUseCase
     ) {
         this.chatRepository = chatRepository;
+        this.getCurrentLoggedUserIdUseCase = getCurrentLoggedUserIdUseCase;
     }
 
     public LiveData<List<LastChatMessageEntity>> invoke() {
-        return Transformations.map(chatRepository.getLastChatMessagesList(), lastChatMessageEntities -> {
+        return Transformations.map(chatRepository.getLastChatMessagesList(getCurrentLoggedUserIdUseCase.invoke()), lastChatMessageEntities -> {
                 Collections.sort(lastChatMessageEntities, Comparator.comparing(
                         lastChatMessageEntity -> lastChatMessageEntity.getTimestamp()
                     )

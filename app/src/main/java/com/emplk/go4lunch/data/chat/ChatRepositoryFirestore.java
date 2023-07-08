@@ -3,6 +3,7 @@ package com.emplk.go4lunch.data.chat;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -12,7 +13,6 @@ import com.emplk.go4lunch.domain.chat.conversation.RecipientEntity;
 import com.emplk.go4lunch.domain.chat.conversation.SenderEntity;
 import com.emplk.go4lunch.domain.chat.last_message.LastChatMessageEntity;
 import com.emplk.go4lunch.domain.chat.send_message.SendMessageEntity;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -32,31 +32,17 @@ public class ChatRepositoryFirestore implements ChatRepository {
     private static final String MESSAGES_SUBCOLLECTION = "messages";
 
     private static final String LAST_MESSAGE_SUBCOLLECTION = "last_message";
-
-    private static final String RECIPIENT_ID = "recipientId";
+    private static final String MESSAGE_TIMESTAMP = "timestamp";
 
     @NonNull
     private final FirebaseFirestore firestore;
 
-    @NonNull
-    private final String currentUserId;
-
 
     @Inject
     public ChatRepositoryFirestore(
-        @NonNull FirebaseFirestore firestore,
-        @NonNull FirebaseAuth firebaseAuth
+        @NonNull FirebaseFirestore firestore
     ) {
         this.firestore = firestore;
-
-        if (firebaseAuth.getCurrentUser() != null &&
-            firebaseAuth.getCurrentUser().getDisplayName() != null &&
-            firebaseAuth.getCurrentUser().getPhotoUrl() != null
-        ) {
-            currentUserId = firebaseAuth.getCurrentUser().getUid();
-        } else {
-            throw new IllegalStateException("User is not logged in!");
-        }
     }
 
 
@@ -141,7 +127,7 @@ public class ChatRepositoryFirestore implements ChatRepository {
 
     @NonNull
     @Override
-    public LiveData<List<LastChatMessageEntity>> getLastChatMessagesList() { // TODO: maybe currentuserid in Usecase
+    public LiveData<List<LastChatMessageEntity>> getLastChatMessagesList(@NonNull String currentUserId) { // TODO: maybe currentuserid in Usecase
         MutableLiveData<List<LastChatMessageEntity>> lastChatMessageReceivedList = new MutableLiveData<>();
 
         firestore.collection(CHAT_LAST_MESSAGES_COLLECTION)
@@ -175,7 +161,10 @@ public class ChatRepositoryFirestore implements ChatRepository {
 
     @NonNull
     @Override
-    public LiveData<List<ChatConversationEntity>> getChatConversation(@NonNull String recipientId) {
+    public LiveData<List<ChatConversationEntity>> getChatConversation(
+        @NonNull String currentUserId,
+        @NonNull String recipientId
+    ) {
         MutableLiveData<List<ChatConversationEntity>> chatMessagesList = new MutableLiveData<>();
         String conversationUid = generateConversationId(currentUserId, recipientId);
 
@@ -183,7 +172,7 @@ public class ChatRepositoryFirestore implements ChatRepository {
             .collection(CHAT_COLLECTION)
             .document(conversationUid)
             .collection(MESSAGES_SUBCOLLECTION)
-            .orderBy("timestamp", Query.Direction.ASCENDING)
+            .orderBy(MESSAGE_TIMESTAMP, Query.Direction.ASCENDING)
             .limit(30)
             .addSnapshotListener((queryDocumentSnapshots, error) -> {
                     if (error != null) {
@@ -216,6 +205,7 @@ public class ChatRepositoryFirestore implements ChatRepository {
         return smallerId + "_" + largerId;
     }
 
+    @Nullable
     private ChatConversationEntity mapToChatConversationEntity(ChatConversationDto chatConversationDto) {
         if (chatConversationDto != null &&
             chatConversationDto.getSenderId() != null &&
@@ -246,6 +236,7 @@ public class ChatRepositoryFirestore implements ChatRepository {
         }
     }
 
+    @Nullable
     private LastChatMessageEntity mapToLastChatMessageEntity(LastChatMessageDto lastChatMessageDto) {
         if (lastChatMessageDto != null &&
             lastChatMessageDto.getMessage() != null &&

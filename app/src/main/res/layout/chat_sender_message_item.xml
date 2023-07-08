@@ -14,17 +14,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/chat_sent_message_cv"
-        tools:src="@drawable/baseline_person_24" />
+        tools:src="@drawable/baseline_person_24"
+        android:contentDescription="@string/chat_user_avatar_a11y" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/chat_sent_message_cv"
         style="@style/Widget.Material3.CardView.Filled"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="34dp"
-        android:layout_marginStart="12dp"
         android:backgroundTint="@color/light_peach_translucent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -68,6 +68,8 @@
         android:layout_height="wrap_content"
         android:textColor="@color/light_gray"
         android:textSize="12sp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/chat_sent_message_cv"
         app:layout_constraintTop_toBottomOf="@id/chat_sent_message_cv"
         tools:text="01/07/23, 14h23" />
