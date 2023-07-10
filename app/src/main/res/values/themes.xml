@@ -31,8 +31,8 @@
 
     <!--LOGIN ACTIVITY-->
 
-    <style name="Theme.Go4Lunch.LoginFacebookButton" parent="Widget.Material3.Button.TonalButton">
-        <item name="backgroundTint">@color/blue_facebook</item>
+    <style name="Theme.Go4Lunch.LoginGithubButton" parent="Widget.Material3.Button.TonalButton">
+        <item name="backgroundTint">@color/gray_github</item>
         <item name="textAllCaps">true</item>
         <item name="android:textColor">@color/white</item>
         <item name="iconTint">@color/white</item>

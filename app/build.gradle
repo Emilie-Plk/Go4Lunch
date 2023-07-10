@@ -33,8 +33,6 @@ android {
 
     Properties properties = new Properties()
     properties.load(project.rootProject.file("local.properties").newDataInputStream())
-    def facebook_app_id = properties.getProperty("FACEBOOK_APP_ID")
-    def facebook_client_token = properties.getProperty("FACEBOOK_CLIENT_TOKEN")
 
 
     buildTypes {
@@ -43,8 +41,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            resValue "string", "facebook_app_id", properties.getProperty("FACEBOOK_APP_ID")
-            resValue "string", "facebook_client_token", properties.getProperty("FACEBOOK_CLIENT_TOKEN")
         }
     }
     compileOptions {
@@ -86,14 +82,10 @@ dependencies {
     // Also add the dependency for the Google Play services library and specify its version
     implementation 'com.google.android.gms:play-services-auth:20.6.0'
 
-    // FACEBOOK AUTH
-    implementation 'com.facebook.android:facebook-android-sdk:16.0.1'
-    implementation 'com.facebook.android:facebook-login:latest.release'
-
     // GOOGLE MAPS SDK
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
     implementation 'com.google.maps.android:android-maps-utils:2.3.0'
-    implementation 'com.google.android.libraries.places:places:3.1.0'
+    implementation 'com.google.android.libraries.places:places:3.2.0'
 
     // RETROFIT
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
