@@ -64,7 +64,7 @@ public class NotificationWorker extends Worker {
         }
 
         NotificationEntity notificationEntity = getNotificationEntityUseCase.invoke();
-        if (notificationEntity != null && notificationEntity.getRestaurantId() != null) {
+        if (notificationEntity != null) {
             displayNotification(notificationEntity);
         } else {
             return Result.success();
@@ -77,9 +77,6 @@ public class NotificationWorker extends Worker {
     private void displayNotification(
         @NonNull NotificationEntity notificationEntity
     ) {
-        if (notificationEntity.getRestaurantId() == null || notificationEntity.getRestaurantId().isEmpty()) {
-            return;
-        }
         StringBuilder contentText = new StringBuilder();
 
         List<String> workmates = notificationEntity.getWorkmates();
@@ -92,7 +89,7 @@ public class NotificationWorker extends Worker {
             if (workmates.size() == 1) {
                 contentText.append(context.getString(R.string.notification_content_and)).append(workmates.get(0));
             } else if (workmates.size() == 2) {
-                contentText.append(", ").append(workmates.get(0))
+                contentText.append(", ").append(workmates.get(0))  // ça on garde
                     .append(context.getString(R.string.notification_content_and)).append(workmates.get(1));
             } else {
                 for (int i = 0; i < workmates.size() - 1; i++) {
@@ -113,9 +110,8 @@ public class NotificationWorker extends Worker {
                 .append(restaurantVicinity);
         }
 
-        Intent intent = new Intent(context, RestaurantDetailActivity.class);
-        intent.putExtra(RestaurantDetailActivity.KEY_RESTAURANT_ID, notificationEntity.getRestaurantId());
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Intent intent = RestaurantDetailActivity.navigate(context, notificationEntity.getRestaurantId())
+            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
         int flag;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

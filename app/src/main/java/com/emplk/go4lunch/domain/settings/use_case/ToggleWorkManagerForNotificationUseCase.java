@@ -12,19 +12,19 @@ public class ToggleWorkManagerForNotificationUseCase {
     private final NotificationRepository notificationRepository;
 
     @NonNull
-    private final UpdateWorkManagerForNotificationUseCase updateWorkManagerForNotificationUseCase;
+    private final ScheduleWorkManagerForNotificationUseCase scheduleWorkManagerForNotificationUseCase;
 
     @Inject
     public ToggleWorkManagerForNotificationUseCase(
         @NonNull NotificationRepository notificationRepository,
-        @NonNull UpdateWorkManagerForNotificationUseCase updateWorkManagerForNotificationUseCase
+        @NonNull ScheduleWorkManagerForNotificationUseCase scheduleWorkManagerForNotificationUseCase
     ) {
         this.notificationRepository = notificationRepository;
-        this.updateWorkManagerForNotificationUseCase = updateWorkManagerForNotificationUseCase;
+        this.scheduleWorkManagerForNotificationUseCase = scheduleWorkManagerForNotificationUseCase;
     }
 
     public void invoke() {
         notificationRepository.setNotificationEnabled(!notificationRepository.isNotificationEnabled());
-        updateWorkManagerForNotificationUseCase.invoke();
+        scheduleWorkManagerForNotificationUseCase.invoke();
     }
 }

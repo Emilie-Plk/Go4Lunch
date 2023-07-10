@@ -14,7 +14,7 @@ import androidx.work.Configuration;
 
 import com.emplk.go4lunch.data.location.GpsLocationRepositoryBroadcastReceiver;
 import com.emplk.go4lunch.data.permission.GpsPermissionRepositoryImpl;
-import com.emplk.go4lunch.domain.settings.use_case.UpdateWorkManagerForNotificationUseCase;
+import com.emplk.go4lunch.domain.settings.use_case.ScheduleWorkManagerForNotificationUseCase;
 
 import javax.inject.Inject;
 
@@ -32,7 +32,7 @@ public class MainApplication extends Application implements Application.Activity
     GpsLocationRepositoryBroadcastReceiver gpsLocationRepositoryBroadcastReceiver;
 
     @Inject
-    UpdateWorkManagerForNotificationUseCase updateWorkManagerForNotificationUseCase;
+    ScheduleWorkManagerForNotificationUseCase scheduleWorkManagerForNotificationUseCase;
 
     private int activityCount;
 
@@ -44,7 +44,7 @@ public class MainApplication extends Application implements Application.Activity
 
         registerActivityLifecycleCallbacks(this);
         registerGpsReceiver();
-        updateWorkManagerForNotificationUseCase.invoke();
+        scheduleWorkManagerForNotificationUseCase.invoke();
     }
 
     private void registerGpsReceiver() {
@@ -64,11 +64,11 @@ public class MainApplication extends Application implements Application.Activity
 
     @Override
     public void onActivityStarted(@NonNull Activity activity) {
+        activityCount++;
     }
 
     @Override
     public void onActivityResumed(@NonNull Activity activity) {
-        activityCount++;
         gpsPermissionRepositoryImpl.refreshGpsPermission();
     }
 

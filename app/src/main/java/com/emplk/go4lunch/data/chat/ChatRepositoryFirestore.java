@@ -44,7 +44,6 @@ public class ChatRepositoryFirestore implements ChatRepository {
         @NonNull FirebaseFirestore firestore
     ) {
         this.firestore = firestore;
-        Log.d("EMILIE", "instanciated ChatRepositoryFirestore");
     }
 
 

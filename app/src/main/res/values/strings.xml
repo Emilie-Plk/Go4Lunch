@@ -53,7 +53,7 @@
     <string name="detail_workmate_joining">%s is joining!</string>
     <string name="list_workmate_not_attending">%s has not chosen yet!</string>
     <string name="no_workmate_text">No workmate is going to eat\n at this restaurant so far!</string>
-    <string name="toast_message_user_no_restaurant_chosen">You didn\'t chose where to lunch yet!</string>
+    <string name="toast_message_user_no_restaurant_chosen">You did not chose where to lunch yet!</string>
     <string name="notification_content_title">Time to Go4Lunch!</string>
     <string name="notification_content_start">You</string>
     <string name="notification_content_and">" and "</string>
@@ -65,11 +65,9 @@
     <string name="lunch_reminder_notifications">Lunch reminder notifications</string>
     <string name="settings_activity_gps_button">GPS settings</string>
     <string name="chat_sender_name">You</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="chat_send_message_btn_a11y">Send message</string>
     <string name="chat_bottom_nav">Chat</string>
-    <string name="chat_textinput_et_hint">Type your message...</string>
+    <string name="chat_textinput_et_hint">Type your message…</string>
     <string name="chat_user_avatar_a11y">user avatar</string>
 
 </resources>

@@ -96,7 +96,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public LiveData<Boolean> isGpsEnabledLiveData() {
-        return Transformations.distinctUntilChanged(isGpsEnabledUseCase.invoke());
+        return isGpsEnabledUseCase.invoke();
     }
 
     public void signOut() {

@@ -8,7 +8,7 @@ import com.emplk.go4lunch.data.favorite_restaurant.FavoriteRestaurantRepositoryF
 import com.emplk.go4lunch.data.location.GpsLocationRepositoryBroadcastReceiver;
 import com.emplk.go4lunch.data.nearbySearchRestaurants.NearbySearchRepositoryGooglePlaces;
 import com.emplk.go4lunch.data.permission.GpsPermissionRepositoryImpl;
-import com.emplk.go4lunch.data.settings.NotificationRepositorySharedPreferences;
+import com.emplk.go4lunch.data.settings.NotificationRepositoryImplementation;
 import com.emplk.go4lunch.data.user.UserRepositoryFirestore;
 import com.emplk.go4lunch.domain.authentication.AuthRepository;
 import com.emplk.go4lunch.domain.autocomplete.AutocompleteRepository;
@@ -66,7 +66,7 @@ public abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    public abstract NotificationRepository bindNotificationRepository(NotificationRepositorySharedPreferences notificationRepositorySharedPreferences);
+    public abstract NotificationRepository bindNotificationRepository(NotificationRepositoryImplementation notificationRepositoryImplementation);
 
     @Binds
     @Singleton

@@ -1,8 +1,16 @@
 package com.emplk.go4lunch.domain.settings;
 
+import androidx.annotation.NonNull;
+import androidx.work.PeriodicWorkRequest;
+
 public interface NotificationRepository {
 
-    public boolean isNotificationEnabled();
+    boolean isNotificationEnabled();
 
-    public void setNotificationEnabled(boolean enabled);
+    void setNotificationEnabled(boolean enabled);
+
+    @NonNull
+    PeriodicWorkRequest scheduleNotification(long delay);
+
+    void cancelNotification();
 }

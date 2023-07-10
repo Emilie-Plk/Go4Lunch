@@ -3,14 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context="com.emplk.go4lunch.ui.restaurant_detail.RestaurantDetailActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/detail_restaurant_layout_parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
 
         <FrameLayout
             android:id="@+id/detail_restaurant_loading_state_layout"
@@ -33,7 +32,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/detail_restaurant_toolbar"
                 style="@style/Theme.Go4Lunch.DetailRestaurantToolbar"
@@ -43,7 +41,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
 
             <ImageView
                 android:id="@+id/detail_restaurant_picture"
@@ -135,7 +132,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/detail_restaurant_name"
                     tools:text="2 rue de la concorde, 92600 Asnières-sur-Seine" />
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.divider.MaterialDivider

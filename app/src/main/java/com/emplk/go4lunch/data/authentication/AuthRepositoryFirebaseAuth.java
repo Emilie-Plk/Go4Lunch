@@ -12,7 +12,6 @@ import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.domain.authentication.AuthRepository;
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

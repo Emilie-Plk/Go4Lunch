@@ -51,13 +51,15 @@ public class GetNotificationEntityUseCase {
                     restaurantVicinity = user.getAttendingRestaurantVicinity();
                 }
             }
+            return new NotificationEntity(
+                restaurantName,
+                restaurantId,
+                restaurantVicinity,
+                workmatesGoingToSameRestaurantAsUser
+            );
+        } else {
+            return null;
         }
-        return new NotificationEntity(
-            restaurantName != null ? restaurantName : "",
-            restaurantId != null ? restaurantId : "",
-            restaurantVicinity != null ? restaurantVicinity : "",
-            workmatesGoingToSameRestaurantAsUser
-        );
     }
 }
 
