@@ -73,7 +73,6 @@ public class MainViewModel extends ViewModel {
         fragmentStateSingleLiveEvent.setValue(MAP_FRAGMENT);
     }
 
-
     public LiveData<LoggedUserEntity> getUserInfoLiveData() { //TODO: maybe should use the UserEntity
         return new MutableLiveData<>(getCurrentLoggedUserUseCase.invoke());
     }

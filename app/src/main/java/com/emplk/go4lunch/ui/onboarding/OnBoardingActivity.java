@@ -40,7 +40,6 @@ public class OnBoardingActivity extends AppCompatActivity {
         permissionLauncher = registerForActivityResult(
             new ActivityResultContracts.RequestMultiplePermissions(),
             result -> {
-                viewModel.onPermissionResult();
             }
         );
 
@@ -80,8 +79,8 @@ public class OnBoardingActivity extends AppCompatActivity {
 
     private void showRequestPermissionRationale() {
         new AlertDialog.Builder(this)
-            .setTitle("Permission required")
-            .setMessage(R.string.showRationaleGpsPermissionMessage)
+            .setTitle(R.string.show_rationale_title)
+            .setMessage(R.string.show_rationale_permission_message)
             .setPositiveButton(R.string.change_settings_dialog_button, (dialog, which) -> {
                     viewModel.onChangeAppSettingsClicked();
                 }

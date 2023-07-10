@@ -40,7 +40,7 @@
     <string name="onboarding_decline_button">No, thank you</string>
     <string name="onboarding_allow_button">Grant permission</string>
     <string name="onboarding_welcome_tv">Welcome!\nFor a better experience, \nGo4Lunch needs your Gps location</string>
-    <string name="showRationaleGpsPermissionMessage">This app works with your permission to Gps location. If you want to provide this permission, please click on \'Change settings\' to grant it.</string>
+    <string name="show_rationale_permission_message">This app works with your permission to GPS location. We only need it to provide you restaurants in your area! If you want to grant this permission, please click on \'Change settings\'.</string>
     <string name="change_settings_dialog_button">change settings</string>
     <string name="list_error_message_no_results">Oops, no results found in your area!</string>
     <string name="list_error_message_no_gps">Please activate you Gps\nto view the list</string>
@@ -69,5 +69,6 @@
     <string name="chat_bottom_nav">Chat</string>
     <string name="chat_textinput_et_hint">Type your message…</string>
     <string name="chat_user_avatar_a11y">user avatar</string>
+    <string name="show_rationale_title">Permission required</string>
 
 </resources>

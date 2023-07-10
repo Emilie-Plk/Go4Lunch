@@ -26,8 +26,8 @@
     <string name="onboarding_privacy_message">Vos informations sont précieuses,\nnous ne partageons pas vos données.</string>
     <string name="onboarding_decline_button">Non merci</string>
     <string name="onboarding_allow_button">Autoriser</string>
-    <string name="onboarding_welcome_tv">Bienvenue !\\nPour une meilleure expérience, nous vous\nrecommandons d\'activer le Gps.</string>
-    <string name="showRationaleGpsPermissionMessage">Cette application fonctionne mieux avec votre autorisation de localisation GPS. Si vous souhaitez fournir cette autorisation, veuillez cliquer sur \"Modifier les paramètres\" pour l\'accorder.</string>
+    <string name="onboarding_welcome_tv">Bienvenue !\nPour une meilleure expérience, nous vous\nrecommandons d\'activer le Gps.</string>
+    <string name="show_rationale_permission_message">Cette application a besoin de votre autorisation de localisation GPS. Nous nous servons de votre position actuelle pour répertorier les restaurants dans vos alentours. Si vous souhaitez fournir cette autorisation, merci de cliquer sur \"Modifier les paramètres\".</string>
     <string name="change_settings_dialog_button">modifier paramètres</string>
     <string name="list_error_message_no_results">Aucun résultat ici !</string>
     <string name="list_error_message_no_gps">Oups, votre GPS\nest désactivé !</string>
