@@ -68,12 +68,12 @@ public class UserRepositoryFirestore implements UserRepository {
                         loggedUserEntity.getPictureUrl()
                     )
                 )
-                .addOnSuccessListener(aVoid -> {
-                        Log.i("UserRepositoryFirestore", "User document successfully created!");
-                    }
-                )
-                .addOnFailureListener(e -> {
-                        Log.e("UserRepositoryFirestore", "Error creating user document: " + e);
+                .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Log.i("UserRepositoryFirestore", "User document successfully created!");
+                        } else {
+                            Log.e("UserRepositoryFirestore", "Error creating user document: " + task.getException());
+                        }
                     }
                 );
         } else {
@@ -105,12 +105,12 @@ public class UserRepositoryFirestore implements UserRepository {
                         chosenRestaurantEntity.getAttendingRestaurantVicinity()
                     )
                 )
-                .addOnSuccessListener(aVoid -> {
-                        Log.i("UserRepositoryFirestore", "User document successfully created!");
-                    }
-                )
-                .addOnFailureListener(e -> {
-                        Log.e("UserRepositoryFirestore", "Error creating user document: " + e);
+                .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Log.i("UserRepositoryFirestore", "User's restaurant choice document successfully created!");
+                        } else {
+                            Log.e("UserRepositoryFirestore", "Error creating user's restaurant choice document: " + task.getException());
+                        }
                     }
                 );
         } else {
@@ -205,12 +205,12 @@ public class UserRepositoryFirestore implements UserRepository {
             firestore.collection(USERS_WITH_RESTAURANT_CHOICE)
                 .document(loggedUserEntity.getId())
                 .delete()
-                .addOnSuccessListener(aVoid -> {
-                        Log.i("UserRepositoryFirestore", "User's restaurant choice successfully deleted!");
-                    }
-                )
-                .addOnFailureListener(e -> {
-                        Log.e("UserRepositoryFirestore", "Error deleting user's restaurant choice: " + e);
+                .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Log.i("UserRepositoryFirestore", "User's restaurant choice successfully deleted!");
+                        } else {
+                            Log.e("UserRepositoryFirestore", "Error deleting user's restaurant choice: " + task.getException());
+                        }
                     }
                 );
         } else {

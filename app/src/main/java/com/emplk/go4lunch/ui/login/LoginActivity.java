@@ -119,13 +119,13 @@ public class LoginActivity extends AppCompatActivity {
             .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                        startActivity(new Intent(LoginActivity.this, DispatcherActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             viewModel.onLoginComplete();
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                            startActivity(new Intent(LoginActivity.this, DispatcherActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 
                         } else {
                             // If sign in fails, display a message to the user.

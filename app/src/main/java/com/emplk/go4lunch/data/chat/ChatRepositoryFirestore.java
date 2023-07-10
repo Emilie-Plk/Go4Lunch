@@ -19,6 +19,8 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -37,12 +39,12 @@ public class ChatRepositoryFirestore implements ChatRepository {
     @NonNull
     private final FirebaseFirestore firestore;
 
-
     @Inject
     public ChatRepositoryFirestore(
         @NonNull FirebaseFirestore firestore
     ) {
         this.firestore = firestore;
+        Log.d("EMILIE", "instanciated ChatRepositoryFirestore");
     }
 
 
@@ -51,7 +53,6 @@ public class ChatRepositoryFirestore implements ChatRepository {
         String senderId = sendMessageEntity.getSenderEntity().getSenderId();
         String recipientId = sendMessageEntity.getRecipientEntity().getRecipientId();
         String conversationUid = generateConversationId(senderId, recipientId);
-
         firestore
             .collection(CHAT_COLLECTION)
             .document(conversationUid)
@@ -199,10 +200,9 @@ public class ChatRepositoryFirestore implements ChatRepository {
         String userId1,
         String userId2
     ) {
-        String smallerId = userId1.compareTo(userId2) < 0 ? userId1 : userId2;
-        String largerId = userId1.compareTo(userId2) >= 0 ? userId1 : userId2;
-
-        return smallerId + "_" + largerId;
+        List<String> recipients = new ArrayList<>(Arrays.asList(userId1, userId2));
+        Collections.sort(recipients);
+        return recipients.get(0) + "_" + recipients.get(1);
     }
 
     @Nullable
