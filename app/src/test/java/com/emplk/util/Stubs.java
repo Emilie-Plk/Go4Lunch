@@ -5,6 +5,7 @@ import com.emplk.go4lunch.domain.chat.conversation.ChatConversationEntity;
 import com.emplk.go4lunch.domain.chat.conversation.RecipientEntity;
 import com.emplk.go4lunch.domain.chat.conversation.SenderEntity;
 import com.emplk.go4lunch.domain.chat.last_message.LastChatMessageEntity;
+import com.emplk.go4lunch.domain.chat.send_message.SendMessageEntity;
 import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
@@ -14,12 +15,12 @@ import java.util.List;
 public class Stubs {
 
     // region LoggedUserEntity
-    private static final String TEST_LOGGED_USER_ENTITY_ID = "TEST_LOGGED_USER_ENTITY_ID";
-    private static final String TEST_LOGGED_USER_ENTITY_NAME = "TEST_LOGGED_USER_ENTITY_NAME";
-    private static final String TEST_LOGGED_USER_ENTITY_EMAIL = "TEST_LOGGED_USER_ENTITY_EMAIL";
-    private static final String TEST_LOGGED_USER_ENTITY_PHOTO_URL = "TEST_LOGGED_USER_ENTITY_PHOTO_URL";
+    public static final String TEST_LOGGED_USER_ENTITY_ID = "TEST_LOGGED_USER_ENTITY_ID";
+    public static final String TEST_LOGGED_USER_ENTITY_NAME = "TEST_LOGGED_USER_ENTITY_NAME";
+    public static final String TEST_LOGGED_USER_ENTITY_EMAIL = "TEST_LOGGED_USER_ENTITY_EMAIL";
+    public static final String TEST_LOGGED_USER_ENTITY_PHOTO_URL = "TEST_LOGGED_USER_ENTITY_PHOTO_URL";
 
-    private static final String TEST_CHAT_MESSAGE = "TEST_CHAT_MESSAGE";
+    public static final String TEST_CHAT_MESSAGE = "TEST_CHAT_MESSAGE";
 
     public static LoggedUserEntity getTestLoggedUserEntity() {
         return new LoggedUserEntity(
@@ -34,9 +35,9 @@ public class Stubs {
 // region ChatConversation
 
     // region SenderEntity
-    private static final String TEST_SENDER_ENTITY_ID = "TEST_SENDER_ENTITY_ID";
-    private static final String TEST_SENDER_ENTITY_NAME = "TEST_SENDER_ENTITY_NAME";
-    private static final String TEST_SENDER_ENTITY_PHOTO_URL = "TEST_SENDER_ENTITY_PHOTO_URL";
+    public static final String TEST_SENDER_ENTITY_ID = "TEST_SENDER_ENTITY_ID";
+    public static final String TEST_SENDER_ENTITY_NAME = "TEST_SENDER_ENTITY_NAME";
+    public static final String TEST_SENDER_ENTITY_PHOTO_URL = "TEST_SENDER_ENTITY_PHOTO_URL";
 
     public static SenderEntity getTestSenderEntity() {
         return new SenderEntity(
@@ -48,9 +49,9 @@ public class Stubs {
 // endregion
 
     // region RecipientEntity
-    private static final String TEST_RECIPIENT_ENTITY_ID = "TEST_RECIPIENT_ENTITY_ID";
-    private static final String TEST_RECIPIENT_ENTITY_NAME = "TEST_RECIPIENT_ENTITY_NAME";
-    private static final String TEST_RECIPIENT_ENTITY_PHOTO_URL = "TEST_RECIPIENT_ENTITY_PHOTO_URL";
+    public static final String TEST_RECIPIENT_ENTITY_ID = "TEST_RECIPIENT_ENTITY_ID";
+    public static final String TEST_RECIPIENT_ENTITY_NAME = "TEST_RECIPIENT_ENTITY_NAME";
+    public static final String TEST_RECIPIENT_ENTITY_PHOTO_URL = "TEST_RECIPIENT_ENTITY_PHOTO_URL";
 
     public static RecipientEntity getTestRecipientEntity() {
         return new RecipientEntity(
@@ -76,7 +77,7 @@ public class Stubs {
         return conversationEntities;
     }
 
-    private static ChatConversationEntity createMockConversationEntity(int index) {
+    public static ChatConversationEntity createMockConversationEntity(int index) {
         SenderEntity senderEntity = Stubs.getTestSenderEntity();
         RecipientEntity recipientEntity = Stubs.getTestRecipientEntity();
         Timestamp timestamp = createMockTimestamp(index);
@@ -115,7 +116,20 @@ public class Stubs {
         return lastChatMessageEntities;
     }
 
+// endregion
 
+    // SendMessageEntity
+    public static SendMessageEntity getTestSendMessageEntity() {
+        LoggedUserEntity loggedUserEntity = Stubs.getTestLoggedUserEntity();
+        SenderEntity senderEntity = new SenderEntity(
+            loggedUserEntity.getId(),
+            loggedUserEntity.getName(),
+            loggedUserEntity.getPictureUrl()
+        );
+        RecipientEntity recipientEntity = Stubs.getTestRecipientEntity();
+
+        return new SendMessageEntity(senderEntity, recipientEntity, TEST_CHAT_MESSAGE);
+    }
 
 
 }
