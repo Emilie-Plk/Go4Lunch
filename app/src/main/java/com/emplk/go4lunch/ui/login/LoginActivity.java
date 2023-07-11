@@ -104,6 +104,10 @@ public class LoginActivity extends AppCompatActivity {
                         .addOnSuccessListener(
                             authResult -> {
                                 {
+                                    if (authResult.getAdditionalUserInfo() != null && authResult.getAdditionalUserInfo().getProfile() != null && authResult.getAdditionalUserInfo().getProfile().get("email") != null) {
+                                        Log.d(TAG, "EMILIE " + authResult.getAdditionalUserInfo().getProfile().get("email"));
+                                    }
+
                                     viewModel.onLoginComplete();
                                     startActivity(DispatcherActivity.navigate(this));
                                 }

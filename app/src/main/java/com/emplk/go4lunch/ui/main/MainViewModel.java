@@ -9,7 +9,7 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
-import com.emplk.go4lunch.domain.authentication.use_case.IsUserLoggedInUseCase;
+import com.emplk.go4lunch.domain.authentication.use_case.IsUserLoggedInLiveDataUseCase;
 import com.emplk.go4lunch.domain.authentication.use_case.LogoutUserUseCase;
 import com.emplk.go4lunch.domain.gps.IsGpsEnabledUseCase;
 import com.emplk.go4lunch.domain.location.StartLocationRequestUseCase;
@@ -29,7 +29,7 @@ public class MainViewModel extends ViewModel {
     private final LogoutUserUseCase logoutUserUseCase;
 
     @NonNull
-    private final IsUserLoggedInUseCase isUserLoggedInUseCase;
+    private final IsUserLoggedInLiveDataUseCase isUserLoggedInLiveDataUseCase;
 
     @NonNull
     private final IsGpsEnabledUseCase isGpsEnabledUseCase;
@@ -51,14 +51,14 @@ public class MainViewModel extends ViewModel {
         @NonNull LogoutUserUseCase logoutUserUseCase,
         @NonNull IsGpsEnabledUseCase isGpsEnabledUseCase,
         @NonNull StartLocationRequestUseCase startLocationRequestUseCase,
-        @NonNull IsUserLoggedInUseCase isUserLoggedInUseCase,
+        @NonNull IsUserLoggedInLiveDataUseCase isUserLoggedInLiveDataUseCase,
         @NonNull GetUserWithRestaurantChoiceEntityLiveDataUseCase getUserWithRestaurantChoiceEntityLiveDataUseCase,
         @NonNull GetUserEntityUseCase getUserEntityUseCase
     ) {
         this.logoutUserUseCase = logoutUserUseCase;
         this.isGpsEnabledUseCase = isGpsEnabledUseCase;
         this.startLocationRequestUseCase = startLocationRequestUseCase;
-        this.isUserLoggedInUseCase = isUserLoggedInUseCase;
+        this.isUserLoggedInLiveDataUseCase = isUserLoggedInLiveDataUseCase;
         this.getUserWithRestaurantChoiceEntityLiveDataUseCase = getUserWithRestaurantChoiceEntityLiveDataUseCase;
         this.getUserEntityUseCase = getUserEntityUseCase;
 
@@ -83,7 +83,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public LiveData<UserLoggingState> onUserLogged() {
-        return Transformations.switchMap(isUserLoggedInUseCase.invoke(), isLogged -> {
+        return Transformations.switchMap(isUserLoggedInLiveDataUseCase.invoke(), isLogged -> {
                 MutableLiveData<UserLoggingState> userLoggingStateLiveData = new MutableLiveData<>();
                 if (isLogged) {
                     userLoggingStateLiveData.setValue(UserLoggingState.IS_LOGGED);

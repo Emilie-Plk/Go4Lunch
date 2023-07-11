@@ -8,7 +8,7 @@ import androidx.lifecycle.MediatorLiveData;
 import com.emplk.go4lunch.domain.authentication.AuthRepository;
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserUseCase;
-import com.emplk.go4lunch.domain.authentication.use_case.IsUserLoggedInUseCase;
+import com.emplk.go4lunch.domain.authentication.use_case.IsUserLoggedInLiveDataUseCase;
 import com.emplk.go4lunch.domain.favorite_restaurant.GetFavoriteRestaurantsIdsUseCase;
 import com.emplk.go4lunch.domain.restaurant_choice.GetUserWithRestaurantChoiceEntityLiveDataUseCase;
 import com.emplk.go4lunch.domain.user.UserEntity;
@@ -26,7 +26,7 @@ public class GetUserEntityUseCase {
     private final MediatorLiveData<UserEntity> userEntityMediatorLiveData;
 
     @NonNull
-    private final IsUserLoggedInUseCase isUserLoggedInUseCase;
+    private final IsUserLoggedInLiveDataUseCase isUserLoggedInLiveDataUseCase;
 
     @NonNull
     private final GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase;
@@ -40,17 +40,17 @@ public class GetUserEntityUseCase {
         @NonNull GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase,
         @NonNull GetFavoriteRestaurantsIdsUseCase getFavoriteRestaurantsIdsUseCase,
         @NonNull GetUserWithRestaurantChoiceEntityLiveDataUseCase getUserWithRestaurantChoiceEntityLiveDataUseCase,
-        @NonNull IsUserLoggedInUseCase isUserLoggedInUseCase,
+        @NonNull IsUserLoggedInLiveDataUseCase isUserLoggedInLiveDataUseCase,
         @NonNull AuthRepository authRepository
     ) {
         this.getCurrentLoggedUserUseCase = getCurrentLoggedUserUseCase;
-        this.isUserLoggedInUseCase = isUserLoggedInUseCase;
+        this.isUserLoggedInLiveDataUseCase = isUserLoggedInLiveDataUseCase;
         this.authRepository = authRepository;
         userEntityMediatorLiveData = new MediatorLiveData<>();
 
         LiveData<Set<String>> favoriteRestaurantsIdsLiveData = getFavoriteRestaurantsIdsUseCase.invoke();
         LiveData<UserWithRestaurantChoiceEntity> userWithRestaurantChoiceEntityLiveData = getUserWithRestaurantChoiceEntityLiveDataUseCase.invoke();
-        LiveData<Boolean> isUserLoggedInLiveData = isUserLoggedInUseCase.invoke();
+        LiveData<Boolean> isUserLoggedInLiveData = isUserLoggedInLiveDataUseCase.invoke();
 
         userEntityMediatorLiveData.addSource(isUserLoggedInLiveData, isUserLoggedIn -> {
                 combine(

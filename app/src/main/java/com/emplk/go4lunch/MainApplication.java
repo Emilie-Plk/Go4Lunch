@@ -54,7 +54,6 @@ public class MainApplication extends Application implements Application.Activity
         isGpsReceiverRegistered = true;
     }
 
-
     @Override
     public void onActivityCreated(
         @NonNull Activity activity,

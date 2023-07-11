@@ -27,14 +27,16 @@ import com.emplk.go4lunch.domain.workmate.WorkmateEntity;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mock;
 
 import java.util.List;
 
 public class RestaurantDetailViewModelTest {
+
+    private static final String KEY_RESTAURANT_ID = "KEY_RESTAURANT_ID";
+
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
-
-    private RestaurantDetailViewModel viewModel;
 
     private final GetDetailsRestaurantWrapperUseCase getDetailsRestaurantWrapperUseCase = mock(GetDetailsRestaurantWrapperUseCase.class);
 
@@ -54,25 +56,25 @@ public class RestaurantDetailViewModelTest {
 
     private final GetCurrentLoggedUserIdUseCase getCurrentLoggedUserIdUseCase = mock(GetCurrentLoggedUserIdUseCase.class);
 
+    @Mock
     private SavedStateHandle savedStateHandle;
+
+
+    private RestaurantDetailViewModel viewModel;
 
     @Before
     public void setUp() {
         savedStateHandle = new SavedStateHandle();
-        savedStateHandle.set("restaurantId", "123");
-
-        MutableLiveData<DetailsRestaurantWrapper> detailsRestaurantWrapperMutableLiveData = new MutableLiveData<>(mock(DetailsRestaurantWrapper.class));
-        doReturn(detailsRestaurantWrapperMutableLiveData).when(getDetailsRestaurantWrapperUseCase).invoke(savedStateHandle.get("restaurantId"));
+        savedStateHandle.set(KEY_RESTAURANT_ID, "RESTAURANT_ID");
 
         MutableLiveData<List<WorkmateEntity>> workmateEntitiesMutableLiveData = new MutableLiveData<>();
-        doReturn(workmateEntitiesMutableLiveData).when(getWorkmateEntitiesGoingToSameRestaurantUseCase).invoke(savedStateHandle.get("restaurantId"));
+        doReturn(workmateEntitiesMutableLiveData).when(getWorkmateEntitiesGoingToSameRestaurantUseCase).invoke(KEY_RESTAURANT_ID);
 
         MutableLiveData<UserEntity> userEntityMutableLiveData = new MutableLiveData<>(mock(UserEntity.class));
         doReturn(userEntityMutableLiveData).when(getUserEntityUseCase).invoke();
 
         String userId = "123";
         doReturn(userId).when(getCurrentLoggedUserIdUseCase).invoke();
-
 
         viewModel = new RestaurantDetailViewModel(
             getDetailsRestaurantWrapperUseCase,
@@ -91,9 +93,13 @@ public class RestaurantDetailViewModelTest {
     @Test
     public void nominal_case() {
         // WHEN
+        MutableLiveData<DetailsRestaurantWrapper> detailsRestaurantWrapperMutableLiveData = new MutableLiveData<>(mock(DetailsRestaurantWrapper.Success.class));
+        doReturn(detailsRestaurantWrapperMutableLiveData).when(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
+
         RestaurantDetailViewState result = getValueForTesting(viewModel.getRestaurantDetails());
+
         assertTrue(result instanceof RestaurantDetailViewState.RestaurantDetail);
-        verify(getDetailsRestaurantWrapperUseCase).invoke(savedStateHandle.get("restaurantId"));
+        verify(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
         verify(getUserEntityUseCase).invoke();
     }
 
@@ -102,6 +108,6 @@ public class RestaurantDetailViewModelTest {
         // WHEN
         viewModel.onAddFavoriteRestaurant();
         // THEN
-        verify(addFavoriteRestaurantUseCase).invoke(savedStateHandle.get("restaurantId"));
+        verify(addFavoriteRestaurantUseCase).invoke(KEY_RESTAURANT_ID);
     }
 }

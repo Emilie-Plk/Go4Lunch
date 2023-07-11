@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.emplk.go4lunch.domain.authentication.use_case.IsUserLoggedInUseCase;
+import com.emplk.go4lunch.domain.authentication.use_case.IsUserLoggedInLiveDataUseCase;
 import com.emplk.go4lunch.domain.location.StartLocationRequestUseCase;
 import com.emplk.go4lunch.domain.permission.HasGpsPermissionUseCase;
 import com.emplk.go4lunch.ui.utils.SingleLiveEvent;
@@ -24,13 +24,13 @@ public class DispatcherViewModel extends ViewModel {
     @Inject
     public DispatcherViewModel(
         @NonNull HasGpsPermissionUseCase hasGpsPermissionUseCase,
-        @NonNull IsUserLoggedInUseCase isUserLoggedInUseCase,
+        @NonNull IsUserLoggedInLiveDataUseCase isUserLoggedInLiveDataUseCase,
         @NonNull StartLocationRequestUseCase startLocationRequestUseCase
     ) {
         this.startLocationRequestUseCase = startLocationRequestUseCase;
 
         LiveData<Boolean> permissionLiveData = hasGpsPermissionUseCase.invoke();
-        LiveData<Boolean> isUserLoggedInLiveData = isUserLoggedInUseCase.invoke();
+        LiveData<Boolean> isUserLoggedInLiveData = isUserLoggedInLiveDataUseCase.invoke();
 
         dispatcherViewActionMediatorLiveData.addSource(permissionLiveData, hasPermission -> {
                 combine(hasPermission, isUserLoggedInLiveData.getValue());

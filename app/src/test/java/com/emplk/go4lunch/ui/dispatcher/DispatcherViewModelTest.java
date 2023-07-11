@@ -8,7 +8,7 @@ import static org.mockito.Mockito.mock;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
 
-import com.emplk.go4lunch.domain.authentication.use_case.IsUserLoggedInUseCase;
+import com.emplk.go4lunch.domain.authentication.use_case.IsUserLoggedInLiveDataUseCase;
 import com.emplk.go4lunch.domain.location.StartLocationRequestUseCase;
 import com.emplk.go4lunch.domain.permission.HasGpsPermissionUseCase;
 
@@ -23,7 +23,7 @@ public class DispatcherViewModelTest {
 
     private final HasGpsPermissionUseCase hasGpsPermissionUseCase = mock(HasGpsPermissionUseCase.class);
 
-    private final IsUserLoggedInUseCase isUserLoggedInUseCase = mock(IsUserLoggedInUseCase.class);
+    private final IsUserLoggedInLiveDataUseCase isUserLoggedInLiveDataUseCase = mock(IsUserLoggedInLiveDataUseCase.class);
 
     private final StartLocationRequestUseCase startLocationRequestUseCase = mock(StartLocationRequestUseCase.class);
 
@@ -40,9 +40,9 @@ public class DispatcherViewModelTest {
         isUserLoggedInMutableLiveData = new MutableLiveData<>();
 
         doReturn(hasPermissionMutableLiveData).when(hasGpsPermissionUseCase).invoke();
-        doReturn(isUserLoggedInMutableLiveData).when(isUserLoggedInUseCase).invoke();
+        doReturn(isUserLoggedInMutableLiveData).when(isUserLoggedInLiveDataUseCase).invoke();
 
-        viewModel = new DispatcherViewModel(hasGpsPermissionUseCase, isUserLoggedInUseCase, startLocationRequestUseCase);
+        viewModel = new DispatcherViewModel(hasGpsPermissionUseCase, isUserLoggedInLiveDataUseCase, startLocationRequestUseCase);
     }
 
 

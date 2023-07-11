@@ -7,13 +7,13 @@ import com.emplk.go4lunch.domain.authentication.AuthRepository;
 
 import javax.inject.Inject;
 
-public class IsUserLoggedInUseCase {
+public class IsUserLoggedInLiveDataUseCase {
 
     @NonNull
     private final AuthRepository authRepository;
 
     @Inject
-    public IsUserLoggedInUseCase(@NonNull AuthRepository authRepository) {
+    public IsUserLoggedInLiveDataUseCase(@NonNull AuthRepository authRepository) {
         this.authRepository = authRepository;
     }
 
