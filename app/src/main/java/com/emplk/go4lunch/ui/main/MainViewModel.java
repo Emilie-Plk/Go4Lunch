@@ -9,7 +9,6 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
-import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserUseCase;
 import com.emplk.go4lunch.domain.authentication.use_case.IsUserLoggedInUseCase;
 import com.emplk.go4lunch.domain.authentication.use_case.LogoutUserUseCase;
 import com.emplk.go4lunch.domain.gps.IsGpsEnabledUseCase;
@@ -27,11 +26,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class MainViewModel extends ViewModel {
 
     @NonNull
-    private final GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase;
-
-    @NonNull
     private final LogoutUserUseCase logoutUserUseCase;
-
 
     @NonNull
     private final IsUserLoggedInUseCase isUserLoggedInUseCase;
@@ -53,7 +48,6 @@ public class MainViewModel extends ViewModel {
 
     @Inject
     public MainViewModel(
-        @NonNull GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase,
         @NonNull LogoutUserUseCase logoutUserUseCase,
         @NonNull IsGpsEnabledUseCase isGpsEnabledUseCase,
         @NonNull StartLocationRequestUseCase startLocationRequestUseCase,
@@ -61,7 +55,6 @@ public class MainViewModel extends ViewModel {
         @NonNull GetUserWithRestaurantChoiceEntityLiveDataUseCase getUserWithRestaurantChoiceEntityLiveDataUseCase,
         @NonNull GetUserEntityUseCase getUserEntityUseCase
     ) {
-        this.getCurrentLoggedUserUseCase = getCurrentLoggedUserUseCase;
         this.logoutUserUseCase = logoutUserUseCase;
         this.isGpsEnabledUseCase = isGpsEnabledUseCase;
         this.startLocationRequestUseCase = startLocationRequestUseCase;

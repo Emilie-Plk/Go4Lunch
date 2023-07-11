@@ -5,28 +5,23 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-
 import com.emplk.go4lunch.domain.authentication.AuthRepository;
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
+import com.emplk.util.Stubs;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
 public class GetCurrentLoggedUserUseCaseTest {
 
-    @Rule
-    public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
+    private final AuthRepository authRepository = mock(AuthRepository.class);
+
+    LoggedUserEntity loggedUserEntity = Stubs.getTestLoggedUserEntity();
 
     private GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase;
 
-    private final AuthRepository authRepository = mock(AuthRepository.class);
-
     @Before
     public void setUp() {
-        LoggedUserEntity loggedUserEntity = mock(LoggedUserEntity.class);
-
         doReturn(loggedUserEntity)
             .when(authRepository)
             .getCurrentLoggedUser();
@@ -35,11 +30,11 @@ public class GetCurrentLoggedUserUseCaseTest {
     }
 
     @Test
-    public void invoke() {
-// WHEN
+    public void testInvoke() {
+        // When
         getCurrentLoggedUserUseCase.invoke();
 
-// THEN
+        // Then
         verify(authRepository).getCurrentLoggedUser();
         verifyNoMoreInteractions(authRepository);
     }
