@@ -13,6 +13,7 @@ public interface AuthRepository {
 
     LiveData<Boolean> isUserLoggedLiveData();
 
+    LiveData<LoggedUserEntity> getLoggedUserLiveData();
 
     void signOut();
 }

@@ -35,17 +35,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/logo_image" />
 
-    <TextView
-        android:id="@+id/login_text"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_margin="24dp"
-        android:text="Please select your login method"
-        app:layout_constraintBottom_toTopOf="@id/login_google_log_btn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/login_big_logo" />
-
     <Button
         android:id="@+id/login_google_log_btn"
         style="@style/Theme.Go4Lunch.LoginGoogleButton"

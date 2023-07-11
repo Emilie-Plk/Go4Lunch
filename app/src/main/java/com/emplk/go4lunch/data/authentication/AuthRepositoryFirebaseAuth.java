@@ -22,6 +22,8 @@ public class AuthRepositoryFirebaseAuth implements AuthRepository {
     private final FirebaseAuth firebaseAuth;
     private final MutableLiveData<Boolean> isUserLoggedMutableLiveData = new MutableLiveData<>();
 
+    private final MutableLiveData<LoggedUserEntity> loggedUserMutableLiveData = new MutableLiveData<>();
+
     @Inject
     public AuthRepositoryFirebaseAuth(
         @NonNull FirebaseAuth firebaseAuth
@@ -34,12 +36,25 @@ public class AuthRepositoryFirebaseAuth implements AuthRepository {
                 public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                     boolean isUserLogged = firebaseAuth.getCurrentUser() != null;
                     isUserLoggedMutableLiveData.setValue(isUserLogged);
+
+                    if (firebaseAuth.getCurrentUser() != null &&
+                        firebaseAuth.getCurrentUser().getPhotoUrl() != null &&
+                        firebaseAuth.getCurrentUser().getDisplayName() != null) {
+                        loggedUserMutableLiveData.setValue(new LoggedUserEntity(
+                                firebaseAuth.getCurrentUser().getUid(),
+                                firebaseAuth.getCurrentUser().getDisplayName(),
+                                firebaseAuth.getCurrentUser().getEmail(),
+                                firebaseAuth.getCurrentUser().getPhotoUrl().toString()
+                            )
+                        );
+                    }
                 }
             }
         );
     }
 
     @Override
+    @Nullable
     public LoggedUserEntity getCurrentLoggedUser() {
         if (firebaseAuth.getCurrentUser() != null) {
             String id = firebaseAuth.getCurrentUser().getUid();
@@ -52,7 +67,7 @@ public class AuthRepositoryFirebaseAuth implements AuthRepository {
             } else {
                 pictureUrl = Uri.parse("android.resource://com.emplk.go4lunch/" + R.drawable.baseline_person_24).toString();
             }
-            if (email != null && name != null) {
+            if (name != null) {
                 return new LoggedUserEntity(
                     id,
                     name,
@@ -69,18 +84,20 @@ public class AuthRepositoryFirebaseAuth implements AuthRepository {
     @Nullable
     @Override
     public String getCurrentLoggedUserId() {
-        String loggedUserId;
         if (firebaseAuth.getCurrentUser() != null) {
-            loggedUserId = firebaseAuth.getCurrentUser().getUid();
-        } else {
-            loggedUserId = null;
+            return firebaseAuth.getCurrentUser().getUid();
         }
-        return loggedUserId;
+        return null;
     }
 
     @Override
     public LiveData<Boolean> isUserLoggedLiveData() {
         return isUserLoggedMutableLiveData;
+    }
+
+    @Override
+    public LiveData<LoggedUserEntity> getLoggedUserLiveData() {
+        return loggedUserMutableLiveData;
     }
 
     @Override

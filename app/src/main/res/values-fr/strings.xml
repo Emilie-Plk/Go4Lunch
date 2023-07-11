@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="github_btn">Connexion avec Github</string>
+    <string name="github_btn">Github</string>
     <string name="search">Rechercher</string>
     <string name="map_bottom_nav">Carte</string>
     <string name="workmates_bottom_nav">Collègues</string>

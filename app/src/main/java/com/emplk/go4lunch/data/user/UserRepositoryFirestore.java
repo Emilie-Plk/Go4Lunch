@@ -290,9 +290,7 @@ public class UserRepositoryFirestore implements UserRepository {
     private LoggedUserEntity mapToLoggedUserEntity(@Nullable LoggedUserDto result) {
         if (result != null &&
             result.getId() != null &&
-            result.getName() != null &&
-            result.getEmail() != null &&
-            result.getPictureUrl() != null
+            result.getName() != null
         ) {
             return new LoggedUserEntity(
                 result.getId(),

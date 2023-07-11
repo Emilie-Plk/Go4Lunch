@@ -70,16 +70,16 @@ public class MainActivity extends AppCompatActivity {
             binding.mainNavigationView.getHeaderView(0)
         );
 
-        viewModel.getUserInfoLiveData().observe(this, firebaseUser -> {
+        viewModel.getUserInfoLiveData().observe(this, currentLoggedUser -> {
                 Glide.with(this)
-                    .load(firebaseUser.getPictureUrl())
+                    .load(currentLoggedUser.getPictureUrl())
                     .fallback(R.drawable.baseline_person_24)
                     .error(R.drawable.baseline_person_24)
                     .transform(new CenterCrop(), new RoundedCorners(25))
                     .into(navigationHeaderBinding.navigationHeaderUserProfilePicture);
 
-                navigationHeaderBinding.navigationHeaderUserEmail.setText(firebaseUser.getEmail());
-                navigationHeaderBinding.navigationHeaderUserName.setText(firebaseUser.getName());
+                navigationHeaderBinding.navigationHeaderUserEmail.setText(currentLoggedUser.getEmail());
+                navigationHeaderBinding.navigationHeaderUserName.setText(currentLoggedUser.getName());
             }
         );
 

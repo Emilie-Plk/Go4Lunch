@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +28,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.OAuthProvider;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -37,7 +39,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private LoginActivityViewModel viewModel;
 
+    private FirebaseAuth.AuthStateListener authStateListener;
+
     private GoogleSignInClient googleSignInClient;
+
     private FirebaseAuth firebaseAuth;
 
     @Override
@@ -50,25 +55,76 @@ public class LoginActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(LoginActivityViewModel.class);
 
+        authStateListener = firebaseAuth -> {
+            if (firebaseAuth.getCurrentUser() != null) {
+                startActivity(DispatcherActivity.navigate(this));
+                finish();
+            }
+        };
+
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build();
 
+        // GOOGLE SIGN IN
         googleSignInClient = GoogleSignIn.getClient(LoginActivity.this, googleSignInOptions);
 
         binding.loginGoogleLogBtn.setOnClickListener(v -> {
-            Intent intent = googleSignInClient.getSignInIntent();
-            startActivityForResult(intent, 100);
-        });
+                Intent intent = googleSignInClient.getSignInIntent();
+                startActivityForResult(intent, 100);
+            }
+        );
+
+        // GITHUB SIGN IN
+        binding.loginGithubLogBtn.setOnClickListener(v -> {
+                OAuthProvider.Builder provider = OAuthProvider.newBuilder("github.com");
+
+                Task<AuthResult> pendingResultTask = firebaseAuth.getPendingAuthResult();
+                if (pendingResultTask != null) {
+                    // There's something already here! Finish the sign-in for your user.
+                    pendingResultTask
+                        .addOnSuccessListener(
+                            authResult -> {
+                                viewModel.onLoginComplete();
+                                startActivity(DispatcherActivity.navigate(this));
+                            }
+                        )
+                        .addOnFailureListener(
+                            e -> {
+                                Toast.makeText(LoginActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                                Log.d(TAG, "onFailure of pendingResultTask: " + e.getMessage());
+                            }
+                        );
+                } else {
+
+
+                    firebaseAuth
+                        .startActivityForSignInWithProvider(this, provider.build())
+                        .addOnSuccessListener(
+                            authResult -> {
+                                {
+                                    viewModel.onLoginComplete();
+                                    startActivity(DispatcherActivity.navigate(this));
+                                }
+                            }
+                        )
+                        .addOnFailureListener(
+                            e -> {
+                                Toast.makeText(LoginActivity.this, "Something went wrong!" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Log.d(TAG, "onFailure of startActivityForSignInWithProvider: " + e.getMessage());
+                            }
+                        );
+                }
+            }
+        );
 
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         if (firebaseUser != null) {
-            startActivity(new Intent(LoginActivity.this, DispatcherActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            startActivity(DispatcherActivity.navigate(this));
         }
     }
-
 
     @Override
     protected void onActivityResult(
@@ -89,10 +145,9 @@ public class LoginActivity extends AppCompatActivity {
                         firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
-                                    // Check condition
                                     if (task.isSuccessful()) {
                                         viewModel.onLoginComplete();
-                                        startActivity(new Intent(LoginActivity.this, DispatcherActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                        startActivity(DispatcherActivity.navigate(LoginActivity.this));
                                         Log.i(TAG, "Firebase auth successful");
                                     } else {
                                         Log.e("Firebase auth error: ", task.getException().getMessage());

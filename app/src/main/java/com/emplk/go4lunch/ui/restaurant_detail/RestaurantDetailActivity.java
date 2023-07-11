@@ -1,8 +1,8 @@
 package com.emplk.go4lunch.ui.restaurant_detail;
 
 
+import static com.emplk.go4lunch.ui.restaurant_detail.WorkmateState.NO_WORKMATE;
 import static com.emplk.go4lunch.ui.restaurant_detail.WorkmateState.WORKMATE_GOING;
-import static com.emplk.go4lunch.ui.restaurant_detail.WorkmateState.WORKMATE_NOT_GOING;
 
 import android.content.Context;
 import android.content.Intent;
@@ -93,7 +93,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         viewModel.getWorkerState().observe(this, workerState -> {
                 if (workerState == WORKMATE_GOING) {
                     binding.detailNoWorkmatesTv.setVisibility(View.GONE);
-                } else if (workerState == WORKMATE_NOT_GOING) {
+                } else if (workerState == NO_WORKMATE) {
                     binding.detailNoWorkmatesTv.setVisibility(View.VISIBLE);
                 }
             }

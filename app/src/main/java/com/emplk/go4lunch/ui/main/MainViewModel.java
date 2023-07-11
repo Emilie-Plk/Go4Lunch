@@ -16,10 +16,8 @@ import com.emplk.go4lunch.domain.gps.IsGpsEnabledUseCase;
 import com.emplk.go4lunch.domain.location.StartLocationRequestUseCase;
 import com.emplk.go4lunch.domain.restaurant_choice.GetUserWithRestaurantChoiceEntityLiveDataUseCase;
 import com.emplk.go4lunch.domain.user.UserWithRestaurantChoiceEntity;
-import com.emplk.go4lunch.ui.main.searchview.SearchViewVisibilityState;
+import com.emplk.go4lunch.domain.user.use_case.GetUserEntityUseCase;
 import com.emplk.go4lunch.ui.utils.SingleLiveEvent;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -47,9 +45,8 @@ public class MainViewModel extends ViewModel {
     @NonNull
     private final GetUserWithRestaurantChoiceEntityLiveDataUseCase getUserWithRestaurantChoiceEntityLiveDataUseCase;
 
-    @NonNull  // TODO: will use it to display/hide searchview bar
-    private final MutableLiveData<List<SearchViewVisibilityState>> searchViewVisibilityStateMutableLiveData = new MutableLiveData<>();
-
+    @NonNull
+    private final GetUserEntityUseCase getUserEntityUseCase;
 
     @NonNull
     private final SingleLiveEvent<FragmentState> fragmentStateSingleLiveEvent = new SingleLiveEvent<>();
@@ -58,23 +55,38 @@ public class MainViewModel extends ViewModel {
     public MainViewModel(
         @NonNull GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase,
         @NonNull LogoutUserUseCase logoutUserUseCase,
-        @NonNull IsUserLoggedInUseCase isUserLoggedInUseCase,
         @NonNull IsGpsEnabledUseCase isGpsEnabledUseCase,
         @NonNull StartLocationRequestUseCase startLocationRequestUseCase,
-        @NonNull GetUserWithRestaurantChoiceEntityLiveDataUseCase getUserWithRestaurantChoiceEntityLiveDataUseCase
+        @NonNull IsUserLoggedInUseCase isUserLoggedInUseCase,
+        @NonNull GetUserWithRestaurantChoiceEntityLiveDataUseCase getUserWithRestaurantChoiceEntityLiveDataUseCase,
+        @NonNull GetUserEntityUseCase getUserEntityUseCase
     ) {
         this.getCurrentLoggedUserUseCase = getCurrentLoggedUserUseCase;
         this.logoutUserUseCase = logoutUserUseCase;
-        this.isUserLoggedInUseCase = isUserLoggedInUseCase;
         this.isGpsEnabledUseCase = isGpsEnabledUseCase;
         this.startLocationRequestUseCase = startLocationRequestUseCase;
+        this.isUserLoggedInUseCase = isUserLoggedInUseCase;
         this.getUserWithRestaurantChoiceEntityLiveDataUseCase = getUserWithRestaurantChoiceEntityLiveDataUseCase;
+        this.getUserEntityUseCase = getUserEntityUseCase;
 
         fragmentStateSingleLiveEvent.setValue(MAP_FRAGMENT);
     }
 
-    public LiveData<LoggedUserEntity> getUserInfoLiveData() { //TODO: maybe should use the UserEntity
-        return new MutableLiveData<>(getCurrentLoggedUserUseCase.invoke());
+    public LiveData<LoggedUserEntity> getUserInfoLiveData() {
+        return Transformations.switchMap(getUserEntityUseCase.invoke(), userEntity -> {
+                MutableLiveData<LoggedUserEntity> loggedUserEntityMutableLiveData = new MutableLiveData<>();
+                LoggedUserEntity currentUser = userEntity.getLoggedUserEntity();
+                loggedUserEntityMutableLiveData.setValue(
+                    new LoggedUserEntity(
+                        currentUser.getId(),
+                        currentUser.getName(),
+                        currentUser.getEmail(),
+                        currentUser.getPictureUrl()
+                    )
+                );
+                return loggedUserEntityMutableLiveData;
+            }
+        );
     }
 
     public LiveData<UserLoggingState> onUserLogged() {

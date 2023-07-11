@@ -214,7 +214,7 @@ public class RestaurantDetailViewModel extends ViewModel {
                         }
                     }
                 } else {
-                    workerStateMutableLiveData.setValue(WorkmateState.WORKMATE_NOT_GOING);
+                    workerStateMutableLiveData.setValue(WorkmateState.NO_WORKMATE);
                 }
                 return new MutableLiveData<>(workmatesViewStateItems);
             }

@@ -13,7 +13,7 @@ public class LoggedUserEntity {
     @NonNull
     private final String name;
 
-    @NonNull
+    @Nullable
     private final String email;
 
     @Nullable
@@ -22,7 +22,7 @@ public class LoggedUserEntity {
     public LoggedUserEntity(
         @NonNull String id,
         @NonNull String name,
-        @NonNull String email,
+        @Nullable String email,
         @Nullable String pictureUrl
     ) {
         this.id = id;
@@ -41,7 +41,7 @@ public class LoggedUserEntity {
         return name;
     }
 
-    @NonNull
+    @Nullable
     public String getEmail() {
         return email;
     }
@@ -56,7 +56,7 @@ public class LoggedUserEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LoggedUserEntity that = (LoggedUserEntity) o;
-        return id.equals(that.id) && name.equals(that.name) && email.equals(that.email) && Objects.equals(pictureUrl, that.pictureUrl);
+        return id.equals(that.id) && name.equals(that.name) && Objects.equals(email, that.email) && Objects.equals(pictureUrl, that.pictureUrl);
     }
 
     @Override

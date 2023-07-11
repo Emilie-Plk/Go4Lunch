@@ -70,7 +70,7 @@ dependencies {
 
     // FIREBASE
     // Import the Firebase BoM
-    implementation platform('com.google.firebase:firebase-bom:31.5.0')
+    implementation platform('com.google.firebase:firebase-bom:32.1.1')
 
     // FIRESTORE
     implementation 'com.google.firebase:firebase-firestore'
