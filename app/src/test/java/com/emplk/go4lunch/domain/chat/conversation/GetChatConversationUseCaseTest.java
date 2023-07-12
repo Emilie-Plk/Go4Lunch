@@ -27,7 +27,6 @@ public class GetChatConversationUseCaseTest {
 
     @Before
     public void setUp() {
-
         doReturn(TEST_SENDER_ID).when(getCurrentLoggedUserIdUseCase).invoke();
 
         List<ChatConversationEntity> chatConversationEntities = Stubs.getTestChatConversationEntityList();

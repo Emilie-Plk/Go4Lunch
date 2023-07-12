@@ -151,7 +151,6 @@ public class ChatRepositoryFirestore implements ChatRepository {
                             }
                         }
                     }
-
                     lastChatMessageReceivedList.setValue(lastChatMessageEntities);
                 }
             );

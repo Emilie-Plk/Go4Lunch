@@ -10,7 +10,9 @@ import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantEntity;
 import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class Stubs {
@@ -74,7 +76,6 @@ public class Stubs {
             ChatConversationEntity conversationEntity = createMockConversationEntity(i);
             conversationEntities.add(conversationEntity);
         }
-
         return conversationEntities;
     }
 
@@ -156,6 +157,13 @@ public class Stubs {
             true);
     }
 
-    // endregion
+    public static Set<String> getTestRestaurantIdSet(int index) {
+        Set<String> restaurantIdSet = new HashSet<>();
+        for (int i = 0; i < index; i++) {
+            restaurantIdSet.add(TEST_RESTAURANT_ID + i);
+        }
+        return restaurantIdSet;
+    }
 
+    // endregion
 }

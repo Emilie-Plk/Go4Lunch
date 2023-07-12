@@ -56,29 +56,31 @@ public class ChatConversationActivity extends AppCompatActivity {
 
         initRecyclerView();
 
-        binding.chatMessageInputEt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(
-                CharSequence s,
-                int start,
-                int count,
-                int after
-            ) {
-            }
+        binding.chatMessageInputEt.addTextChangedListener(
+            new TextWatcher() {
+                @Override
+                public void beforeTextChanged(
+                    CharSequence s,
+                    int start,
+                    int count,
+                    int after
+                ) {
+                }
 
-            @Override
-            public void onTextChanged(
-                CharSequence s,
-                int start,
-                int before,
-                int count
-            ) {
-            }
+                @Override
+                public void onTextChanged(
+                    CharSequence s,
+                    int start,
+                    int before,
+                    int count
+                ) {
+                }
 
-            @Override
-            public void afterTextChanged(Editable s) {
+                @Override
+                public void afterTextChanged(Editable s) {
+                }
             }
-        });
+        );
 
         binding.chatSendFabButton.setOnClickListener(v -> {
                 if (binding.chatMessageInputEt.getText() != null) {

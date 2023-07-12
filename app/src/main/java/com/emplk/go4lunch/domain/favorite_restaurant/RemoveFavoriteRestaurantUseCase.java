@@ -23,9 +23,7 @@ public class RemoveFavoriteRestaurantUseCase {
         this.getCurrentLoggedUserIdUseCase = getCurrentLoggedUserIdUseCase;
     }
 
-    public void invoke(
-        @NonNull String restaurantId
-    ) {
+    public void invoke(@NonNull String restaurantId) {
         favoriteRestaurantRepository.removeFavoriteRestaurant(
             getCurrentLoggedUserIdUseCase.invoke(),
             restaurantId
