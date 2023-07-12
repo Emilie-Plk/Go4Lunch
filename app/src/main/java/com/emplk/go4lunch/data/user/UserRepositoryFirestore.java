@@ -40,16 +40,12 @@ public class UserRepositoryFirestore implements UserRepository {
 
     @NonNull
     private final FirebaseFirestore firestore;
-    @NonNull
-    private final Clock clock;
 
     @Inject
     public UserRepositoryFirestore(
-        @NonNull FirebaseFirestore firestore,
-        @NonNull Clock clock
+        @NonNull FirebaseFirestore firestore
     ) {
         this.firestore = firestore;
-        this.clock = clock;
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.emplk.go4lunch.domain.chat.conversation.RecipientEntity;
 import com.emplk.go4lunch.domain.chat.conversation.SenderEntity;
 import com.emplk.go4lunch.domain.chat.last_message.LastChatMessageEntity;
 import com.emplk.go4lunch.domain.chat.send_message.SendMessageEntity;
+import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantEntity;
 import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ import java.util.List;
 
 
 public class Stubs {
+
+    public static final String TEST_API_KEY = "TEST_API_KEY";
 
     // region LoggedUserEntity
     public static final String TEST_LOGGED_USER_ENTITY_ID = "TEST_LOGGED_USER_ENTITY_ID";
@@ -131,5 +134,30 @@ public class Stubs {
         return new SendMessageEntity(senderEntity, recipientEntity, TEST_CHAT_MESSAGE);
     }
 
+    // region RESTAURANT
+    public static final String TEST_RESTAURANT_ID = "TEST_RESTAURANT_ID";
+
+    public static final String TEST_RESTAURANT_NAME = "TEST_RESTAURANT_NAME";
+    public static final String TEST_RESTAURANT_VICINITY = "TEST_RESTAURANT_VICINITY";
+    public static final String TEST_RESTAURANT_PHOTO_URL = "TEST_RESTAURANT_PHOTO_URL";
+
+    public static final Float TEST_RESTAURANT_RATING = 3.5f;
+    public static final String TEST_RESTAURANT_PHONE_NUMBER = "TEST_RESTAURANT_PHONE_NUMBER";
+    public static final String TEST_RESTAURANT_WEBSITE = "TEST_RESTAURANT_WEBSITE";
+
+
+    public static DetailsRestaurantEntity getTestDetailsRestaurantEntity() {
+        return new DetailsRestaurantEntity(
+            TEST_RESTAURANT_ID,
+            TEST_RESTAURANT_NAME,
+            TEST_RESTAURANT_VICINITY,
+            TEST_RESTAURANT_PHOTO_URL,
+            TEST_RESTAURANT_RATING,
+            TEST_RESTAURANT_PHONE_NUMBER,
+            TEST_RESTAURANT_WEBSITE,
+            true);
+    }
+
+    // endregion
 
 }
