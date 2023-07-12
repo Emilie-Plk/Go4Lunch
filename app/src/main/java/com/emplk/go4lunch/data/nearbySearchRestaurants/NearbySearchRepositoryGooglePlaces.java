@@ -1,5 +1,7 @@
 package com.emplk.go4lunch.data.nearbySearchRestaurants;
 
+import static com.emplk.go4lunch.BuildConfig.API_KEY;
+
 import android.util.Log;
 import android.util.LruCache;
 
@@ -43,8 +45,7 @@ public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepositor
     public LiveData<NearbySearchWrapper> getNearbyRestaurants(
         @NonNull String location,
         @NonNull String type,
-        int radius,
-        @NonNull String key
+        int radius
     ) {
         MutableLiveData<NearbySearchWrapper> resultMutableLiveData = new MutableLiveData<>();
         LocationKey cacheKey = generateCacheKey(location);
@@ -57,7 +58,7 @@ public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepositor
                     location,
                     type,
                     radius,
-                    key
+                    API_KEY
                 )
                 .enqueue(
                     new Callback<NearbySearchResponse>() {

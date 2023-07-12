@@ -10,7 +10,6 @@ public interface NearbySearchRepository {
     LiveData<NearbySearchWrapper> getNearbyRestaurants(
         @NonNull String location,
         @NonNull String type,
-        int radius,
-        @NonNull String key
+        int radius
     );
 }

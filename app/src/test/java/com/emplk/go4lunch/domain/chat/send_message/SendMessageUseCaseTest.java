@@ -1,6 +1,5 @@
 package com.emplk.go4lunch.domain.chat.send_message;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;

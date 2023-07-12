@@ -52,9 +52,6 @@ android {
         viewBinding true
     }
 
-    testOptions {
-        unitTests.returnDefaultValues = true
-    }
     namespace 'com.emplk.go4lunch'
 }
 

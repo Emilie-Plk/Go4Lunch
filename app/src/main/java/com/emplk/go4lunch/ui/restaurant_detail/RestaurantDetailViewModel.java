@@ -2,7 +2,6 @@ package com.emplk.go4lunch.ui.restaurant_detail;
 
 
 import static com.emplk.go4lunch.BuildConfig.API_KEY;
-import static com.emplk.go4lunch.ui.restaurant_detail.RestaurantDetailActivity.KEY_RESTAURANT_ID;
 
 import android.content.res.Resources;
 import android.net.Uri;

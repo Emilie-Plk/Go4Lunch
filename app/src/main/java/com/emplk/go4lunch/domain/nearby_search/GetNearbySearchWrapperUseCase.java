@@ -1,7 +1,5 @@
 package com.emplk.go4lunch.domain.nearby_search;
 
-import static com.emplk.go4lunch.BuildConfig.API_KEY;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -17,6 +15,7 @@ import javax.inject.Inject;
 public class GetNearbySearchWrapperUseCase {
 
     private static final int RADIUS = 1_000;
+    private static final String TYPE = "restaurant";
     @NonNull
     private final NearbySearchRepository nearbySearchRepository;
 
@@ -40,9 +39,8 @@ public class GetNearbySearchWrapperUseCase {
                     LocationEntity location = ((LocationStateEntity.Success) locationState).locationEntity;
                     return nearbySearchRepository.getNearbyRestaurants(
                         location.getLatitude() + "," + location.getLongitude(),
-                        "restaurant",
-                        RADIUS,
-                        API_KEY
+                        TYPE,
+                        RADIUS
                     );
                 } else if (locationState instanceof LocationStateEntity.GpsProviderDisabled) {
                     return new MutableLiveData<>(

@@ -32,7 +32,7 @@ public class GetDetailsRestaurantWrapperUseCaseTest {
     public void testInvoke() {
         // Given
         MutableLiveData<DetailsRestaurantWrapper> detailsRestaurantWrapperMutableLiveData = new MutableLiveData<>();
-        doReturn(detailsRestaurantWrapperMutableLiveData).when(detailsRestaurantRepository).getRestaurantDetails(Stubs.TEST_RESTAURANT_ID, Stubs.TEST_API_KEY);
+        doReturn(detailsRestaurantWrapperMutableLiveData).when(detailsRestaurantRepository).getRestaurantDetails(Stubs.TEST_RESTAURANT_ID);
 
         DetailsRestaurantWrapper detailsRestaurantWrapper = new DetailsRestaurantWrapper.Success(Stubs.getTestDetailsRestaurantEntity());
         detailsRestaurantWrapperMutableLiveData.setValue(detailsRestaurantWrapper);
@@ -41,7 +41,7 @@ public class GetDetailsRestaurantWrapperUseCaseTest {
         getDetailsRestaurantWrapperUseCase.invoke(Stubs.TEST_RESTAURANT_ID);
 
         // Then
-        verify(detailsRestaurantRepository).getRestaurantDetails(Stubs.TEST_RESTAURANT_ID, Stubs.TEST_API_KEY);
+        verify(detailsRestaurantRepository).getRestaurantDetails(Stubs.TEST_RESTAURANT_ID);
     }
 
 }

@@ -8,7 +8,6 @@ import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantWrapper;
 public interface DetailsRestaurantRepository {
 
     LiveData<DetailsRestaurantWrapper> getRestaurantDetails(
-        @NonNull String placeId,
-        @NonNull String apiKey
+        @NonNull String placeId
     );
 }

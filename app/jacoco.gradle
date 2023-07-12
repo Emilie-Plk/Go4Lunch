@@ -42,7 +42,6 @@ android.applicationVariants.all { variant ->
 
         reports {
             xml.required = true
-            csv.required = true
             html.outputLocation = htmlOutDir
         }
 

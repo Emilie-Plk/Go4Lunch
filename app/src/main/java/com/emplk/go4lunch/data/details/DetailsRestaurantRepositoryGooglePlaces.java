@@ -1,5 +1,8 @@
 package com.emplk.go4lunch.data.details;
 
+
+import static com.emplk.go4lunch.BuildConfig.API_KEY;
+
 import android.util.Log;
 import android.util.LruCache;
 
@@ -36,8 +39,7 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
     }
 
     public LiveData<DetailsRestaurantWrapper> getRestaurantDetails(
-        @NonNull String placeId,
-        @NonNull String apiKey
+        @NonNull String placeId
     ) {
         MutableLiveData<DetailsRestaurantWrapper> resultMutableLiveData = new MutableLiveData<>();
         DetailsKey cacheKey = generateCacheKey(placeId);
@@ -46,7 +48,7 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
 
         if (cachedDetailsEntity == null) {
             resultMutableLiveData.setValue(new DetailsRestaurantWrapper.Loading());
-            googleMapsApi.getPlaceDetails(placeId, apiKey).enqueue(
+            googleMapsApi.getPlaceDetails(placeId, API_KEY).enqueue(
                 new Callback<DetailsRestaurantResponse>() {
                     @Override
                     public void onResponse(

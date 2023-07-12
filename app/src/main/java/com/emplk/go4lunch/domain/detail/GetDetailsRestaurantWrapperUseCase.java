@@ -1,7 +1,5 @@
 package com.emplk.go4lunch.domain.detail;
 
-import static com.emplk.go4lunch.BuildConfig.API_KEY;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
@@ -20,6 +18,6 @@ public class GetDetailsRestaurantWrapperUseCase {
     }
 
     public LiveData<DetailsRestaurantWrapper> invoke(@NonNull String restaurantId) {
-        return detailsRestaurantRepository.getRestaurantDetails(restaurantId, API_KEY);
+        return detailsRestaurantRepository.getRestaurantDetails(restaurantId);
     }
 }

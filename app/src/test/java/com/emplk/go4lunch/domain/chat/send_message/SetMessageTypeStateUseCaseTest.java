@@ -1,6 +1,6 @@
 package com.emplk.go4lunch.domain.chat.send_message;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
@@ -28,7 +28,7 @@ public class SetMessageTypeStateUseCaseTest {
         doReturn(Stubs.getTestLoggedUserEntity().getId()).when(getCurrentLoggedUserIdUseCase).invoke();
 
         // When
-       MessageTypeState result = setMessageTypeStateUseCase.invoke(Stubs.TEST_LOGGED_USER_ENTITY_ID);
+        MessageTypeState result = setMessageTypeStateUseCase.invoke(Stubs.TEST_LOGGED_USER_ENTITY_ID);
 
         // Then
         assertEquals(MessageTypeState.RECIPIENT, result);

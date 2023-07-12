@@ -15,8 +15,6 @@ import java.util.List;
 
 public class Stubs {
 
-    public static final String TEST_API_KEY = "TEST_API_KEY";
-
     // region LoggedUserEntity
     public static final String TEST_LOGGED_USER_ENTITY_ID = "TEST_LOGGED_USER_ENTITY_ID";
     public static final String TEST_LOGGED_USER_ENTITY_NAME = "TEST_LOGGED_USER_ENTITY_NAME";
