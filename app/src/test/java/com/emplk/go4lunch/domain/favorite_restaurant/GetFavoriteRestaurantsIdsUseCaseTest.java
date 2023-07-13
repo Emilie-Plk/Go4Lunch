@@ -31,11 +31,11 @@ public class GetFavoriteRestaurantsIdsUseCaseTest {
 
     @Before
     public void setUp() {
-        doReturn(Stubs.TEST_LOGGED_USER_ENTITY_ID).when(getCurrentLoggedUserIdUseCase).invoke();
+        doReturn(Stubs.TEST_USER_ID).when(getCurrentLoggedUserIdUseCase).invoke();
 
         MutableLiveData<Set<String>> restaurantIds = new MutableLiveData<>();
         restaurantIds.setValue(Stubs.getTestRestaurantIdSet(5));
-        doReturn(restaurantIds).when(favoriteRestaurantRepository).getUserFavoriteRestaurantIdsLiveData(Stubs.TEST_LOGGED_USER_ENTITY_ID);
+        doReturn(restaurantIds).when(favoriteRestaurantRepository).getUserFavoriteRestaurantIdsLiveData(Stubs.TEST_USER_ID);
 
         getFavoriteRestaurantsIdsUseCase = new GetFavoriteRestaurantsIdsUseCase(
             favoriteRestaurantRepository,

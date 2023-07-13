@@ -38,8 +38,8 @@ public class AddLoggedUserEntityUseCase {
                     loggedUserEntity.getPictureUrl()
                 )
             );
-        } else {
+        }/* else {
             Log.e("UpsertLoggedUser", "Error while getting current user");
-        }
+        }*/
     }
 }

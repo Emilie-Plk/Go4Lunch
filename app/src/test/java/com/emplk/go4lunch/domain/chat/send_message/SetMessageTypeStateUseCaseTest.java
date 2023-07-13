@@ -28,7 +28,7 @@ public class SetMessageTypeStateUseCaseTest {
         doReturn(Stubs.getTestLoggedUserEntity().getId()).when(getCurrentLoggedUserIdUseCase).invoke();
 
         // When
-        MessageTypeState result = setMessageTypeStateUseCase.invoke(Stubs.TEST_LOGGED_USER_ENTITY_ID);
+        MessageTypeState result = setMessageTypeStateUseCase.invoke(Stubs.TEST_USER_ID);
 
         // Then
         assertEquals(MessageTypeState.RECIPIENT, result);
@@ -40,7 +40,7 @@ public class SetMessageTypeStateUseCaseTest {
         doReturn("123").when(getCurrentLoggedUserIdUseCase).invoke();
 
         // When
-        MessageTypeState result = setMessageTypeStateUseCase.invoke(Stubs.TEST_LOGGED_USER_ENTITY_ID);
+        MessageTypeState result = setMessageTypeStateUseCase.invoke(Stubs.TEST_USER_ID);
 
         // Then
         assertEquals(MessageTypeState.SENDER, result);

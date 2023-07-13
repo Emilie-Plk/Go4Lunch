@@ -21,7 +21,7 @@ public class AddFavoriteRestaurantUseCaseTest {
 
     @Before
     public void setUp() {
-        doReturn(Stubs.TEST_LOGGED_USER_ENTITY_ID).when(getCurrentLoggedUserIdUseCase).invoke();
+        doReturn(Stubs.TEST_USER_ID).when(getCurrentLoggedUserIdUseCase).invoke();
 
         addFavoriteRestaurantUseCase = new AddFavoriteRestaurantUseCase(
             favoriteRestaurantRepository,
@@ -34,7 +34,7 @@ public class AddFavoriteRestaurantUseCaseTest {
         // When
         addFavoriteRestaurantUseCase.invoke(Stubs.TEST_RESTAURANT_ID);
         // Then
-        verify(favoriteRestaurantRepository).addFavoriteRestaurant(Stubs.TEST_LOGGED_USER_ENTITY_ID, Stubs.TEST_RESTAURANT_ID);
+        verify(favoriteRestaurantRepository).addFavoriteRestaurant(Stubs.TEST_USER_ID, Stubs.TEST_RESTAURANT_ID);
         verifyNoMoreInteractions(favoriteRestaurantRepository);
     }
 }

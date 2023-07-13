@@ -16,6 +16,7 @@ import com.emplk.go4lunch.domain.user.UserWithRestaurantChoiceEntity;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -25,39 +26,27 @@ public class GetUserEntityUseCase {
     @NonNull
     private final MediatorLiveData<UserEntity> userEntityMediatorLiveData;
 
-    @NonNull
-    private final IsUserLoggedInLiveDataUseCase isUserLoggedInLiveDataUseCase;
-
-    @NonNull
-    private final GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase;
-
-    @NonNull
-    private final AuthRepository authRepository;
-
 
     @Inject
     public GetUserEntityUseCase(
-        @NonNull GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase,
         @NonNull GetFavoriteRestaurantsIdsUseCase getFavoriteRestaurantsIdsUseCase,
         @NonNull GetUserWithRestaurantChoiceEntityLiveDataUseCase getUserWithRestaurantChoiceEntityLiveDataUseCase,
         @NonNull IsUserLoggedInLiveDataUseCase isUserLoggedInLiveDataUseCase,
         @NonNull AuthRepository authRepository
     ) {
-        this.getCurrentLoggedUserUseCase = getCurrentLoggedUserUseCase;
-        this.isUserLoggedInLiveDataUseCase = isUserLoggedInLiveDataUseCase;
-        this.authRepository = authRepository;
         userEntityMediatorLiveData = new MediatorLiveData<>();
 
         LiveData<Set<String>> favoriteRestaurantsIdsLiveData = getFavoriteRestaurantsIdsUseCase.invoke();
         LiveData<UserWithRestaurantChoiceEntity> userWithRestaurantChoiceEntityLiveData = getUserWithRestaurantChoiceEntityLiveDataUseCase.invoke();
         LiveData<Boolean> isUserLoggedInLiveData = isUserLoggedInLiveDataUseCase.invoke();
+        LiveData<LoggedUserEntity> loggedUserEntityLiveData = authRepository.getLoggedUserLiveData();
 
         userEntityMediatorLiveData.addSource(isUserLoggedInLiveData, isUserLoggedIn -> {
                 combine(
                     isUserLoggedIn,
                     favoriteRestaurantsIdsLiveData.getValue(),
                     userWithRestaurantChoiceEntityLiveData.getValue(),
-                    authRepository.getLoggedUserLiveData().getValue()
+                    loggedUserEntityLiveData.getValue()
                 );
             }
         );
@@ -67,7 +56,7 @@ public class GetUserEntityUseCase {
                     isUserLoggedInLiveData.getValue(),
                     favoriteRestaurantIds,
                     userWithRestaurantChoiceEntityLiveData.getValue(),
-                    authRepository.getLoggedUserLiveData().getValue()
+                    loggedUserEntityLiveData.getValue()
                 );
             }
         );
@@ -77,13 +66,13 @@ public class GetUserEntityUseCase {
                     isUserLoggedInLiveData.getValue(),
                     favoriteRestaurantsIdsLiveData.getValue(),
                     userWithRestaurantChoice,
-                    authRepository.getLoggedUserLiveData().getValue()
+                    loggedUserEntityLiveData.getValue()
                 );
             }
         );
 
 
-        userEntityMediatorLiveData.addSource(authRepository.getLoggedUserLiveData(), currentUser -> {
+        userEntityMediatorLiveData.addSource(loggedUserEntityLiveData, currentUser -> {
                 combine(
                     isUserLoggedInLiveData.getValue(),
                     favoriteRestaurantsIdsLiveData.getValue(),

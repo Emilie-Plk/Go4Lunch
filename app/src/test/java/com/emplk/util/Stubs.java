@@ -1,7 +1,5 @@
 package com.emplk.util;
 
-import androidx.annotation.Nullable;
-
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.chat.conversation.ChatConversationEntity;
 import com.emplk.go4lunch.domain.chat.conversation.RecipientEntity;
@@ -26,20 +24,20 @@ import java.util.Set;
 public class Stubs {
 
     // region LoggedUserEntity
-    public static final String TEST_LOGGED_USER_ENTITY_ID = "TEST_LOGGED_USER_ENTITY_ID";
-    public static final String TEST_LOGGED_USER_ENTITY_NAME = "TEST_LOGGED_USER_ENTITY_NAME";
-    public static final String TEST_LOGGED_USER_ENTITY_EMAIL = "TEST_LOGGED_USER_ENTITY_EMAIL";
-    public static final String TEST_LOGGED_USER_ENTITY_PHOTO_URL = "TEST_LOGGED_USER_ENTITY_PHOTO_URL";
+    public static final String TEST_USER_ID = "TEST_USER_ID";
+    public static final String TEST_USER_NAME = "TEST_USER_NAME";
+    public static final String TEST_USER_EMAIL = "TEST_USER_EMAIL";
+    public static final String TEST_USER_PHOTO_URL = "TEST_USER_PHOTO_URL";
 
     public static final String TEST_CHAT_MESSAGE = "TEST_CHAT_MESSAGE";
 
 
     public static LoggedUserEntity getTestLoggedUserEntity() {
         return new LoggedUserEntity(
-            TEST_LOGGED_USER_ENTITY_ID,
-            TEST_LOGGED_USER_ENTITY_NAME,
-            TEST_LOGGED_USER_ENTITY_EMAIL,
-            TEST_LOGGED_USER_ENTITY_PHOTO_URL
+            TEST_USER_ID,
+            TEST_USER_NAME,
+            TEST_USER_EMAIL,
+            TEST_USER_PHOTO_URL
         );
     }
     // endregion
@@ -207,7 +205,7 @@ public class Stubs {
     public static final String TEST_NEARBYSEARCH_ID = "TEST_NEARBYSEARCH_ID";
     public static final String TEST_NEARBYSEARCH_NAME = "TEST_NEARBYSEARCH_NAME";
     public static final String TEST_NEARBYSEARCH_VICINITY = "TEST_NEARBYSEARCH_VICINITY";
-    public static final String TEST_NEARBYSEARCH_PHOTO_URL = "TEST_NEARBYSEARCH_PHOTO_URL";
+    public static final String TEST_NEARBYSEARCH_PICTURE_URL = "TEST_NEARBYSEARCH_PHOTO_URL";
     public static final Float TEST_NEARBYSEARCH_RATING = 3.5f;
     public static final LocationEntity TEST_NEARBYSEARCH_LOCATION_ENTITY = new LocationEntity(
         TEST_NEARBYSEARCH_LAT_LNG.latitude,
@@ -227,7 +225,7 @@ public class Stubs {
                 TEST_NEARBYSEARCH_ID + i,
                 TEST_NEARBYSEARCH_NAME,
                 TEST_NEARBYSEARCH_VICINITY,
-                TEST_NEARBYSEARCH_PHOTO_URL,
+                TEST_NEARBYSEARCH_PICTURE_URL,
                 TEST_NEARBYSEARCH_RATING,
                 new LocationEntity(TEST_NEARBYSEARCH_LOCATION_ENTITY.getLatitude() + i, TEST_NEARBYSEARCH_LOCATION_ENTITY.getLongitude() + i),
                 TEST_NEARBYSEARCH_OPEN_NOW
@@ -243,10 +241,10 @@ public class Stubs {
     public static String ATTENDING_RESTAURANT_NAME = "ATTENDING_RESTAURANT_NAME";
     public static String ATTENDING_RESTAURANT_VICINITY = "ATTENDING_RESTAURANT_VICINITY";
 
-    public static UserWithRestaurantChoiceEntity getTestUserWithRestaurantChoiceEntity(int index, @Nullable String restaurantId) {
+    public static UserWithRestaurantChoiceEntity getTestUserWithDifferentRestaurantChoiceEntity(String restaurantId) {
         return new UserWithRestaurantChoiceEntity(
             ATTENDING_USER_ID,
-            createMockTimestamp(index),
+            ATTENDING_TIMESTAMP,
             ATTENDING_USER_NAME,
             ATTENDING_RESTAURANT_ID + restaurantId,
             ATTENDING_RESTAURANT_NAME,
@@ -254,13 +252,23 @@ public class Stubs {
         );
     }
 
-    public static String CURRENT_USER_ID = "CURRENT_USER_ID";
-    public static Timestamp CURRENT_USER_TIMESTAMP = new Timestamp(1686691200, 0);
+    public static UserWithRestaurantChoiceEntity getTestUserWithSameRestaurantChoiceEntity() {
+        return new UserWithRestaurantChoiceEntity(
+            ATTENDING_USER_ID,
+            ATTENDING_TIMESTAMP,
+            ATTENDING_USER_NAME,
+            ATTENDING_RESTAURANT_ID,
+            ATTENDING_RESTAURANT_NAME,
+            ATTENDING_RESTAURANT_VICINITY
+        );
+    }
+
+    public static Timestamp ATTENDING_TIMESTAMP = new Timestamp(1686691200, 0);
 
     public static UserWithRestaurantChoiceEntity getTestCurrentUserWithRestaurantChoiceEntity() {
         return new UserWithRestaurantChoiceEntity(
-            CURRENT_USER_ID,
-            CURRENT_USER_TIMESTAMP,
+            TEST_USER_ID,
+            ATTENDING_TIMESTAMP,
             ATTENDING_USER_NAME,
             ATTENDING_RESTAURANT_ID,
             ATTENDING_RESTAURANT_NAME,

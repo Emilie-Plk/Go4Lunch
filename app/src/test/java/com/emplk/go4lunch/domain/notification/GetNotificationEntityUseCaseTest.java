@@ -28,7 +28,7 @@ public class GetNotificationEntityUseCaseTest {
 
     @Before
     public void setUp() {
-        doReturn(Stubs.CURRENT_USER_ID).when(getCurrentLoggedUserIdUseCase).invoke();
+        doReturn(Stubs.TEST_USER_ID).when(getCurrentLoggedUserIdUseCase).invoke();
 
         getNotificationEntityUseCase = new GetNotificationEntityUseCase(userRepository, getCurrentLoggedUserIdUseCase);
     }
@@ -37,9 +37,9 @@ public class GetNotificationEntityUseCaseTest {
     public void notificationEntity_withTwoWorkmatesGoingToSameRestaurant() {
         // Given
         List<UserWithRestaurantChoiceEntity> usersWithRestaurantChoiceEntities = new ArrayList<>();
-        UserWithRestaurantChoiceEntity userWithRestaurantChoiceEntity1 = Stubs.getTestUserWithRestaurantChoiceEntity(1, null);
+        UserWithRestaurantChoiceEntity userWithRestaurantChoiceEntity1 = Stubs.getTestUserWithSameRestaurantChoiceEntity();
         UserWithRestaurantChoiceEntity currentUserWithRestaurantChoiceEntity = Stubs.getTestCurrentUserWithRestaurantChoiceEntity();
-        UserWithRestaurantChoiceEntity userWithRestaurantChoiceEntity2 = Stubs.getTestUserWithRestaurantChoiceEntity(2, null);
+        UserWithRestaurantChoiceEntity userWithRestaurantChoiceEntity2 = Stubs.getTestUserWithSameRestaurantChoiceEntity();
         usersWithRestaurantChoiceEntities.add(userWithRestaurantChoiceEntity1);
         usersWithRestaurantChoiceEntities.add(currentUserWithRestaurantChoiceEntity);
         usersWithRestaurantChoiceEntities.add(userWithRestaurantChoiceEntity2);
@@ -47,8 +47,8 @@ public class GetNotificationEntityUseCaseTest {
 
 
         List<String> expectedWorkmatesNames = Arrays.asList(
-            Stubs.getTestUserWithRestaurantChoiceEntity(1, null).getAttendingUsername(),
-            Stubs.getTestUserWithRestaurantChoiceEntity(2, null).getAttendingUsername()
+            Stubs.getTestUserWithDifferentRestaurantChoiceEntity(null).getAttendingUsername(),
+            Stubs.getTestUserWithDifferentRestaurantChoiceEntity( null).getAttendingUsername()
         );
 
         // When
@@ -57,10 +57,10 @@ public class GetNotificationEntityUseCaseTest {
 
 
         // Then
-        assertEquals(expectedNotificationEntity, result);
+
         verify(getCurrentLoggedUserIdUseCase).invoke();
         verify(userRepository).getUsersWithRestaurantChoiceEntitiesAsync();
-        assertEquals(expectedWorkmatesNames.size(), result.getWorkmates().size());
+        assertEquals(expectedNotificationEntity, result);
         verifyNoMoreInteractions(getCurrentLoggedUserIdUseCase, userRepository);
     }
 
@@ -68,24 +68,25 @@ public class GetNotificationEntityUseCaseTest {
     public void notificationEntity_withNoWorkmatesGoingToSameRestaurant() {
         // Given
         List<UserWithRestaurantChoiceEntity> usersWithRestaurantChoiceEntities = new ArrayList<>();
-
-        List<String> expectedWorkmatesNames = Arrays.asList(
-            Stubs.getTestUserWithRestaurantChoiceEntity(1, "1").getAttendingUsername(),
-            Stubs.getTestUserWithRestaurantChoiceEntity(2, "2").getAttendingUsername()
-        );
-
+        UserWithRestaurantChoiceEntity userWithRestaurantChoiceEntity1 = Stubs.getTestUserWithDifferentRestaurantChoiceEntity("123");
+        UserWithRestaurantChoiceEntity currentUserWithRestaurantChoiceEntity = Stubs.getTestCurrentUserWithRestaurantChoiceEntity();
+        UserWithRestaurantChoiceEntity userWithRestaurantChoiceEntity2 = Stubs.getTestUserWithDifferentRestaurantChoiceEntity("456");
+        usersWithRestaurantChoiceEntities.add(userWithRestaurantChoiceEntity1);
+        usersWithRestaurantChoiceEntities.add(currentUserWithRestaurantChoiceEntity);
+        usersWithRestaurantChoiceEntities.add(userWithRestaurantChoiceEntity2);
+        doReturn(usersWithRestaurantChoiceEntities).when(userRepository).getUsersWithRestaurantChoiceEntitiesAsync();
 
         // When
 
         // Then
 
-
-        NotificationEntity expectedNotificationEntity = Stubs.getTestNotificationEntity(expectedWorkmatesNames);
         NotificationEntity result = getNotificationEntityUseCase.invoke();
 
-        assertEquals(0, result.getWorkmates().size());
+
         verify(getCurrentLoggedUserIdUseCase).invoke();
         verify(userRepository).getUsersWithRestaurantChoiceEntitiesAsync();
+        assertEquals(0, result.getWorkmates().size());
+        verifyNoMoreInteractions(getCurrentLoggedUserIdUseCase, userRepository);
     }
 
     @Test

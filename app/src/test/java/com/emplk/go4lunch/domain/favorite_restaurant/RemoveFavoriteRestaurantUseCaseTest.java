@@ -21,7 +21,7 @@ public class RemoveFavoriteRestaurantUseCaseTest {
 
     @Before
     public void setUp() {
-        doReturn(Stubs.TEST_LOGGED_USER_ENTITY_ID).when(getCurrentLoggedUserIdUseCase).invoke();
+        doReturn(Stubs.TEST_USER_ID).when(getCurrentLoggedUserIdUseCase).invoke();
 
         removeFavoriteRestaurantUseCase = new RemoveFavoriteRestaurantUseCase(
             favoriteRestaurantRepository,
@@ -34,7 +34,7 @@ public class RemoveFavoriteRestaurantUseCaseTest {
         // When
         removeFavoriteRestaurantUseCase.invoke(Stubs.TEST_RESTAURANT_ID);
         // Then
-        verify(favoriteRestaurantRepository).removeFavoriteRestaurant(Stubs.TEST_LOGGED_USER_ENTITY_ID, Stubs.TEST_RESTAURANT_ID);
+        verify(favoriteRestaurantRepository).removeFavoriteRestaurant(Stubs.TEST_USER_ID, Stubs.TEST_RESTAURANT_ID);
         verifyNoMoreInteractions(favoriteRestaurantRepository);
     }
 

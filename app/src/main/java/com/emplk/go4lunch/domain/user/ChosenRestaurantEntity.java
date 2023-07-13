@@ -68,7 +68,7 @@ public class ChosenRestaurantEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChosenRestaurantEntity that = (ChosenRestaurantEntity) o;
-        return timestamp.equals(that.timestamp) && attendingRestaurantId.equals(that.attendingRestaurantId) && attendingRestaurantName.equals(that.attendingRestaurantName) && attendingRestaurantVicinity.equals(that.attendingRestaurantVicinity) && Objects.equals(attendingRestaurantPictureUrl, that.attendingRestaurantPictureUrl);
+        return Objects.equals(timestamp, that.timestamp) && attendingRestaurantId.equals(that.attendingRestaurantId) && attendingRestaurantName.equals(that.attendingRestaurantName) && attendingRestaurantVicinity.equals(that.attendingRestaurantVicinity) && Objects.equals(attendingRestaurantPictureUrl, that.attendingRestaurantPictureUrl);
     }
 
     @Override
