@@ -245,6 +245,7 @@ public class RestaurantListViewModel extends ViewModel {
         restaurantLocation.setLatitude(locationEntity.getLatitude());
         restaurantLocation.setLongitude(locationEntity.getLongitude());
 
+        // TODO Emilie à "cacher" dans un repository
         float distance = userLocation.distanceTo(restaurantLocation);
         DecimalFormat decimalFormat = new DecimalFormat("#.#");
         decimalFormat.setRoundingMode(RoundingMode.DOWN);

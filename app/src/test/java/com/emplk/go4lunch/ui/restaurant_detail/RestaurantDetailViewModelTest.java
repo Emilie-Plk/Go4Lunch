@@ -28,6 +28,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import java.util.List;
 
@@ -56,16 +57,13 @@ public class RestaurantDetailViewModelTest {
 
     private final GetCurrentLoggedUserIdUseCase getCurrentLoggedUserIdUseCase = mock(GetCurrentLoggedUserIdUseCase.class);
 
-    @Mock
-    private SavedStateHandle savedStateHandle;
-
+    private final SavedStateHandle savedStateHandle = Mockito.mock(SavedStateHandle.class);
 
     private RestaurantDetailViewModel viewModel;
 
     @Before
     public void setUp() {
-        savedStateHandle = new SavedStateHandle();
-        savedStateHandle.set(KEY_RESTAURANT_ID, "RESTAURANT_ID");
+        Mockito.doReturn( "RESTAURANT_ID").when(savedStateHandle).get(KEY_RESTAURANT_ID);
 
         MutableLiveData<List<WorkmateEntity>> workmateEntitiesMutableLiveData = new MutableLiveData<>();
         doReturn(workmateEntitiesMutableLiveData).when(getWorkmateEntitiesGoingToSameRestaurantUseCase).invoke(KEY_RESTAURANT_ID);

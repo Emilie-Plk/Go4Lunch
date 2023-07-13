@@ -38,7 +38,6 @@ public class ChatConversationViewModelTest {
     @Before
     public void setUp() {
 
-        doReturn()
         viewModel = new ChatConversationViewModel(
             sendMessageUseCase,
             getChatConversationUseCase,

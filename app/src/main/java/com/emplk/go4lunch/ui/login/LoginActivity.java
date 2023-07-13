@@ -30,6 +30,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.OAuthProvider;
 
+import java.util.ArrayList;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -78,7 +80,9 @@ public class LoginActivity extends AppCompatActivity {
 
         // GITHUB SIGN IN
         binding.loginGithubLogBtn.setOnClickListener(v -> {
-                OAuthProvider.Builder provider = OAuthProvider.newBuilder("github.com");
+                OAuthProvider.Builder provider = OAuthProvider
+                    .newBuilder("github.com")
+                    .setScopes(new ArrayList<String>(){{ add("user:email");}});
 
                 Task<AuthResult> pendingResultTask = firebaseAuth.getPendingAuthResult();
                 if (pendingResultTask != null) {
