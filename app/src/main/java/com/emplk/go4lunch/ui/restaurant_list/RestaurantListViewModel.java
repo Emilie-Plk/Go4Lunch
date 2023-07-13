@@ -28,7 +28,7 @@ import com.emplk.go4lunch.domain.nearby_search.SortNearbyRestaurantsUseCase;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchWrapper;
 import com.emplk.go4lunch.domain.permission.HasGpsPermissionUseCase;
-import com.emplk.go4lunch.domain.workmate.GetAttendantsByRestaurantIdsUseCase;
+import com.emplk.go4lunch.domain.workmate.GetAttendantsGoingToSameRestaurantAsUserUseCase;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -51,7 +51,7 @@ public class RestaurantListViewModel extends ViewModel {
     private final SortNearbyRestaurantsUseCase sortNearbyRestaurantsUseCase;
 
     @NonNull
-    private final GetAttendantsByRestaurantIdsUseCase getAttendantsByRestaurantIdsUseCase;
+    private final GetAttendantsGoingToSameRestaurantAsUserUseCase getAttendantsGoingToSameRestaurantAsUserUseCase;
 
     private final LiveData<Boolean> hasGpsPermissionLiveData;
 
@@ -64,17 +64,17 @@ public class RestaurantListViewModel extends ViewModel {
         @NonNull IsGpsEnabledUseCase isGpsEnabledUseCase,
         @NonNull Resources resources,
         @NonNull SortNearbyRestaurantsUseCase sortNearbyRestaurantsUseCase,
-        @NonNull GetAttendantsByRestaurantIdsUseCase getAttendantsByRestaurantIdsUseCase
+        @NonNull GetAttendantsGoingToSameRestaurantAsUserUseCase getAttendantsGoingToSameRestaurantAsUserUseCase
     ) {
         this.resources = resources;
         this.sortNearbyRestaurantsUseCase = sortNearbyRestaurantsUseCase;
-        this.getAttendantsByRestaurantIdsUseCase = getAttendantsByRestaurantIdsUseCase;
+        this.getAttendantsGoingToSameRestaurantAsUserUseCase = getAttendantsGoingToSameRestaurantAsUserUseCase;
 
         LiveData<LocationStateEntity> locationLiveData = getCurrentLocationStateUseCase.invoke();
 
         LiveData<Boolean> isGpsEnabledMutableLiveData = isGpsEnabledUseCase.invoke();
 
-        LiveData<Map<String, Integer>> attendantsByRestaurantIdsLiveData = getAttendantsByRestaurantIdsUseCase.invoke();
+        LiveData<Map<String, Integer>> attendantsByRestaurantIdsLiveData = getAttendantsGoingToSameRestaurantAsUserUseCase.invoke();
 
         hasGpsPermissionLiveData = hasGpsPermissionUseCase.invoke();
 

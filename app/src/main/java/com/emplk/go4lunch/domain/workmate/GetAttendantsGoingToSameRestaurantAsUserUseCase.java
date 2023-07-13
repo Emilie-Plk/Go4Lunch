@@ -14,7 +14,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-public class GetAttendantsByRestaurantIdsUseCase {
+public class GetAttendantsGoingToSameRestaurantAsUserUseCase {
 
     @NonNull
     private final UserRepository userRepository;
@@ -23,7 +23,7 @@ public class GetAttendantsByRestaurantIdsUseCase {
     private final GetCurrentLoggedUserIdUseCase getCurrentLoggedUserIdUseCase;
 
     @Inject
-    public GetAttendantsByRestaurantIdsUseCase(
+    public GetAttendantsGoingToSameRestaurantAsUserUseCase(
         @NonNull UserRepository userRepository,
         @NonNull GetCurrentLoggedUserIdUseCase getCurrentLoggedUserIdUseCase
     ) {

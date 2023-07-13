@@ -17,7 +17,7 @@ import com.emplk.go4lunch.domain.location.GetCurrentLocationStateUseCase;
 import com.emplk.go4lunch.domain.nearby_search.GetNearbySearchWrapperUseCase;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchWrapper;
-import com.emplk.go4lunch.domain.workmate.GetAttendantsByRestaurantIdsUseCase;
+import com.emplk.go4lunch.domain.workmate.GetAttendantsGoingToSameRestaurantAsUserUseCase;
 import com.emplk.go4lunch.ui.restaurant_map.map__marker.RestaurantMarkerViewStateItem;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -45,7 +45,7 @@ public class MapViewModel extends ViewModel {
         @NonNull IsGpsEnabledUseCase isGpsEnabledUseCase,
         @NonNull GetCurrentLocationStateUseCase getCurrentLocationStateUseCase,
         @NonNull GetNearbySearchWrapperUseCase getNearbySearchWrapperUseCase,
-        @NonNull GetAttendantsByRestaurantIdsUseCase getAttendantsByRestaurantIdsUseCase,
+        @NonNull GetAttendantsGoingToSameRestaurantAsUserUseCase getAttendantsGoingToSameRestaurantAsUserUseCase,
         @NonNull @ApplicationContext Context context
     ) {
         this.getCurrentLocationStateUseCase = getCurrentLocationStateUseCase;
@@ -54,7 +54,7 @@ public class MapViewModel extends ViewModel {
         LiveData<NearbySearchWrapper> nearbySearchWrapperLiveData = getNearbySearchWrapperUseCase.invoke();
         LiveData<LocationStateEntity> locationStateEntityLiveData = getCurrentLocationStateUseCase.invoke();
         LiveData<Boolean> isGpsEnabledLiveData = isGpsEnabledUseCase.invoke();
-        LiveData<Map<String, Integer>> restaurantIdToAttendantsCountLiveData = getAttendantsByRestaurantIdsUseCase.invoke();
+        LiveData<Map<String, Integer>> restaurantIdToAttendantsCountLiveData = getAttendantsGoingToSameRestaurantAsUserUseCase.invoke();
 
         mapViewStateMediatorLiveData.addSource(isGpsEnabledLiveData, isGpsEnabled -> {
                 combine(isGpsEnabled, locationStateEntityLiveData.getValue(), nearbySearchWrapperLiveData.getValue(), restaurantIdToAttendantsCountLiveData.getValue()

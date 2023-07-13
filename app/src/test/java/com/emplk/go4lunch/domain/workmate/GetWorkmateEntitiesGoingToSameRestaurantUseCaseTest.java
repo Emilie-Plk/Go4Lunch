@@ -1,4 +1,5 @@
-import static org.junit.Assert.*;
+package com.emplk.go4lunch.domain.workmate;
+
 public class GetWorkmateEntitiesGoingToSameRestaurantUseCaseTest {
-  
+
 }

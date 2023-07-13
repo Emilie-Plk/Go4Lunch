@@ -1,5 +1,7 @@
 package com.emplk.util;
 
+import androidx.annotation.NonNull;
+
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.chat.conversation.ChatConversationEntity;
 import com.emplk.go4lunch.domain.chat.conversation.RecipientEntity;
@@ -12,12 +14,16 @@ import com.emplk.go4lunch.domain.gps.entity.LocationStateEntity;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
 import com.emplk.go4lunch.domain.notification.NotificationEntity;
 import com.emplk.go4lunch.domain.user.UserWithRestaurantChoiceEntity;
+import com.emplk.go4lunch.ui.chat.conversation.ChatConversationMessageViewStateItem;
+import com.emplk.go4lunch.ui.chat.conversation.MessageTypeState;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.Timestamp;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 
@@ -80,13 +86,13 @@ public class Stubs {
 
         // Create multiple ChatConversationEntity objects with unique timestamps
         for (int i = 0; i < 5; i++) {
-            ChatConversationEntity conversationEntity = createMockConversationEntity(i);
+            ChatConversationEntity conversationEntity = createMockChatConversationEntity(i);
             conversationEntities.add(conversationEntity);
         }
         return conversationEntities;
     }
 
-    public static ChatConversationEntity createMockConversationEntity(int index) {
+    public static ChatConversationEntity createMockChatConversationEntity(int index) {
         SenderEntity senderEntity = Stubs.getTestSenderEntity();
         RecipientEntity recipientEntity = Stubs.getTestRecipientEntity();
         Timestamp timestamp = createMockTimestamp(index);
@@ -96,7 +102,7 @@ public class Stubs {
 
     private static Timestamp createMockTimestamp(int index) {
         // Create a mock Timestamp object with unique seconds and nanoseconds
-        long seconds = System.currentTimeMillis() / 1000 + index;
+        long seconds = 1689264308 + index;
         int nanoseconds = index * 1000000;
 
         return new Timestamp(seconds, nanoseconds);
@@ -139,6 +145,10 @@ public class Stubs {
 
         return new SendMessageEntity(senderEntity, recipientEntity, TEST_CHAT_MESSAGE);
     }
+
+    // endregion
+
+
 
     // region RESTAURANT
     public static final String TEST_RESTAURANT_ID = "TEST_RESTAURANT_ID";
@@ -277,7 +287,7 @@ public class Stubs {
     }
     // endregion
 
-    // NotificationEntity
+    // region NotificationEntity
     public static NotificationEntity getTestNotificationEntity(List<String> workmateNamesGoingToSameRestaurant) {
         return new NotificationEntity(
             ATTENDING_RESTAURANT_NAME,
@@ -286,6 +296,12 @@ public class Stubs {
             workmateNamesGoingToSameRestaurant
         );
     }
-        // endregion
 
+    // endregion
+
+    private static String formatTimestamp(@NonNull Timestamp timestamp) {
+        Locale locale = Locale.getDefault();
+        DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale);
+        return dateFormat.format(timestamp.toDate());
+    }
     }
