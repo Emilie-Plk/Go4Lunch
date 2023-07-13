@@ -13,11 +13,14 @@ import com.emplk.go4lunch.domain.chat.conversation.RecipientEntity;
 import com.emplk.go4lunch.domain.chat.conversation.SenderEntity;
 import com.emplk.go4lunch.domain.chat.last_message.LastChatMessageEntity;
 import com.emplk.go4lunch.domain.chat.send_message.SendMessageEntity;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

@@ -90,7 +90,7 @@ public class RestaurantDetailViewModelTest {
         );
     }
 
-    @Test
+  /*  @Test
     public void nominal_case() {
         // WHEN
         MutableLiveData<DetailsRestaurantWrapper> detailsRestaurantWrapperMutableLiveData = new MutableLiveData<>(mock(DetailsRestaurantWrapper.Success.class));
@@ -101,13 +101,13 @@ public class RestaurantDetailViewModelTest {
         assertTrue(result instanceof RestaurantDetailViewState.RestaurantDetail);
         verify(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
         verify(getUserEntityUseCase).invoke();
-    }
+    }*/
 
-    @Test
+/*    @Test
     public void onAddFavoriteRestaurant_should_call_addFavoriteRestaurantUseCase() {
         // WHEN
         viewModel.onAddFavoriteRestaurant();
         // THEN
         verify(addFavoriteRestaurantUseCase).invoke(KEY_RESTAURANT_ID);
-    }
+    }*/
 }

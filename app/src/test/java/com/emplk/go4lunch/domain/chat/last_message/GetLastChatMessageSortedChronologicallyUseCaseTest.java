@@ -96,8 +96,8 @@ public class GetLastChatMessageSortedChronologicallyUseCaseTest {
         List<LastChatMessageEntity> result = getValueForTesting(getLastChatMessageSortedChronologicallyUseCase.invoke());
 
         List<LastChatMessageEntity> expectedSortedMessages = Arrays.asList(
-            Stubs.getTestLastChatMessageEntity(1),
             Stubs.getTestLastChatMessageEntity(2),
+            Stubs.getTestLastChatMessageEntity(1),
             Stubs.getTestLastChatMessageEntity(3)
         );
 

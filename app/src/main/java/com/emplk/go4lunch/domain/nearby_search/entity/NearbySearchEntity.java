@@ -19,7 +19,6 @@ public class NearbySearchEntity {
     @Nullable
     private final String photoReferenceUrl;
 
-
     @Nullable
     private final Float rating;
 
@@ -28,7 +27,6 @@ public class NearbySearchEntity {
 
     @Nullable
     private final Boolean isOpen;
-
 
     public NearbySearchEntity(
         @NonNull String placeId,

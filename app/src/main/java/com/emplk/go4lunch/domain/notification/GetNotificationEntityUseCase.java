@@ -41,14 +41,16 @@ public class GetNotificationEntityUseCase {
         if (usersWithRestaurantChoiceEntities != null) {
 
             for (UserWithRestaurantChoiceEntity user : usersWithRestaurantChoiceEntities) {
-                if (!user.getId().equals(currentLoggedUserId)) {
-                    workmatesGoingToSameRestaurantAsUser.add(user.getAttendingUsername());
-                }
-
                 if (user.getId().equals(currentLoggedUserId)) {
                     restaurantId = user.getAttendingRestaurantId();
                     restaurantName = user.getAttendingRestaurantName();
                     restaurantVicinity = user.getAttendingRestaurantVicinity();
+
+                    for (UserWithRestaurantChoiceEntity workmate : usersWithRestaurantChoiceEntities) {
+                        if (workmate != user && workmate.getAttendingRestaurantId().equals(restaurantId)) {
+                            workmatesGoingToSameRestaurantAsUser.add(workmate.getAttendingUsername());
+                        }
+                    }
                 }
             }
             return new NotificationEntity(
