@@ -69,6 +69,7 @@ public class RestaurantDetailViewModel extends ViewModel {
 
     private final String restaurantId;
 
+    private final String currentUserId;
 
     @Inject
     public RestaurantDetailViewModel(
@@ -97,6 +98,7 @@ public class RestaurantDetailViewModel extends ViewModel {
 
         LiveData<DetailsRestaurantWrapper> detailsRestaurantWrapperLiveData = getDetailsRestaurantWrapperUseCase.invoke(restaurantId);
         LiveData<UserEntity> currentUserEntityLiveData = getUserEntityUseCase.invoke();
+        currentUserId = getCurrentLoggedUserIdUseCase.invoke();
 
         restaurantDetailViewStateMediatorLiveData.addSource(detailsRestaurantWrapperLiveData, detailsRestaurantWrapper -> {
                 combine(detailsRestaurantWrapper, currentUserEntityLiveData.getValue());
@@ -188,12 +190,12 @@ public class RestaurantDetailViewModel extends ViewModel {
         );
     }
 
-    public LiveData<WorkmateState> getWorkerState() {
-        return workerStateMutableLiveData;
-    }
-
     public void onRemoveUserRestaurantChoice() {
         removeUserRestaurantChoiceUseCase.invoke();
+    }
+
+    public LiveData<WorkmateState> getWorkerState() {
+        return workerStateMutableLiveData;
     }
 
     public LiveData<List<WorkmatesViewStateItem>> getWorkmatesGoingToRestaurant() {
@@ -202,7 +204,7 @@ public class RestaurantDetailViewModel extends ViewModel {
                 if (workmatesGoingToSameRestaurant != null && !workmatesGoingToSameRestaurant.isEmpty()) {
                     workerStateMutableLiveData.setValue(WorkmateState.WORKMATE_GOING);
                     for (WorkmateEntity workmateEntity : workmatesGoingToSameRestaurant) {
-                        if (!workmateEntity.getLoggedUserEntity().getId().equals(getCurrentLoggedUserIdUseCase.invoke())) {
+                        if (!workmateEntity.getLoggedUserEntity().getId().equals(currentUserId)) {
                             workmatesViewStateItems.add(
                                 new WorkmatesViewStateItem.WorkmatesGoingToSameRestaurant(
                                     workmateEntity.getLoggedUserEntity().getId(),

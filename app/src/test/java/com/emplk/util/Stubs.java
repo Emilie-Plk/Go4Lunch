@@ -1,7 +1,5 @@
 package com.emplk.util;
 
-import androidx.annotation.NonNull;
-
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.chat.conversation.ChatConversationEntity;
 import com.emplk.go4lunch.domain.chat.conversation.RecipientEntity;
@@ -9,21 +7,22 @@ import com.emplk.go4lunch.domain.chat.conversation.SenderEntity;
 import com.emplk.go4lunch.domain.chat.last_message.LastChatMessageEntity;
 import com.emplk.go4lunch.domain.chat.send_message.SendMessageEntity;
 import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantEntity;
+import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantWrapper;
 import com.emplk.go4lunch.domain.gps.entity.LocationEntity;
 import com.emplk.go4lunch.domain.gps.entity.LocationStateEntity;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
 import com.emplk.go4lunch.domain.notification.NotificationEntity;
 import com.emplk.go4lunch.domain.user.UserWithRestaurantChoiceEntity;
-import com.emplk.go4lunch.ui.chat.conversation.ChatConversationMessageViewStateItem;
-import com.emplk.go4lunch.ui.chat.conversation.MessageTypeState;
+import com.emplk.go4lunch.domain.workmate.WorkmateEntity;
+import com.emplk.go4lunch.ui.restaurant_detail.AttendanceState;
+import com.emplk.go4lunch.ui.restaurant_detail.RestaurantDetailViewState;
+import com.emplk.go4lunch.ui.utils.RestaurantDetailsFavoriteState;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.Timestamp;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 
@@ -149,7 +148,6 @@ public class Stubs {
     // endregion
 
 
-
     // region RESTAURANT
     public static final String TEST_RESTAURANT_ID = "TEST_RESTAURANT_ID";
 
@@ -157,11 +155,11 @@ public class Stubs {
     public static final String TEST_RESTAURANT_VICINITY = "TEST_RESTAURANT_VICINITY";
     public static final String TEST_RESTAURANT_PHOTO_URL = "TEST_RESTAURANT_PHOTO_URL";
 
-    public static final Float TEST_RESTAURANT_RATING = 3.5f;
+    public static final Float TEST_RESTAURANT_RATING = 5f;
     public static final String TEST_RESTAURANT_PHONE_NUMBER = "TEST_RESTAURANT_PHONE_NUMBER";
     public static final String TEST_RESTAURANT_WEBSITE = "TEST_RESTAURANT_WEBSITE";
 
-
+    // region DetailRestaurantEntity
     public static DetailsRestaurantEntity getTestDetailsRestaurantEntity() {
         return new DetailsRestaurantEntity(
             TEST_RESTAURANT_ID,
@@ -173,6 +171,8 @@ public class Stubs {
             TEST_RESTAURANT_WEBSITE,
             true);
     }
+
+    // endregion
 
     public static Set<String> getTestRestaurantIdSet(int index) {
         Set<String> restaurantIdSet = new HashSet<>();
@@ -299,9 +299,85 @@ public class Stubs {
 
     // endregion
 
-    private static String formatTimestamp(@NonNull Timestamp timestamp) {
-        Locale locale = Locale.getDefault();
-        DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale);
-        return dateFormat.format(timestamp.toDate());
+    // region DetailsRestaurantWrapper
+
+    public static DetailsRestaurantWrapper getTestDetailsRestaurantWrapperLoading() {
+        return new DetailsRestaurantWrapper.Loading();
     }
+
+    public static DetailsRestaurantWrapper getTestDetailsRestaurantWrapperError() {
+        return new DetailsRestaurantWrapper.Error(
+            new Exception("TEST_ERROR")
+        );
     }
+
+    public static DetailsRestaurantWrapper.Success getTestDetailsRestaurantWrapperSuccess() {
+        return new DetailsRestaurantWrapper.Success(
+            new DetailsRestaurantEntity(
+                "KEY_RESTAURANT_ID",
+                TEST_RESTAURANT_NAME,
+                TEST_RESTAURANT_VICINITY,
+                TEST_RESTAURANT_PHOTO_URL,
+                TEST_RESTAURANT_RATING,
+                TEST_RESTAURANT_PHONE_NUMBER,
+                TEST_RESTAURANT_WEBSITE,
+                true
+            )
+        );
+    }
+
+    // endregion
+    // region RestaurantDetailViewState
+    public static RestaurantDetailViewState getTestRestaurantDetailViewState() {
+        return new RestaurantDetailViewState.RestaurantDetail(
+            "KEY_RESTAURANT_ID",
+            TEST_RESTAURANT_NAME,
+            TEST_RESTAURANT_VICINITY,
+            null,
+            3.0f,
+            TEST_RESTAURANT_PHONE_NUMBER,
+            TEST_RESTAURANT_WEBSITE,
+            AttendanceState.IS_NOT_ATTENDING,
+            RestaurantDetailsFavoriteState.IS_NOT_FAVORITE,
+            true,
+            true,
+            true
+        );
+    }
+
+    public static RestaurantDetailViewState getTestRestaurantDetailViewStateError() {
+        return new RestaurantDetailViewState.Error(
+            "TEST_ERROR"
+        );
+    }
+
+    public static RestaurantDetailViewState getTestRestaurantDetailViewStateLoading() {
+        return new RestaurantDetailViewState.Loading();
+    }
+    // endregion
+
+    // region WorkmateEntity
+    public static WorkmateEntity getTestWorkmateEntity_currentUser() {
+        return new WorkmateEntity(
+            Stubs.getTestLoggedUserEntity(),
+            "KEY_RESTAURANT_ID",
+            ATTENDING_RESTAURANT_NAME,
+            ATTENDING_RESTAURANT_VICINITY
+        );
+    }
+
+    public static WorkmateEntity getTestWorkmateEntity() {
+        return new WorkmateEntity(
+            new LoggedUserEntity(
+                "WORKMATE_ID",
+                "WORKMATE_NAME",
+                "WORKMATE_EMAIL",
+                "WORKMATE_PHOTO_URL"
+            ),
+            "KEY_RESTAURANT_ID",
+            ATTENDING_RESTAURANT_NAME,
+            ATTENDING_RESTAURANT_VICINITY
+        );
+    }
+    // endregion
+}

@@ -30,6 +30,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.OAuthProvider;
 
+import java.util.Collections;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
@@ -39,7 +41,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private LoginActivityViewModel viewModel;
 
-    private FirebaseAuth.AuthStateListener authStateListener;
 
     private GoogleSignInClient googleSignInClient;
 
@@ -54,13 +55,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(view);
 
         viewModel = new ViewModelProvider(this).get(LoginActivityViewModel.class);
-
-        authStateListener = firebaseAuth -> {
-            if (firebaseAuth.getCurrentUser() != null) {
-                startActivity(DispatcherActivity.navigate(this));
-                finish();
-            }
-        };
 
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -78,7 +72,11 @@ public class LoginActivity extends AppCompatActivity {
 
         // GITHUB SIGN IN
         binding.loginGithubLogBtn.setOnClickListener(v -> {
-                OAuthProvider.Builder provider = OAuthProvider.newBuilder("github.com");
+                OAuthProvider.Builder provider = OAuthProvider
+                    .newBuilder("github.com")
+                    .setScopes(Collections.singletonList(("user:email")
+                        )
+                    );
 
                 Task<AuthResult> pendingResultTask = firebaseAuth.getPendingAuthResult();
                 if (pendingResultTask != null) {
@@ -97,8 +95,6 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         );
                 } else {
-
-
                     firebaseAuth
                         .startActivityForSignInWithProvider(this, provider.build())
                         .addOnSuccessListener(

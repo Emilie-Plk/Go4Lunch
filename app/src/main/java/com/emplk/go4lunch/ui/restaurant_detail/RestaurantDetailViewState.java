@@ -186,14 +186,25 @@ public abstract class RestaurantDetailViewState {
         public int hashCode() {
             return Objects.hash(id, name, vicinity, pictureUrl, rating, phoneNumber, websiteUrl, attendanceState, restaurantDetailsFavoriteState, isVeganFriendly, isPhoneNumberAvailable, isWebsiteAvailable);
         }
-    }
 
-    @NonNull
-    @Override
-    public String toString() {
-        return "RestaurantDetailViewState{" +
-            "type=" + type +
-            '}';
+        @NonNull
+        @Override
+        public String toString() {
+            return "RestaurantDetail{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", vicinity='" + vicinity + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                ", rating=" + rating +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", websiteUrl='" + websiteUrl + '\'' +
+                ", attendanceState=" + attendanceState +
+                ", restaurantDetailsFavoriteState=" + restaurantDetailsFavoriteState +
+                ", isVeganFriendly=" + isVeganFriendly +
+                ", isPhoneNumberAvailable=" + isPhoneNumberAvailable +
+                ", isWebsiteAvailable=" + isWebsiteAvailable +
+                '}';
+        }
     }
 
     public static class Error extends RestaurantDetailViewState {
