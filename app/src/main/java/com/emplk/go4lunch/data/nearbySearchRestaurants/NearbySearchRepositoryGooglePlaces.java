@@ -2,6 +2,7 @@ package com.emplk.go4lunch.data.nearbySearchRestaurants;
 
 import static com.emplk.go4lunch.BuildConfig.API_KEY;
 
+import android.location.Location;
 import android.util.Log;
 import android.util.LruCache;
 
@@ -72,7 +73,7 @@ public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepositor
                                 response.body().getStatus() != null &&
                                 response.body().getStatus().equals("OK")
                             ) {
-                                List<NearbySearchEntity> nearbySearchEntityList = mapToNearbySearchEntityList(response.body());
+                                List<NearbySearchEntity> nearbySearchEntityList = mapToNearbySearchEntityList(response.body(), location);
                                 nearbySearchLruCache.put(cacheKey, nearbySearchEntityList);
                                 resultMutableLiveData.setValue(new NearbySearchWrapper.Success(nearbySearchEntityList));
                             } else if (response.isSuccessful() &&
@@ -113,7 +114,10 @@ public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepositor
     }
 
     @NonNull
-    private List<NearbySearchEntity> mapToNearbySearchEntityList(@Nullable NearbySearchResponse response) {
+    private List<NearbySearchEntity> mapToNearbySearchEntityList(
+        @Nullable NearbySearchResponse response,
+        @NonNull String userLocation
+    ) {
         List<NearbySearchEntity> results = new ArrayList<>();
 
         if (response != null && response.getResults() != null) {
@@ -140,12 +144,15 @@ public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepositor
                 }
 
                 LocationEntity locationEntity;
+                Integer distance;
                 if (result.getGeometry() != null && result.getGeometry().getLocation() != null) {
                     Double latitude = result.getGeometry().getLocation().getLat();
                     Double longitude = result.getGeometry().getLocation().getLng();
                     locationEntity = new LocationEntity(latitude, longitude);
+                    distance = getDistanceFromUserLocation(locationEntity, userLocation);
                 } else {
                     locationEntity = null;
+                    distance = null;
                 }
 
                 Boolean openingHours;
@@ -167,11 +174,33 @@ public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepositor
                         photoUrl,
                         rating,
                         locationEntity,
+                        distance,
                         openingHours);
                     results.add(searchResult);
                 }
             }
         }
         return results;
+    }
+
+    private Integer getDistanceFromUserLocation(
+        @NonNull LocationEntity restaurantLocationEntity,
+        @NonNull String userLocationString
+    ) {
+        String[] coordinatesArr = userLocationString.split(",");
+        double userLatitude = Double.parseDouble(coordinatesArr[0]);
+        double userLongitude = Double.parseDouble(coordinatesArr[1]);
+
+        Location userLocation = new Location("userLocation");
+        userLocation.setLatitude(userLatitude);
+        userLocation.setLongitude(userLongitude);
+
+        Location restaurantLocation = new Location("nearbySearchResultRestaurantLocation");
+        restaurantLocation.setLatitude(restaurantLocationEntity.getLatitude());
+        restaurantLocation.setLongitude(restaurantLocationEntity.getLongitude());
+
+        float distance = userLocation.distanceTo(restaurantLocation);
+
+        return (int) Math.floor(distance);
     }
 }

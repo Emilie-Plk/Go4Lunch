@@ -45,6 +45,43 @@ public class Stubs {
             TEST_USER_PHOTO_URL
         );
     }
+
+    public static List<LoggedUserEntity> getFourTestLoggedUserEntities() {
+        List<LoggedUserEntity> loggedUserEntityList = new ArrayList<>();
+        loggedUserEntityList.add(
+            new LoggedUserEntity(
+                TEST_USER_ID + 1,
+                TEST_USER_NAME,
+                TEST_USER_EMAIL,
+                TEST_USER_PHOTO_URL
+            )
+        );
+        loggedUserEntityList.add(
+            new LoggedUserEntity(
+                TEST_USER_ID + 2,
+                TEST_USER_NAME,
+                TEST_USER_EMAIL,
+                TEST_USER_PHOTO_URL
+            )
+        );
+        loggedUserEntityList.add(
+            new LoggedUserEntity(
+                TEST_USER_ID + 3,
+                TEST_USER_NAME,
+                TEST_USER_EMAIL,
+                TEST_USER_PHOTO_URL
+            )
+        );
+        loggedUserEntityList.add(
+            new LoggedUserEntity(
+                TEST_USER_ID + 4,
+                TEST_USER_NAME,
+                TEST_USER_EMAIL,
+                TEST_USER_PHOTO_URL
+            )
+        );
+        return loggedUserEntityList;
+    }
     // endregion
 
 // region ChatConversation
@@ -126,7 +163,6 @@ public class Stubs {
             LastChatMessageEntity lastChatMessageEntity = getTestLastChatMessageEntity(i);
             lastChatMessageEntities.add(lastChatMessageEntity);
         }
-
         return lastChatMessageEntities;
     }
 
@@ -144,7 +180,6 @@ public class Stubs {
 
         return new SendMessageEntity(senderEntity, recipientEntity, TEST_CHAT_MESSAGE);
     }
-
     // endregion
 
 
@@ -215,6 +250,8 @@ public class Stubs {
     public static final String TEST_NEARBYSEARCH_ID = "TEST_NEARBYSEARCH_ID";
     public static final String TEST_NEARBYSEARCH_NAME = "TEST_NEARBYSEARCH_NAME";
     public static final String TEST_NEARBYSEARCH_VICINITY = "TEST_NEARBYSEARCH_VICINITY";
+
+    public static final Integer TEST_NEARBYSEARCH_DISTANCE = 1000;
     public static final String TEST_NEARBYSEARCH_PICTURE_URL = "TEST_NEARBYSEARCH_PHOTO_URL";
     public static final Float TEST_NEARBYSEARCH_RATING = 3.5f;
     public static final LocationEntity TEST_NEARBYSEARCH_LOCATION_ENTITY = new LocationEntity(
@@ -238,6 +275,7 @@ public class Stubs {
                 TEST_NEARBYSEARCH_PICTURE_URL,
                 TEST_NEARBYSEARCH_RATING,
                 new LocationEntity(TEST_NEARBYSEARCH_LOCATION_ENTITY.getLatitude() + i, TEST_NEARBYSEARCH_LOCATION_ENTITY.getLongitude() + i),
+                TEST_NEARBYSEARCH_DISTANCE,
                 TEST_NEARBYSEARCH_OPEN_NOW
             );
             nearbySearchEntities.add(nearbySearchEntity);
@@ -325,8 +363,8 @@ public class Stubs {
             )
         );
     }
-
     // endregion
+
     // region RestaurantDetailViewState
     public static RestaurantDetailViewState getTestRestaurantDetailViewState() {
         return new RestaurantDetailViewState.RestaurantDetail(
@@ -374,10 +412,19 @@ public class Stubs {
                 "WORKMATE_EMAIL",
                 "WORKMATE_PHOTO_URL"
             ),
-            "KEY_RESTAURANT_ID",
+            TEST_RESTAURANT_ID,
             ATTENDING_RESTAURANT_NAME,
             ATTENDING_RESTAURANT_VICINITY
         );
     }
+
+    public static List<WorkmateEntity> getThreeTestWorkmateEntities() {
+        List<WorkmateEntity> workmateEntities = new ArrayList<>();
+        workmateEntities.add(getTestWorkmateEntity());
+        workmateEntities.add(getTestWorkmateEntity());
+        workmateEntities.add(getTestWorkmateEntity());
+        return workmateEntities;
+    }
+
     // endregion
 }

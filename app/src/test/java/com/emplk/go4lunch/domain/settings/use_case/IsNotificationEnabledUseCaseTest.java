@@ -1,12 +1,11 @@
 package com.emplk.go4lunch.domain.settings.use_case;
 
 import static com.emplk.util.TestUtil.getValueForTesting;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-import androidx.lifecycle.MutableLiveData;
 
 import com.emplk.go4lunch.domain.settings.NotificationRepository;
 
@@ -28,14 +27,14 @@ public class IsNotificationEnabledUseCaseTest {
         isNotificationEnabledUseCase = new IsNotificationEnabledUseCase(notificationRepository);
     }
 
-@Test
+    @Test
     public void notificationIsEnabled() {
         // Given
-    doReturn(true).when(notificationRepository).isNotificationEnabled();
+        doReturn(true).when(notificationRepository).isNotificationEnabled();
         // When
         Boolean result = getValueForTesting(isNotificationEnabledUseCase.invoke());
         // Then
-    assertEquals(true, result);
+        assertEquals(true, result);
     }
 
     @Test

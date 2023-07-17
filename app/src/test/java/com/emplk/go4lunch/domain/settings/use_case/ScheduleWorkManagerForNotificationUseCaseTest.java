@@ -1,6 +1,5 @@
 package com.emplk.go4lunch.domain.settings.use_case;
 
-import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -24,7 +23,7 @@ public class ScheduleWorkManagerForNotificationUseCaseTest {
     private ScheduleWorkManagerForNotificationUseCase scheduleWorkManagerForNotificationUseCase;
 
     @Before
-    public void setUp()  {
+    public void setUp() {
         scheduleWorkManagerForNotificationUseCase = new ScheduleWorkManagerForNotificationUseCase(notificationRepository, clock);
     }
 
@@ -49,6 +48,7 @@ public class ScheduleWorkManagerForNotificationUseCaseTest {
         scheduleWorkManagerForNotificationUseCase.invoke();
 
         // Then
-        verify(notificationRepository).cancelNotification();;
+        verify(notificationRepository).cancelNotification();
+        ;
     }
 }

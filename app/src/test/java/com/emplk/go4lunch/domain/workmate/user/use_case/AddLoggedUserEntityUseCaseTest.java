@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.domain.user.use_case;
+package com.emplk.go4lunch.domain.workmate.user.use_case;
 
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserUseCase;
 import com.emplk.go4lunch.domain.user.UserRepository;
+import com.emplk.go4lunch.domain.user.use_case.AddLoggedUserEntityUseCase;
 import com.emplk.util.Stubs;
 
 import org.junit.Before;

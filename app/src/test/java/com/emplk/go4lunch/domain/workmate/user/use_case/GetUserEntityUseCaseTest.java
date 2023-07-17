@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.domain.user.use_case;
+package com.emplk.go4lunch.domain.workmate.user.use_case;
 
 import static com.emplk.util.TestUtil.getValueForTesting;
 import static org.junit.Assert.assertEquals;
@@ -17,6 +17,7 @@ import com.emplk.go4lunch.domain.favorite_restaurant.GetFavoriteRestaurantsIdsUs
 import com.emplk.go4lunch.domain.restaurant_choice.GetUserWithRestaurantChoiceEntityLiveDataUseCase;
 import com.emplk.go4lunch.domain.user.UserEntity;
 import com.emplk.go4lunch.domain.user.UserWithRestaurantChoiceEntity;
+import com.emplk.go4lunch.domain.user.use_case.GetUserEntityUseCase;
 import com.emplk.util.Stubs;
 
 import org.junit.Before;

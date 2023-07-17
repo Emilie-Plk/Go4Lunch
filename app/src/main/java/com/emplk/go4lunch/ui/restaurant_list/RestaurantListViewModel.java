@@ -10,7 +10,6 @@ import static com.emplk.go4lunch.ui.restaurant_list.RestaurantOpeningState.IS_NO
 import static com.emplk.go4lunch.ui.restaurant_list.RestaurantOpeningState.IS_OPEN;
 
 import android.content.res.Resources;
-import android.location.Location;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,17 +23,19 @@ import com.emplk.go4lunch.domain.gps.entity.LocationEntity;
 import com.emplk.go4lunch.domain.gps.entity.LocationStateEntity;
 import com.emplk.go4lunch.domain.location.GetCurrentLocationStateUseCase;
 import com.emplk.go4lunch.domain.nearby_search.GetNearbySearchWrapperUseCase;
-import com.emplk.go4lunch.domain.nearby_search.SortNearbyRestaurantsUseCase;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchWrapper;
 import com.emplk.go4lunch.domain.permission.HasGpsPermissionUseCase;
 import com.emplk.go4lunch.domain.workmate.GetAttendantsGoingToSameRestaurantAsUserUseCase;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.SphericalUtil;
 
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -47,11 +48,6 @@ public class RestaurantListViewModel extends ViewModel {
     private final Resources resources;
 
     private final MediatorLiveData<List<RestaurantListViewStateItem>> restaurantListMediatorLiveData = new MediatorLiveData<>();
-    @NonNull
-    private final SortNearbyRestaurantsUseCase sortNearbyRestaurantsUseCase;
-
-    @NonNull
-    private final GetAttendantsGoingToSameRestaurantAsUserUseCase getAttendantsGoingToSameRestaurantAsUserUseCase;
 
     private final LiveData<Boolean> hasGpsPermissionLiveData;
 
@@ -63,12 +59,9 @@ public class RestaurantListViewModel extends ViewModel {
         @NonNull HasGpsPermissionUseCase hasGpsPermissionUseCase,
         @NonNull IsGpsEnabledUseCase isGpsEnabledUseCase,
         @NonNull Resources resources,
-        @NonNull SortNearbyRestaurantsUseCase sortNearbyRestaurantsUseCase,
         @NonNull GetAttendantsGoingToSameRestaurantAsUserUseCase getAttendantsGoingToSameRestaurantAsUserUseCase
     ) {
         this.resources = resources;
-        this.sortNearbyRestaurantsUseCase = sortNearbyRestaurantsUseCase;
-        this.getAttendantsGoingToSameRestaurantAsUserUseCase = getAttendantsGoingToSameRestaurantAsUserUseCase;
 
         LiveData<LocationStateEntity> locationLiveData = getCurrentLocationStateUseCase.invoke();
 
@@ -164,14 +157,14 @@ public class RestaurantListViewModel extends ViewModel {
             if (locationStateEntity instanceof LocationStateEntity.Success) {
                 LocationEntity location = ((LocationStateEntity.Success) locationStateEntity).locationEntity;
 
-                List<NearbySearchEntity> sortedRestaurantList = sortNearbyRestaurantsUseCase.invoke(((NearbySearchWrapper.Success) nearbySearchWrapper).getNearbySearchEntityList(), location);
+                List<NearbySearchEntity> sortedRestaurantList = sortNearbyRestaurants(((NearbySearchWrapper.Success) nearbySearchWrapper).getNearbySearchEntityList(), location);
                 for (NearbySearchEntity nearbySearchEntity : sortedRestaurantList) {
                     result.add(
                         new RestaurantListViewStateItem.RestaurantItemItem(
                             nearbySearchEntity.getPlaceId(),
                             nearbySearchEntity.getRestaurantName(),
                             nearbySearchEntity.getVicinity(),
-                            getDistanceString(location.getLatitude(), location.getLongitude(), nearbySearchEntity.getLocationEntity()),
+                            (new DecimalFormat("#").format(nearbySearchEntity.getDistance())) + "m",
                             getAttendants(nearbySearchEntity.getPlaceId(), attendantsByRestaurantIds),
                             formatOpeningStatus(nearbySearchEntity.isOpen()),
                             parseRestaurantPictureUrl(nearbySearchEntity.getPhotoReferenceUrl()),
@@ -193,11 +186,31 @@ public class RestaurantListViewModel extends ViewModel {
         restaurantListMediatorLiveData.setValue(result);
     }
 
+    private List<NearbySearchEntity> sortNearbyRestaurants(
+        @NonNull List<NearbySearchEntity> nearbySearchEntityList,
+        @NonNull LocationEntity userLocationEntity
+    ) {
+        LatLng userLatLng = new LatLng(userLocationEntity.getLatitude(), userLocationEntity.getLongitude());
+        return nearbySearchEntityList.stream()
+            .sorted(Comparator.comparingDouble(place ->
+                    SphericalUtil.computeDistanceBetween(
+                        userLatLng,
+                        new LatLng(place.getLocationEntity().getLatitude(), place.getLocationEntity().getLongitude()
+                        )
+                    )
+                )
+            )
+            .collect(Collectors.toList());
+    }
+
     private String getAttendants(
         String placeId,
         Map<String, Integer> attendantsByRestaurantIds
     ) {
-        if (attendantsByRestaurantIds != null && attendantsByRestaurantIds.containsKey(placeId)) {
+        if (attendantsByRestaurantIds != null &&
+            attendantsByRestaurantIds.containsKey(placeId) &&
+            attendantsByRestaurantIds.get(placeId) != null
+        ) {
             return attendantsByRestaurantIds.get(placeId).toString();
         } else {
             return "0";
@@ -232,25 +245,6 @@ public class RestaurantListViewModel extends ViewModel {
         }
     }
 
-    private String getDistanceString(
-        @NonNull Double userLat,
-        @NonNull Double userLong,
-        @NonNull LocationEntity locationEntity
-    ) {
-        Location userLocation = new Location("userLocation");
-        userLocation.setLatitude(userLat);
-        userLocation.setLongitude(userLong);
-
-        Location restaurantLocation = new Location("nearbySearchResultRestaurantLocation");
-        restaurantLocation.setLatitude(locationEntity.getLatitude());
-        restaurantLocation.setLongitude(locationEntity.getLongitude());
-
-        float distance = userLocation.distanceTo(restaurantLocation);
-        DecimalFormat decimalFormat = new DecimalFormat("#.#");
-        decimalFormat.setRoundingMode(RoundingMode.DOWN);
-        return decimalFormat.format(distance).split("[.,]")[0] + "m";
-    }
-
     private float convertFiveToThreeRating(@Nullable Float fiveRating) {
         if (fiveRating == null) {
             return 0f;
@@ -259,5 +253,4 @@ public class RestaurantListViewModel extends ViewModel {
             return Math.min(3f, convertedRating / 5f * 3f);
         }
     }
-
 }

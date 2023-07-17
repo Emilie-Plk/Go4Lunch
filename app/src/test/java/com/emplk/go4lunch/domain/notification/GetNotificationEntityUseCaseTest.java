@@ -48,7 +48,7 @@ public class GetNotificationEntityUseCaseTest {
 
         List<String> expectedWorkmatesNames = Arrays.asList(
             Stubs.getTestUserWithDifferentRestaurantChoiceEntity(null).getAttendingUsername(),
-            Stubs.getTestUserWithDifferentRestaurantChoiceEntity( null).getAttendingUsername()
+            Stubs.getTestUserWithDifferentRestaurantChoiceEntity(null).getAttendingUsername()
         );
 
         // When

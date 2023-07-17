@@ -1,5 +1,7 @@
 package com.emplk.go4lunch.domain.settings.use_case;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.emplk.go4lunch.domain.settings.NotificationRepository;
@@ -40,7 +42,7 @@ public class ScheduleWorkManagerForNotificationUseCase {
         if (delay.isNegative()) {
             delay = delay.plusDays(1);
         }
-        //   Log.d("NotificationRepository", "Notification scheduled in " + delay.toMinutes() + " minutes");
+        Log.d("NotificationRepository", "Notification scheduled in " + delay.toMinutes() + " minutes");
         return delay.toMillis();
     }
 }

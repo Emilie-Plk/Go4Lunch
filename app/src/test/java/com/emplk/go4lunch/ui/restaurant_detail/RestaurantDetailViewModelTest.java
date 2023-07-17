@@ -2,6 +2,7 @@ package com.emplk.go4lunch.ui.restaurant_detail;
 
 import static com.emplk.util.TestUtil.getValueForTesting;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -67,23 +68,22 @@ public class RestaurantDetailViewModelTest {
 
     private final MutableLiveData<DetailsRestaurantWrapper> detailsRestaurantWrapperMutableLiveData = new MutableLiveData<>();
 
-    private MutableLiveData<WorkmateState> workmateStateMutableLiveData;
+    MutableLiveData<UserEntity> userEntityMutableLiveData = new MutableLiveData<>(mock(UserEntity.class));
 
     private RestaurantDetailViewModel viewModel;
 
     @Before
     public void setUp() {
-        workmateStateMutableLiveData = new MutableLiveData<>();
         doReturn("KEY_RESTAURANT_ID").when(savedStateHandle).get(KEY_RESTAURANT_ID);
         doReturn(detailsRestaurantWrapperMutableLiveData).when(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
 
         MutableLiveData<List<WorkmateEntity>> workmateEntitiesMutableLiveData = new MutableLiveData<>();
         doReturn(workmateEntitiesMutableLiveData).when(getWorkmateEntitiesGoingToSameRestaurantUseCase).invoke(KEY_RESTAURANT_ID);
 
-        MutableLiveData<UserEntity> userEntityMutableLiveData = new MutableLiveData<>(mock(UserEntity.class));
+
         doReturn(userEntityMutableLiveData).when(getUserEntityUseCase).invoke();
 
-        doReturn("coucou").when(resources).getString(R.string.google_image_url);
+        doReturn("Test").when(resources).getString(R.string.google_image_url);
 
         doReturn(Stubs.TEST_USER_ID).when(getCurrentLoggedUserIdUseCase).invoke();
 
@@ -126,6 +126,30 @@ public class RestaurantDetailViewModelTest {
         verifyNoMoreInteractions(addFavoriteRestaurantUseCase);
     }
 
+    @Test
+    public void detailsRestaurantWrapperIsNull_shouldReturn() {
+        // Given
+        detailsRestaurantWrapperMutableLiveData.setValue(null);
+
+        // When
+        RestaurantDetailViewState result = getValueForTesting(viewModel.getRestaurantDetails());
+
+        // Then
+        assertNull(result);
+    }
+
+
+    @Test
+    public void currentUserIsNull_shouldReturn() {
+        // Given
+        userEntityMutableLiveData.setValue(null);
+
+        // When
+        RestaurantDetailViewState result = getValueForTesting(viewModel.getRestaurantDetails());
+
+        // Then
+        assertNull(result);
+    }
 
     @Test
     public void onRemoveFavoriteRestaurant_should_call_removeFavoriteRestaurantUseCase() {

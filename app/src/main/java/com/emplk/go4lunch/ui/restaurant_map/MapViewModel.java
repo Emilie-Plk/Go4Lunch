@@ -1,6 +1,5 @@
 package com.emplk.go4lunch.ui.restaurant_map;
 
-import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.ColorRes;
@@ -28,7 +27,6 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
-import dagger.hilt.android.qualifiers.ApplicationContext;
 
 @HiltViewModel
 public class MapViewModel extends ViewModel {
@@ -37,19 +35,15 @@ public class MapViewModel extends ViewModel {
     private final GetCurrentLocationStateUseCase getCurrentLocationStateUseCase;
 
     private final MediatorLiveData<List<RestaurantMarkerViewStateItem>> mapViewStateMediatorLiveData = new MediatorLiveData<>();
-    @NonNull
-    private final Context context;
 
     @Inject
     public MapViewModel(
         @NonNull IsGpsEnabledUseCase isGpsEnabledUseCase,
         @NonNull GetCurrentLocationStateUseCase getCurrentLocationStateUseCase,
         @NonNull GetNearbySearchWrapperUseCase getNearbySearchWrapperUseCase,
-        @NonNull GetAttendantsGoingToSameRestaurantAsUserUseCase getAttendantsGoingToSameRestaurantAsUserUseCase,
-        @NonNull @ApplicationContext Context context
+        @NonNull GetAttendantsGoingToSameRestaurantAsUserUseCase getAttendantsGoingToSameRestaurantAsUserUseCase
     ) {
         this.getCurrentLocationStateUseCase = getCurrentLocationStateUseCase;
-        this.context = context;
 
         LiveData<NearbySearchWrapper> nearbySearchWrapperLiveData = getNearbySearchWrapperUseCase.invoke();
         LiveData<LocationStateEntity> locationStateEntityLiveData = getCurrentLocationStateUseCase.invoke();

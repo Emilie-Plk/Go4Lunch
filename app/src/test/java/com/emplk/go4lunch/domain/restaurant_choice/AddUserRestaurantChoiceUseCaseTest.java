@@ -19,7 +19,7 @@ public class AddUserRestaurantChoiceUseCaseTest {
 
     private final GetCurrentLoggedUserUseCase getCurrentLoggedUserUseCase = mock(GetCurrentLoggedUserUseCase.class);
 
-    private  AddUserRestaurantChoiceUseCase addUserRestaurantChoiceUseCase;
+    private AddUserRestaurantChoiceUseCase addUserRestaurantChoiceUseCase;
 
     @Before
     public void setUp() {
@@ -41,13 +41,13 @@ public class AddUserRestaurantChoiceUseCaseTest {
         verify(getCurrentLoggedUserUseCase).invoke();
         verify(userRepository).upsertUserRestaurantChoice(
             Stubs.getTestLoggedUserEntity(),
-          new ChosenRestaurantEntity(
-              null,
-              Stubs.TEST_RESTAURANT_ID,
-              Stubs.TEST_RESTAURANT_NAME,
-              Stubs.TEST_RESTAURANT_VICINITY,
-              Stubs.TEST_NEARBYSEARCH_PICTURE_URL
-          )
+            new ChosenRestaurantEntity(
+                null,
+                Stubs.TEST_RESTAURANT_ID,
+                Stubs.TEST_RESTAURANT_NAME,
+                Stubs.TEST_RESTAURANT_VICINITY,
+                Stubs.TEST_NEARBYSEARCH_PICTURE_URL
+            )
         );
         verifyNoMoreInteractions(userRepository, getCurrentLoggedUserUseCase);
     }
