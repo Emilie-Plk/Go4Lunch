@@ -45,7 +45,7 @@ public class GetLastChatMessageSortedChronologicallyUseCaseTest {
     public void testInvoke() {
         // Given
         MutableLiveData<List<LastChatMessageEntity>> lastChatMessagesList = new MutableLiveData<>();
-        List<LastChatMessageEntity> lastChatMessageEntities = Stubs.getTestLastChatMessageEntityList();
+        List<LastChatMessageEntity> lastChatMessageEntities = Stubs.getTestFiveLastChatMessageEntityList();
         lastChatMessagesList.setValue(lastChatMessageEntities);
         doReturn(lastChatMessagesList).when(chatRepository).getLastChatMessagesList(TEST_USER_ID);
 

@@ -156,7 +156,7 @@ public class Stubs {
         return new LastChatMessageEntity(TEST_CHAT_MESSAGE, senderEntity, recipientEntity, timestamp);
     }
 
-    public static List<LastChatMessageEntity> getTestLastChatMessageEntityList() {
+    public static List<LastChatMessageEntity> getTestFiveLastChatMessageEntityList() {
         List<LastChatMessageEntity> lastChatMessageEntities = new ArrayList<>();
 
         for (int i = 0; i < 5; i++) {
