@@ -48,27 +48,27 @@ public class MapViewModel extends ViewModel {
         LiveData<NearbySearchWrapper> nearbySearchWrapperLiveData = getNearbySearchWrapperUseCase.invoke();
         LiveData<LocationStateEntity> locationStateEntityLiveData = getCurrentLocationStateUseCase.invoke();
         LiveData<Boolean> isGpsEnabledLiveData = isGpsEnabledUseCase.invoke();
-        LiveData<Map<String, Integer>> restaurantIdToAttendantsCountLiveData = getAttendantsGoingToSameRestaurantAsUserUseCase.invoke();
+        LiveData<Map<String, Integer>> restaurantIdWithAttendantsMapLiveData = getAttendantsGoingToSameRestaurantAsUserUseCase.invoke();
 
         mapViewStateMediatorLiveData.addSource(isGpsEnabledLiveData, isGpsEnabled -> {
-                combine(isGpsEnabled, locationStateEntityLiveData.getValue(), nearbySearchWrapperLiveData.getValue(), restaurantIdToAttendantsCountLiveData.getValue()
+                combine(isGpsEnabled, locationStateEntityLiveData.getValue(), nearbySearchWrapperLiveData.getValue(), restaurantIdWithAttendantsMapLiveData.getValue()
                 );
             }
         );
 
         mapViewStateMediatorLiveData.addSource(locationStateEntityLiveData, locationEntity -> {
-                combine(isGpsEnabledLiveData.getValue(), locationEntity, nearbySearchWrapperLiveData.getValue(), restaurantIdToAttendantsCountLiveData.getValue()
+                combine(isGpsEnabledLiveData.getValue(), locationEntity, nearbySearchWrapperLiveData.getValue(), restaurantIdWithAttendantsMapLiveData.getValue()
                 );
             }
         );
 
         mapViewStateMediatorLiveData.addSource(nearbySearchWrapperLiveData, nearbySearchWrapper -> {
-                combine(isGpsEnabledLiveData.getValue(), locationStateEntityLiveData.getValue(), nearbySearchWrapper, restaurantIdToAttendantsCountLiveData.getValue()
+                combine(isGpsEnabledLiveData.getValue(), locationStateEntityLiveData.getValue(), nearbySearchWrapper, restaurantIdWithAttendantsMapLiveData.getValue()
                 );
             }
         );
 
-        mapViewStateMediatorLiveData.addSource(restaurantIdToAttendantsCountLiveData, restaurantIdToAttendantsCount -> {
+        mapViewStateMediatorLiveData.addSource(restaurantIdWithAttendantsMapLiveData, restaurantIdToAttendantsCount -> {
                 combine(isGpsEnabledLiveData.getValue(), locationStateEntityLiveData.getValue(), nearbySearchWrapperLiveData.getValue(), restaurantIdToAttendantsCount
                 );
             }
