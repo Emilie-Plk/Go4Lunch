@@ -3,6 +3,7 @@ package com.emplk.go4lunch.ui.restaurant_detail;
 import static com.emplk.util.TestUtil.getValueForTesting;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -17,6 +18,7 @@ import androidx.lifecycle.SavedStateHandle;
 import com.emplk.go4lunch.R;
 import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserIdUseCase;
 import com.emplk.go4lunch.domain.detail.GetDetailsRestaurantWrapperUseCase;
+import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantEntity;
 import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantWrapper;
 import com.emplk.go4lunch.domain.favorite_restaurant.AddFavoriteRestaurantUseCase;
 import com.emplk.go4lunch.domain.favorite_restaurant.RemoveFavoriteRestaurantUseCase;
@@ -112,6 +114,126 @@ public class RestaurantDetailViewModelTest {
 
         // Then
         assertEquals(Stubs.getTestRestaurantDetailViewState(), result);
+        assertTrue(result instanceof RestaurantDetailViewState.RestaurantDetail);
+        verify(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
+        verify(getUserEntityUseCase).invoke();
+        verifyNoMoreInteractions(getDetailsRestaurantWrapperUseCase, getUserEntityUseCase, getWorkmateEntitiesGoingToSameRestaurantUseCase);
+    }
+
+    @Test
+    public void detailsRestaurantWrapperSuccess_phoneNumberIsNotNull() {
+        // Given
+        detailsRestaurantWrapperMutableLiveData.setValue(Stubs.getTestDetailsRestaurantWrapperSuccess());
+        doReturn(detailsRestaurantWrapperMutableLiveData).when(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
+
+        // When
+        RestaurantDetailViewState result = getValueForTesting(viewModel.getRestaurantDetails());
+
+        // Then
+        assertEquals(Stubs.TEST_RESTAURANT_PHONE_NUMBER, ((RestaurantDetailViewState.RestaurantDetail) result).getPhoneNumber());
+        verify(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
+        verify(getUserEntityUseCase).invoke();
+        verifyNoMoreInteractions(getDetailsRestaurantWrapperUseCase, getUserEntityUseCase, getWorkmateEntitiesGoingToSameRestaurantUseCase);
+    }
+
+    @Test
+    public void detailsRestaurantWrapperSuccess_phoneNumberIsNull() {
+        // Given
+        DetailsRestaurantWrapper detailsRestaurantWrapper = new DetailsRestaurantWrapper.Success(
+            new DetailsRestaurantEntity(
+                Stubs.TEST_RESTAURANT_ID,
+                Stubs.TEST_RESTAURANT_NAME,
+                Stubs.TEST_RESTAURANT_VICINITY,
+                Stubs.TEST_RESTAURANT_PHOTO_URL,
+                Stubs.TEST_NEARBYSEARCH_RATING,
+                null,
+                Stubs.TEST_RESTAURANT_WEBSITE,
+                true
+            )
+        );
+        detailsRestaurantWrapperMutableLiveData.setValue(detailsRestaurantWrapper);
+        doReturn(detailsRestaurantWrapperMutableLiveData).when(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
+
+        // When
+        RestaurantDetailViewState result = getValueForTesting(viewModel.getRestaurantDetails());
+
+        // Then
+        assertNull(((RestaurantDetailViewState.RestaurantDetail) result).getPhoneNumber());
+        verify(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
+        verify(getUserEntityUseCase).invoke();
+        verifyNoMoreInteractions(getDetailsRestaurantWrapperUseCase, getUserEntityUseCase, getWorkmateEntitiesGoingToSameRestaurantUseCase);
+    }
+
+    @Test
+    public void detailsRestaurantWrapperSuccess_websiteUrlIsNotNull() {
+        // Given
+        detailsRestaurantWrapperMutableLiveData.setValue(Stubs.getTestDetailsRestaurantWrapperSuccess());
+        doReturn(detailsRestaurantWrapperMutableLiveData).when(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
+
+        // When
+        RestaurantDetailViewState result = getValueForTesting(viewModel.getRestaurantDetails());
+
+        // Then
+        assertEquals(Stubs.TEST_RESTAURANT_WEBSITE, ((RestaurantDetailViewState.RestaurantDetail) result).getWebsiteUrl());
+        verify(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
+        verify(getUserEntityUseCase).invoke();
+        verifyNoMoreInteractions(getDetailsRestaurantWrapperUseCase, getUserEntityUseCase, getWorkmateEntitiesGoingToSameRestaurantUseCase);
+    }
+
+    @Test
+    public void detailsRestaurantWrapperSuccess_websiteUrlIsNull() {
+        // Given
+        DetailsRestaurantWrapper detailsRestaurantWrapper = new DetailsRestaurantWrapper.Success(
+            new DetailsRestaurantEntity(
+                Stubs.TEST_RESTAURANT_ID,
+                Stubs.TEST_RESTAURANT_NAME,
+                Stubs.TEST_RESTAURANT_VICINITY,
+                Stubs.TEST_RESTAURANT_PHOTO_URL,
+                Stubs.TEST_NEARBYSEARCH_RATING,
+                Stubs.TEST_RESTAURANT_WEBSITE,
+                null,
+                true
+            )
+        );
+        detailsRestaurantWrapperMutableLiveData.setValue(detailsRestaurantWrapper);
+        doReturn(detailsRestaurantWrapperMutableLiveData).when(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
+
+        // When
+        RestaurantDetailViewState result = getValueForTesting(viewModel.getRestaurantDetails());
+
+        // Then
+        assertNull(((RestaurantDetailViewState.RestaurantDetail) result).getWebsiteUrl());
+        verify(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
+        verify(getUserEntityUseCase).invoke();
+        verifyNoMoreInteractions(getDetailsRestaurantWrapperUseCase, getUserEntityUseCase, getWorkmateEntitiesGoingToSameRestaurantUseCase);
+    }
+
+    @Test
+    public void edge_case_detailsRestaurantWrapperIsNull() {
+        // Given
+        detailsRestaurantWrapperMutableLiveData.setValue(null);
+        doReturn(detailsRestaurantWrapperMutableLiveData).when(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
+
+        // When
+        RestaurantDetailViewState result = getValueForTesting(viewModel.getRestaurantDetails());
+
+        // Then
+        assertNull(result);
+        verify(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
+        verify(getUserEntityUseCase).invoke();
+        verifyNoMoreInteractions(getDetailsRestaurantWrapperUseCase, getUserEntityUseCase, getWorkmateEntitiesGoingToSameRestaurantUseCase);
+    }
+
+    @Test
+    public void edge_case_currentUserIsNull() {
+        // Given
+        userEntityMutableLiveData.setValue(null);
+
+        // When
+        RestaurantDetailViewState result = getValueForTesting(viewModel.getRestaurantDetails());
+
+        // Then
+        assertNull(result);
         verify(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
         verify(getUserEntityUseCase).invoke();
         verifyNoMoreInteractions(getDetailsRestaurantWrapperUseCase, getUserEntityUseCase, getWorkmateEntitiesGoingToSameRestaurantUseCase);
@@ -195,7 +317,7 @@ public class RestaurantDetailViewModelTest {
     }
 
     @Test
-    public void detailsRestaurantWrapperError_RestaurantDetailViewStateReturnsLoadingStateItem() {
+    public void detailsRestaurantWrapperError_RestaurantDetailViewStateReturnsErrorStateItem() {
         // Given
         detailsRestaurantWrapperMutableLiveData.setValue(new DetailsRestaurantWrapper.Error(new Throwable("TEST_ERROR")));
         doReturn(detailsRestaurantWrapperMutableLiveData).when(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
@@ -205,6 +327,7 @@ public class RestaurantDetailViewModelTest {
 
         // Then
         assertEquals(Stubs.getTestRestaurantDetailViewStateError(), result);
+        assertEquals("TEST_ERROR", ((RestaurantDetailViewState.Error) result).getErrorMessage());
         verify(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
         verify(getUserEntityUseCase).invoke();
         verifyNoMoreInteractions(getDetailsRestaurantWrapperUseCase, getUserEntityUseCase, getWorkmateEntitiesGoingToSameRestaurantUseCase);

@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         );
 
         viewModel.onUserLogged().observe(this, loggingState -> {
-                if (loggingState == UserLoggingState.IS_NOT_LOGGED) {
+                if (!loggingState) {
                     startActivity(DispatcherActivity.navigate(this));
                     finish();
                 }

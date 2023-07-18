@@ -82,15 +82,15 @@ public class MainViewModel extends ViewModel {
         );
     }
 
-    public LiveData<UserLoggingState> onUserLogged() {
+    public LiveData<Boolean> onUserLogged() {
         return Transformations.switchMap(isUserLoggedInLiveDataUseCase.invoke(), isLogged -> {
-                MutableLiveData<UserLoggingState> userLoggingStateLiveData = new MutableLiveData<>();
+                MutableLiveData<Boolean> isUserLoggedInMutableLiveData = new MutableLiveData<>();
                 if (isLogged) {
-                    userLoggingStateLiveData.setValue(UserLoggingState.IS_LOGGED);
+                    isUserLoggedInMutableLiveData.setValue(true);
                 } else {
-                    userLoggingStateLiveData.setValue(UserLoggingState.IS_NOT_LOGGED);
+                    isUserLoggedInMutableLiveData.setValue(false);
                 }
-                return userLoggingStateLiveData;
+                return isUserLoggedInMutableLiveData;
             }
         );
     }

@@ -12,6 +12,7 @@ import com.emplk.go4lunch.domain.gps.entity.LocationEntity;
 import com.emplk.go4lunch.domain.gps.entity.LocationStateEntity;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
 import com.emplk.go4lunch.domain.notification.NotificationEntity;
+import com.emplk.go4lunch.domain.user.UserEntity;
 import com.emplk.go4lunch.domain.user.UserWithRestaurantChoiceEntity;
 import com.emplk.go4lunch.domain.workmate.WorkmateEntity;
 import com.emplk.go4lunch.ui.restaurant_detail.AttendanceState;
@@ -292,7 +293,7 @@ public class Stubs {
     public static UserWithRestaurantChoiceEntity getTestUserWithDifferentRestaurantChoiceEntity(String restaurantId) {
         return new UserWithRestaurantChoiceEntity(
             ATTENDING_USER_ID,
-            ATTENDING_TIMESTAMP,
+            TIMESTAMP,
             ATTENDING_USER_NAME,
             ATTENDING_RESTAURANT_ID + restaurantId,
             ATTENDING_RESTAURANT_NAME,
@@ -303,7 +304,7 @@ public class Stubs {
     public static UserWithRestaurantChoiceEntity getTestUserWithSameRestaurantChoiceEntity() {
         return new UserWithRestaurantChoiceEntity(
             ATTENDING_USER_ID,
-            ATTENDING_TIMESTAMP,
+            TIMESTAMP,
             ATTENDING_USER_NAME,
             ATTENDING_RESTAURANT_ID,
             ATTENDING_RESTAURANT_NAME,
@@ -311,12 +312,12 @@ public class Stubs {
         );
     }
 
-    public static Timestamp ATTENDING_TIMESTAMP = new Timestamp(1686691200, 0);
+    public static Timestamp TIMESTAMP = new Timestamp(1686691200, 0);
 
     public static UserWithRestaurantChoiceEntity getTestCurrentUserWithRestaurantChoiceEntity() {
         return new UserWithRestaurantChoiceEntity(
             TEST_USER_ID,
-            ATTENDING_TIMESTAMP,
+            TIMESTAMP,
             ATTENDING_USER_NAME,
             ATTENDING_RESTAURANT_ID,
             ATTENDING_RESTAURANT_NAME,
@@ -424,6 +425,14 @@ public class Stubs {
         workmateEntities.add(getTestWorkmateEntity());
         workmateEntities.add(getTestWorkmateEntity());
         return workmateEntities;
+    }
+
+    public static UserEntity getCurrentUserEntity() {
+        return new UserEntity(
+            Stubs.getTestLoggedUserEntity(),
+            Stubs.getTestRestaurantIdSet(4),
+            Stubs.TEST_RESTAURANT_ID
+        );
     }
 
     // endregion
