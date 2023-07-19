@@ -4,7 +4,6 @@
     <string name="google_client_id" translatable="false">649898468705-70o8d171e13d0h5r4bql8qjfs13b55ct.apps.googleusercontent.com</string>
     <string name="google_btn" translatable="false">Google</string>
     <string name="github_btn" translatable="false">GitHub</string>
-    <string name="fb_login_protocol_scheme" translatable="false">fb447645630905453</string>
     <string name="google_image_url" translatable="false">"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&amp;photo_reference=%1$s&amp;key=%2$s"</string>
 
 
@@ -51,7 +50,7 @@
     <string name="map_toast_message_error_gps">Please enable your GPS to continue!</string>
     <string name="error_placeholder">error</string>
     <string name="detail_workmate_joining">%s is joining!</string>
-    <string name="list_workmate_not_attending">%s has not chosen yet!</string>
+    <string name="list_workmate_not_attending">%s has not chosen yet</string>
     <string name="no_workmate_text">No workmate is going to eat\n at this restaurant so far!</string>
     <string name="toast_message_user_no_restaurant_chosen">You did not chose where to lunch yet!</string>
     <string name="notification_content_title">Time to Go4Lunch!</string>
@@ -66,7 +65,7 @@
     <string name="settings_activity_gps_button">GPS settings</string>
     <string name="chat_sender_name">You</string>
     <string name="chat_send_message_btn_a11y">Send message</string>
-    <string name="chat_bottom_nav">Chat</string>
+    <string name="chat_bottom_nav" translatable="false">Chat</string>
     <string name="chat_textinput_et_hint">Type your message…</string>
     <string name="chat_user_avatar_a11y">user avatar</string>
     <string name="show_rationale_title">Permission required</string>
