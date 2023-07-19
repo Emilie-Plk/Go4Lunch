@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:openDrawer="start"
     tools:context="com.emplk.go4lunch.ui.main.MainActivity">
 
     <com.google.android.material.navigation.NavigationView
@@ -24,10 +23,10 @@
             android:id="@+id/main_navigation_view_user_picture"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginBottom="24dp"
             android:layout_gravity="bottom|center"
-            android:tint="@color/pumpkin_orange"
-            android:src="@drawable/baseline_restaurant_24" />
+            android:layout_marginBottom="24dp"
+            android:src="@drawable/baseline_restaurant_24"
+            android:tint="@color/pumpkin_orange" />
     </com.google.android.material.navigation.NavigationView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -55,23 +54,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
+                    android:textColor="@color/grayish_black"
                     app:queryBackground="@color/white"
                     app:searchIcon="@drawable/baseline_search_24" />
 
             </com.google.android.material.appbar.MaterialToolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/main_searchview_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="?attr/actionBarSize"
-            app:layout_constraintTop_toTopOf="@id/main_frame_layout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/main_frame_layout"
-            tools:listitem="@layout/prediction_item" />
 
         <FrameLayout
             android:id="@+id/main_frame_layout"
@@ -81,8 +70,8 @@
             android:layout_marginBottom="80dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:layout_constraintBottom_toTopOf="@id/main_bottom_appbar"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/main_toolbar_layout" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -97,6 +86,18 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:menu="@menu/bottom_menu_main" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/main_searchview_recyclerview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/main_toolbar_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_toolbar_layout"
+            tools:listitem="@layout/prediction_item" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>

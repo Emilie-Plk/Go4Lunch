@@ -14,6 +14,11 @@ public abstract class LocationStateEntity {
             this.locationEntity = locationEntity;
         }
 
+        @NonNull
+        public LocationEntity getLocationEntity() {
+            return locationEntity;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;

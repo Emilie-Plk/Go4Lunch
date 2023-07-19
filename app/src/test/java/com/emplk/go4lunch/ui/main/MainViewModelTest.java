@@ -75,8 +75,8 @@ public class MainViewModelTest {
             startLocationRequestUseCase,
             isUserLoggedInLiveDataUseCase,
             getUserWithRestaurantChoiceEntityLiveDataUseCase,
-            getUserEntityUseCase
-        );
+            getUserEntityUseCase,
+            getAutocompletePredictionsUseCase, getCurrentLocationStateUseCase, getNearbySearchWrapperUseCase);
     }
 
     @Test

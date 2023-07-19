@@ -11,8 +11,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
@@ -22,6 +25,7 @@ import com.emplk.go4lunch.databinding.MainActivityBinding;
 import com.emplk.go4lunch.databinding.MainNavigationHeaderBinding;
 import com.emplk.go4lunch.ui.chat.last_messages.ChatLastMessageListFragment;
 import com.emplk.go4lunch.ui.dispatcher.DispatcherActivity;
+import com.emplk.go4lunch.ui.main.searchview.AutocompleteListAdapter;
 import com.emplk.go4lunch.ui.main.settings.SettingsActivity;
 import com.emplk.go4lunch.ui.restaurant_detail.RestaurantDetailActivity;
 import com.emplk.go4lunch.ui.restaurant_list.RestaurantListFragment;
@@ -61,6 +65,10 @@ public class MainActivity extends AppCompatActivity {
         initBottomNavigationBar();
 
         initNavigationDrawer();
+
+        initAutocompleteSearchView();
+
+        getSearchViewQuery();
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -212,6 +220,43 @@ public class MainActivity extends AppCompatActivity {
 
         binding.mainNavigationView.bringToFront();
     }
+
+    private void initAutocompleteSearchView() {
+        AutocompleteListAdapter adapter = new AutocompleteListAdapter(placeId -> {
+            Log.d(TAG, "onPredictionClicked() called with placeId: " + placeId);
+            startActivity(
+                RestaurantDetailActivity.navigate(MainActivity.this, placeId)
+            );
+        }
+        );
+        binding.mainSearchviewRecyclerview.setLayoutManager(new LinearLayoutManager(this));
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(binding.mainSearchviewRecyclerview.getContext(), DividerItemDecoration.VERTICAL);
+        binding.mainSearchviewRecyclerview.addItemDecoration(dividerItemDecoration);
+        binding.mainSearchviewRecyclerview.setAdapter(adapter);
+
+        viewModel.getAutocompletePredictionsLiveData().observe(this, predictionViewStateList -> {
+                adapter.submitList(predictionViewStateList);
+            }
+        );
+    }
+
+    private void getSearchViewQuery() {
+        binding.mainToolbarSearchView.setOnQueryTextListener(
+            new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    viewModel.onQueryChanged(newText);
+                    return true;
+                }
+            }
+        );
+    }
+
 
     private void replaceFragment(@NonNull Fragment fragment) {
         getSupportFragmentManager()

@@ -1,5 +1,7 @@
 package com.emplk.go4lunch.data.autocomplete;
 
+import static com.emplk.go4lunch.BuildConfig.API_KEY;
+
 import android.util.LruCache;
 
 import androidx.annotation.NonNull;
@@ -12,11 +14,11 @@ import com.emplk.go4lunch.data.autocomplete.autocomplete_response.AutocompleteSu
 import com.emplk.go4lunch.data.autocomplete.autocomplete_response.PredictionsItem;
 import com.emplk.go4lunch.data.nearbySearchRestaurants.LocationKey;
 import com.emplk.go4lunch.domain.autocomplete.AutocompleteRepository;
-import com.emplk.go4lunch.domain.autocomplete.entity.AutocompleteWrapper;
 import com.emplk.go4lunch.domain.autocomplete.entity.PredictionEntity;
 import com.emplk.go4lunch.domain.gps.entity.LocationEntity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -41,25 +43,24 @@ public class AutocompleteRepositoryGooglePlaces implements AutocompleteRepositor
     }
 
     @Override
-    public LiveData<AutocompleteWrapper> getAutocompleteResult(
-        @NonNull String input,
+    public LiveData<List<PredictionEntity>> getAutocompleteResult(
+        @NonNull String query,
         @NonNull String location,
-        @NonNull String radius,
-        @NonNull String types,
-        @NonNull String key
+        int radius,
+        @NonNull String types
     ) {
-        MutableLiveData<AutocompleteWrapper> resultMutableLiveData = new MutableLiveData<>();
+        MutableLiveData<List<PredictionEntity>> predictionEntities = new MutableLiveData<>();
         LocationKey cacheKey = generateCacheKey(location);
 
         List<PredictionEntity> cachedPredictionEntityList = userQueryLruCache.get(cacheKey);
 
         if (cachedPredictionEntityList == null) {
             googleMapsApi.getAutocomplete(
-                    input,
+                    query,
                     location,
                     radius,
                     types,
-                    key
+                    API_KEY
                 )
                 .enqueue(
                     new Callback<AutocompleteSuggestionResponses>() {
@@ -73,17 +74,14 @@ public class AutocompleteRepositoryGooglePlaces implements AutocompleteRepositor
                                 response.body().getStatus() != null &&
                                 response.body().getStatus().equals("OK")
                             ) {
+
                                 List<PredictionEntity> predictionEntityList = mapToPredictionEntityList(response.body());
-                                userQueryLruCache.put(cacheKey, predictionEntityList);
-                                resultMutableLiveData.setValue(new AutocompleteWrapper.Success(predictionEntityList));
-                            } else if (response.isSuccessful() &&
-                                response.body() != null &&
-                                response.body().getStatus() != null &&
-                                response.body().getStatus().equals("ZERO_RESULTS")
-                            ) {
-                                List<PredictionEntity> emptyList = new ArrayList<>();
-                                userQueryLruCache.put(cacheKey, emptyList);
-                                resultMutableLiveData.setValue(new AutocompleteWrapper.NoResults());
+                                if (predictionEntityList != null) {
+                                    userQueryLruCache.put(cacheKey, predictionEntityList);
+                                    predictionEntities.setValue(predictionEntityList);
+                                }
+                            } else {
+                                predictionEntities.setValue(null);
                             }
                         }
 
@@ -92,14 +90,14 @@ public class AutocompleteRepositoryGooglePlaces implements AutocompleteRepositor
                             @NonNull Call<AutocompleteSuggestionResponses> call,
                             @NonNull Throwable t
                         ) {
-                            resultMutableLiveData.setValue(new AutocompleteWrapper.Error(t));
+                            t.printStackTrace();
                         }
                     }
                 );
         } else {
-            resultMutableLiveData.setValue(new AutocompleteWrapper.Success(cachedPredictionEntityList));
+            predictionEntities.setValue(Collections.emptyList());
         }
-        return resultMutableLiveData;
+        return predictionEntities;
     }
 
     private List<PredictionEntity> mapToPredictionEntityList(@Nullable AutocompleteSuggestionResponses response) {
@@ -107,7 +105,6 @@ public class AutocompleteRepositoryGooglePlaces implements AutocompleteRepositor
 
         if (response != null && response.getPredictions() != null) {
             for (PredictionsItem prediction : response.getPredictions()) {
-
                 String placeId;
                 if (prediction.getPlaceId() != null) {
                     placeId = prediction.getPlaceId();
@@ -124,18 +121,12 @@ public class AutocompleteRepositoryGooglePlaces implements AutocompleteRepositor
                     name = null;
                 }
 
-                String vicinity;
-                if (prediction.getStructuredFormatting() != null &&
-                    prediction.getStructuredFormatting().getSecondaryText() != null) {
-                    vicinity = prediction.getStructuredFormatting().getSecondaryText();
-                } else {
-                    vicinity = null;
-                }
-
                 results.add(
-                    new PredictionEntity(placeId, name, vicinity)
+                    new PredictionEntity(placeId, name)
                 );
             }
+        } else {
+            return null;
         }
         return results;
     }

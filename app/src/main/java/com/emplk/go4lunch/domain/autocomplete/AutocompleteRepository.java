@@ -3,14 +3,17 @@ package com.emplk.go4lunch.domain.autocomplete;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
-import com.emplk.go4lunch.domain.autocomplete.entity.AutocompleteWrapper;
+import com.emplk.go4lunch.domain.autocomplete.entity.PredictionEntity;
+
+import java.util.List;
 
 public interface AutocompleteRepository {
-    LiveData<AutocompleteWrapper> getAutocompleteResult(
-        @NonNull String input,
+
+
+    LiveData<List<PredictionEntity>> getAutocompleteResult(
+        @NonNull String query,
         @NonNull String location,
-        @NonNull String radius,
-        @NonNull String types,
-        @NonNull String key
+        int radius,
+        @NonNull String types
     );
 }

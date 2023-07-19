@@ -10,12 +10,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.emplk.go4lunch.databinding.PredictionItemBinding;
 
-public class SearchViewAdapter extends ListAdapter<PredictionViewState, RecyclerView.ViewHolder> {
+public class AutocompleteListAdapter extends ListAdapter<PredictionViewState, RecyclerView.ViewHolder> {
 
     @NonNull
     private final OnPredictionClickedListener listener;
 
-    public SearchViewAdapter(@NonNull OnPredictionClickedListener listener) {
+    public AutocompleteListAdapter(@NonNull OnPredictionClickedListener listener) {
         super(new ListPredictionItemCallback());
         this.listener = listener;
     }
@@ -28,8 +28,7 @@ public class SearchViewAdapter extends ListAdapter<PredictionViewState, Recycler
     ) {
         return new PredictionViewHolder(
             PredictionItemBinding.inflate(
-                LayoutInflater.from(parent.getContext()), parent, false
-            )
+                LayoutInflater.from(parent.getContext()), parent, false)
         );
     }
 
@@ -55,7 +54,6 @@ public class SearchViewAdapter extends ListAdapter<PredictionViewState, Recycler
             @NonNull OnPredictionClickedListener listener
         ) {
             binding.predictionItemRestaurantName.setText(predictionViewState.getRestaurantName());
-            binding.predictionItemRestaurantVicinity.setText(predictionViewState.getVicinity());
             binding.predictionItemHolder.setOnClickListener(v -> listener.onPredictionClicked(predictionViewState.getPlaceId()));
         }
     }

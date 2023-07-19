@@ -13,18 +13,12 @@ public class PredictionViewState {
     @NonNull
     private final String restaurantName;
 
-    @Nullable
-    private final String vicinity; // secondary text
-
     public PredictionViewState(
         @NonNull String placeId,
-        @NonNull String restaurantName,
-        @Nullable String vicinity
+        @NonNull String restaurantName
     ) {
         this.placeId = placeId;
-        this.restaurantName = restaurantName;
-        this.vicinity = vicinity;
-    }
+        this.restaurantName = restaurantName;}
 
     @NonNull
     public String getPlaceId() {
@@ -36,22 +30,17 @@ public class PredictionViewState {
         return restaurantName;
     }
 
-    @Nullable
-    public String getVicinity() {
-        return vicinity;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PredictionViewState that = (PredictionViewState) o;
-        return placeId.equals(that.placeId) && restaurantName.equals(that.restaurantName) && Objects.equals(vicinity, that.vicinity);
+        return placeId.equals(that.placeId) && restaurantName.equals(that.restaurantName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(placeId, restaurantName, vicinity);
+        return Objects.hash(placeId, restaurantName);
     }
 
     @NonNull
@@ -60,7 +49,6 @@ public class PredictionViewState {
         return "PredictionViewState{" +
             "placeId='" + placeId + '\'' +
             ", restaurantName='" + restaurantName + '\'' +
-            ", vicinity='" + vicinity + '\'' +
             '}';
     }
 }

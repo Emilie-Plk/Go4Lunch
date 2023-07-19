@@ -25,9 +25,9 @@ public interface GoogleMapsApi {
 
     @GET("autocomplete/json")
     Call<AutocompleteSuggestionResponses> getAutocomplete(
-        @Query("input") String input,
+        @Query("input") String query,
         @Query("location") String location,
-        @Query("radius") String radius,
+        @Query("radius") int radius,
         @Query("types") String types,
         @Query("key") String apiKey
     );
