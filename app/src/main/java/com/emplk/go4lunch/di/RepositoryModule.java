@@ -7,6 +7,7 @@ import com.emplk.go4lunch.data.favorite_restaurant.FavoriteRestaurantRepositoryF
 import com.emplk.go4lunch.data.location.GpsLocationRepositoryBroadcastReceiver;
 import com.emplk.go4lunch.data.nearbySearchRestaurants.NearbySearchRepositoryGooglePlaces;
 import com.emplk.go4lunch.data.permission.GpsPermissionRepositoryImpl;
+import com.emplk.go4lunch.data.searchview.SearchViewQueryRepositoryImplementation;
 import com.emplk.go4lunch.data.settings.NotificationRepositoryImplementation;
 import com.emplk.go4lunch.data.user.UserRepositoryFirestore;
 import com.emplk.go4lunch.domain.authentication.AuthRepository;
@@ -16,6 +17,7 @@ import com.emplk.go4lunch.domain.favorite_restaurant.FavoriteRestaurantRepositor
 import com.emplk.go4lunch.domain.gps.GpsLocationRepository;
 import com.emplk.go4lunch.domain.nearby_search.NearbySearchRepository;
 import com.emplk.go4lunch.domain.permission.GpsPermissionRepository;
+import com.emplk.go4lunch.domain.searchview.SearchViewQueryRepository;
 import com.emplk.go4lunch.domain.settings.NotificationRepository;
 import com.emplk.go4lunch.domain.user.UserRepository;
 
@@ -65,4 +67,8 @@ public abstract class RepositoryModule {
     @Binds
     @Singleton
     public abstract ChatRepository bindChatRepository(ChatRepositoryFirestore chatRepositoryFirestore);
+
+    @Binds
+    @Singleton
+    public abstract SearchViewQueryRepository bindChatRepository(SearchViewQueryRepositoryImplementation searchViewQueryRepositoryImplementation);
 }
