@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
         binding.mainSearchviewRecyclerview.addItemDecoration(dividerItemDecoration);
         binding.mainSearchviewRecyclerview.setAdapter(adapter);
 
-        viewModel.getAutocompletePredictionsLiveData().observe(this, predictionViewStateList -> {
+        viewModel.getPredictionsLiveData().observe(this, predictionViewStateList -> {
                 adapter.submitList(predictionViewStateList);
             }
         );

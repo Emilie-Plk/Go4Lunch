@@ -16,7 +16,9 @@ import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.authentication.use_case.IsUserLoggedInLiveDataUseCase;
 import com.emplk.go4lunch.domain.authentication.use_case.LogoutUserUseCase;
 import com.emplk.go4lunch.domain.gps.IsGpsEnabledUseCase;
+import com.emplk.go4lunch.domain.location.GetCurrentLocationStateUseCase;
 import com.emplk.go4lunch.domain.location.StartLocationRequestUseCase;
+import com.emplk.go4lunch.domain.nearby_search.GetNearbySearchWrapperUseCase;
 import com.emplk.go4lunch.domain.restaurant_choice.GetUserWithRestaurantChoiceEntityLiveDataUseCase;
 import com.emplk.go4lunch.domain.user.UserEntity;
 import com.emplk.go4lunch.domain.user.UserWithRestaurantChoiceEntity;
@@ -39,6 +41,10 @@ public class MainViewModelTest {
     private final StartLocationRequestUseCase startLocationRequestUseCase = mock(StartLocationRequestUseCase.class);
 
     private final IsUserLoggedInLiveDataUseCase isUserLoggedInLiveDataUseCase = mock(IsUserLoggedInLiveDataUseCase.class);
+
+    private final GetCurrentLocationStateUseCase getCurrentLocationStateUseCase = mock(GetCurrentLocationStateUseCase.class);
+
+    private final GetNearbySearchWrapperUseCase getNearbySearchWrapperUseCase = mock(GetNearbySearchWrapperUseCase.class);
 
     private final GetUserWithRestaurantChoiceEntityLiveDataUseCase getUserWithRestaurantChoiceEntityLiveDataUseCase = mock(GetUserWithRestaurantChoiceEntityLiveDataUseCase.class);
 
@@ -76,7 +82,9 @@ public class MainViewModelTest {
             isUserLoggedInLiveDataUseCase,
             getUserWithRestaurantChoiceEntityLiveDataUseCase,
             getUserEntityUseCase,
-            getAutocompletePredictionsUseCase, getCurrentLocationStateUseCase, getNearbySearchWrapperUseCase);
+            getCurrentLocationStateUseCase,
+            getNearbySearchWrapperUseCase
+        );
     }
 
     @Test

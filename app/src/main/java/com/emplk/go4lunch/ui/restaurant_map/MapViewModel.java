@@ -81,7 +81,7 @@ public class MapViewModel extends ViewModel {
         @Nullable NearbySearchWrapper nearbySearchWrapper,
         @Nullable Map<String, Integer> restaurantIdToAttendantsCount
     ) {
-        if (isGpsEnabled == null || nearbySearchWrapper == null) {
+        if (isGpsEnabled == null || nearbySearchWrapper == null || nearbySearchWrapper instanceof NearbySearchWrapper.Loading || locationStateEntity == null) {
             return;
         }
 
@@ -102,8 +102,6 @@ public class MapViewModel extends ViewModel {
                     );
                     mapViewStateMediatorLiveData.setValue(restaurantMarkerViewStateItems);
                 }
-            } else if (nearbySearchWrapper instanceof NearbySearchWrapper.Loading) {
-                Log.d("MapViewModel", "Loading nearby search");
             }
         }
     }

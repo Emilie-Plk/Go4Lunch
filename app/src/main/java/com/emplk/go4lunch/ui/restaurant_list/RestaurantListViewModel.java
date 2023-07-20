@@ -104,7 +104,7 @@ public class RestaurantListViewModel extends ViewModel {
         @Nullable NearbySearchWrapper nearbySearchWrapper,
         @Nullable Map<String, Integer> attendantsByRestaurantIds
     ) {
-        if (nearbySearchWrapper == null || locationStateEntity == null) {
+        if (nearbySearchWrapper == null || locationStateEntity == null || isGpsEnabled == null) {
             return;
         }
         List<RestaurantListViewStateItem> result = new ArrayList<>();
@@ -130,7 +130,7 @@ public class RestaurantListViewModel extends ViewModel {
             return;
         }
 
-        if (isGpsEnabled != null && !isGpsEnabled) {
+        if (!isGpsEnabled) {
             result.add(
                 new RestaurantListViewStateItem.RestaurantListErrorItem(
                     resources.getString(R.string.list_error_message_no_gps),

@@ -13,10 +13,7 @@ import androidx.lifecycle.ViewModel;
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.authentication.use_case.IsUserLoggedInLiveDataUseCase;
 import com.emplk.go4lunch.domain.authentication.use_case.LogoutUserUseCase;
-import com.emplk.go4lunch.domain.autocomplete.GetAutocompletePredictionsUseCase;
-import com.emplk.go4lunch.domain.autocomplete.entity.PredictionEntity;
 import com.emplk.go4lunch.domain.gps.IsGpsEnabledUseCase;
-import com.emplk.go4lunch.domain.gps.entity.LocationEntity;
 import com.emplk.go4lunch.domain.gps.entity.LocationStateEntity;
 import com.emplk.go4lunch.domain.location.GetCurrentLocationStateUseCase;
 import com.emplk.go4lunch.domain.location.StartLocationRequestUseCase;
@@ -24,6 +21,7 @@ import com.emplk.go4lunch.domain.nearby_search.GetNearbySearchWrapperUseCase;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchWrapper;
 import com.emplk.go4lunch.domain.restaurant_choice.GetUserWithRestaurantChoiceEntityLiveDataUseCase;
+import com.emplk.go4lunch.domain.user.UserEntity;
 import com.emplk.go4lunch.domain.user.UserWithRestaurantChoiceEntity;
 import com.emplk.go4lunch.domain.user.use_case.GetUserEntityUseCase;
 import com.emplk.go4lunch.ui.main.searchview.PredictionViewState;
@@ -59,9 +57,6 @@ public class MainViewModel extends ViewModel {
 
 
     @NonNull
-    private final GetAutocompletePredictionsUseCase getAutocompletePredictionsUseCase;
-
-    @NonNull
     private final GetCurrentLocationStateUseCase getCurrentLocationStateUseCase;
 
     @NonNull
@@ -69,9 +64,6 @@ public class MainViewModel extends ViewModel {
 
     @NonNull
     private final MutableLiveData<String> userQueryMutableLiveData = new MutableLiveData<>();
-
-    @NonNull
-    private final GetNearbySearchWrapperUseCase getNearbySearchWrapperUseCase;
 
     @NonNull
     private final MediatorLiveData<List<PredictionViewState>> predictionViewStateMediatorLiveData = new MediatorLiveData<>();
@@ -84,7 +76,6 @@ public class MainViewModel extends ViewModel {
         @NonNull IsUserLoggedInLiveDataUseCase isUserLoggedInLiveDataUseCase,
         @NonNull GetUserWithRestaurantChoiceEntityLiveDataUseCase getUserWithRestaurantChoiceEntityLiveDataUseCase,
         @NonNull GetUserEntityUseCase getUserEntityUseCase,
-        @NonNull GetAutocompletePredictionsUseCase getAutocompletePredictionsUseCase,
         @NonNull GetCurrentLocationStateUseCase getCurrentLocationStateUseCase,
         @NonNull GetNearbySearchWrapperUseCase getNearbySearchWrapperUseCase
     ) {
@@ -94,9 +85,7 @@ public class MainViewModel extends ViewModel {
         this.isUserLoggedInLiveDataUseCase = isUserLoggedInLiveDataUseCase;
         this.getUserWithRestaurantChoiceEntityLiveDataUseCase = getUserWithRestaurantChoiceEntityLiveDataUseCase;
         this.getUserEntityUseCase = getUserEntityUseCase;
-        this.getAutocompletePredictionsUseCase = getAutocompletePredictionsUseCase;
         this.getCurrentLocationStateUseCase = getCurrentLocationStateUseCase;
-        this.getNearbySearchWrapperUseCase = getNearbySearchWrapperUseCase;
 
         fragmentStateSingleLiveEvent.setValue(MAP_FRAGMENT);
 
@@ -104,52 +93,30 @@ public class MainViewModel extends ViewModel {
 
         LiveData<NearbySearchWrapper> nearbySearchWrapperLiveData = getNearbySearchWrapperUseCase.invoke();
 
-        LiveData<List<PredictionEntity>> predictionsLiveData = Transformations.switchMap(getCurrentLocationStateUseCase.invoke(), locationState -> {
-                if (locationState instanceof LocationStateEntity.Success) {
-                    LocationEntity location = ((LocationStateEntity.Success) locationState).locationEntity;
-                    String locationString = location.getLatitude() + "," + location.getLongitude();
-                    return Transformations.switchMap(userQueryMutableLiveData, query -> {
-                            if (query == null || query.isEmpty() || query.length() >= 3) {
-                                return null;
-                            } else {
-                                return getAutocompletePredictionsUseCase.invoke(query, locationString);
-                            }
-                        }
-                    );
-                } else {
-                    return new MutableLiveData<>();
-                }
-            }
-        );
 
         predictionViewStateMediatorLiveData.addSource(userQueryMutableLiveData, query -> {
-                combine(query, predictionsLiveData.getValue(), locationStateLiveData.getValue(), nearbySearchWrapperLiveData.getValue());
+                combine(query, locationStateLiveData.getValue(), nearbySearchWrapperLiveData.getValue());
             }
         );
 
-        predictionViewStateMediatorLiveData.addSource(predictionsLiveData, predictionWrapper -> {
-                combine(userQueryMutableLiveData.getValue(), predictionWrapper, locationStateLiveData.getValue(), nearbySearchWrapperLiveData.getValue());
-            }
-        );
 
         predictionViewStateMediatorLiveData.addSource(locationStateLiveData, locationState -> {
-                combine(userQueryMutableLiveData.getValue(), predictionsLiveData.getValue(), locationState, nearbySearchWrapperLiveData.getValue());
+                combine(userQueryMutableLiveData.getValue(), locationState, nearbySearchWrapperLiveData.getValue());
             }
         );
 
         predictionViewStateMediatorLiveData.addSource(nearbySearchWrapperLiveData, nearbySearchWrapper -> {
-                combine(userQueryMutableLiveData.getValue(), predictionsLiveData.getValue(), locationStateLiveData.getValue(), nearbySearchWrapper);
+                combine(userQueryMutableLiveData.getValue(), locationStateLiveData.getValue(), nearbySearchWrapper);
             }
         );
     }
 
     private void combine(
         @Nullable String query,
-        @Nullable List<PredictionEntity> predictionEntities,
         @Nullable LocationStateEntity locationState,
         @Nullable NearbySearchWrapper nearbySearch
     ) {
-        if (query == null || predictionEntities == null || locationState == null || nearbySearch == null) {
+        if (query == null || query.length() < 3 || locationState == null || nearbySearch == null) {
             predictionViewStateMediatorLiveData.setValue(new ArrayList<>());
             return;
         }
@@ -161,29 +128,30 @@ public class MainViewModel extends ViewModel {
                 List<NearbySearchEntity> nearbySearchEntityList = ((NearbySearchWrapper.Success) nearbySearch).getNearbySearchEntityList();
 
                 for (NearbySearchEntity nearbySearchEntity : nearbySearchEntityList) {
-                    if (query.length() >= 3) {
-                        String restaurantName = nearbySearchEntity.getRestaurantName();
-                        if (restaurantName.toLowerCase().contains(query.toLowerCase())) {
-                            predictionViewStateList.add(
-                                new PredictionViewState(
-                                    nearbySearchEntity.getPlaceId(),
-                                    restaurantName
-                                )
-                            );
-                        }
-                    }
-                    else {
-                        predictionViewStateList = new ArrayList<>();
+                    String restaurantName = nearbySearchEntity.getRestaurantName();
+                    if (restaurantName.toLowerCase().contains(query.toLowerCase())) {
+                        predictionViewStateList.add(
+                            new PredictionViewState(
+                                nearbySearchEntity.getPlaceId(),
+                                restaurantName
+                            )
+                        );
                     }
                 }
             }
         }
-        predictionViewStateMediatorLiveData.setValue(predictionViewStateList);
+
+        if (predictionViewStateList.isEmpty()) {
+            predictionViewStateMediatorLiveData.setValue(new ArrayList<>());
+        } else {
+            predictionViewStateMediatorLiveData.setValue(predictionViewStateList);
+        }
     }
 
 
     public LiveData<LoggedUserEntity> getUserInfoLiveData() {
-        return Transformations.switchMap(getUserEntityUseCase.invoke(), userEntity -> {
+       LiveData<UserEntity> userEntityLiveData = getUserEntityUseCase.invoke();
+        return Transformations.switchMap(userEntityLiveData, userEntity -> {
                 MutableLiveData<LoggedUserEntity> loggedUserEntityMutableLiveData = new MutableLiveData<>();
                 LoggedUserEntity currentUser = userEntity.getLoggedUserEntity();
                 loggedUserEntityMutableLiveData.setValue(
@@ -200,7 +168,8 @@ public class MainViewModel extends ViewModel {
     }
 
     public LiveData<Boolean> onUserLogged() {
-        return Transformations.switchMap(isUserLoggedInLiveDataUseCase.invoke(), isLogged -> {
+        LiveData<Boolean> isUserLoggedInLiveData = isUserLoggedInLiveDataUseCase.invoke();
+        return Transformations.switchMap(isUserLoggedInLiveData, isLogged -> {
                 MutableLiveData<Boolean> isUserLoggedInMutableLiveData = new MutableLiveData<>();
                 if (isLogged) {
                     isUserLoggedInMutableLiveData.setValue(true);
@@ -216,7 +185,7 @@ public class MainViewModel extends ViewModel {
         return getUserWithRestaurantChoiceEntityLiveDataUseCase.invoke();
     }
 
-    public LiveData<List<PredictionViewState>> getAutocompletePredictionsLiveData() {
+    public LiveData<List<PredictionViewState>> getPredictionsLiveData() {
         return predictionViewStateMediatorLiveData;
     }
 

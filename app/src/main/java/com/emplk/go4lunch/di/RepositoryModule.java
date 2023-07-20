@@ -1,7 +1,6 @@
 package com.emplk.go4lunch.di;
 
 import com.emplk.go4lunch.data.authentication.AuthRepositoryFirebaseAuth;
-import com.emplk.go4lunch.data.autocomplete.AutocompleteRepositoryGooglePlaces;
 import com.emplk.go4lunch.data.chat.ChatRepositoryFirestore;
 import com.emplk.go4lunch.data.details.DetailsRestaurantRepositoryGooglePlaces;
 import com.emplk.go4lunch.data.favorite_restaurant.FavoriteRestaurantRepositoryFirestore;
@@ -11,7 +10,6 @@ import com.emplk.go4lunch.data.permission.GpsPermissionRepositoryImpl;
 import com.emplk.go4lunch.data.settings.NotificationRepositoryImplementation;
 import com.emplk.go4lunch.data.user.UserRepositoryFirestore;
 import com.emplk.go4lunch.domain.authentication.AuthRepository;
-import com.emplk.go4lunch.domain.autocomplete.AutocompleteRepository;
 import com.emplk.go4lunch.domain.chat.ChatRepository;
 import com.emplk.go4lunch.domain.detail.DetailsRestaurantRepository;
 import com.emplk.go4lunch.domain.favorite_restaurant.FavoriteRestaurantRepository;
@@ -51,10 +49,6 @@ public abstract class RepositoryModule {
     @Binds
     @Singleton
     public abstract DetailsRestaurantRepository bindsDetailsRestaurantRepository(DetailsRestaurantRepositoryGooglePlaces detailsRestaurantRepositoryGooglePlaces);
-
-    @Binds
-    @Singleton
-    public abstract AutocompleteRepository bindsAutocompleteRepository(AutocompleteRepositoryGooglePlaces autocompleteRepositoryGooglePlaces);
 
     @Binds
     @Singleton

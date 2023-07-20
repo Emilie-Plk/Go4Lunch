@@ -113,7 +113,6 @@ public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepositor
         return new LocationKey(locationEntity);
     }
 
-    @NonNull
     private List<NearbySearchEntity> mapToNearbySearchEntityList(
         @Nullable NearbySearchResponse response,
         @NonNull String userLocation
@@ -177,6 +176,8 @@ public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepositor
                         distance,
                         openingHours);
                     results.add(searchResult);
+                } else {
+                    return null;
                 }
             }
         }

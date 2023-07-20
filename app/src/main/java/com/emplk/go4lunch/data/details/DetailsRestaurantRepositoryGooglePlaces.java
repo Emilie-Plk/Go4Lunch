@@ -48,40 +48,45 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
 
         if (cachedDetailsEntity == null) {
             resultMutableLiveData.setValue(new DetailsRestaurantWrapper.Loading());
-            googleMapsApi.getPlaceDetails(placeId, API_KEY).enqueue(
-                new Callback<DetailsRestaurantResponse>() {
-                    @Override
-                    public void onResponse(
-                        @NonNull Call<DetailsRestaurantResponse> call,
-                        @NonNull Response<DetailsRestaurantResponse> response
-                    ) {
-                        DetailsRestaurantResponse body = response.body();
-                        if (response.isSuccessful() &&
-                            body != null &&
-                            body.getStatus() != null &&
-                            body.getStatus().equals("OK") &&
-                            body.getResult() != null &&
-                            body.getResult().getPlaceId() != null &&
-                            body.getResult().getName() != null &&
-                            body.getResult().getVicinity() != null
+            googleMapsApi.getPlaceDetails(placeId, API_KEY)
+                .enqueue(
+                    new Callback<DetailsRestaurantResponse>() {
+                        @Override
+                        public void onResponse(
+                            @NonNull Call<DetailsRestaurantResponse> call,
+                            @NonNull Response<DetailsRestaurantResponse> response
                         ) {
-                            DetailsRestaurantEntity detailsRestaurantEntity = mapToDetailsRestaurantEntity(response.body());
-                            detailsLruCache.put(cacheKey, detailsRestaurantEntity);
-                            resultMutableLiveData.setValue(new DetailsRestaurantWrapper.Success(detailsRestaurantEntity));
-                        } else {
-                            resultMutableLiveData.setValue(new DetailsRestaurantWrapper.Error(new Exception("Error while fetching details")));
+                            DetailsRestaurantResponse body = response.body();
+                            if (response.isSuccessful() &&
+                                body != null &&
+                                body.getStatus() != null &&
+                                body.getStatus().equals("OK") &&
+                                body.getResult() != null &&
+                                body.getResult().getPlaceId() != null &&
+                                body.getResult().getName() != null &&
+                                body.getResult().getVicinity() != null
+                            ) {
+                                DetailsRestaurantEntity detailsRestaurantEntity = mapToDetailsRestaurantEntity(response.body());
+                                if (detailsRestaurantEntity != null) {
+                                    detailsLruCache.put(cacheKey, detailsRestaurantEntity);
+                                    resultMutableLiveData.setValue(new DetailsRestaurantWrapper.Success(detailsRestaurantEntity));
+                                } else {
+                                    resultMutableLiveData.setValue(new DetailsRestaurantWrapper.Error(new Exception("Error while fetching details")));
+                                }
+                            } else {
+                                resultMutableLiveData.setValue(new DetailsRestaurantWrapper.Error(new Exception("Error while fetching details")));
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(
+                            @NonNull Call<DetailsRestaurantResponse> call,
+                            @NonNull Throwable t
+                        ) {
+                            resultMutableLiveData.setValue(new DetailsRestaurantWrapper.Error(t));
                         }
                     }
-
-                    @Override
-                    public void onFailure(
-                        @NonNull Call<DetailsRestaurantResponse> call,
-                        @NonNull Throwable t
-                    ) {
-                        resultMutableLiveData.setValue(new DetailsRestaurantWrapper.Error(t));
-                    }
-                }
-            );
+                );
         } else {
             resultMutableLiveData.setValue(new DetailsRestaurantWrapper.Success(cachedDetailsEntity));
         }
@@ -92,7 +97,6 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
         return new DetailsKey(placeId);
     }
 
-    @NonNull
     private DetailsRestaurantEntity mapToDetailsRestaurantEntity(
         @Nullable DetailsRestaurantResponse
             response
@@ -106,7 +110,7 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
         String website;
         Boolean isVeganFriendly;
 
-        placeId = response.getResult().getPlaceId();  // why do I have a warning here? I already checked for nulls
+        placeId = response.getResult().getPlaceId();
         name = response.getResult().getName();
         vicinity = response.getResult().getVicinity();
 
@@ -142,15 +146,18 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
         } else {
             isVeganFriendly = null;
         }
-
-        return new DetailsRestaurantEntity(
-            placeId,
-            name,
-            vicinity,
-            photoReference,
-            rating,
-            formattedPhoneNumber,
-            website,
-            isVeganFriendly);
+        if (placeId != null && name != null && vicinity != null) {
+            return new DetailsRestaurantEntity(
+                placeId,
+                name,
+                vicinity,
+                photoReference,
+                rating,
+                formattedPhoneNumber,
+                website,
+                isVeganFriendly);
+        } else {
+            return null;
+        }
     }
 }

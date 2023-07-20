@@ -11,6 +11,7 @@ import com.emplk.go4lunch.domain.location.GetCurrentLocationStateUseCase;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchWrapper;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 public class GetNearbySearchWrapperUseCase {
 

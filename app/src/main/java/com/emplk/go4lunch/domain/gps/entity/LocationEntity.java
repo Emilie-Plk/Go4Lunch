@@ -33,8 +33,8 @@ public class LocationEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        LocationEntity that = (LocationEntity) o;
-        return Objects.equals(latitude, that.latitude) && Objects.equals(longitude, that.longitude);
+        LocationEntity location = (LocationEntity) o;
+        return latitude.equals(location.latitude) && longitude.equals(location.longitude);
     }
 
     @Override
