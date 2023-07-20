@@ -42,9 +42,9 @@ public class NotificationRepositoryImplementationTest {
         doReturn(editor).when(sharedPreferences).edit();
         doReturn(editor).when(editor).putBoolean(eq(KEY_NOTIFICATION_ENABLED), anyBoolean());
 
-    //    doReturn(workRequestBuilder).when(workRequestBuilder).addTag(NOTIFICATION_WORKER);
-    //    doReturn(workRequestBuilder).when(workRequestBuilder).setInitialDelay(eq(7200000L), eq(TimeUnit.MILLISECONDS));
-      //  doReturn(workRequest).when(workRequestBuilder).build();
+        //    doReturn(workRequestBuilder).when(workRequestBuilder).addTag(NOTIFICATION_WORKER);
+        //    doReturn(workRequestBuilder).when(workRequestBuilder).setInitialDelay(eq(7200000L), eq(TimeUnit.MILLISECONDS));
+        //  doReturn(workRequest).when(workRequestBuilder).build();
 
         notificationRepositoryImplementation = new NotificationRepositoryImplementation(sharedPreferences, workManager);
     }
@@ -102,9 +102,9 @@ public class NotificationRepositoryImplementationTest {
 
         // Then
         verify(workManager).enqueueUniquePeriodicWork(
-        NOTIFICATION_WORKER,
-        ExistingPeriodicWorkPolicy.KEEP,
-        workRequest);
+            NOTIFICATION_WORKER,
+            ExistingPeriodicWorkPolicy.KEEP,
+            workRequest);
         verify(workRequestBuilder).addTag(NOTIFICATION_WORKER).setInitialDelay(eq(7200000L), eq(TimeUnit.MILLISECONDS));
         verify(workRequestBuilder).build();
     }

@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface SearchViewPredictionRepository {
 
-     void savePredictions(List<PredictionEntity> predictions);
+    void savePredictions(List<PredictionEntity> predictions);
 
-     LiveData<List<PredictionEntity>> getPredictionsMutableLiveData();
+    LiveData<List<PredictionEntity>> getPredictionsMutableLiveData();
 
-     void resetPredictions();
+    void resetPredictions();
 }

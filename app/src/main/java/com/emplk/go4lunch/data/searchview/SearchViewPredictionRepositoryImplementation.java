@@ -1,5 +1,6 @@
 package com.emplk.go4lunch.data.searchview;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -21,7 +22,7 @@ public class SearchViewPredictionRepositoryImplementation implements SearchViewP
     }
 
     @Override
-    public void savePredictions(List<PredictionEntity> predictions) {
+    public void savePredictions(@NonNull List<PredictionEntity> predictions) {
         predictionsMutableLiveData.setValue(predictions);
     }
 

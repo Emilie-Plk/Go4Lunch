@@ -40,17 +40,14 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
 
-
     private MainActivityBinding binding;
 
     private MainViewModel viewModel;
 
     private Snackbar snackbar;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
 
         binding = MainActivityBinding.inflate(getLayoutInflater());
@@ -58,23 +55,17 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.mainToolbar);
 
-
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         setObservers();
-
         initBottomNavigationBar();
-
         initNavigationDrawer();
-
         initAutocompleteSearchView();
-
         getSearchViewQuery();
     }
 
     @SuppressLint("NonConstantResourceId")
     private void setObservers() {
-
         MainNavigationHeaderBinding navigationHeaderBinding = MainNavigationHeaderBinding.bind(
             binding.mainNavigationView.getHeaderView(0)
         );
@@ -191,18 +182,22 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.bottom_bar_map:
                         viewModel.onChangeFragmentView(FragmentState.MAP_FRAGMENT);
                         binding.mainSearchviewRecyclerview.setVisibility(View.VISIBLE);
+                        binding.mainToolbarSearchView.setVisibility(View.VISIBLE);
                         return true;
                     case R.id.bottom_bar_restaurant_list:
                         viewModel.onChangeFragmentView(FragmentState.LIST_FRAGMENT);
                         binding.mainSearchviewRecyclerview.setVisibility(View.GONE);
+                        binding.mainToolbarSearchView.setVisibility(View.VISIBLE);
                         return true;
                     case R.id.bottom_bar_workmate_list:
                         viewModel.onChangeFragmentView(FragmentState.WORKMATES_FRAGMENT);
-                        binding.mainSearchviewRecyclerview.setVisibility(View.VISIBLE);
+                        binding.mainSearchviewRecyclerview.setVisibility(View.GONE);
+                        binding.mainToolbarSearchView.setVisibility(View.GONE);
                         return true;
                     case R.id.bottom_bar_chat_list:
                         viewModel.onChangeFragmentView(FragmentState.CHAT_FRAGMENT);
-                        binding.mainSearchviewRecyclerview.setVisibility(View.VISIBLE);
+                        binding.mainSearchviewRecyclerview.setVisibility(View.GONE);
+                        binding.mainToolbarSearchView.setVisibility(View.GONE);
                         return true;
                 }
                 return false;
@@ -268,7 +263,6 @@ public class MainActivity extends AppCompatActivity {
             }
         );
     }
-
 
     private void replaceFragment(@NonNull Fragment fragment) {
         getSupportFragmentManager()

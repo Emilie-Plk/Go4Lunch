@@ -59,12 +59,6 @@ public class MainViewModel extends ViewModel {
     private final GetUserEntityUseCase getUserEntityUseCase;
 
     @NonNull
-    private final SaveSearchViewQueryUseCase saveSearchViewQueryUseCase;
-
-    @NonNull
-    private final ResetSearchViewQueryUseCase resetSearchViewQueryUseCase;
-
-    @NonNull
     private final SavePredictionsUseCase savePredictionsUseCase;
 
     @NonNull
@@ -90,8 +84,6 @@ public class MainViewModel extends ViewModel {
         @NonNull GetUserEntityUseCase getUserEntityUseCase,
         @NonNull GetCurrentLocationStateUseCase getCurrentLocationStateUseCase,
         @NonNull GetNearbySearchWrapperUseCase getNearbySearchWrapperUseCase,
-        @NonNull SaveSearchViewQueryUseCase saveSearchViewQueryUseCase,
-        @NonNull ResetSearchViewQueryUseCase resetSearchViewQueryUseCase,
         @NonNull SavePredictionsUseCase savePredictionsUseCase,
         @NonNull ResetPredictionsUseCase resetPredictionsUseCase
     ) {
@@ -101,8 +93,6 @@ public class MainViewModel extends ViewModel {
         this.isUserLoggedInLiveDataUseCase = isUserLoggedInLiveDataUseCase;
         this.getUserWithRestaurantChoiceEntityLiveDataUseCase = getUserWithRestaurantChoiceEntityLiveDataUseCase;
         this.getUserEntityUseCase = getUserEntityUseCase;
-        this.saveSearchViewQueryUseCase = saveSearchViewQueryUseCase;
-        this.resetSearchViewQueryUseCase = resetSearchViewQueryUseCase;
         this.savePredictionsUseCase = savePredictionsUseCase;
         this.resetPredictionsUseCase = resetPredictionsUseCase;
 
@@ -221,7 +211,6 @@ public class MainViewModel extends ViewModel {
 
     public void onQueryChanged(@NonNull String query) {
         if (query.isEmpty()) {
-            resetSearchViewQueryUseCase.invoke();
             resetPredictionsUseCase.invoke();
             userQueryMutableLiveData.setValue(null);
             return;
@@ -230,7 +219,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public void onQueryReset() {
-        resetSearchViewQueryUseCase.invoke();
+        resetPredictionsUseCase.invoke();
     }
 
     public LiveData<Boolean> isGpsEnabledLiveData() {

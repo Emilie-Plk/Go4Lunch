@@ -1,7 +1,6 @@
 package com.emplk.go4lunch.ui.main.searchview;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import java.util.Objects;
 
@@ -18,7 +17,8 @@ public class PredictionViewState {
         @NonNull String restaurantName
     ) {
         this.placeId = placeId;
-        this.restaurantName = restaurantName;}
+        this.restaurantName = restaurantName;
+    }
 
     @NonNull
     public String getPlaceId() {

@@ -7,7 +7,6 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
@@ -84,14 +83,14 @@ public class SettingsViewModelTest {
         verifyNoMoreInteractions(toggleWorkManagerForNotificationUseCase);
     }
 
-   @Test
+    @Test
     public void onStartGpsSettingsIntent() {
         // When
-       Void result = getValueForTesting(settingsViewModel.getStartGpsSettingsIntentSingleLiveEvent());
+        Void result = getValueForTesting(settingsViewModel.getStartGpsSettingsIntentSingleLiveEvent());
 
         // Then
-       assertTrue(true);
-       verifyNoMoreInteractions(toggleWorkManagerForNotificationUseCase);
+        assertTrue(true);
+        verifyNoMoreInteractions(toggleWorkManagerForNotificationUseCase);
     }
 
 
