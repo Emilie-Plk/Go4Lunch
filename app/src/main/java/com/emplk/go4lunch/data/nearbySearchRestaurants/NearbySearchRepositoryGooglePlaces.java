@@ -34,7 +34,7 @@ public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepositor
     @NonNull
     private final GoogleMapsApi googleMapsApi;
 
-    private final LruCache<LocationKey, List<NearbySearchEntity>> nearbySearchLruCache;
+    private final LruCache<LocationEntity, List<NearbySearchEntity>> nearbySearchLruCache;
 
     @Inject
     public NearbySearchRepositoryGooglePlaces(@NonNull GoogleMapsApi googleMapsApi) {
@@ -44,14 +44,20 @@ public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepositor
 
     @Override
     public LiveData<NearbySearchWrapper> getNearbyRestaurants(
-        @NonNull String location,
+        @NonNull Double latitude,
+        @NonNull Double longitude,
         @NonNull String type,
         int radius
     ) {
         MutableLiveData<NearbySearchWrapper> resultMutableLiveData = new MutableLiveData<>();
-        LocationKey cacheKey = generateCacheKey(location);
         Log.d("NearbySearchRepository", "nearbySearchLruCache size is:" + nearbySearchLruCache.size());
+        LocationEntity cacheKey = new LocationEntity(
+            latitude,
+            longitude
+        );
         List<NearbySearchEntity> cachedNearbySearchEntityList = nearbySearchLruCache.get(cacheKey);
+
+        String location = latitude + "," + longitude;
 
         if (cachedNearbySearchEntityList == null) {
             resultMutableLiveData.setValue(new NearbySearchWrapper.Loading());

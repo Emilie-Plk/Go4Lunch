@@ -1,5 +1,7 @@
 package com.emplk.go4lunch.domain.nearby_search;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -38,7 +40,8 @@ public class GetNearbySearchWrapperUseCase {
                 if (locationState instanceof LocationStateEntity.Success) {
                     LocationEntity location = ((LocationStateEntity.Success) locationState).locationEntity;
                     return nearbySearchRepository.getNearbyRestaurants(
-                        location.getLatitude() + "," + location.getLongitude(),
+                        location.getLatitude(),
+                        location.getLongitude(),
                         TYPE,
                         RADIUS
                     );

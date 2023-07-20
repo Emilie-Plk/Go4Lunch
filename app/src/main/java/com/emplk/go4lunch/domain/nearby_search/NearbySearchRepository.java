@@ -8,7 +8,8 @@ import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchWrapper;
 public interface NearbySearchRepository {
 
     LiveData<NearbySearchWrapper> getNearbyRestaurants(
-        @NonNull String location,
+        @NonNull Double latitude,
+        @NonNull Double longitude,
         @NonNull String type,
         int radius
     );
