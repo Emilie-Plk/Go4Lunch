@@ -83,8 +83,8 @@ public class MainViewModelTest {
             getUserWithRestaurantChoiceEntityLiveDataUseCase,
             getUserEntityUseCase,
             getCurrentLocationStateUseCase,
-            getNearbySearchWrapperUseCase
-        );
+            getNearbySearchWrapperUseCase,
+            saveSearchViewQueryUseCase, resetSearchViewQueryUseCase, savePredictionsUseCase, resetPredictionsUseCase);
     }
 
     @Test

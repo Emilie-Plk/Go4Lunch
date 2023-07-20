@@ -3,7 +3,7 @@ package com.emplk.go4lunch.domain.searchview.use_case;
 import androidx.lifecycle.LiveData;
 
 import com.emplk.go4lunch.domain.searchview.PredictionEntity;
-import com.emplk.go4lunch.domain.searchview.SearchViewQueryRepository;
+import com.emplk.go4lunch.domain.searchview.SearchViewPredictionRepository;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -14,10 +14,10 @@ import javax.inject.Inject;
 public class GetPredictionUseCase {
 
     @NonNull
-    private final SearchViewQueryRepository repository;
+    private final SearchViewPredictionRepository repository;
 
     @Inject
-    public GetPredictionUseCase(@NonNull SearchViewQueryRepository repository) {
+    public GetPredictionUseCase(@NonNull SearchViewPredictionRepository repository) {
         this.repository = repository;
     }
 

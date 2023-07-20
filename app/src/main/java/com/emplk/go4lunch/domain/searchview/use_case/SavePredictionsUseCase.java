@@ -1,7 +1,7 @@
 package com.emplk.go4lunch.domain.searchview.use_case;
 
 import com.emplk.go4lunch.domain.searchview.PredictionEntity;
-import com.emplk.go4lunch.domain.searchview.SearchViewQueryRepository;
+import com.emplk.go4lunch.domain.searchview.SearchViewPredictionRepository;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -12,14 +12,14 @@ import javax.inject.Inject;
 public class SavePredictionsUseCase {
 
     @NonNull
-    private final SearchViewQueryRepository searchViewQueryRepository;
+    private final SearchViewPredictionRepository searchViewPredictionRepository;
 
     @Inject
-    public SavePredictionsUseCase(@NonNull SearchViewQueryRepository searchViewQueryRepository) {
-        this.searchViewQueryRepository = searchViewQueryRepository;
+    public SavePredictionsUseCase(@NonNull SearchViewPredictionRepository searchViewPredictionRepository) {
+        this.searchViewPredictionRepository = searchViewPredictionRepository;
     }
 
     public void invoke(List<PredictionEntity> predictions) {
-        searchViewQueryRepository.savePredictions(predictions);
+        searchViewPredictionRepository.savePredictions(predictions);
     }
 }

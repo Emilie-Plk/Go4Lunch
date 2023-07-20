@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.emplk.go4lunch.domain.searchview.PredictionEntity;
-import com.emplk.go4lunch.domain.searchview.SearchViewQueryRepository;
+import com.emplk.go4lunch.domain.searchview.SearchViewPredictionRepository;
 
 import java.util.List;
 
@@ -12,29 +12,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class SearchViewQueryRepositoryImplementation implements SearchViewQueryRepository {
-
-    private final MutableLiveData<String> searchViewQueryMutableLiveData = new MutableLiveData<>();
+public class SearchViewPredictionRepositoryImplementation implements SearchViewPredictionRepository {
 
     private final MutableLiveData<List<PredictionEntity>> predictionsMutableLiveData = new MutableLiveData<>();
 
     @Inject
-    public SearchViewQueryRepositoryImplementation() {
-    }
-
-    @Override
-    public void saveSearchViewQuery(String query) {
-        searchViewQueryMutableLiveData.setValue(query);
-    }
-
-    @Override
-    public LiveData<String> getSearchViewQuery() {
-        return searchViewQueryMutableLiveData;
-    }
-
-    @Override
-    public void resetSearchViewQuery() {
-        searchViewQueryMutableLiveData.setValue(null);
+    public SearchViewPredictionRepositoryImplementation() {
     }
 
     @Override

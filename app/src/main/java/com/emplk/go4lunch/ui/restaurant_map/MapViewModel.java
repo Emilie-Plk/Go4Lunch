@@ -1,7 +1,5 @@
 package com.emplk.go4lunch.ui.restaurant_map;
 
-import android.util.Log;
-
 import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +14,8 @@ import com.emplk.go4lunch.domain.location.GetCurrentLocationStateUseCase;
 import com.emplk.go4lunch.domain.nearby_search.GetNearbySearchWrapperUseCase;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchWrapper;
+import com.emplk.go4lunch.domain.searchview.PredictionEntity;
+import com.emplk.go4lunch.domain.searchview.use_case.GetPredictionUseCase;
 import com.emplk.go4lunch.domain.workmate.GetAttendantsGoingToSameRestaurantAsUserUseCase;
 import com.emplk.go4lunch.ui.restaurant_map.map__marker.RestaurantMarkerViewStateItem;
 import com.google.android.gms.maps.model.LatLng;
@@ -41,7 +41,8 @@ public class MapViewModel extends ViewModel {
         @NonNull IsGpsEnabledUseCase isGpsEnabledUseCase,
         @NonNull GetCurrentLocationStateUseCase getCurrentLocationStateUseCase,
         @NonNull GetNearbySearchWrapperUseCase getNearbySearchWrapperUseCase,
-        @NonNull GetAttendantsGoingToSameRestaurantAsUserUseCase getAttendantsGoingToSameRestaurantAsUserUseCase
+        @NonNull GetAttendantsGoingToSameRestaurantAsUserUseCase getAttendantsGoingToSameRestaurantAsUserUseCase,
+        @NonNull GetPredictionUseCase getPredictionUseCase
     ) {
         this.getCurrentLocationStateUseCase = getCurrentLocationStateUseCase;
 
@@ -49,27 +50,59 @@ public class MapViewModel extends ViewModel {
         LiveData<LocationStateEntity> locationStateEntityLiveData = getCurrentLocationStateUseCase.invoke();
         LiveData<Boolean> isGpsEnabledLiveData = isGpsEnabledUseCase.invoke();
         LiveData<Map<String, Integer>> restaurantIdWithAttendantsMapLiveData = getAttendantsGoingToSameRestaurantAsUserUseCase.invoke();
+        LiveData<List<PredictionEntity>> predictionEntitiesLiveData = getPredictionUseCase.invoke();
 
         mapViewStateMediatorLiveData.addSource(isGpsEnabledLiveData, isGpsEnabled -> {
-                combine(isGpsEnabled, locationStateEntityLiveData.getValue(), nearbySearchWrapperLiveData.getValue(), restaurantIdWithAttendantsMapLiveData.getValue()
+                combine(
+                    isGpsEnabled,
+                    locationStateEntityLiveData.getValue(),
+                    nearbySearchWrapperLiveData.getValue(),
+                    restaurantIdWithAttendantsMapLiveData.getValue(),
+                    predictionEntitiesLiveData.getValue()
                 );
             }
         );
 
         mapViewStateMediatorLiveData.addSource(locationStateEntityLiveData, locationEntity -> {
-                combine(isGpsEnabledLiveData.getValue(), locationEntity, nearbySearchWrapperLiveData.getValue(), restaurantIdWithAttendantsMapLiveData.getValue()
+                combine(
+                    isGpsEnabledLiveData.getValue(),
+                    locationEntity,
+                    nearbySearchWrapperLiveData.getValue(),
+                    restaurantIdWithAttendantsMapLiveData.getValue(),
+                    predictionEntitiesLiveData.getValue()
                 );
             }
         );
 
         mapViewStateMediatorLiveData.addSource(nearbySearchWrapperLiveData, nearbySearchWrapper -> {
-                combine(isGpsEnabledLiveData.getValue(), locationStateEntityLiveData.getValue(), nearbySearchWrapper, restaurantIdWithAttendantsMapLiveData.getValue()
+                combine(
+                    isGpsEnabledLiveData.getValue(),
+                    locationStateEntityLiveData.getValue(),
+                    nearbySearchWrapper,
+                    restaurantIdWithAttendantsMapLiveData.getValue(),
+                    predictionEntitiesLiveData.getValue()
                 );
             }
         );
 
         mapViewStateMediatorLiveData.addSource(restaurantIdWithAttendantsMapLiveData, restaurantIdToAttendantsCount -> {
-                combine(isGpsEnabledLiveData.getValue(), locationStateEntityLiveData.getValue(), nearbySearchWrapperLiveData.getValue(), restaurantIdToAttendantsCount
+                combine(
+                    isGpsEnabledLiveData.getValue(),
+                    locationStateEntityLiveData.getValue(),
+                    nearbySearchWrapperLiveData.getValue(),
+                    restaurantIdToAttendantsCount,
+                    predictionEntitiesLiveData.getValue()
+                );
+            }
+        );
+
+        mapViewStateMediatorLiveData.addSource(predictionEntitiesLiveData, predictionEntities -> {
+                combine(
+                    isGpsEnabledLiveData.getValue(),
+                    locationStateEntityLiveData.getValue(),
+                    nearbySearchWrapperLiveData.getValue(),
+                    restaurantIdWithAttendantsMapLiveData.getValue(),
+                    predictionEntities
                 );
             }
         );
@@ -79,7 +112,8 @@ public class MapViewModel extends ViewModel {
         @Nullable Boolean isGpsEnabled,
         @Nullable LocationStateEntity locationStateEntity,
         @Nullable NearbySearchWrapper nearbySearchWrapper,
-        @Nullable Map<String, Integer> restaurantIdToAttendantsCount
+        @Nullable Map<String, Integer> restaurantIdToAttendantsCount,
+        @Nullable List<PredictionEntity> predictionEntities
     ) {
         if (isGpsEnabled == null || nearbySearchWrapper == null || nearbySearchWrapper instanceof NearbySearchWrapper.Loading || locationStateEntity == null) {
             return;
@@ -89,17 +123,35 @@ public class MapViewModel extends ViewModel {
         if (locationStateEntity instanceof LocationStateEntity.Success) {
             if (nearbySearchWrapper instanceof NearbySearchWrapper.Success) {
                 for (NearbySearchEntity nearbySearchEntity : ((NearbySearchWrapper.Success) nearbySearchWrapper).getNearbySearchEntityList()) {
-                    restaurantMarkerViewStateItems.add(
-                        new RestaurantMarkerViewStateItem(
-                            nearbySearchEntity.getPlaceId(),
-                            nearbySearchEntity.getRestaurantName(),
-                            new LatLng(
-                                nearbySearchEntity.getLocationEntity().getLatitude(),
-                                nearbySearchEntity.getLocationEntity().getLongitude()
-                            ),
-                            isRestaurantAttended(restaurantIdToAttendantsCount, nearbySearchEntity.getPlaceId())
-                        )
-                    );
+                    if (predictionEntities == null || predictionEntities.isEmpty()) {
+                        restaurantMarkerViewStateItems.add(
+                            new RestaurantMarkerViewStateItem(
+                                nearbySearchEntity.getPlaceId(),
+                                nearbySearchEntity.getRestaurantName(),
+                                new LatLng(
+                                    nearbySearchEntity.getLocationEntity().getLatitude(),
+                                    nearbySearchEntity.getLocationEntity().getLongitude()
+                                ),
+                                isRestaurantAttended(restaurantIdToAttendantsCount, nearbySearchEntity.getPlaceId())
+                            )
+                        );
+                    } else {
+                        for (PredictionEntity predictionEntity : predictionEntities) {
+                            if (predictionEntity.getPlaceId().equals(nearbySearchEntity.getPlaceId())) {
+                                restaurantMarkerViewStateItems.add(
+                                    new RestaurantMarkerViewStateItem(
+                                        nearbySearchEntity.getPlaceId(),
+                                        predictionEntity.getRestaurantName(),
+                                        new LatLng(
+                                            nearbySearchEntity.getLocationEntity().getLatitude(),
+                                            nearbySearchEntity.getLocationEntity().getLongitude()
+                                        ),
+                                        isRestaurantAttended(restaurantIdToAttendantsCount, nearbySearchEntity.getPlaceId())
+                                    )
+                                );
+                            }
+                        }
+                    }
                     mapViewStateMediatorLiveData.setValue(restaurantMarkerViewStateItems);
                 }
             }

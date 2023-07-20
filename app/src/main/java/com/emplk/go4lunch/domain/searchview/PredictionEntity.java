@@ -20,6 +20,16 @@ public class PredictionEntity {
         this.restaurantName = restaurantName;
     }
 
+    @NonNull
+    public String getPlaceId() {
+        return placeId;
+    }
+
+    @NonNull
+    public String getRestaurantName() {
+        return restaurantName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

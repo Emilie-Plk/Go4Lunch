@@ -1,6 +1,6 @@
 package com.emplk.go4lunch.domain.searchview.use_case;
 
-import com.emplk.go4lunch.domain.searchview.SearchViewQueryRepository;
+import com.emplk.go4lunch.domain.searchview.SearchViewPredictionRepository;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -9,10 +9,10 @@ import javax.inject.Inject;
 public class ResetPredictionsUseCase {
 
     @NonNull
-    private final SearchViewQueryRepository repository;
+    private final SearchViewPredictionRepository repository;
 
     @Inject
-    public ResetPredictionsUseCase(@NonNull SearchViewQueryRepository repository) {
+    public ResetPredictionsUseCase(@NonNull SearchViewPredictionRepository repository) {
         this.repository = repository;
     }
 

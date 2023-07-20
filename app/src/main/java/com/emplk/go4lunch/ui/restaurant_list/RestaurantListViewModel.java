@@ -26,6 +26,8 @@ import com.emplk.go4lunch.domain.nearby_search.GetNearbySearchWrapperUseCase;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchWrapper;
 import com.emplk.go4lunch.domain.permission.HasGpsPermissionUseCase;
+import com.emplk.go4lunch.domain.searchview.PredictionEntity;
+import com.emplk.go4lunch.domain.searchview.use_case.GetPredictionUseCase;
 import com.emplk.go4lunch.domain.workmate.GetAttendantsGoingToSameRestaurantAsUserUseCase;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.SphericalUtil;
@@ -58,6 +60,7 @@ public class RestaurantListViewModel extends ViewModel {
         @NonNull GetCurrentLocationStateUseCase getCurrentLocationStateUseCase,
         @NonNull HasGpsPermissionUseCase hasGpsPermissionUseCase,
         @NonNull IsGpsEnabledUseCase isGpsEnabledUseCase,
+        @NonNull GetPredictionUseCase getPredictionUseCase,
         @NonNull Resources resources,
         @NonNull GetAttendantsGoingToSameRestaurantAsUserUseCase getAttendantsGoingToSameRestaurantAsUserUseCase
     ) {
@@ -73,26 +76,72 @@ public class RestaurantListViewModel extends ViewModel {
 
         LiveData<NearbySearchWrapper> nearbySearchWrapperLiveData = getNearbySearchWrapperUseCase.invoke();
 
+        LiveData<List<PredictionEntity>> predictionsLiveData = getPredictionUseCase.invoke();
+
 
         restaurantListMediatorLiveData.addSource(hasGpsPermissionLiveData, hasGpsPermission ->
-            combine(hasGpsPermission, isGpsEnabledMutableLiveData.getValue(), locationLiveData.getValue(), nearbySearchWrapperLiveData.getValue(), attendantsByRestaurantIdsLiveData.getValue())
+            combine(
+                hasGpsPermission,
+                isGpsEnabledMutableLiveData.getValue(),
+                locationLiveData.getValue(),
+                nearbySearchWrapperLiveData.getValue(),
+                attendantsByRestaurantIdsLiveData.getValue(),
+                predictionsLiveData.getValue()
+            )
         );
 
-        //TODO: virer le isGpsEnabled?
         restaurantListMediatorLiveData.addSource(locationLiveData, location ->
-            combine(hasGpsPermissionLiveData.getValue(), isGpsEnabledMutableLiveData.getValue(), location, nearbySearchWrapperLiveData.getValue(), attendantsByRestaurantIdsLiveData.getValue())
+            combine(
+                hasGpsPermissionLiveData.getValue(),
+                isGpsEnabledMutableLiveData.getValue(),
+                location,
+                nearbySearchWrapperLiveData.getValue(),
+                attendantsByRestaurantIdsLiveData.getValue(),
+                predictionsLiveData.getValue()
+            )
         );
 
         restaurantListMediatorLiveData.addSource(nearbySearchWrapperLiveData, nearbySearchWrapper ->
-            combine(hasGpsPermissionLiveData.getValue(), isGpsEnabledMutableLiveData.getValue(), locationLiveData.getValue(), nearbySearchWrapper, attendantsByRestaurantIdsLiveData.getValue())
+            combine(
+                hasGpsPermissionLiveData.getValue(),
+                isGpsEnabledMutableLiveData.getValue(),
+                locationLiveData.getValue(),
+                nearbySearchWrapper,
+                attendantsByRestaurantIdsLiveData.getValue(),
+                predictionsLiveData.getValue()
+            )
         );
 
         restaurantListMediatorLiveData.addSource(isGpsEnabledMutableLiveData, isGpsEnabled ->
-            combine(hasGpsPermissionLiveData.getValue(), isGpsEnabled, locationLiveData.getValue(), nearbySearchWrapperLiveData.getValue(), attendantsByRestaurantIdsLiveData.getValue())
+            combine(
+                hasGpsPermissionLiveData.getValue(),
+                isGpsEnabled,
+                locationLiveData.getValue(),
+                nearbySearchWrapperLiveData.getValue(),
+                attendantsByRestaurantIdsLiveData.getValue(),
+                predictionsLiveData.getValue()
+            )
         );
 
         restaurantListMediatorLiveData.addSource(attendantsByRestaurantIdsLiveData, attendantsByRestaurantIds ->
-            combine(hasGpsPermissionLiveData.getValue(), isGpsEnabledMutableLiveData.getValue(), locationLiveData.getValue(), nearbySearchWrapperLiveData.getValue(), attendantsByRestaurantIds)
+            combine(
+                hasGpsPermissionLiveData.getValue(),
+                isGpsEnabledMutableLiveData.getValue(),
+                locationLiveData.getValue(),
+                nearbySearchWrapperLiveData.getValue(),
+                attendantsByRestaurantIds,
+                predictionsLiveData.getValue()
+            )
+        );
+
+        restaurantListMediatorLiveData.addSource(predictionsLiveData, predictionEntities ->
+            combine(
+                hasGpsPermissionLiveData.getValue(),
+                isGpsEnabledMutableLiveData.getValue(),
+                locationLiveData.getValue(),
+                nearbySearchWrapperLiveData.getValue(),
+                attendantsByRestaurantIdsLiveData.getValue(),
+                predictionEntities)
         );
 
     }
@@ -102,7 +151,8 @@ public class RestaurantListViewModel extends ViewModel {
         @Nullable Boolean isGpsEnabled,
         @Nullable LocationStateEntity locationStateEntity,
         @Nullable NearbySearchWrapper nearbySearchWrapper,
-        @Nullable Map<String, Integer> attendantsByRestaurantIds
+        @Nullable Map<String, Integer> attendantsByRestaurantIds,
+        @Nullable List<PredictionEntity> predictionEntities
     ) {
         if (nearbySearchWrapper == null || locationStateEntity == null || isGpsEnabled == null) {
             return;
@@ -159,19 +209,41 @@ public class RestaurantListViewModel extends ViewModel {
 
                 List<NearbySearchEntity> sortedRestaurantList = sortNearbyRestaurants(((NearbySearchWrapper.Success) nearbySearchWrapper).getNearbySearchEntityList(), location);
                 for (NearbySearchEntity nearbySearchEntity : sortedRestaurantList) {
-                    result.add(
-                        new RestaurantListViewStateItem.RestaurantItemItem(
-                            nearbySearchEntity.getPlaceId(),
-                            nearbySearchEntity.getRestaurantName(),
-                            nearbySearchEntity.getVicinity(),
-                            (new DecimalFormat("#").format(nearbySearchEntity.getDistance())) + "m",
-                            getAttendants(nearbySearchEntity.getPlaceId(), attendantsByRestaurantIds),
-                            formatOpeningStatus(nearbySearchEntity.isOpen()),
-                            parseRestaurantPictureUrl(nearbySearchEntity.getPhotoReferenceUrl()),
-                            isRatingBarVisible(nearbySearchEntity.getRating()),
-                            convertFiveToThreeRating(nearbySearchEntity.getRating())
-                        )
-                    );
+                    if (predictionEntities == null || predictionEntities.isEmpty()) {
+
+                        result.add(
+                            new RestaurantListViewStateItem.RestaurantItemItem(
+                                nearbySearchEntity.getPlaceId(),
+                                nearbySearchEntity.getRestaurantName(),
+                                nearbySearchEntity.getVicinity(),
+                                (new DecimalFormat("#").format(nearbySearchEntity.getDistance())) + "m",
+                                getAttendants(nearbySearchEntity.getPlaceId(), attendantsByRestaurantIds),
+                                formatOpeningStatus(nearbySearchEntity.isOpen()),
+                                parseRestaurantPictureUrl(nearbySearchEntity.getPhotoReferenceUrl()),
+                                isRatingBarVisible(nearbySearchEntity.getRating()),
+                                convertFiveToThreeRating(nearbySearchEntity.getRating())
+                            )
+                        );
+                    } else {
+                        for (PredictionEntity predictionEntity : predictionEntities) {
+                            if (predictionEntity.getPlaceId().equals(nearbySearchEntity.getPlaceId())) {
+                                result.add(
+                                    new RestaurantListViewStateItem.RestaurantItemItem(
+                                        nearbySearchEntity.getPlaceId(),
+                                        nearbySearchEntity.getRestaurantName(),
+                                        nearbySearchEntity.getVicinity(),
+                                        (new DecimalFormat("#").format(nearbySearchEntity.getDistance())) + "m",
+                                        getAttendants(nearbySearchEntity.getPlaceId(), attendantsByRestaurantIds),
+                                        formatOpeningStatus(nearbySearchEntity.isOpen()),
+                                        parseRestaurantPictureUrl(nearbySearchEntity.getPhotoReferenceUrl()),
+                                        isRatingBarVisible(nearbySearchEntity.getRating()),
+                                        convertFiveToThreeRating(nearbySearchEntity.getRating())
+                                    )
+                                );
+                            }
+                        }
+                    }
+
                 }
             }
         } else if (nearbySearchWrapper instanceof NearbySearchWrapper.RequestError) {

@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -189,15 +190,19 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.bottom_bar_map:
                         viewModel.onChangeFragmentView(FragmentState.MAP_FRAGMENT);
+                        binding.mainSearchviewRecyclerview.setVisibility(View.VISIBLE);
                         return true;
                     case R.id.bottom_bar_restaurant_list:
                         viewModel.onChangeFragmentView(FragmentState.LIST_FRAGMENT);
+                        binding.mainSearchviewRecyclerview.setVisibility(View.GONE);
                         return true;
                     case R.id.bottom_bar_workmate_list:
                         viewModel.onChangeFragmentView(FragmentState.WORKMATES_FRAGMENT);
+                        binding.mainSearchviewRecyclerview.setVisibility(View.VISIBLE);
                         return true;
                     case R.id.bottom_bar_chat_list:
                         viewModel.onChangeFragmentView(FragmentState.CHAT_FRAGMENT);
+                        binding.mainSearchviewRecyclerview.setVisibility(View.VISIBLE);
                         return true;
                 }
                 return false;
@@ -253,6 +258,13 @@ public class MainActivity extends AppCompatActivity {
                     viewModel.onQueryChanged(newText);
                     return true;
                 }
+            }
+        );
+
+        binding.mainToolbarSearchView.setOnCloseListener(
+            () -> {
+                viewModel.onQueryReset();
+                return false;
             }
         );
     }
