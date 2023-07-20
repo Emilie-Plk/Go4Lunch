@@ -14,8 +14,6 @@ import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.authentication.use_case.IsUserLoggedInLiveDataUseCase;
 import com.emplk.go4lunch.domain.authentication.use_case.LogoutUserUseCase;
 import com.emplk.go4lunch.domain.gps.IsGpsEnabledUseCase;
-import com.emplk.go4lunch.domain.gps.entity.LocationStateEntity;
-import com.emplk.go4lunch.domain.location.GetCurrentLocationStateUseCase;
 import com.emplk.go4lunch.domain.location.StartLocationRequestUseCase;
 import com.emplk.go4lunch.domain.nearby_search.GetNearbySearchWrapperUseCase;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
@@ -69,7 +67,7 @@ public class MainViewModel extends ViewModel {
     private final SingleLiveEvent<FragmentState> fragmentStateSingleLiveEvent = new SingleLiveEvent<>();
 
     @NonNull
-    private final MutableLiveData<String> userQueryMutableLiveData = new MutableLiveData<>();
+    private final MutableLiveData<String> userQueryMutableLiveData;
 
     @NonNull
     private final MediatorLiveData<List<PredictionViewState>> predictionViewStateMediatorLiveData = new MediatorLiveData<>();
@@ -82,7 +80,6 @@ public class MainViewModel extends ViewModel {
         @NonNull IsUserLoggedInLiveDataUseCase isUserLoggedInLiveDataUseCase,
         @NonNull GetUserWithRestaurantChoiceEntityLiveDataUseCase getUserWithRestaurantChoiceEntityLiveDataUseCase,
         @NonNull GetUserEntityUseCase getUserEntityUseCase,
-        @NonNull GetCurrentLocationStateUseCase getCurrentLocationStateUseCase,
         @NonNull GetNearbySearchWrapperUseCase getNearbySearchWrapperUseCase,
         @NonNull SavePredictionsUseCase savePredictionsUseCase,
         @NonNull ResetPredictionsUseCase resetPredictionsUseCase
@@ -98,34 +95,26 @@ public class MainViewModel extends ViewModel {
 
         fragmentStateSingleLiveEvent.setValue(MAP_FRAGMENT);
 
-        LiveData<LocationStateEntity> locationStateLiveData = getCurrentLocationStateUseCase.invoke();
+        userQueryMutableLiveData = new MutableLiveData<>();
 
         LiveData<NearbySearchWrapper> nearbySearchWrapperLiveData = getNearbySearchWrapperUseCase.invoke();
 
-
         predictionViewStateMediatorLiveData.addSource(userQueryMutableLiveData, query -> {
-                combine(query, locationStateLiveData.getValue(), nearbySearchWrapperLiveData.getValue());
-            }
-        );
-
-
-        predictionViewStateMediatorLiveData.addSource(locationStateLiveData, locationState -> {
-                combine(userQueryMutableLiveData.getValue(), locationState, nearbySearchWrapperLiveData.getValue());
+                combine(query, nearbySearchWrapperLiveData.getValue());
             }
         );
 
         predictionViewStateMediatorLiveData.addSource(nearbySearchWrapperLiveData, nearbySearchWrapper -> {
-                combine(userQueryMutableLiveData.getValue(), locationStateLiveData.getValue(), nearbySearchWrapper);
+                combine(userQueryMutableLiveData.getValue(), nearbySearchWrapper);
             }
         );
     }
 
     private void combine(
         @Nullable String query,
-        @Nullable LocationStateEntity locationState,
         @Nullable NearbySearchWrapper nearbySearch
     ) {
-        if (query == null || locationState == null || nearbySearch == null) {
+        if (query == null || nearbySearch == null) {
             resetPredictionsUseCase.invoke();
             predictionViewStateMediatorLiveData.setValue(new ArrayList<>());
             return;
@@ -135,37 +124,30 @@ public class MainViewModel extends ViewModel {
 
         List<PredictionEntity> predictionEntityList = new ArrayList<>();
 
-        if (locationState instanceof LocationStateEntity.Success) {
-            if (nearbySearch instanceof NearbySearchWrapper.Success) {
-                List<NearbySearchEntity> nearbySearchEntityList = ((NearbySearchWrapper.Success) nearbySearch).getNearbySearchEntityList();
+        if (nearbySearch instanceof NearbySearchWrapper.Success) {
+            List<NearbySearchEntity> nearbySearchEntityList = ((NearbySearchWrapper.Success) nearbySearch).getNearbySearchEntityList();
 
-                for (NearbySearchEntity nearbySearchEntity : nearbySearchEntityList) {
-                    String restaurantName = nearbySearchEntity.getRestaurantName();
-                    if (restaurantName.toLowerCase().contains(query.toLowerCase())) {
-                        predictionEntityList.add(
-                            new PredictionEntity(
-                                nearbySearchEntity.getPlaceId(),
-                                restaurantName
-                            )
-                        );
-                        predictionViewStateList.add(
-                            new PredictionViewState(
-                                nearbySearchEntity.getPlaceId(),
-                                restaurantName
-                            )
-                        );
-                    }
+            for (NearbySearchEntity nearbySearchEntity : nearbySearchEntityList) {
+                String restaurantName = nearbySearchEntity.getRestaurantName();
+                if (restaurantName.toLowerCase().contains(query.toLowerCase())) {
+                    predictionEntityList.add(
+                        new PredictionEntity(
+                            nearbySearchEntity.getPlaceId(),
+                            restaurantName
+                        )
+                    );
+                    predictionViewStateList.add(
+                        new PredictionViewState(
+                            nearbySearchEntity.getPlaceId(),
+                            restaurantName
+                        )
+                    );
                 }
             }
         }
 
-        if (predictionViewStateList.isEmpty()) {
-            resetPredictionsUseCase.invoke();
-            predictionViewStateMediatorLiveData.setValue(new ArrayList<>());
-        } else {
-            savePredictionsUseCase.invoke(predictionEntityList);
-            predictionViewStateMediatorLiveData.setValue(predictionViewStateList);
-        }
+        savePredictionsUseCase.invoke(predictionEntityList);  // called twice, why?
+        predictionViewStateMediatorLiveData.setValue(predictionViewStateList);
     }
 
 

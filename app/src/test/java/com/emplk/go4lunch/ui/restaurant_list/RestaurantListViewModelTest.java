@@ -22,6 +22,8 @@ import com.emplk.go4lunch.domain.nearby_search.GetNearbySearchWrapperUseCase;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchWrapper;
 import com.emplk.go4lunch.domain.permission.HasGpsPermissionUseCase;
+import com.emplk.go4lunch.domain.searchview.PredictionEntity;
+import com.emplk.go4lunch.domain.searchview.use_case.GetPredictionUseCase;
 import com.emplk.go4lunch.domain.workmate.GetAttendantsGoingToSameRestaurantAsUserUseCase;
 import com.emplk.util.Stubs;
 
@@ -55,6 +57,8 @@ public class RestaurantListViewModelTest {
     private final IsGpsEnabledUseCase isGpsEnabledUseCase = mock(IsGpsEnabledUseCase.class);
 
     private final Resources resources = mock(Resources.class);
+
+    private final GetPredictionUseCase getPredictionUseCase = mock(GetPredictionUseCase.class);
 
     private final GetAttendantsGoingToSameRestaurantAsUserUseCase getAttendantsGoingToSameRestaurantAsUserUseCase = mock(GetAttendantsGoingToSameRestaurantAsUserUseCase.class);
 
@@ -96,11 +100,17 @@ public class RestaurantListViewModelTest {
         attendantsGoingToSameRestaurantAsUserLiveData.setValue(attendantsByRestaurantIdsMap);
         doReturn(attendantsGoingToSameRestaurantAsUserLiveData).when(getAttendantsGoingToSameRestaurantAsUserUseCase).invoke();
 
+        List<PredictionEntity> predictionEntityList = Stubs.getPredictionEntityList();
+        MutableLiveData<List<PredictionEntity>> predictionEntityListMutableLiveData = new MutableLiveData<>();
+        predictionEntityListMutableLiveData.setValue(predictionEntityList);
+        doReturn(predictionEntityListMutableLiveData).when(getPredictionUseCase).invoke();
+
         restaurantListViewModel = new RestaurantListViewModel(
             getNearbySearchWrapperUseCase,
             getCurrentLocationStateUseCase,
             hasGpsPermissionUseCase,
             isGpsEnabledUseCase,
+            getPredictionUseCase,
             resources,
             getAttendantsGoingToSameRestaurantAsUserUseCase
         );
@@ -239,7 +249,7 @@ public class RestaurantListViewModelTest {
     public void openingState_shouldReturnIsOpened() {
         // When
         NearbySearchEntity nearbySearchEntity = new NearbySearchEntity(
-            Stubs.TEST_NEARBYSEARCH_ID,
+            Stubs.TEST_NEARBYSEARCH_ID + 0,
             Stubs.TEST_NEARBYSEARCH_NAME,
             Stubs.TEST_RESTAURANT_VICINITY,
             Stubs.TEST_RESTAURANT_PHOTO_URL,
@@ -262,7 +272,7 @@ public class RestaurantListViewModelTest {
     public void openingStateNotDefined_shouldReturnNotDefined() {
         // When
         NearbySearchEntity nearbySearchEntity = new NearbySearchEntity(
-            Stubs.TEST_NEARBYSEARCH_ID,
+            Stubs.TEST_NEARBYSEARCH_ID + 0,
             Stubs.TEST_NEARBYSEARCH_NAME,
             Stubs.TEST_RESTAURANT_VICINITY,
             Stubs.TEST_RESTAURANT_PHOTO_URL,
@@ -285,7 +295,7 @@ public class RestaurantListViewModelTest {
     public void restaurantWith0rating_shouldReturn0() {
         // When
         NearbySearchEntity nearbySearchEntity = new NearbySearchEntity(
-            Stubs.TEST_NEARBYSEARCH_ID,
+            Stubs.TEST_NEARBYSEARCH_ID + 0,
             Stubs.TEST_NEARBYSEARCH_NAME,
             Stubs.TEST_RESTAURANT_VICINITY,
             Stubs.TEST_RESTAURANT_PHOTO_URL,

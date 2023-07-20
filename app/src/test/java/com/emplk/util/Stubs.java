@@ -12,6 +12,7 @@ import com.emplk.go4lunch.domain.gps.entity.LocationEntity;
 import com.emplk.go4lunch.domain.gps.entity.LocationStateEntity;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
 import com.emplk.go4lunch.domain.notification.NotificationEntity;
+import com.emplk.go4lunch.domain.searchview.PredictionEntity;
 import com.emplk.go4lunch.domain.user.UserEntity;
 import com.emplk.go4lunch.domain.user.UserWithRestaurantChoiceEntity;
 import com.emplk.go4lunch.domain.workmate.WorkmateEntity;
@@ -434,6 +435,16 @@ public class Stubs {
             Stubs.TEST_RESTAURANT_ID
         );
     }
+    // endregion
 
+    // region PredictionEntity
+    public static List<PredictionEntity> getPredictionEntityList() {
+        List<PredictionEntity> predictionEntities = new ArrayList<>();
+        predictionEntities.add(new PredictionEntity("TEST_NEARBYSEARCH_ID0", "TEST_DESCRIPTION_1"));
+        predictionEntities.add(new PredictionEntity("TEST_NEARBYSEARCH_ID1", "TEST_DESCRIPTION_2"));
+        predictionEntities.add(new PredictionEntity("TEST_NEARBYSEARCH_ID2", "TEST_DESCRIPTION_3"));
+        predictionEntities.add(new PredictionEntity("TEST_NEARBYSEARCH_ID3", "TEST_DESCRIPTION_3"));
+        return predictionEntities;
+    }
     // endregion
 }
