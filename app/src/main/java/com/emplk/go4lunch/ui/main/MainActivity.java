@@ -235,9 +235,9 @@ public class MainActivity extends AppCompatActivity {
         AutocompleteListAdapter adapter = new AutocompleteListAdapter((placeId, restaurantName) -> {
             Log.d(TAG, "onPredictionClicked() called with placeId: " + placeId);
             viewModel.onPredictionClicked(placeId);
+            binding.mainToolbarSearchView.clearFocus();
             binding.mainToolbarSearchView.setQuery(restaurantName, false);
             binding.mainSearchviewRecyclerview.setVisibility(View.GONE);
-            binding.mainToolbarSearchView.clearFocus();
             hideSoftKeyboard();
         }
         );
@@ -269,11 +269,21 @@ public class MainActivity extends AppCompatActivity {
             }
         );
 
-        binding.mainToolbarSearchView.setOnCloseListener(
-            () -> {
-                viewModel.onPredictionPlaceIdReset();
+        binding.mainToolbarSearchView.setOnQueryTextFocusChangeListener(
+            (v, hasFocus) -> {
+                if (!hasFocus) {
+                    binding.mainSearchviewRecyclerview.setVisibility(View.GONE);
+                } else {
+                    binding.mainSearchviewRecyclerview.setVisibility(View.VISIBLE);
+                }
+            }
+        );
+
+        binding.mainToolbarSearchView.setOnCloseListener(() -> {
                 binding.mainToolbarSearchView.clearFocus();
                 binding.mainToolbarSearchView.onActionViewCollapsed();
+                binding.mainSearchviewRecyclerview.setVisibility(View.GONE);
+                viewModel.onPredictionPlaceIdReset();
                 hideSoftKeyboard();
                 return true;
             }

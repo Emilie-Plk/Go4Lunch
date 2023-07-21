@@ -38,7 +38,8 @@ public class PredictionsRepositoryAutocomplete implements PredictionsRepository 
     @Override
     public LiveData<List<PredictionEntity>> getPredictionsLiveData(
         @NonNull String input,
-        @NonNull String location,
+        @NonNull Double latitude,
+        @NonNull Double longitude,
         int radius,
         @NonNull String types
     ) {
@@ -46,7 +47,7 @@ public class PredictionsRepositoryAutocomplete implements PredictionsRepository 
 
         googleMapsApi.getPlacesAutocomplete(
             input,
-            location,
+            latitude + "," + longitude,
             radius,
             types,
             API_KEY

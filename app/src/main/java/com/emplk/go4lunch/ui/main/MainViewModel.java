@@ -172,9 +172,8 @@ public class MainViewModel extends ViewModel {
     }
 
     public void onPredictionPlaceIdReset() {
-        resetPredictionPlaceIdUseCase.invoke();
         userQueryMutableLiveData.setValue(null);
-
+        resetPredictionPlaceIdUseCase.invoke();
     }
 
     public LiveData<Boolean> isGpsEnabledLiveData() {

@@ -43,7 +43,8 @@ public class GetPredictionsUseCase {
                     Double longitude = ((LocationStateEntity.Success) locationStateEntity).getLocationEntity().getLongitude();
                     return repository.getPredictionsLiveData(
                         query,
-                        (latitude + "," + longitude),
+                        latitude,
+                        longitude,
                         RADIUS,
                         TYPES
                     );

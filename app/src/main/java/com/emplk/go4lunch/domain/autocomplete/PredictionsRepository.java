@@ -9,7 +9,8 @@ public interface PredictionsRepository {
 
     LiveData<List<PredictionEntity>> getPredictionsLiveData(
         @NonNull String query,
-        @NonNull String location,
+        @NonNull Double latitude,
+        @NonNull Double longitude,
         int radius,
         @NonNull String types
     );
