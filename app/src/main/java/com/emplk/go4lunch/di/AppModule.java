@@ -8,7 +8,7 @@ import android.content.res.Resources;
 import androidx.annotation.NonNull;
 import androidx.work.WorkManager;
 
-import com.emplk.go4lunch.data.GoogleMapsApi;
+import com.emplk.go4lunch.data.GooglePlacesApi;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
@@ -58,8 +58,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public GoogleMapsApi provideGoogleMapsApi(@NonNull Retrofit retrofit) {
-        return retrofit.create(GoogleMapsApi.class);
+    public GooglePlacesApi provideGoogleMapsApi(@NonNull Retrofit retrofit) {
+        return retrofit.create(GooglePlacesApi.class);
     }
 
     @Provides

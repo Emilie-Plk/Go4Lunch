@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.emplk.go4lunch.data.GoogleMapsApi;
+import com.emplk.go4lunch.data.GooglePlacesApi;
 import com.emplk.go4lunch.data.nearbySearchRestaurants.nearbySearchResponse.NearbySearchResponse;
 import com.emplk.go4lunch.data.nearbySearchRestaurants.nearbySearchResponse.ResultsItem;
 import com.emplk.go4lunch.domain.gps.entity.LocationEntity;
@@ -32,13 +32,13 @@ import retrofit2.Response;
 @Singleton
 public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepository {
     @NonNull
-    private final GoogleMapsApi googleMapsApi;
+    private final GooglePlacesApi googlePlacesApi;
 
     private final LruCache<LocationEntity, List<NearbySearchEntity>> nearbySearchLruCache;
 
     @Inject
-    public NearbySearchRepositoryGooglePlaces(@NonNull GoogleMapsApi googleMapsApi) {
-        this.googleMapsApi = googleMapsApi;
+    public NearbySearchRepositoryGooglePlaces(@NonNull GooglePlacesApi googlePlacesApi) {
+        this.googlePlacesApi = googlePlacesApi;
         nearbySearchLruCache = new LruCache<>(400);
     }
 
@@ -61,7 +61,7 @@ public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepositor
 
         if (cachedNearbySearchEntityList == null) {
             resultMutableLiveData.setValue(new NearbySearchWrapper.Loading());
-            googleMapsApi.getNearby(
+            googlePlacesApi.getNearby(
                     location,
                     type,
                     radius,
@@ -101,6 +101,7 @@ public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepositor
                             @NonNull Throwable t
                         ) {
                             resultMutableLiveData.setValue(new NearbySearchWrapper.RequestError(t));
+                            t.printStackTrace();
                         }
                     }
                 );
@@ -108,17 +109,6 @@ public class NearbySearchRepositoryGooglePlaces implements NearbySearchRepositor
             resultMutableLiveData.setValue(new NearbySearchWrapper.Success(cachedNearbySearchEntityList));
         }
         return resultMutableLiveData;
-    }
-
-    private LocationKey generateCacheKey(
-        @NonNull String location
-    ) {
-        String[] coordinatesArr = location.split(",");
-        Double latitude = Double.parseDouble(coordinatesArr[1]);
-        Double longitude = Double.parseDouble(coordinatesArr[0]);
-        LocationEntity locationEntity = new LocationEntity(latitude, longitude);
-
-        return new LocationKey(locationEntity);
     }
 
     private List<NearbySearchEntity> mapToNearbySearchEntityList(

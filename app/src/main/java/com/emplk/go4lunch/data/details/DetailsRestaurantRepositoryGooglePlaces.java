@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.emplk.go4lunch.data.GoogleMapsApi;
+import com.emplk.go4lunch.data.GooglePlacesApi;
 import com.emplk.go4lunch.data.details.details_restaurant_response.DetailsRestaurantResponse;
 import com.emplk.go4lunch.domain.detail.DetailsRestaurantRepository;
 import com.emplk.go4lunch.domain.detail.entity.DetailsRestaurantEntity;
@@ -27,14 +27,14 @@ import retrofit2.Response;
 @Singleton
 public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestaurantRepository {
 
-    private final GoogleMapsApi googleMapsApi;
+    private final GooglePlacesApi googlePlacesApi;
 
     // TODO: maybe add a DiskLruCache with double hookup
     private final LruCache<DetailsKey, DetailsRestaurantEntity> detailsLruCache;
 
     @Inject
-    public DetailsRestaurantRepositoryGooglePlaces(GoogleMapsApi googleMapsApi) {
-        this.googleMapsApi = googleMapsApi;
+    public DetailsRestaurantRepositoryGooglePlaces(GooglePlacesApi googlePlacesApi) {
+        this.googlePlacesApi = googlePlacesApi;
         detailsLruCache = new LruCache<>(200);
     }
 
@@ -48,7 +48,7 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
 
         if (cachedDetailsEntity == null) {
             resultMutableLiveData.setValue(new DetailsRestaurantWrapper.Loading());
-            googleMapsApi.getPlaceDetails(placeId, API_KEY)
+            googlePlacesApi.getPlaceDetails(placeId, API_KEY)
                 .enqueue(
                     new Callback<DetailsRestaurantResponse>() {
                         @Override

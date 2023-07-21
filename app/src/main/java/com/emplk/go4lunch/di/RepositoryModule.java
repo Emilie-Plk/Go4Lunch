@@ -7,7 +7,7 @@ import com.emplk.go4lunch.data.favorite_restaurant.FavoriteRestaurantRepositoryF
 import com.emplk.go4lunch.data.location.GpsLocationRepositoryBroadcastReceiver;
 import com.emplk.go4lunch.data.nearbySearchRestaurants.NearbySearchRepositoryGooglePlaces;
 import com.emplk.go4lunch.data.permission.GpsPermissionRepositoryImpl;
-import com.emplk.go4lunch.data.searchview.SearchViewPredictionRepositoryImplementation;
+import com.emplk.go4lunch.data.autocomplete.PredictionsRepositoryAutocomplete;
 import com.emplk.go4lunch.data.settings.NotificationRepositoryImplementation;
 import com.emplk.go4lunch.data.user.UserRepositoryFirestore;
 import com.emplk.go4lunch.domain.authentication.AuthRepository;
@@ -17,7 +17,7 @@ import com.emplk.go4lunch.domain.favorite_restaurant.FavoriteRestaurantRepositor
 import com.emplk.go4lunch.domain.gps.GpsLocationRepository;
 import com.emplk.go4lunch.domain.nearby_search.NearbySearchRepository;
 import com.emplk.go4lunch.domain.permission.GpsPermissionRepository;
-import com.emplk.go4lunch.domain.searchview.SearchViewPredictionRepository;
+import com.emplk.go4lunch.domain.searchview.PredictionsRepository;
 import com.emplk.go4lunch.domain.settings.NotificationRepository;
 import com.emplk.go4lunch.domain.user.UserRepository;
 
@@ -70,5 +70,5 @@ public abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    public abstract SearchViewPredictionRepository bindSearchViewQueryRepository(SearchViewPredictionRepositoryImplementation searchViewQueryRepositoryImplementation);
+    public abstract PredictionsRepository bindSearchViewQueryRepository(PredictionsRepositoryAutocomplete searchViewQueryRepositoryImplementation);
 }
