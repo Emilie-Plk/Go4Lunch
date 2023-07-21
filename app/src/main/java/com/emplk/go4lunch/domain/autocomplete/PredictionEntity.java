@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.domain.searchview;
+package com.emplk.go4lunch.domain.autocomplete;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 

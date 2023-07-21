@@ -12,13 +12,13 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
 
+import com.emplk.go4lunch.domain.autocomplete.use_case.GetPredictionsUseCase;
 import com.emplk.go4lunch.domain.gps.IsGpsEnabledUseCase;
 import com.emplk.go4lunch.domain.gps.entity.LocationStateEntity;
 import com.emplk.go4lunch.domain.location.GetCurrentLocationStateUseCase;
 import com.emplk.go4lunch.domain.nearby_search.GetNearbySearchWrapperUseCase;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchWrapper;
-import com.emplk.go4lunch.domain.searchview.PredictionEntity;
-import com.emplk.go4lunch.domain.searchview.use_case.GetPredictionUseCase;
+import com.emplk.go4lunch.domain.autocomplete.PredictionEntity;
 import com.emplk.go4lunch.domain.workmate.GetAttendantsGoingToSameRestaurantAsUserUseCase;
 import com.emplk.go4lunch.ui.restaurant_map.map__marker.RestaurantMarkerViewStateItem;
 import com.emplk.util.Stubs;
@@ -44,7 +44,7 @@ public class MapViewModelTest {
     private final GetAttendantsGoingToSameRestaurantAsUserUseCase getAttendantsGoingToSameRestaurantAsUserUseCase = mock(GetAttendantsGoingToSameRestaurantAsUserUseCase.class);
 
 
-    private final GetPredictionUseCase getPredictionUseCase = mock(GetPredictionUseCase.class);
+    private final GetPredictionsUseCase getPredictionsUseCase = mock(GetPredictionsUseCase.class);
     private final MutableLiveData<NearbySearchWrapper> nearbySearchWrapperMutableLiveData = new MutableLiveData<>();
 
     private final MutableLiveData<LocationStateEntity> locationStateEntityMutableLiveData = new MutableLiveData<>();
@@ -78,14 +78,14 @@ public class MapViewModelTest {
         List<PredictionEntity> predictionEntityList = Stubs.getPredictionEntityList();
         MutableLiveData<List<PredictionEntity>> predictionEntityListMutableLiveData = new MutableLiveData<>();
         predictionEntityListMutableLiveData.setValue(predictionEntityList);
-        doReturn(predictionEntityListMutableLiveData).when(getPredictionUseCase).invoke();
+        doReturn(predictionEntityListMutableLiveData).when(getPredictionsUseCase).invoke();
 
         mapViewModel = new MapViewModel(
             isGpsEnabledUseCase,
             getCurrentLocationStateUseCase,
             getNearbySearchWrapperUseCase,
             getAttendantsGoingToSameRestaurantAsUserUseCase,
-            getPredictionUseCase
+            getPredictionsUseCase
         );
     }
 

@@ -15,13 +15,13 @@ import androidx.lifecycle.MutableLiveData;
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.authentication.use_case.IsUserLoggedInLiveDataUseCase;
 import com.emplk.go4lunch.domain.authentication.use_case.LogoutUserUseCase;
+import com.emplk.go4lunch.domain.autocomplete.use_case.SaveUserQueryUseCase;
 import com.emplk.go4lunch.domain.gps.IsGpsEnabledUseCase;
 import com.emplk.go4lunch.domain.location.StartLocationRequestUseCase;
 import com.emplk.go4lunch.domain.nearby_search.GetNearbySearchWrapperUseCase;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchWrapper;
 import com.emplk.go4lunch.domain.restaurant_choice.GetUserWithRestaurantChoiceEntityLiveDataUseCase;
-import com.emplk.go4lunch.domain.searchview.use_case.ResetPredictionsUseCase;
-import com.emplk.go4lunch.domain.searchview.use_case.SavePredictionsUseCase;
+import com.emplk.go4lunch.domain.autocomplete.use_case.ResetUserQueryUseCase;
 import com.emplk.go4lunch.domain.user.UserEntity;
 import com.emplk.go4lunch.domain.user.UserWithRestaurantChoiceEntity;
 import com.emplk.go4lunch.domain.user.use_case.GetUserEntityUseCase;
@@ -49,9 +49,9 @@ public class MainViewModelTest {
     private final GetUserWithRestaurantChoiceEntityLiveDataUseCase getUserWithRestaurantChoiceEntityLiveDataUseCase = mock(GetUserWithRestaurantChoiceEntityLiveDataUseCase.class);
 
 
-    private final SavePredictionsUseCase savePredictionsUseCase = mock(SavePredictionsUseCase.class);
+    private final SaveUserQueryUseCase saveUserQueryUseCase = mock(SaveUserQueryUseCase.class);
 
-    private final ResetPredictionsUseCase resetPredictionsUseCase = mock(ResetPredictionsUseCase.class);
+    private final ResetUserQueryUseCase resetUserQueryUseCase = mock(ResetUserQueryUseCase.class);
     private final GetUserEntityUseCase getUserEntityUseCase = mock(GetUserEntityUseCase.class);
 
     MutableLiveData<Boolean> isUserLoggedInMutableLiveData = new MutableLiveData<>();
@@ -93,8 +93,8 @@ public class MainViewModelTest {
             getUserWithRestaurantChoiceEntityLiveDataUseCase,
             getUserEntityUseCase,
             getNearbySearchWrapperUseCase,
-            savePredictionsUseCase,
-            resetPredictionsUseCase
+            saveUserQueryUseCase,
+            resetUserQueryUseCase
         );
     }
 
@@ -254,7 +254,7 @@ public class MainViewModelTest {
             isUserLoggedInLiveDataUseCase,
             getUserWithRestaurantChoiceEntityLiveDataUseCase,
             getUserEntityUseCase,
-            savePredictionsUseCase
+            saveUserQueryUseCase
         );
     }
 
@@ -268,7 +268,7 @@ public class MainViewModelTest {
 
         // Then
         assertEquals(3, result.size());
-        verify(savePredictionsUseCase).invoke(anyList());  // says I call it twice...
+        verify(saveUserQueryUseCase).invoke(anyList());  // says I call it twice...
         verifyNoMoreInteractions(
             logoutUserUseCase,
             isGpsEnabledUseCase,
@@ -276,7 +276,7 @@ public class MainViewModelTest {
             isUserLoggedInLiveDataUseCase,
             getUserWithRestaurantChoiceEntityLiveDataUseCase,
             getUserEntityUseCase,
-            savePredictionsUseCase
+            saveUserQueryUseCase
         );
     }
 */

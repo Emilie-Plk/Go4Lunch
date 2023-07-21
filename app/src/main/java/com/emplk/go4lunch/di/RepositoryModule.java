@@ -17,7 +17,7 @@ import com.emplk.go4lunch.domain.favorite_restaurant.FavoriteRestaurantRepositor
 import com.emplk.go4lunch.domain.gps.GpsLocationRepository;
 import com.emplk.go4lunch.domain.nearby_search.NearbySearchRepository;
 import com.emplk.go4lunch.domain.permission.GpsPermissionRepository;
-import com.emplk.go4lunch.domain.searchview.PredictionsRepository;
+import com.emplk.go4lunch.domain.autocomplete.PredictionsRepository;
 import com.emplk.go4lunch.domain.settings.NotificationRepository;
 import com.emplk.go4lunch.domain.user.UserRepository;
 

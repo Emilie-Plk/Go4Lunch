@@ -1,4 +1,4 @@
-package com.emplk.go4lunch.domain.searchview;
+package com.emplk.go4lunch.domain.autocomplete;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;

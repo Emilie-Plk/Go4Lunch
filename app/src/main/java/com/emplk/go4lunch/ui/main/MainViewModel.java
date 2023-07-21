@@ -19,9 +19,9 @@ import com.emplk.go4lunch.domain.nearby_search.GetNearbySearchWrapperUseCase;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchWrapper;
 import com.emplk.go4lunch.domain.restaurant_choice.GetUserWithRestaurantChoiceEntityLiveDataUseCase;
-import com.emplk.go4lunch.domain.searchview.PredictionEntity;
-import com.emplk.go4lunch.domain.searchview.use_case.ResetPredictionsUseCase;
-import com.emplk.go4lunch.domain.searchview.use_case.SavePredictionsUseCase;
+import com.emplk.go4lunch.domain.autocomplete.PredictionEntity;
+import com.emplk.go4lunch.domain.autocomplete.use_case.ResetUserQueryUseCase;
+import com.emplk.go4lunch.domain.autocomplete.use_case.SaveUserQueryUseCase;
 import com.emplk.go4lunch.domain.user.UserEntity;
 import com.emplk.go4lunch.domain.user.UserWithRestaurantChoiceEntity;
 import com.emplk.go4lunch.domain.user.use_case.GetUserEntityUseCase;
@@ -57,10 +57,10 @@ public class MainViewModel extends ViewModel {
     private final GetUserEntityUseCase getUserEntityUseCase;
 
     @NonNull
-    private final SavePredictionsUseCase savePredictionsUseCase;
+    private final SaveUserQueryUseCase saveUserQueryUseCase;
 
     @NonNull
-    private final ResetPredictionsUseCase resetPredictionsUseCase;
+    private final ResetUserQueryUseCase resetUserQueryUseCase;
 
 
     @NonNull
@@ -81,8 +81,8 @@ public class MainViewModel extends ViewModel {
         @NonNull GetUserWithRestaurantChoiceEntityLiveDataUseCase getUserWithRestaurantChoiceEntityLiveDataUseCase,
         @NonNull GetUserEntityUseCase getUserEntityUseCase,
         @NonNull GetNearbySearchWrapperUseCase getNearbySearchWrapperUseCase,
-        @NonNull SavePredictionsUseCase savePredictionsUseCase,
-        @NonNull ResetPredictionsUseCase resetPredictionsUseCase
+        @NonNull SaveUserQueryUseCase saveUserQueryUseCase,
+        @NonNull ResetUserQueryUseCase resetUserQueryUseCase
     ) {
         this.logoutUserUseCase = logoutUserUseCase;
         this.isGpsEnabledUseCase = isGpsEnabledUseCase;
@@ -90,8 +90,8 @@ public class MainViewModel extends ViewModel {
         this.isUserLoggedInLiveDataUseCase = isUserLoggedInLiveDataUseCase;
         this.getUserWithRestaurantChoiceEntityLiveDataUseCase = getUserWithRestaurantChoiceEntityLiveDataUseCase;
         this.getUserEntityUseCase = getUserEntityUseCase;
-        this.savePredictionsUseCase = savePredictionsUseCase;
-        this.resetPredictionsUseCase = resetPredictionsUseCase;
+        this.saveUserQueryUseCase = saveUserQueryUseCase;
+        this.resetUserQueryUseCase = resetUserQueryUseCase;
 
         fragmentStateSingleLiveEvent.setValue(MAP_FRAGMENT);
 
@@ -115,7 +115,7 @@ public class MainViewModel extends ViewModel {
         @Nullable NearbySearchWrapper nearbySearch
     ) {
         if (query == null || nearbySearch == null) {
-            resetPredictionsUseCase.invoke();
+            resetUserQueryUseCase.invoke();
             predictionViewStateMediatorLiveData.setValue(new ArrayList<>());
             return;
         }
@@ -146,7 +146,7 @@ public class MainViewModel extends ViewModel {
             }
         }
 
-        savePredictionsUseCase.invoke(predictionEntityList);  // called twice, why?
+        saveUserQueryUseCase.invoke(predictionEntityList);  // called twice, why?
         predictionViewStateMediatorLiveData.setValue(predictionViewStateList);
     }
 
@@ -193,7 +193,7 @@ public class MainViewModel extends ViewModel {
 
     public void onQueryChanged(@NonNull String query) {
         if (query.isEmpty()) {
-            resetPredictionsUseCase.invoke();
+            resetUserQueryUseCase.invoke();
             userQueryMutableLiveData.setValue(null);
             return;
         }
@@ -201,7 +201,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public void onQueryReset() {
-        resetPredictionsUseCase.invoke();
+        resetUserQueryUseCase.invoke();
     }
 
     public LiveData<Boolean> isGpsEnabledLiveData() {

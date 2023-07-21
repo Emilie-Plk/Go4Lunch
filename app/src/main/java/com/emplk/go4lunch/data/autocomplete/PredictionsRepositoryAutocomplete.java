@@ -10,8 +10,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.emplk.go4lunch.data.GooglePlacesApi;
 import com.emplk.go4lunch.data.autocomplete.response.AutocompletePredictionResponse;
 import com.emplk.go4lunch.data.autocomplete.response.PredictionsItem;
-import com.emplk.go4lunch.domain.searchview.PredictionEntity;
-import com.emplk.go4lunch.domain.searchview.PredictionsRepository;
+import com.emplk.go4lunch.domain.autocomplete.PredictionEntity;
+import com.emplk.go4lunch.domain.autocomplete.PredictionsRepository;
 
 import java.util.ArrayList;
 import java.util.List;

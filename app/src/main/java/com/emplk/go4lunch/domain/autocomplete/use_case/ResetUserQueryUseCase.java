@@ -1,18 +1,18 @@
-package com.emplk.go4lunch.domain.searchview.use_case;
+package com.emplk.go4lunch.domain.autocomplete.use_case;
 
-import com.emplk.go4lunch.domain.searchview.PredictionsRepository;
+import com.emplk.go4lunch.domain.autocomplete.PredictionsRepository;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import javax.inject.Inject;
 
-public class ResetPredictionsUseCase {
+public class ResetUserQueryUseCase {
 
     @NonNull
     private final PredictionsRepository repository;
 
     @Inject
-    public ResetPredictionsUseCase(@NonNull PredictionsRepository repository) {
+    public ResetUserQueryUseCase(@NonNull PredictionsRepository repository) {
         this.repository = repository;
     }
 
