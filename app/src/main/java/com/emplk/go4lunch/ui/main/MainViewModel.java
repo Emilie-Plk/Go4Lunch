@@ -3,9 +3,7 @@ package com.emplk.go4lunch.ui.main;
 import static com.emplk.go4lunch.ui.main.FragmentState.MAP_FRAGMENT;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
@@ -13,15 +11,13 @@ import androidx.lifecycle.ViewModel;
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.authentication.use_case.IsUserLoggedInLiveDataUseCase;
 import com.emplk.go4lunch.domain.authentication.use_case.LogoutUserUseCase;
+import com.emplk.go4lunch.domain.autocomplete.PredictionEntity;
+import com.emplk.go4lunch.domain.autocomplete.use_case.GetPredictionsUseCase;
+import com.emplk.go4lunch.domain.autocomplete.use_case.ResetPredictionPlaceIdUseCase;
+import com.emplk.go4lunch.domain.autocomplete.use_case.SavePredictionPlaceIdUseCase;
 import com.emplk.go4lunch.domain.gps.IsGpsEnabledUseCase;
 import com.emplk.go4lunch.domain.location.StartLocationRequestUseCase;
-import com.emplk.go4lunch.domain.nearby_search.GetNearbySearchWrapperUseCase;
-import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
-import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchWrapper;
 import com.emplk.go4lunch.domain.restaurant_choice.GetUserWithRestaurantChoiceEntityLiveDataUseCase;
-import com.emplk.go4lunch.domain.autocomplete.PredictionEntity;
-import com.emplk.go4lunch.domain.autocomplete.use_case.ResetUserQueryUseCase;
-import com.emplk.go4lunch.domain.autocomplete.use_case.SaveUserQueryUseCase;
 import com.emplk.go4lunch.domain.user.UserEntity;
 import com.emplk.go4lunch.domain.user.UserWithRestaurantChoiceEntity;
 import com.emplk.go4lunch.domain.user.use_case.GetUserEntityUseCase;
@@ -29,6 +25,7 @@ import com.emplk.go4lunch.ui.main.searchview.PredictionViewState;
 import com.emplk.go4lunch.ui.utils.SingleLiveEvent;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -57,20 +54,22 @@ public class MainViewModel extends ViewModel {
     private final GetUserEntityUseCase getUserEntityUseCase;
 
     @NonNull
-    private final SaveUserQueryUseCase saveUserQueryUseCase;
+    private final SavePredictionPlaceIdUseCase savePredictionPlaceIdUseCase;
 
     @NonNull
-    private final ResetUserQueryUseCase resetUserQueryUseCase;
+    private final ResetPredictionPlaceIdUseCase resetPredictionPlaceIdUseCase;
 
 
     @NonNull
     private final SingleLiveEvent<FragmentState> fragmentStateSingleLiveEvent = new SingleLiveEvent<>();
 
+
     @NonNull
     private final MutableLiveData<String> userQueryMutableLiveData;
 
     @NonNull
-    private final MediatorLiveData<List<PredictionViewState>> predictionViewStateMediatorLiveData = new MediatorLiveData<>();
+    private final LiveData<List<PredictionEntity>> predictionsLiveData;
+
 
     @Inject
     public MainViewModel(
@@ -80,9 +79,9 @@ public class MainViewModel extends ViewModel {
         @NonNull IsUserLoggedInLiveDataUseCase isUserLoggedInLiveDataUseCase,
         @NonNull GetUserWithRestaurantChoiceEntityLiveDataUseCase getUserWithRestaurantChoiceEntityLiveDataUseCase,
         @NonNull GetUserEntityUseCase getUserEntityUseCase,
-        @NonNull GetNearbySearchWrapperUseCase getNearbySearchWrapperUseCase,
-        @NonNull SaveUserQueryUseCase saveUserQueryUseCase,
-        @NonNull ResetUserQueryUseCase resetUserQueryUseCase
+        @NonNull GetPredictionsUseCase getPredictionsUseCase,
+        @NonNull SavePredictionPlaceIdUseCase savePredictionPlaceIdUseCase,
+        @NonNull ResetPredictionPlaceIdUseCase resetPredictionPlaceIdUseCase
     ) {
         this.logoutUserUseCase = logoutUserUseCase;
         this.isGpsEnabledUseCase = isGpsEnabledUseCase;
@@ -90,64 +89,22 @@ public class MainViewModel extends ViewModel {
         this.isUserLoggedInLiveDataUseCase = isUserLoggedInLiveDataUseCase;
         this.getUserWithRestaurantChoiceEntityLiveDataUseCase = getUserWithRestaurantChoiceEntityLiveDataUseCase;
         this.getUserEntityUseCase = getUserEntityUseCase;
-        this.saveUserQueryUseCase = saveUserQueryUseCase;
-        this.resetUserQueryUseCase = resetUserQueryUseCase;
+        this.savePredictionPlaceIdUseCase = savePredictionPlaceIdUseCase;
+        this.resetPredictionPlaceIdUseCase = resetPredictionPlaceIdUseCase;
 
         fragmentStateSingleLiveEvent.setValue(MAP_FRAGMENT);
 
         userQueryMutableLiveData = new MutableLiveData<>();
 
-        LiveData<NearbySearchWrapper> nearbySearchWrapperLiveData = getNearbySearchWrapperUseCase.invoke();
-
-        predictionViewStateMediatorLiveData.addSource(userQueryMutableLiveData, query -> {
-                combine(query, nearbySearchWrapperLiveData.getValue());
-            }
-        );
-
-        predictionViewStateMediatorLiveData.addSource(nearbySearchWrapperLiveData, nearbySearchWrapper -> {
-                combine(userQueryMutableLiveData.getValue(), nearbySearchWrapper);
-            }
-        );
-    }
-
-    private void combine(
-        @Nullable String query,
-        @Nullable NearbySearchWrapper nearbySearch
-    ) {
-        if (query == null || nearbySearch == null) {
-            resetUserQueryUseCase.invoke();
-            predictionViewStateMediatorLiveData.setValue(new ArrayList<>());
-            return;
-        }
-
-        List<PredictionViewState> predictionViewStateList = new ArrayList<>();
-
-        List<PredictionEntity> predictionEntityList = new ArrayList<>();
-
-        if (nearbySearch instanceof NearbySearchWrapper.Success) {
-            List<NearbySearchEntity> nearbySearchEntityList = ((NearbySearchWrapper.Success) nearbySearch).getNearbySearchEntityList();
-
-            for (NearbySearchEntity nearbySearchEntity : nearbySearchEntityList) {
-                String restaurantName = nearbySearchEntity.getRestaurantName();
-                if (restaurantName.toLowerCase().contains(query.toLowerCase())) {
-                    predictionEntityList.add(
-                        new PredictionEntity(
-                            nearbySearchEntity.getPlaceId(),
-                            restaurantName
-                        )
-                    );
-                    predictionViewStateList.add(
-                        new PredictionViewState(
-                            nearbySearchEntity.getPlaceId(),
-                            restaurantName
-                        )
-                    );
+        predictionsLiveData = Transformations.switchMap(
+            userQueryMutableLiveData, userQuery -> {
+                if (userQuery == null || userQuery.isEmpty() || userQuery.length() < 3) {
+                    return new MutableLiveData<>(Collections.emptyList());
+                } else {
+                    return getPredictionsUseCase.invoke(userQuery);
                 }
             }
-        }
-
-        saveUserQueryUseCase.invoke(predictionEntityList);  // called twice, why?
-        predictionViewStateMediatorLiveData.setValue(predictionViewStateList);
+        );
     }
 
 
@@ -188,20 +145,36 @@ public class MainViewModel extends ViewModel {
     }
 
     public LiveData<List<PredictionViewState>> getPredictionsLiveData() {
-        return predictionViewStateMediatorLiveData;
+        return Transformations.switchMap(predictionsLiveData, predictions -> {
+                MutableLiveData<List<PredictionViewState>> predictionViewStateMutableLiveData = new MutableLiveData<>();
+                List<PredictionViewState> predictionViewStateList = new ArrayList<>();
+                for (PredictionEntity prediction : predictions) {
+                    predictionViewStateList.add(
+                        new PredictionViewState(
+                            prediction.getPlaceId(),
+                            prediction.getRestaurantName()
+                        )
+                    );
+                }
+                predictionViewStateMutableLiveData.setValue(predictionViewStateList);
+                return predictionViewStateMutableLiveData;
+            }
+        );
     }
 
     public void onQueryChanged(@NonNull String query) {
         if (query.isEmpty()) {
-            resetUserQueryUseCase.invoke();
+            resetPredictionPlaceIdUseCase.invoke();
             userQueryMutableLiveData.setValue(null);
             return;
         }
         userQueryMutableLiveData.setValue(query);
     }
 
-    public void onQueryReset() {
-        resetUserQueryUseCase.invoke();
+    public void onPredictionPlaceIdReset() {
+        resetPredictionPlaceIdUseCase.invoke();
+        userQueryMutableLiveData.setValue(null);
+
     }
 
     public LiveData<Boolean> isGpsEnabledLiveData() {
@@ -223,6 +196,10 @@ public class MainViewModel extends ViewModel {
 
     public void onResume() {
         startLocationRequestUseCase.invoke();
+    }
+
+    public void onPredictionClicked(String placeId) {
+        savePredictionPlaceIdUseCase.invoke(placeId);
     }
 }
 

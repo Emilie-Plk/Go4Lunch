@@ -15,6 +15,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
 
 import com.emplk.go4lunch.R;
+import com.emplk.go4lunch.domain.autocomplete.PredictionEntity;
 import com.emplk.go4lunch.domain.autocomplete.use_case.GetPredictionsUseCase;
 import com.emplk.go4lunch.domain.gps.IsGpsEnabledUseCase;
 import com.emplk.go4lunch.domain.gps.entity.LocationStateEntity;
@@ -23,7 +24,6 @@ import com.emplk.go4lunch.domain.nearby_search.GetNearbySearchWrapperUseCase;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchWrapper;
 import com.emplk.go4lunch.domain.permission.HasGpsPermissionUseCase;
-import com.emplk.go4lunch.domain.autocomplete.PredictionEntity;
 import com.emplk.go4lunch.domain.workmate.GetAttendantsGoingToSameRestaurantAsUserUseCase;
 import com.emplk.util.Stubs;
 

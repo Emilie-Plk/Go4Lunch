@@ -6,17 +6,17 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 import javax.inject.Inject;
 
-public class SaveUserQueryUseCase {
+public class SavePredictionPlaceIdUseCase {
 
     @NonNull
     private final PredictionsRepository predictionsRepository;
 
     @Inject
-    public SaveUserQueryUseCase(@NonNull PredictionsRepository predictionsRepository) {
+    public SavePredictionPlaceIdUseCase(@NonNull PredictionsRepository predictionsRepository) {
         this.predictionsRepository = predictionsRepository;
     }
 
-    public void invoke(@NonNull String query) {
-        predictionsRepository.saveUserQuery(query);
+    public void invoke(@NonNull String placeId) {
+        predictionsRepository.savePredictionPlaceId(placeId);
     }
 }

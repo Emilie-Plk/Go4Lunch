@@ -1,6 +1,7 @@
 package com.emplk.util;
 
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
+import com.emplk.go4lunch.domain.autocomplete.PredictionEntity;
 import com.emplk.go4lunch.domain.chat.conversation.ChatConversationEntity;
 import com.emplk.go4lunch.domain.chat.conversation.RecipientEntity;
 import com.emplk.go4lunch.domain.chat.conversation.SenderEntity;
@@ -12,7 +13,6 @@ import com.emplk.go4lunch.domain.gps.entity.LocationEntity;
 import com.emplk.go4lunch.domain.gps.entity.LocationStateEntity;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
 import com.emplk.go4lunch.domain.notification.NotificationEntity;
-import com.emplk.go4lunch.domain.autocomplete.PredictionEntity;
 import com.emplk.go4lunch.domain.user.UserEntity;
 import com.emplk.go4lunch.domain.user.UserWithRestaurantChoiceEntity;
 import com.emplk.go4lunch.domain.workmate.WorkmateEntity;

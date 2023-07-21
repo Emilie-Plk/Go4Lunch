@@ -14,9 +14,9 @@ public interface PredictionsRepository {
         @NonNull String types
     );
 
-    void saveUserQuery(@NonNull String query);
+    void savePredictionPlaceId(@NonNull String placeId);
 
-    LiveData<String> getUserQueryLiveData();
+    LiveData<String> getPredictionPlaceIdLiveData();
 
-    void resetUserQuery();
+    void resetPredictionPlaceIdQuery();
 }

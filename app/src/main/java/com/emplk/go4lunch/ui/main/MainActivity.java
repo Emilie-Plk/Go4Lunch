@@ -3,10 +3,12 @@ package com.emplk.go4lunch.ui.main;
 import static android.content.ContentValues.TAG;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -221,12 +223,22 @@ public class MainActivity extends AppCompatActivity {
         binding.mainNavigationView.bringToFront();
     }
 
+    private void hideSoftKeyboard() {
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
     private void initAutocompleteSearchView() {
-        AutocompleteListAdapter adapter = new AutocompleteListAdapter(placeId -> {
+        AutocompleteListAdapter adapter = new AutocompleteListAdapter((placeId, restaurantName) -> {
             Log.d(TAG, "onPredictionClicked() called with placeId: " + placeId);
-            startActivity(
-                RestaurantDetailActivity.navigate(MainActivity.this, placeId)
-            );
+            viewModel.onPredictionClicked(placeId);
+            binding.mainToolbarSearchView.setQuery(restaurantName, false);
+            binding.mainSearchviewRecyclerview.setVisibility(View.GONE);
+            binding.mainToolbarSearchView.clearFocus();
+            hideSoftKeyboard();
         }
         );
         binding.mainSearchviewRecyclerview.setLayoutManager(new LinearLayoutManager(this));
@@ -250,6 +262,7 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public boolean onQueryTextChange(String newText) {
+                    binding.mainSearchviewRecyclerview.setVisibility(View.VISIBLE);
                     viewModel.onQueryChanged(newText);
                     return true;
                 }
@@ -258,8 +271,11 @@ public class MainActivity extends AppCompatActivity {
 
         binding.mainToolbarSearchView.setOnCloseListener(
             () -> {
-                viewModel.onQueryReset();
-                return false;
+                viewModel.onPredictionPlaceIdReset();
+                binding.mainToolbarSearchView.clearFocus();
+                binding.mainToolbarSearchView.onActionViewCollapsed();
+                hideSoftKeyboard();
+                return true;
             }
         );
     }

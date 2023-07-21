@@ -2,10 +2,11 @@ package com.emplk.go4lunch.data.autocomplete.response;
 
 import androidx.annotation.NonNull;
 
-import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-public class StructuredFormatting{
+import java.util.List;
+
+public class StructuredFormatting {
 
     @SerializedName("main_text_matched_substrings")
     private List<MainTextMatchedSubstringsItem> mainTextMatchedSubstrings;
@@ -16,26 +17,26 @@ public class StructuredFormatting{
     @SerializedName("main_text")
     private String mainText;
 
-    public List<MainTextMatchedSubstringsItem> getMainTextMatchedSubstrings(){
+    public List<MainTextMatchedSubstringsItem> getMainTextMatchedSubstrings() {
         return mainTextMatchedSubstrings;
     }
 
-    public String getSecondaryText(){
+    public String getSecondaryText() {
         return secondaryText;
     }
 
-    public String getMainText(){
+    public String getMainText() {
         return mainText;
     }
 
     @NonNull
     @Override
-     public String toString(){
-        return 
-            "StructuredFormatting{" + 
-            "main_text_matched_substrings = '" + mainTextMatchedSubstrings + '\'' + 
-            ",secondary_text = '" + secondaryText + '\'' + 
-            ",main_text = '" + mainText + '\'' + 
-            "}";
-        }
+    public String toString() {
+        return
+            "StructuredFormatting{" +
+                "main_text_matched_substrings = '" + mainTextMatchedSubstrings + '\'' +
+                ",secondary_text = '" + secondaryText + '\'' +
+                ",main_text = '" + mainText + '\'' +
+                "}";
+    }
 }

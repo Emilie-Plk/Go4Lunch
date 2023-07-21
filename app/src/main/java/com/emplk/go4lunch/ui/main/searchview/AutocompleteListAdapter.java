@@ -54,7 +54,7 @@ public class AutocompleteListAdapter extends ListAdapter<PredictionViewState, Re
             @NonNull OnPredictionClickedListener listener
         ) {
             binding.predictionItemRestaurantName.setText(predictionViewState.getRestaurantName());
-            binding.predictionItemHolder.setOnClickListener(v -> listener.onPredictionClicked(predictionViewState.getPlaceId()));
+            binding.predictionItemRestaurantName.setOnClickListener(v -> listener.onPredictionClicked(predictionViewState.getPlaceId(), predictionViewState.getRestaurantName()));
         }
     }
 

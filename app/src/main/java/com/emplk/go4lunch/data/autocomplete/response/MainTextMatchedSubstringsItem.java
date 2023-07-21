@@ -2,7 +2,7 @@ package com.emplk.go4lunch.data.autocomplete.response;
 
 import com.google.gson.annotations.SerializedName;
 
-public class MainTextMatchedSubstringsItem{
+public class MainTextMatchedSubstringsItem {
 
     @SerializedName("offset")
     private int offset;
@@ -10,20 +10,20 @@ public class MainTextMatchedSubstringsItem{
     @SerializedName("length")
     private int length;
 
-    public int getOffset(){
+    public int getOffset() {
         return offset;
     }
 
-    public int getLength(){
+    public int getLength() {
         return length;
     }
 
     @Override
-     public String toString(){
-        return 
-            "MainTextMatchedSubstringsItem{" + 
-            "offset = '" + offset + '\'' + 
-            ",length = '" + length + '\'' + 
-            "}";
-        }
+    public String toString() {
+        return
+            "MainTextMatchedSubstringsItem{" +
+                "offset = '" + offset + '\'' +
+                ",length = '" + length + '\'' +
+                "}";
+    }
 }

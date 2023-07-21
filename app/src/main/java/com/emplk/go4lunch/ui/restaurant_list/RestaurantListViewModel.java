@@ -2,9 +2,6 @@ package com.emplk.go4lunch.ui.restaurant_list;
 
 
 import static com.emplk.go4lunch.BuildConfig.API_KEY;
-import static com.emplk.go4lunch.ui.restaurant_list.ErrorDrawable.NO_GPS_FOUND;
-import static com.emplk.go4lunch.ui.restaurant_list.ErrorDrawable.NO_RESULT_FOUND;
-import static com.emplk.go4lunch.ui.restaurant_list.ErrorDrawable.REQUEST_FAILURE;
 import static com.emplk.go4lunch.ui.restaurant_list.RestaurantOpeningState.IS_CLOSED;
 import static com.emplk.go4lunch.ui.restaurant_list.RestaurantOpeningState.IS_NOT_DEFINED;
 import static com.emplk.go4lunch.ui.restaurant_list.RestaurantOpeningState.IS_OPEN;
@@ -27,13 +24,10 @@ import com.emplk.go4lunch.domain.nearby_search.GetNearbySearchWrapperUseCase;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
 import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchWrapper;
 import com.emplk.go4lunch.domain.permission.HasGpsPermissionUseCase;
-import com.emplk.go4lunch.domain.autocomplete.PredictionEntity;
 import com.emplk.go4lunch.domain.workmate.GetAttendantsGoingToSameRestaurantAsUserUseCase;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.SphericalUtil;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -76,10 +70,10 @@ public class RestaurantListViewModel extends ViewModel {
 
         LiveData<NearbySearchWrapper> nearbySearchWrapperLiveData = getNearbySearchWrapperUseCase.invoke();
 
-        LiveData<List<PredictionEntity>> predictionsLiveData = getPredictionsUseCase.invoke();
+        //     LiveData<List<PredictionEntity>> predictionsLiveData = getPredictionsUseCase.invoke();
 
 
-        restaurantListMediatorLiveData.addSource(hasGpsPermissionLiveData, hasGpsPermission ->
+       /* restaurantListMediatorLiveData.addSource(hasGpsPermissionLiveData, hasGpsPermission ->
             combine(
                 hasGpsPermission,
                 isGpsEnabledMutableLiveData.getValue(),
@@ -108,7 +102,7 @@ public class RestaurantListViewModel extends ViewModel {
                 locationLiveData.getValue(),
                 nearbySearchWrapper,
                 attendantsByRestaurantIdsLiveData.getValue(),
-                predictionsLiveData.getValue()
+               predictionsLiveData.getValue()
             )
         );
 
@@ -130,11 +124,11 @@ public class RestaurantListViewModel extends ViewModel {
                 locationLiveData.getValue(),
                 nearbySearchWrapperLiveData.getValue(),
                 attendantsByRestaurantIds,
-                predictionsLiveData.getValue()
+               predictionsLiveData.getValue()
             )
-        );
+        );*/
 
-        restaurantListMediatorLiveData.addSource(predictionsLiveData, predictionEntities ->
+      /*  restaurantListMediatorLiveData.addSource(predictionsLiveData, predictionEntities ->
             combine(
                 hasGpsPermissionLiveData.getValue(),
                 isGpsEnabledMutableLiveData.getValue(),
@@ -142,122 +136,122 @@ public class RestaurantListViewModel extends ViewModel {
                 nearbySearchWrapperLiveData.getValue(),
                 attendantsByRestaurantIdsLiveData.getValue(),
                 predictionEntities)
-        );
+        );*/
 
     }
 
-    private void combine(
-        @Nullable Boolean hasGpsPermission,
-        @Nullable Boolean isGpsEnabled,
-        @Nullable LocationStateEntity locationStateEntity,
-        @Nullable NearbySearchWrapper nearbySearchWrapper,
-        @Nullable Map<String, Integer> attendantsByRestaurantIds,
-        @Nullable List<PredictionEntity> predictionEntities
-    ) {
-        if (nearbySearchWrapper == null || locationStateEntity == null || isGpsEnabled == null) {
-            return;
-        }
-        List<RestaurantListViewStateItem> result = new ArrayList<>();
+    /*  private void combine(
+          @Nullable Boolean hasGpsPermission,
+          @Nullable Boolean isGpsEnabled,
+          @Nullable LocationStateEntity locationStateEntity,
+          @Nullable NearbySearchWrapper nearbySearchWrapper,
+          @Nullable Map<String, Integer> attendantsByRestaurantIds,
+          @Nullable List<PredictionEntity> predictionEntities
+      ) {
+          if (nearbySearchWrapper == null || locationStateEntity == null || isGpsEnabled == null) {
+              return;
+          }
+          List<RestaurantListViewStateItem> result = new ArrayList<>();
 
-        if (hasGpsPermission != null && !hasGpsPermission) {
-            result.add(
-                new RestaurantListViewStateItem.RestaurantListErrorItem(
-                    resources.getString(R.string.list_error_message_no_gps),
-                    NO_GPS_FOUND
-                )
-            );
-            restaurantListMediatorLiveData.setValue(result);
-        }
+          if (hasGpsPermission != null && !hasGpsPermission) {
+              result.add(
+                  new RestaurantListViewStateItem.RestaurantListErrorItem(
+                      resources.getString(R.string.list_error_message_no_gps),
+                      NO_GPS_FOUND
+                  )
+              );
+              restaurantListMediatorLiveData.setValue(result);
+          }
 
-        if (locationStateEntity instanceof LocationStateEntity.GpsProviderDisabled) {
-            result.add(
-                new RestaurantListViewStateItem.RestaurantListErrorItem(
-                    resources.getString(R.string.list_error_message_no_gps),
-                    NO_GPS_FOUND
-                )
-            );
-            restaurantListMediatorLiveData.setValue(result);
-            return;
-        }
+          if (locationStateEntity instanceof LocationStateEntity.GpsProviderDisabled) {
+              result.add(
+                  new RestaurantListViewStateItem.RestaurantListErrorItem(
+                      resources.getString(R.string.list_error_message_no_gps),
+                      NO_GPS_FOUND
+                  )
+              );
+              restaurantListMediatorLiveData.setValue(result);
+              return;
+          }
 
-        if (!isGpsEnabled) {
-            result.add(
-                new RestaurantListViewStateItem.RestaurantListErrorItem(
-                    resources.getString(R.string.list_error_message_no_gps),
-                    NO_GPS_FOUND
-                )
-            );
-            restaurantListMediatorLiveData.setValue(result);
-            return;
-        }
+          if (!isGpsEnabled) {
+              result.add(
+                  new RestaurantListViewStateItem.RestaurantListErrorItem(
+                      resources.getString(R.string.list_error_message_no_gps),
+                      NO_GPS_FOUND
+                  )
+              );
+              restaurantListMediatorLiveData.setValue(result);
+              return;
+          }
 
 
-        if (nearbySearchWrapper instanceof NearbySearchWrapper.Loading) {
-            result.add(
-                new RestaurantListViewStateItem.Loading()
-            );
-        } else if (nearbySearchWrapper instanceof NearbySearchWrapper.NoResults) {
-            result.add(
-                new RestaurantListViewStateItem.RestaurantListErrorItem(
-                    resources.getString(R.string.list_error_message_no_results),
-                    NO_RESULT_FOUND
-                )
-            );
-        } else if (nearbySearchWrapper instanceof NearbySearchWrapper.Success) {
-            if (locationStateEntity instanceof LocationStateEntity.Success) {
-                LocationEntity location = ((LocationStateEntity.Success) locationStateEntity).locationEntity;
+          if (nearbySearchWrapper instanceof NearbySearchWrapper.Loading) {
+              result.add(
+                  new RestaurantListViewStateItem.Loading()
+              );
+          } else if (nearbySearchWrapper instanceof NearbySearchWrapper.NoResults) {
+              result.add(
+                  new RestaurantListViewStateItem.RestaurantListErrorItem(
+                      resources.getString(R.string.list_error_message_no_results),
+                      NO_RESULT_FOUND
+                  )
+              );
+          } else if (nearbySearchWrapper instanceof NearbySearchWrapper.Success) {
+              if (locationStateEntity instanceof LocationStateEntity.Success) {
+                  LocationEntity location = ((LocationStateEntity.Success) locationStateEntity).locationEntity;
 
-                List<NearbySearchEntity> sortedRestaurantList = sortNearbyRestaurants(((NearbySearchWrapper.Success) nearbySearchWrapper).getNearbySearchEntityList(), location);
-                for (NearbySearchEntity nearbySearchEntity : sortedRestaurantList) {
-                    if (predictionEntities == null || predictionEntities.isEmpty()) {
+                  List<NearbySearchEntity> sortedRestaurantList = sortNearbyRestaurants(((NearbySearchWrapper.Success) nearbySearchWrapper).getNearbySearchEntityList(), location);
+                  for (NearbySearchEntity nearbySearchEntity : sortedRestaurantList) {
+                      if (predictionEntities == null || predictionEntities.isEmpty()) {
 
-                        result.add(
-                            new RestaurantListViewStateItem.RestaurantItemItem(
-                                nearbySearchEntity.getPlaceId(),
-                                nearbySearchEntity.getRestaurantName(),
-                                nearbySearchEntity.getVicinity(),
-                                (new DecimalFormat("#").format(nearbySearchEntity.getDistance())) + "m",
-                                getAttendants(nearbySearchEntity.getPlaceId(), attendantsByRestaurantIds),
-                                formatOpeningStatus(nearbySearchEntity.isOpen()),
-                                parseRestaurantPictureUrl(nearbySearchEntity.getPhotoReferenceUrl()),
-                                isRatingBarVisible(nearbySearchEntity.getRating()),
-                                convertFiveToThreeRating(nearbySearchEntity.getRating())
-                            )
-                        );
-                    } else {
-                        for (PredictionEntity predictionEntity : predictionEntities) {
-                            if (predictionEntity.getPlaceId().equals(nearbySearchEntity.getPlaceId())) {
-                                result.add(
-                                    new RestaurantListViewStateItem.RestaurantItemItem(
-                                        nearbySearchEntity.getPlaceId(),
-                                        nearbySearchEntity.getRestaurantName(),
-                                        nearbySearchEntity.getVicinity(),
-                                        (new DecimalFormat("#").format(nearbySearchEntity.getDistance())) + "m",
-                                        getAttendants(nearbySearchEntity.getPlaceId(), attendantsByRestaurantIds),
-                                        formatOpeningStatus(nearbySearchEntity.isOpen()),
-                                        parseRestaurantPictureUrl(nearbySearchEntity.getPhotoReferenceUrl()),
-                                        isRatingBarVisible(nearbySearchEntity.getRating()),
-                                        convertFiveToThreeRating(nearbySearchEntity.getRating())
-                                    )
-                                );
-                            }
-                        }
-                    }
+                          result.add(
+                              new RestaurantListViewStateItem.RestaurantItemItem(
+                                  nearbySearchEntity.getPlaceId(),
+                                  nearbySearchEntity.getRestaurantName(),
+                                  nearbySearchEntity.getVicinity(),
+                                  (new DecimalFormat("#").format(nearbySearchEntity.getDistance())) + "m",
+                                  getAttendants(nearbySearchEntity.getPlaceId(), attendantsByRestaurantIds),
+                                  formatOpeningStatus(nearbySearchEntity.isOpen()),
+                                  parseRestaurantPictureUrl(nearbySearchEntity.getPhotoReferenceUrl()),
+                                  isRatingBarVisible(nearbySearchEntity.getRating()),
+                                  convertFiveToThreeRating(nearbySearchEntity.getRating())
+                              )
+                          );
+                      } else {
+                          for (PredictionEntity predictionEntity : predictionEntities) {
+                              if (predictionEntity.getPlaceId().equals(nearbySearchEntity.getPlaceId())) {
+                                  result.add(
+                                      new RestaurantListViewStateItem.RestaurantItemItem(
+                                          nearbySearchEntity.getPlaceId(),
+                                          nearbySearchEntity.getRestaurantName(),
+                                          nearbySearchEntity.getVicinity(),
+                                          (new DecimalFormat("#").format(nearbySearchEntity.getDistance())) + "m",
+                                          getAttendants(nearbySearchEntity.getPlaceId(), attendantsByRestaurantIds),
+                                          formatOpeningStatus(nearbySearchEntity.isOpen()),
+                                          parseRestaurantPictureUrl(nearbySearchEntity.getPhotoReferenceUrl()),
+                                          isRatingBarVisible(nearbySearchEntity.getRating()),
+                                          convertFiveToThreeRating(nearbySearchEntity.getRating())
+                                      )
+                                  );
+                              }
+                          }
+                      }
 
-                }
-            }
-        } else if (nearbySearchWrapper instanceof NearbySearchWrapper.RequestError) {
-            ((NearbySearchWrapper.RequestError) nearbySearchWrapper).getThrowable().printStackTrace();
-            result.add(
-                new RestaurantListViewStateItem.RestaurantListErrorItem(
-                    resources.getString(R.string.list_error_message_generic),
-                    REQUEST_FAILURE
-                )
-            );
-        }
-        restaurantListMediatorLiveData.setValue(result);
-    }
-
+                  }
+              }
+          } else if (nearbySearchWrapper instanceof NearbySearchWrapper.RequestError) {
+              ((NearbySearchWrapper.RequestError) nearbySearchWrapper).getThrowable().printStackTrace();
+              result.add(
+                  new RestaurantListViewStateItem.RestaurantListErrorItem(
+                      resources.getString(R.string.list_error_message_generic),
+                      REQUEST_FAILURE
+                  )
+              );
+          }
+          restaurantListMediatorLiveData.setValue(result);
+      }
+  */
     private List<NearbySearchEntity> sortNearbyRestaurants(
         @NonNull List<NearbySearchEntity> nearbySearchEntityList,
         @NonNull LocationEntity userLocationEntity

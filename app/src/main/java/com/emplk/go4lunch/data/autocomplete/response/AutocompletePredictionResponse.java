@@ -1,9 +1,10 @@
 package com.emplk.go4lunch.data.autocomplete.response;
 
-import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-public class AutocompletePredictionResponse{
+import java.util.List;
+
+public class AutocompletePredictionResponse {
 
     @SerializedName("predictions")
     private List<PredictionsItem> predictions;
@@ -11,20 +12,20 @@ public class AutocompletePredictionResponse{
     @SerializedName("status")
     private String status;
 
-    public List<PredictionsItem> getPredictions(){
+    public List<PredictionsItem> getPredictions() {
         return predictions;
     }
 
-    public String getStatus(){
+    public String getStatus() {
         return status;
     }
 
     @Override
-     public String toString(){
-        return 
-            "AutocompletePredictionResponse{" + 
-            "predictions = '" + predictions + '\'' + 
-            ",status = '" + status + '\'' + 
-            "}";
-        }
+    public String toString() {
+        return
+            "AutocompletePredictionResponse{" +
+                "predictions = '" + predictions + '\'' +
+                ",status = '" + status + '\'' +
+                "}";
+    }
 }

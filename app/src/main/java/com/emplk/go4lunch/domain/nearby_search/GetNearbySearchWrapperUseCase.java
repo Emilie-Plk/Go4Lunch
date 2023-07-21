@@ -1,7 +1,5 @@
 package com.emplk.go4lunch.domain.nearby_search;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

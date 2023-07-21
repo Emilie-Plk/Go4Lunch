@@ -5,6 +5,7 @@ import static com.emplk.go4lunch.ui.utils.BitmapFromVector.getBitmapFromVector;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -90,6 +91,10 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
             }
         );
 
+        viewModel.getNoRestaurantMatchSingleLiveEvent().observe(getViewLifecycleOwner(), aVoid -> {
+                Toast.makeText(getContext(), "No restaurant matched!", Toast.LENGTH_LONG).show();
+            }
+        );
 
         viewModel.getLocationState().observe(getViewLifecycleOwner(), locationState -> {
                 if (locationState instanceof LocationStateEntity.Success) {

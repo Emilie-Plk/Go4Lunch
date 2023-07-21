@@ -2,7 +2,7 @@ package com.emplk.go4lunch.data.autocomplete.response;
 
 import com.google.gson.annotations.SerializedName;
 
-public class TermsItem{
+public class TermsItem {
 
     @SerializedName("offset")
     private int offset;
@@ -10,20 +10,20 @@ public class TermsItem{
     @SerializedName("value")
     private String value;
 
-    public int getOffset(){
+    public int getOffset() {
         return offset;
     }
 
-    public String getValue(){
+    public String getValue() {
         return value;
     }
 
     @Override
-     public String toString(){
-        return 
-            "TermsItem{" + 
-            "offset = '" + offset + '\'' + 
-            ",value = '" + value + '\'' + 
-            "}";
-        }
+    public String toString() {
+        return
+            "TermsItem{" +
+                "offset = '" + offset + '\'' +
+                ",value = '" + value + '\'' +
+                "}";
+    }
 }

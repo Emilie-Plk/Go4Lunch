@@ -28,7 +28,7 @@ public class PredictionsRepositoryAutocomplete implements PredictionsRepository 
 
     @NonNull
     private final GooglePlacesApi googleMapsApi;
-    private final MutableLiveData<String> userQueryMutableLiveData = new MutableLiveData<>();
+    private final MutableLiveData<String> predictionPlaceIdMutableLiveData = new MutableLiveData<>();
 
     @Inject
     public PredictionsRepositoryAutocomplete(@NonNull GooglePlacesApi googleMapsApi) {
@@ -106,17 +106,17 @@ public class PredictionsRepositoryAutocomplete implements PredictionsRepository 
     }
 
     @Override
-    public void saveUserQuery(@NonNull String query) {
-        userQueryMutableLiveData.setValue(query);
+    public void savePredictionPlaceId(@NonNull String query) {
+        predictionPlaceIdMutableLiveData.setValue(query);
     }
 
     @Override
-    public LiveData<String> getUserQueryLiveData() {
-        return userQueryMutableLiveData;
+    public LiveData<String> getPredictionPlaceIdLiveData() {
+        return predictionPlaceIdMutableLiveData;
     }
 
     @Override
-    public void resetUserQuery() {
-        userQueryMutableLiveData.setValue(null);
+    public void resetPredictionPlaceIdQuery() {
+        predictionPlaceIdMutableLiveData.setValue(null);
     }
 }
