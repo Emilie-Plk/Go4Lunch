@@ -61,9 +61,6 @@ public class RestaurantDetailViewModel extends ViewModel {
     private final GetWorkmateEntitiesGoingToSameRestaurantUseCase getWorkmateEntitiesGoingToSameRestaurantUseCase;
 
     @NonNull
-    private final GetCurrentLoggedUserIdUseCase getCurrentLoggedUserIdUseCase;
-
-    @NonNull
     private final MutableLiveData<WorkmateState> workerStateMutableLiveData;
 
 
@@ -90,7 +87,6 @@ public class RestaurantDetailViewModel extends ViewModel {
         this.addUserRestaurantChoiceUseCase = addUserRestaurantChoiceUseCase;
         this.removeUserRestaurantChoiceUseCase = removeUserRestaurantChoiceUseCase;
         this.getWorkmateEntitiesGoingToSameRestaurantUseCase = getWorkmateEntitiesGoingToSameRestaurantUseCase;
-        this.getCurrentLoggedUserIdUseCase = getCurrentLoggedUserIdUseCase;
 
         restaurantId = savedStateHandle.get(RestaurantDetailActivity.KEY_RESTAURANT_ID);
 
