@@ -1,5 +1,7 @@
 package com.emplk.go4lunch.data.autocomplete.response;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -20,6 +22,7 @@ public class AutocompletePredictionResponse {
         return status;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return

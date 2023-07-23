@@ -148,13 +148,17 @@ public class MainViewModel extends ViewModel {
         return Transformations.switchMap(predictionsLiveData, predictions -> {
                 MutableLiveData<List<PredictionViewState>> predictionViewStateMutableLiveData = new MutableLiveData<>();
                 List<PredictionViewState> predictionViewStateList = new ArrayList<>();
-                for (PredictionEntity prediction : predictions) {
-                    predictionViewStateList.add(
-                        new PredictionViewState(
-                            prediction.getPlaceId(),
-                            prediction.getRestaurantName()
-                        )
-                    );
+                if (predictions != null) {
+                    for (PredictionEntity prediction : predictions) {
+                        predictionViewStateList.add(
+                            new PredictionViewState(
+                                prediction.getPlaceId(),
+                                prediction.getRestaurantName()
+                            )
+                        );
+                    }
+                } else {
+                    predictionViewStateMutableLiveData.setValue(Collections.emptyList());
                 }
                 predictionViewStateMutableLiveData.setValue(predictionViewStateList);
                 return predictionViewStateMutableLiveData;
@@ -162,8 +166,8 @@ public class MainViewModel extends ViewModel {
         );
     }
 
-    public void onQueryChanged(@NonNull String query) {
-        if (query.isEmpty()) {
+    public void onQueryChanged(String query) {
+        if (query == null || query.isEmpty()) {
             resetPredictionPlaceIdUseCase.invoke();
             userQueryMutableLiveData.setValue(null);
             return;
@@ -199,6 +203,7 @@ public class MainViewModel extends ViewModel {
 
     public void onPredictionClicked(String placeId) {
         savePredictionPlaceIdUseCase.invoke(placeId);
+        userQueryMutableLiveData.setValue(null);
     }
 }
 

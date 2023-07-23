@@ -237,7 +237,6 @@ public class MainActivity extends AppCompatActivity {
             viewModel.onPredictionClicked(placeId);
             binding.mainToolbarSearchView.clearFocus();
             binding.mainToolbarSearchView.setQuery(restaurantName, false);
-            binding.mainSearchviewRecyclerview.setVisibility(View.GONE);
             hideSoftKeyboard();
         }
         );
@@ -257,12 +256,11 @@ public class MainActivity extends AppCompatActivity {
             new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
-                    return true;
+                    return false;
                 }
 
                 @Override
                 public boolean onQueryTextChange(String newText) {
-                    binding.mainSearchviewRecyclerview.setVisibility(View.VISIBLE);
                     viewModel.onQueryChanged(newText);
                     return true;
                 }
@@ -282,7 +280,6 @@ public class MainActivity extends AppCompatActivity {
         binding.mainToolbarSearchView.setOnCloseListener(() -> {
                 binding.mainToolbarSearchView.clearFocus();
                 binding.mainToolbarSearchView.onActionViewCollapsed();
-                binding.mainSearchviewRecyclerview.setVisibility(View.GONE);
                 viewModel.onPredictionPlaceIdReset();
                 hideSoftKeyboard();
                 return true;

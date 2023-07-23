@@ -7,7 +7,6 @@ import android.util.LruCache;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.DispatchQueue;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -16,12 +15,9 @@ import com.emplk.go4lunch.data.autocomplete.response.AutocompletePredictionRespo
 import com.emplk.go4lunch.data.autocomplete.response.PredictionsItem;
 import com.emplk.go4lunch.domain.autocomplete.PredictionEntity;
 import com.emplk.go4lunch.domain.autocomplete.PredictionsRepository;
-import com.emplk.go4lunch.domain.gps.entity.LocationEntity;
-import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchEntity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -85,6 +81,8 @@ public class PredictionsRepositoryAutocomplete implements PredictionsRepository 
                                 predictionEntitiesLruCache.put(cacheKey, predictionEntities);
                                 predictionEntitiesLiveData.setValue(predictionEntities);
                             }
+                        } else {
+                            predictionEntitiesLiveData.setValue(null);
                         }
                     }
 
