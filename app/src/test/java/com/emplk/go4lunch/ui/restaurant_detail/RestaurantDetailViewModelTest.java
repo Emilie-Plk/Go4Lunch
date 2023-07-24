@@ -70,7 +70,7 @@ public class RestaurantDetailViewModelTest {
 
     private final MutableLiveData<DetailsRestaurantWrapper> detailsRestaurantWrapperMutableLiveData = new MutableLiveData<>();
 
-    MutableLiveData<UserEntity> userEntityMutableLiveData = new MutableLiveData<>(mock(UserEntity.class));
+    private final MutableLiveData<UserEntity> userEntityMutableLiveData = new MutableLiveData<>(mock(UserEntity.class));
 
     private RestaurantDetailViewModel viewModel;
 
@@ -107,7 +107,13 @@ public class RestaurantDetailViewModelTest {
     public void detailsRestaurantWrapperSuccess_RestaurantDetailViewStateReturnsDetailsStateItem() {
         // Given
         detailsRestaurantWrapperMutableLiveData.setValue(Stubs.getTestDetailsRestaurantWrapperSuccess());
-        doReturn(detailsRestaurantWrapperMutableLiveData).when(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
+        userEntityMutableLiveData.setValue(
+            new UserEntity(
+                Stubs.getTestLoggedUserEntity(),
+                Collections.emptySet(),
+                "KEY_RESTAURANT_ID"
+            )
+        );
 
         // When
         RestaurantDetailViewState result = getValueForTesting(viewModel.getRestaurantDetails());
@@ -121,10 +127,25 @@ public class RestaurantDetailViewModelTest {
     }
 
     @Test
+    public void detailsRestaurantWrapperSuccessWithAttendingWorkmate_RestaurantDetailViewStateReturnsDetailsStateItem() {
+        // Given
+        detailsRestaurantWrapperMutableLiveData.setValue(Stubs.getTestDetailsRestaurantWrapperSuccess());
+        // When
+        RestaurantDetailViewState result = getValueForTesting(viewModel.getRestaurantDetails());
+
+        // Then
+        assertEquals(Stubs.getTestRestaurantDetailViewState(), result);
+        assertTrue(result instanceof RestaurantDetailViewState.RestaurantDetail);
+        verify(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
+        verify(getUserEntityUseCase).invoke();
+        verifyNoMoreInteractions(getDetailsRestaurantWrapperUseCase, getUserEntityUseCase, getWorkmateEntitiesGoingToSameRestaurantUseCase);
+    }
+
+
+    @Test
     public void detailsRestaurantWrapperSuccess_phoneNumberIsNotNull() {
         // Given
         detailsRestaurantWrapperMutableLiveData.setValue(Stubs.getTestDetailsRestaurantWrapperSuccess());
-        doReturn(detailsRestaurantWrapperMutableLiveData).when(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
 
         // When
         RestaurantDetailViewState result = getValueForTesting(viewModel.getRestaurantDetails());
@@ -152,7 +173,6 @@ public class RestaurantDetailViewModelTest {
             )
         );
         detailsRestaurantWrapperMutableLiveData.setValue(detailsRestaurantWrapper);
-        doReturn(detailsRestaurantWrapperMutableLiveData).when(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
 
         // When
         RestaurantDetailViewState result = getValueForTesting(viewModel.getRestaurantDetails());
@@ -168,7 +188,6 @@ public class RestaurantDetailViewModelTest {
     public void detailsRestaurantWrapperSuccess_websiteUrlIsNotNull() {
         // Given
         detailsRestaurantWrapperMutableLiveData.setValue(Stubs.getTestDetailsRestaurantWrapperSuccess());
-        doReturn(detailsRestaurantWrapperMutableLiveData).when(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
 
         // When
         RestaurantDetailViewState result = getValueForTesting(viewModel.getRestaurantDetails());
@@ -196,8 +215,6 @@ public class RestaurantDetailViewModelTest {
             )
         );
         detailsRestaurantWrapperMutableLiveData.setValue(detailsRestaurantWrapper);
-        doReturn(detailsRestaurantWrapperMutableLiveData).when(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
-
         // When
         RestaurantDetailViewState result = getValueForTesting(viewModel.getRestaurantDetails());
 
@@ -212,7 +229,6 @@ public class RestaurantDetailViewModelTest {
     public void edge_case_detailsRestaurantWrapperIsNull() {
         // Given
         detailsRestaurantWrapperMutableLiveData.setValue(null);
-        doReturn(detailsRestaurantWrapperMutableLiveData).when(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
 
         // When
         RestaurantDetailViewState result = getValueForTesting(viewModel.getRestaurantDetails());
@@ -304,7 +320,6 @@ public class RestaurantDetailViewModelTest {
     public void detailsRestaurantWrapperLoading_RestaurantDetailViewStateReturnsLoadingStateItem() {
         // Given
         detailsRestaurantWrapperMutableLiveData.setValue(new DetailsRestaurantWrapper.Loading());
-        doReturn(detailsRestaurantWrapperMutableLiveData).when(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
 
         // When
         RestaurantDetailViewState result = getValueForTesting(viewModel.getRestaurantDetails());
@@ -320,7 +335,6 @@ public class RestaurantDetailViewModelTest {
     public void detailsRestaurantWrapperError_RestaurantDetailViewStateReturnsErrorStateItem() {
         // Given
         detailsRestaurantWrapperMutableLiveData.setValue(new DetailsRestaurantWrapper.Error(new Throwable("TEST_ERROR")));
-        doReturn(detailsRestaurantWrapperMutableLiveData).when(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
 
         // When
         RestaurantDetailViewState result = getValueForTesting(viewModel.getRestaurantDetails());
@@ -337,7 +351,6 @@ public class RestaurantDetailViewModelTest {
     public void ratingOnFive_shouldReturnRatingOnThree() {
         // Given
         detailsRestaurantWrapperMutableLiveData.setValue(Stubs.getTestDetailsRestaurantWrapperSuccess());
-        doReturn(detailsRestaurantWrapperMutableLiveData).when(getDetailsRestaurantWrapperUseCase).invoke(KEY_RESTAURANT_ID);
 
         // When
         RestaurantDetailViewState result = getValueForTesting(viewModel.getRestaurantDetails());
@@ -345,6 +358,32 @@ public class RestaurantDetailViewModelTest {
 
         // Then
         assertEquals(3.0f, rating, 0.0);
+    }
+
+    @Test
+    public void ratingNull_shouldReturn0() {
+        // Given
+        detailsRestaurantWrapperMutableLiveData.setValue(
+            new DetailsRestaurantWrapper.Success(
+                new DetailsRestaurantEntity(
+                    "KEY_RESTAURANT_ID",
+                    Stubs.TEST_RESTAURANT_NAME,
+                    Stubs.TEST_RESTAURANT_VICINITY,
+                    Stubs.TEST_RESTAURANT_PHOTO_URL,
+                    null,
+                    Stubs.TEST_RESTAURANT_PHONE_NUMBER,
+                    Stubs.TEST_RESTAURANT_WEBSITE,
+                    true
+                )
+            )
+        );
+
+        // When
+        RestaurantDetailViewState result = getValueForTesting(viewModel.getRestaurantDetails());
+        Float rating = ((RestaurantDetailViewState.RestaurantDetail) result).getRating();
+
+        // Then
+        assertEquals(0f, rating, 0.0);
     }
 
     @Test
@@ -363,9 +402,8 @@ public class RestaurantDetailViewModelTest {
         // When
         List<WorkmatesViewStateItem> result = getValueForTesting(viewModel.getWorkmatesGoingToRestaurant());
 
-        assertEquals(3, result.size());
         // Then
-
+        assertEquals(3, result.size());
         verify(getWorkmateEntitiesGoingToSameRestaurantUseCase).invoke(KEY_RESTAURANT_ID);
         verify(getUserEntityUseCase).invoke();
         verify(getCurrentLoggedUserIdUseCase).invoke();

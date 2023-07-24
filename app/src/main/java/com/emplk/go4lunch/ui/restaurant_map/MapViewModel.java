@@ -23,7 +23,6 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
@@ -160,8 +159,7 @@ public class MapViewModel extends ViewModel {
                         break;
                     }
                 }
-            }
-            else if (nearbySearchWrapper instanceof NearbySearchWrapper.NoResults) {
+            } else if (nearbySearchWrapper instanceof NearbySearchWrapper.NoResults) {
                 noRestaurantFoundSingleLiveEvent.call();
             }
             if (restaurantMarkerViewStateItems.isEmpty() && nearbySearchWrapper instanceof NearbySearchWrapper.Success) {

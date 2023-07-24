@@ -11,14 +11,11 @@ import static org.mockito.Mockito.verify;
 
 import android.content.SharedPreferences;
 
-import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.concurrent.TimeUnit;
 
 public class NotificationRepositoryImplementationTest {
 

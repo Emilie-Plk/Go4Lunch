@@ -118,9 +118,6 @@ public class RestaurantDetailViewModel extends ViewModel {
         boolean isRestaurantLiked = currentUser.getFavoriteRestaurantSet() != null && !currentUser.getFavoriteRestaurantSet().isEmpty() && currentUser.getFavoriteRestaurantSet().contains(restaurantId);
         boolean isAttending = (currentUser.getAttendingRestaurantId() != null && currentUser.getAttendingRestaurantId().equals(restaurantId));
 
-        RestaurantDetailsFavoriteState restaurantDetailsFavoriteState = isRestaurantLiked ? RestaurantDetailsFavoriteState.IS_FAVORITE : RestaurantDetailsFavoriteState.IS_NOT_FAVORITE;
-        AttendanceState attendanceState = isAttending ? AttendanceState.IS_ATTENDING : AttendanceState.IS_NOT_ATTENDING;
-
         if (detailsRestaurantWrapper instanceof DetailsRestaurantWrapper.Loading) {
             restaurantDetailViewStateMediatorLiveData.setValue(
                 new RestaurantDetailViewState.Loading()
@@ -140,8 +137,8 @@ public class RestaurantDetailViewModel extends ViewModel {
                     convertFiveToThreeRating(detailsRestaurantEntity.getRating()),
                     detailsRestaurantEntity.getPhoneNumber(),
                     detailsRestaurantEntity.getWebsiteUrl(),
-                    attendanceState,
-                    restaurantDetailsFavoriteState,
+                    isAttending ? AttendanceState.IS_ATTENDING : AttendanceState.IS_NOT_ATTENDING,
+                    isRestaurantLiked ? RestaurantDetailsFavoriteState.IS_FAVORITE : RestaurantDetailsFavoriteState.IS_NOT_FAVORITE,
                     detailsRestaurantEntity.getVeganFriendly(),
                     detailsRestaurantEntity.getPhoneNumber() != null,
                     detailsRestaurantEntity.getWebsiteUrl() != null
