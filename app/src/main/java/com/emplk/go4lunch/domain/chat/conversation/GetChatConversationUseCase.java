@@ -2,10 +2,13 @@ package com.emplk.go4lunch.domain.chat.conversation;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Transformations;
 
 import com.emplk.go4lunch.domain.authentication.use_case.GetCurrentLoggedUserIdUseCase;
 import com.emplk.go4lunch.domain.chat.ChatRepository;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -29,6 +32,14 @@ public class GetChatConversationUseCase {
     }
 
     public LiveData<List<ChatConversationEntity>> invoke(@NonNull String recipientId) {
-        return chatRepository.getChatConversation(getCurrentLoggedUserIdUseCase.invoke(), recipientId);
+        String currentLoggedUserId = getCurrentLoggedUserIdUseCase.invoke();
+        return Transformations.map(chatRepository.getChatConversation(currentLoggedUserId, recipientId), chatConversationEntities -> {
+                Collections.sort(chatConversationEntities, Comparator.comparing(
+                        chatConversationEntity -> chatConversationEntity.getTimestamp()
+                    )
+                );
+                return chatConversationEntities;
+            }
+        );
     }
 }

@@ -31,7 +31,8 @@ public class GetLastChatMessageSortedChronologicallyUseCase {
     }
 
     public LiveData<List<LastChatMessageEntity>> invoke() {
-        return Transformations.map(chatRepository.getLastChatMessagesList(getCurrentLoggedUserIdUseCase.invoke()), lastChatMessageEntities -> {
+        String currentLoggedUserId = getCurrentLoggedUserIdUseCase.invoke();
+        return Transformations.map(chatRepository.getLastChatMessagesList(currentLoggedUserId), lastChatMessageEntities -> {
                 Collections.sort(lastChatMessageEntities, Comparator.comparing(
                         lastChatMessageEntity -> lastChatMessageEntity.getTimestamp()
                     )

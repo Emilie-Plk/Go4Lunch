@@ -127,7 +127,7 @@ public class ChatRepositoryFirestore implements ChatRepository {
 
     @NonNull
     @Override
-    public LiveData<List<LastChatMessageEntity>> getLastChatMessagesList(@NonNull String currentUserId) { // TODO: maybe currentuserid in Usecase
+    public LiveData<List<LastChatMessageEntity>> getLastChatMessagesList(@NonNull String currentUserId) {
         MutableLiveData<List<LastChatMessageEntity>> lastChatMessageReceivedList = new MutableLiveData<>();
 
         firestore.collection(CHAT_LAST_MESSAGES_COLLECTION)
@@ -171,7 +171,7 @@ public class ChatRepositoryFirestore implements ChatRepository {
             .collection(CHAT_COLLECTION)
             .document(conversationUid)
             .collection(MESSAGES_SUBCOLLECTION)
-            .orderBy(MESSAGE_TIMESTAMP, Query.Direction.ASCENDING)
+            .orderBy(MESSAGE_TIMESTAMP, Query.Direction.DESCENDING)
             .limit(30)
             .addSnapshotListener((queryDocumentSnapshots, error) -> {
                     if (error != null) {

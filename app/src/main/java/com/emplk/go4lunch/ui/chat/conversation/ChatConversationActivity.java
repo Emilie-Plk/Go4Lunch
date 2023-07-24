@@ -1,11 +1,15 @@
 package com.emplk.go4lunch.ui.chat.conversation;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -56,31 +60,6 @@ public class ChatConversationActivity extends AppCompatActivity {
 
         initRecyclerView();
 
-        binding.chatMessageInputEt.addTextChangedListener(
-            new TextWatcher() {
-                @Override
-                public void beforeTextChanged(
-                    CharSequence s,
-                    int start,
-                    int count,
-                    int after
-                ) {
-                }
-
-                @Override
-                public void onTextChanged(
-                    CharSequence s,
-                    int start,
-                    int before,
-                    int count
-                ) {
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                }
-            }
-        );
 
         binding.chatSendFabButton.setOnClickListener(v -> {
                 if (binding.chatMessageInputEt.getText() != null) {
@@ -95,9 +74,20 @@ public class ChatConversationActivity extends AppCompatActivity {
                         binding.chatMessageInputEt.setText("");
                     }
                 }
+                hideSoftKeyboard();
+            }
+        );
+
+        binding.chatMessageInputEt.setOnEditorActionListener(
+            (v, actionId, event) -> {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    binding.chatSendFabButton.performClick();
+                }
+                return false;
             }
         );
     }
+
 
     private void initRecyclerView() {
         ChatConversationListAdapter adapter = new ChatConversationListAdapter();
@@ -111,6 +101,14 @@ public class ChatConversationActivity extends AppCompatActivity {
                 }
             }
         );
+    }
+
+    private void hideSoftKeyboard() {
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     @Override
