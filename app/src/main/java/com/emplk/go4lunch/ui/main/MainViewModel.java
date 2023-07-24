@@ -67,6 +67,7 @@ public class MainViewModel extends ViewModel {
     @NonNull
     private final MutableLiveData<String> userQueryMutableLiveData;
 
+
     @NonNull
     private final LiveData<List<PredictionEntity>> predictionsLiveData;
 

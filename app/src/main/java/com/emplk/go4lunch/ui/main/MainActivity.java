@@ -233,10 +233,31 @@ public class MainActivity extends AppCompatActivity {
 
     private void initAutocompleteSearchView() {
         AutocompleteListAdapter adapter = new AutocompleteListAdapter((placeId, restaurantName) -> {
+            // Handle suggestion click here.
             Log.d(TAG, "onPredictionClicked() called with placeId: " + placeId);
+
+            // Remove the onQueryTextListener temporarily to avoid unnecessary Autocomplete call
+            binding.mainToolbarSearchView.setOnQueryTextListener(null);
             viewModel.onPredictionClicked(placeId);
             binding.mainToolbarSearchView.clearFocus();
             binding.mainToolbarSearchView.setQuery(restaurantName, false);
+
+            // Re-setting the onQueryTextListener.
+            binding.mainToolbarSearchView.setOnQueryTextListener(
+                new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        viewModel.onQueryChanged(newText);
+                        return true;
+                    }
+                }
+            );
+
             hideSoftKeyboard();
         }
         );
@@ -252,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getSearchViewQuery() {
-        binding.mainToolbarSearchView.setOnQueryTextListener(
+       binding.mainToolbarSearchView.setOnQueryTextListener(
             new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
