@@ -71,5 +71,6 @@
     <string name="show_rationale_title">Permission required</string>
     <string name="toast_no_restaurant_match_found">No restaurant match found nearby</string>
     <string name="list_no_restaurant_match">No restaurant match found nearby</string>
+    <string name="toast_no_restaurant_found_nearby">No restaurant found in your area</string>
 
 </resources>

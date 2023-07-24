@@ -44,7 +44,7 @@ public class GetNearbySearchWrapperUseCaseTest {
         MutableLiveData<NearbySearchWrapper> nearbySearchWrapperMutableLiveData = new MutableLiveData<>();
         NearbySearchWrapper nearbySearchWrapper = mock(NearbySearchWrapper.Success.class);
         nearbySearchWrapperMutableLiveData.setValue(nearbySearchWrapper);
-        doReturn(nearbySearchWrapperMutableLiveData).when(nearbySearchRepository).getNearbyRestaurants(location.getLatitude() + "," + location.getLongitude(), Stubs.TEST_RESTAURANT_TYPE, Stubs.TEST_RESTAURANT_RADIUS);
+        doReturn(nearbySearchWrapperMutableLiveData).when(nearbySearchRepository).getNearbyRestaurants(location.getLatitude(), location.getLongitude(), Stubs.TEST_RESTAURANT_TYPE, Stubs.TEST_RESTAURANT_RADIUS);
 
         MutableLiveData<LocationStateEntity> locationStateEntityMutableLiveData = new MutableLiveData<>();
         locationStateEntityMutableLiveData.setValue(Stubs.getTestLocationStateEntitySuccess());
@@ -56,7 +56,7 @@ public class GetNearbySearchWrapperUseCaseTest {
         // Then
         assertTrue(result instanceof NearbySearchWrapper.Success);
         verify(getCurrentLocationStateUseCase).invoke();
-        verify(nearbySearchRepository).getNearbyRestaurants(location.getLatitude() + "," + location.getLongitude(), Stubs.TEST_RESTAURANT_TYPE, Stubs.TEST_RESTAURANT_RADIUS);
+        verify(nearbySearchRepository).getNearbyRestaurants(location.getLatitude(), location.getLongitude(), Stubs.TEST_RESTAURANT_TYPE, Stubs.TEST_RESTAURANT_RADIUS);
         verifyNoMoreInteractions(getCurrentLocationStateUseCase, nearbySearchRepository);
     }
 

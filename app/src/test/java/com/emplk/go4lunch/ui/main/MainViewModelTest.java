@@ -15,21 +15,24 @@ import androidx.lifecycle.MutableLiveData;
 import com.emplk.go4lunch.domain.authentication.LoggedUserEntity;
 import com.emplk.go4lunch.domain.authentication.use_case.IsUserLoggedInLiveDataUseCase;
 import com.emplk.go4lunch.domain.authentication.use_case.LogoutUserUseCase;
+import com.emplk.go4lunch.domain.autocomplete.PredictionEntity;
+import com.emplk.go4lunch.domain.autocomplete.use_case.GetPredictionsUseCase;
 import com.emplk.go4lunch.domain.autocomplete.use_case.ResetPredictionPlaceIdUseCase;
 import com.emplk.go4lunch.domain.autocomplete.use_case.SavePredictionPlaceIdUseCase;
 import com.emplk.go4lunch.domain.gps.IsGpsEnabledUseCase;
 import com.emplk.go4lunch.domain.location.StartLocationRequestUseCase;
-import com.emplk.go4lunch.domain.nearby_search.GetNearbySearchWrapperUseCase;
-import com.emplk.go4lunch.domain.nearby_search.entity.NearbySearchWrapper;
 import com.emplk.go4lunch.domain.restaurant_choice.GetUserWithRestaurantChoiceEntityLiveDataUseCase;
 import com.emplk.go4lunch.domain.user.UserEntity;
 import com.emplk.go4lunch.domain.user.UserWithRestaurantChoiceEntity;
 import com.emplk.go4lunch.domain.user.use_case.GetUserEntityUseCase;
+import com.emplk.go4lunch.ui.main.searchview.PredictionViewState;
 import com.emplk.util.Stubs;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import java.util.List;
 
 public class MainViewModelTest {
 
@@ -44,7 +47,7 @@ public class MainViewModelTest {
 
     private final IsUserLoggedInLiveDataUseCase isUserLoggedInLiveDataUseCase = mock(IsUserLoggedInLiveDataUseCase.class);
 
-    private final GetNearbySearchWrapperUseCase getNearbySearchWrapperUseCase = mock(GetNearbySearchWrapperUseCase.class);
+    private final GetPredictionsUseCase getPredictionsUseCase = mock(GetPredictionsUseCase.class);
 
     private final GetUserWithRestaurantChoiceEntityLiveDataUseCase getUserWithRestaurantChoiceEntityLiveDataUseCase = mock(GetUserWithRestaurantChoiceEntityLiveDataUseCase.class);
 
@@ -61,8 +64,6 @@ public class MainViewModelTest {
     MutableLiveData<UserEntity> currentUserEntityMutableLiveData = new MutableLiveData<>();
 
     MutableLiveData<UserWithRestaurantChoiceEntity> userWithRestaurantChoiceEntityMutableLiveData = new MutableLiveData<>();
-
-    MutableLiveData<NearbySearchWrapper> nearbySearchWrapperMutableLiveData = new MutableLiveData<>();
 
     private MainViewModel mainViewModel;
 
@@ -81,9 +82,10 @@ public class MainViewModelTest {
         userWithRestaurantChoiceEntityMutableLiveData.setValue(userWithRestaurantChoiceEntity);
         doReturn(userWithRestaurantChoiceEntityMutableLiveData).when(getUserWithRestaurantChoiceEntityLiveDataUseCase).invoke();
 
-        NearbySearchWrapper nearbySearchWrapper = new NearbySearchWrapper.Success(Stubs.getTestNearbySearchEntityList(3));
-        nearbySearchWrapperMutableLiveData.setValue(nearbySearchWrapper);
-        doReturn(nearbySearchWrapperMutableLiveData).when(getNearbySearchWrapperUseCase).invoke();
+        List<PredictionEntity> predictionEntities = Stubs.getPredictionEntityList();
+        MutableLiveData<List<PredictionEntity>> predictionEntitiesMutableLiveData = new MutableLiveData<>();
+        predictionEntitiesMutableLiveData.setValue(predictionEntities);
+        doReturn(predictionEntitiesMutableLiveData).when(getPredictionsUseCase).invoke("TEST");
 
         mainViewModel = new MainViewModel(
             logoutUserUseCase,
@@ -92,7 +94,7 @@ public class MainViewModelTest {
             isUserLoggedInLiveDataUseCase,
             getUserWithRestaurantChoiceEntityLiveDataUseCase,
             getUserEntityUseCase,
-            getNearbySearchWrapperUseCase,
+            getPredictionsUseCase,
             savePredictionPlaceIdUseCase,
             resetPredictionPlaceIdUseCase
         );
@@ -258,17 +260,18 @@ public class MainViewModelTest {
         );
     }
 
- /*   @Test
-    public void getPredictionList() {
+    @Test
+    public void getPredictionList_withQuery() {
         // Given
         mainViewModel.onQueryChanged("TEST");
 
         // When
         List<PredictionViewState> result = getValueForTesting(mainViewModel.getPredictionsLiveData());
+        int expectedSize = Stubs.getPredictionEntityList().size();
 
         // Then
-        assertEquals(3, result.size());
-        verify(savePredictionPlaceIdUseCase).invoke(anyList());  // says I call it twice...
+        assertEquals(expectedSize, result.size());
+        verify(getPredictionsUseCase).invoke("TEST");
         verifyNoMoreInteractions(
             logoutUserUseCase,
             isGpsEnabledUseCase,
@@ -279,7 +282,92 @@ public class MainViewModelTest {
             savePredictionPlaceIdUseCase
         );
     }
-*/
+
+    @Test
+    public void getPredictionList_withQueryLengthLowerThan2() {
+        // Given
+        mainViewModel.onQueryChanged("TE");
+
+        // When
+        List<PredictionViewState> result = getValueForTesting(mainViewModel.getPredictionsLiveData());
+
+        // Then
+        assertEquals(0, result.size());
+        verifyNoMoreInteractions(
+            logoutUserUseCase,
+            isGpsEnabledUseCase,
+            startLocationRequestUseCase,
+            isUserLoggedInLiveDataUseCase,
+            getUserWithRestaurantChoiceEntityLiveDataUseCase,
+            getUserEntityUseCase,
+            savePredictionPlaceIdUseCase
+        );
+    }
+
+    @Test
+    public void getPredictionList_withNullQuery() {
+        // Given
+        mainViewModel.onQueryChanged(null);
+
+        // When
+        List<PredictionViewState> result = getValueForTesting(mainViewModel.getPredictionsLiveData());
+
+        // Then
+        assertEquals(0, result.size());
+        verifyNoMoreInteractions(
+            logoutUserUseCase,
+            isGpsEnabledUseCase,
+            startLocationRequestUseCase,
+            isUserLoggedInLiveDataUseCase,
+            getUserWithRestaurantChoiceEntityLiveDataUseCase,
+            getUserEntityUseCase,
+            savePredictionPlaceIdUseCase
+        );
+    }
+
+    @Test
+    public void onNullQuery_shouldResetPredictionPlaceId() {
+        // Given
+        mainViewModel.onQueryChanged(null);
+
+        // When
+        List<PredictionViewState> result = getValueForTesting(mainViewModel.getPredictionsLiveData());
+
+        // Then
+        assertEquals(0, result.size());
+        verify(resetPredictionPlaceIdUseCase).invoke();
+        verifyNoMoreInteractions(
+            logoutUserUseCase,
+            isGpsEnabledUseCase,
+            startLocationRequestUseCase,
+            savePredictionPlaceIdUseCase,
+            isUserLoggedInLiveDataUseCase,
+            getUserWithRestaurantChoiceEntityLiveDataUseCase,
+            getUserEntityUseCase
+        );
+    }
+
+    @Test
+    public void onEmptyQuery_shouldResetPredictionPlaceId() {
+        // Given
+        mainViewModel.onQueryChanged("");
+
+        // When
+        List<PredictionViewState> result = getValueForTesting(mainViewModel.getPredictionsLiveData());
+
+        // Then
+        assertEquals(0, result.size());
+        verify(resetPredictionPlaceIdUseCase).invoke();
+        verifyNoMoreInteractions(
+            logoutUserUseCase,
+            isGpsEnabledUseCase,
+            startLocationRequestUseCase,
+            savePredictionPlaceIdUseCase,
+            isUserLoggedInLiveDataUseCase,
+            getUserWithRestaurantChoiceEntityLiveDataUseCase,
+            getUserEntityUseCase
+        );
+    }
 
     @Test
     public void onGetFragmentState_workmatesFragment() {
@@ -304,6 +392,7 @@ public class MainViewModelTest {
     public void onGetFragmentState_chatFragment() {
         // Given
         mainViewModel.onChangeFragmentView(FragmentState.CHAT_FRAGMENT);
+
         // When
         FragmentState result = getValueForTesting(mainViewModel.getFragmentStateSingleLiveEvent());
 

@@ -103,6 +103,8 @@ public class Stubs {
 // endregion
 
     // region RecipientEntity
+
+    public static final String TEST_MESSAGE_ID = "id";
     public static final String TEST_RECIPIENT_ENTITY_ID = "TEST_RECIPIENT_ENTITY_ID";
     public static final String TEST_RECIPIENT_ENTITY_NAME = "TEST_RECIPIENT_ENTITY_NAME";
     public static final String TEST_RECIPIENT_ENTITY_PHOTO_URL = "TEST_RECIPIENT_ENTITY_PHOTO_URL";
@@ -135,7 +137,7 @@ public class Stubs {
         RecipientEntity recipientEntity = Stubs.getTestRecipientEntity();
         Timestamp timestamp = createMockTimestamp(index);
 
-        return new ChatConversationEntity(id, senderEntity, recipientEntity, TEST_CHAT_MESSAGE, timestamp);
+        return new ChatConversationEntity(TEST_MESSAGE_ID, senderEntity, recipientEntity, TEST_CHAT_MESSAGE, timestamp);
     }
 
     private static Timestamp createMockTimestamp(int index) {
@@ -155,7 +157,7 @@ public class Stubs {
 
         Timestamp timestamp = createMockTimestamp(index);
 
-        return new LastChatMessageEntity(TEST_CHAT_MESSAGE, senderEntity, recipientEntity, timestamp);
+        return new LastChatMessageEntity(TEST_MESSAGE_ID, TEST_CHAT_MESSAGE, senderEntity, recipientEntity, timestamp);
     }
 
     public static List<LastChatMessageEntity> getTestFiveLastChatMessageEntityList() {
@@ -438,6 +440,8 @@ public class Stubs {
     // endregion
 
     // region PredictionEntity
+    public static String TEST_PREDICTION_ID = "TEST_NEARBYSEARCH_ID";
+
     public static List<PredictionEntity> getPredictionEntityList() {
         List<PredictionEntity> predictionEntities = new ArrayList<>();
         predictionEntities.add(new PredictionEntity("TEST_NEARBYSEARCH_ID0", "TEST_DESCRIPTION_1"));

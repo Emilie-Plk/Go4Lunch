@@ -78,13 +78,10 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
                 }
 
                 googleMap.setOnInfoWindowClickListener(
-                    new GoogleMap.OnInfoWindowClickListener() {
-                        @Override
-                        public void onInfoWindowClick(@NonNull Marker marker) {
-                            String restaurantId = (String) marker.getTag();
-                            if (restaurantId != null) {
-                                onMarkerClicked(restaurantId);
-                            }
+                    marker -> {
+                        String restaurantId = (String) marker.getTag();
+                        if (restaurantId != null) {
+                            onMarkerClicked(restaurantId);
                         }
                     }
                 );
@@ -93,6 +90,11 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
 
         viewModel.getNoRestaurantMatchSingleLiveEvent().observe(getViewLifecycleOwner(), aVoid -> {
                 Toast.makeText(getContext(), R.string.toast_no_restaurant_match_found, Toast.LENGTH_LONG).show();
+            }
+        );
+
+        viewModel.getNoRestaurantFoundSingleLiveEvent().observe(getViewLifecycleOwner(), aVoid -> {
+                Toast.makeText(getContext(), R.string.toast_no_restaurant_found_nearby, Toast.LENGTH_LONG).show();
             }
         );
 

@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
@@ -36,6 +37,10 @@ public class MapViewModel extends ViewModel {
 
     @NonNull
     private final SingleLiveEvent<Void> noRestaurantMatchSingleLiveEvent = new SingleLiveEvent<>();
+
+    @NonNull
+    private final SingleLiveEvent<Void> noRestaurantFoundSingleLiveEvent = new SingleLiveEvent<>();
+
 
     @NonNull
     private final MediatorLiveData<List<RestaurantMarkerViewStateItem>> mapViewStateMediatorLiveData = new MediatorLiveData<>();
@@ -156,7 +161,10 @@ public class MapViewModel extends ViewModel {
                     }
                 }
             }
-            if (restaurantMarkerViewStateItems.isEmpty()) {
+            else if (nearbySearchWrapper instanceof NearbySearchWrapper.NoResults) {
+                noRestaurantFoundSingleLiveEvent.call();
+            }
+            if (restaurantMarkerViewStateItems.isEmpty() && nearbySearchWrapper instanceof NearbySearchWrapper.Success) {
                 noRestaurantMatchSingleLiveEvent.call();
             }
             mapViewStateMediatorLiveData.setValue(restaurantMarkerViewStateItems);
@@ -166,6 +174,11 @@ public class MapViewModel extends ViewModel {
     @NonNull
     public SingleLiveEvent<Void> getNoRestaurantMatchSingleLiveEvent() {
         return noRestaurantMatchSingleLiveEvent;
+    }
+
+    @NonNull
+    public SingleLiveEvent<Void> getNoRestaurantFoundSingleLiveEvent() {
+        return noRestaurantFoundSingleLiveEvent;
     }
 
     @ColorRes

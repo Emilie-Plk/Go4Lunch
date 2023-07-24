@@ -87,6 +87,7 @@ public class ChatLastMessageListViewModelTest {
         );
 
         LastChatMessageEntity lastChatMessageEntity = new LastChatMessageEntity(
+            Stubs.TEST_MESSAGE_ID,
             "Hello",
             senderEntity,
             recipientEntity,
@@ -129,6 +130,7 @@ public class ChatLastMessageListViewModelTest {
         );
 
         LastChatMessageEntity lastChatMessageEntity = new LastChatMessageEntity(
+            Stubs.TEST_MESSAGE_ID,
             "Hello",
             senderEntity,
             recipientEntity,
@@ -171,6 +173,7 @@ public class ChatLastMessageListViewModelTest {
         );
 
         LastChatMessageEntity lastChatMessageEntity = new LastChatMessageEntity(
+            Stubs.TEST_MESSAGE_ID,
             "Hello",
             senderEntity,
             recipientEntity,

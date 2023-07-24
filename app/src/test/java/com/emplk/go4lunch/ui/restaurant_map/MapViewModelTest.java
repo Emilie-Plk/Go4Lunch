@@ -1,5 +1,6 @@
 package com.emplk.go4lunch.ui.restaurant_map;
 
+import static com.emplk.util.TestUtil.getEmitCountForTesting;
 import static com.emplk.util.TestUtil.getValueForTesting;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -12,8 +13,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
 
-import com.emplk.go4lunch.domain.autocomplete.PredictionEntity;
-import com.emplk.go4lunch.domain.autocomplete.use_case.GetPredictionsUseCase;
+import com.emplk.go4lunch.domain.autocomplete.use_case.GetPredictionPlaceIdUseCase;
 import com.emplk.go4lunch.domain.gps.IsGpsEnabledUseCase;
 import com.emplk.go4lunch.domain.gps.entity.LocationStateEntity;
 import com.emplk.go4lunch.domain.location.GetCurrentLocationStateUseCase;
@@ -44,7 +44,7 @@ public class MapViewModelTest {
     private final GetAttendantsGoingToSameRestaurantAsUserUseCase getAttendantsGoingToSameRestaurantAsUserUseCase = mock(GetAttendantsGoingToSameRestaurantAsUserUseCase.class);
 
 
-    private final GetPredictionsUseCase getPredictionsUseCase = mock(GetPredictionsUseCase.class);
+    private final GetPredictionPlaceIdUseCase getPredictionPlaceIdUseCase = mock(GetPredictionPlaceIdUseCase.class);
     private final MutableLiveData<NearbySearchWrapper> nearbySearchWrapperMutableLiveData = new MutableLiveData<>();
 
     private final MutableLiveData<LocationStateEntity> locationStateEntityMutableLiveData = new MutableLiveData<>();
@@ -52,6 +52,8 @@ public class MapViewModelTest {
     private final MutableLiveData<Map<String, Integer>> restaurantIdWithAttendantsMapMutableLiveData = new MutableLiveData<>();
 
     private final MutableLiveData<Boolean> isGpsEnabledMutableLiveData = new MutableLiveData<>();
+
+    MutableLiveData<String> predictionIdLiveData = new MutableLiveData<>();
 
     private MapViewModel mapViewModel;
 
@@ -75,17 +77,16 @@ public class MapViewModelTest {
         restaurantIdWithAttendantsMapMutableLiveData.setValue(restaurantIdWithAttendantsMap);
         doReturn(restaurantIdWithAttendantsMapMutableLiveData).when(getAttendantsGoingToSameRestaurantAsUserUseCase).invoke();
 
-        List<PredictionEntity> predictionEntityList = Stubs.getPredictionEntityList();
-        MutableLiveData<List<PredictionEntity>> predictionEntityListMutableLiveData = new MutableLiveData<>();
-        predictionEntityListMutableLiveData.setValue(predictionEntityList);
-        doReturn(predictionEntityListMutableLiveData).when(getPredictionsUseCase).invoke();
+
+        predictionIdLiveData.setValue(null);
+        doReturn(predictionIdLiveData).when(getPredictionPlaceIdUseCase).invoke();
 
         mapViewModel = new MapViewModel(
             isGpsEnabledUseCase,
             getCurrentLocationStateUseCase,
             getNearbySearchWrapperUseCase,
             getAttendantsGoingToSameRestaurantAsUserUseCase,
-            getPredictionsUseCase
+            getPredictionPlaceIdUseCase
         );
     }
 
@@ -93,9 +94,13 @@ public class MapViewModelTest {
     public void nominal_case() {
         // When
         List<RestaurantMarkerViewStateItem> result = getValueForTesting(mapViewModel.getMapViewState());
+        int emitCountNoRestaurantFound = getEmitCountForTesting(mapViewModel.getNoRestaurantFoundSingleLiveEvent());
+        int emitCountNoMatch = getEmitCountForTesting(mapViewModel.getNoRestaurantMatchSingleLiveEvent());
 
         // Then
         assertEquals(4, result.size());
+        assertEquals(0, emitCountNoRestaurantFound);
+        assertEquals(0, emitCountNoMatch);
         assertEquals(Stubs.TEST_NEARBYSEARCH_ID + 0, result.get(0).getId());
         assertEquals(Stubs.TEST_NEARBYSEARCH_ID + 1, result.get(1).getId());
         assertEquals(Stubs.TEST_NEARBYSEARCH_ID + 2, result.get(2).getId());
@@ -170,6 +175,65 @@ public class MapViewModelTest {
 
         // Then
         assertTrue(result instanceof LocationStateEntity.GpsProviderDisabled);
+    }
+
+    @Test
+    public void predictionPlaceIdIsNotNull_shouldReturnMatchingMarkerViewState() {
+        // Given
+        predictionIdLiveData.setValue(Stubs.TEST_PREDICTION_ID + 0);
+
+        // When
+        List<RestaurantMarkerViewStateItem> result = getValueForTesting(mapViewModel.getMapViewState());
+
+        // Then
+        assertEquals(1, result.size());
+        assertEquals(Stubs.TEST_NEARBYSEARCH_ID + 0, result.get(0).getId());
+        verify(getCurrentLocationStateUseCase).invoke();
+        verify(isGpsEnabledUseCase).invoke();
+        verify(getNearbySearchWrapperUseCase).invoke();
+        verify(getAttendantsGoingToSameRestaurantAsUserUseCase).invoke();
+        verify(getPredictionPlaceIdUseCase).invoke();
+        verifyNoMoreInteractions(getCurrentLocationStateUseCase, isGpsEnabledUseCase, getNearbySearchWrapperUseCase, getAttendantsGoingToSameRestaurantAsUserUseCase, getPredictionPlaceIdUseCase);
+    }
+
+    @Test
+    public void nearbySearchWrapperNoResult_shouldTriggerNoRestaurantFoundSingleLiveEvent() {
+        // Given
+        nearbySearchWrapperMutableLiveData.setValue(new NearbySearchWrapper.NoResults());
+        // When
+        List<RestaurantMarkerViewStateItem> result = getValueForTesting(mapViewModel.getMapViewState());
+        int emitCount = getEmitCountForTesting(mapViewModel.getNoRestaurantFoundSingleLiveEvent());
+
+
+        // Then
+        assertEquals(0, result.size());
+        assertEquals(1, emitCount);
+        verify(getCurrentLocationStateUseCase).invoke();
+        verify(isGpsEnabledUseCase).invoke();
+        verify(getNearbySearchWrapperUseCase).invoke();
+        verify(getAttendantsGoingToSameRestaurantAsUserUseCase).invoke();
+        verify(getPredictionPlaceIdUseCase).invoke();
+        verifyNoMoreInteractions(getCurrentLocationStateUseCase, isGpsEnabledUseCase, getNearbySearchWrapperUseCase, getAttendantsGoingToSameRestaurantAsUserUseCase, getPredictionPlaceIdUseCase);
+    }
+
+    @Test
+    public void predictionPlaceIdNotMatching_shouldTriggerNoRestaurantMatchSingleLiveEvent() {
+        // Given
+        predictionIdLiveData.setValue(Stubs.TEST_PREDICTION_ID + 123456789);
+        // When
+        List<RestaurantMarkerViewStateItem> result = getValueForTesting(mapViewModel.getMapViewState());
+        int emitCount = getEmitCountForTesting(mapViewModel.getNoRestaurantMatchSingleLiveEvent());
+
+
+        // Then
+        assertEquals(0, result.size());
+        assertEquals(1, emitCount);
+        verify(getCurrentLocationStateUseCase).invoke();
+        verify(isGpsEnabledUseCase).invoke();
+        verify(getNearbySearchWrapperUseCase).invoke();
+        verify(getAttendantsGoingToSameRestaurantAsUserUseCase).invoke();
+        verify(getPredictionPlaceIdUseCase).invoke();
+        verifyNoMoreInteractions(getCurrentLocationStateUseCase, isGpsEnabledUseCase, getNearbySearchWrapperUseCase, getAttendantsGoingToSameRestaurantAsUserUseCase, getPredictionPlaceIdUseCase);
     }
 }
 

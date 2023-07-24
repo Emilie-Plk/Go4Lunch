@@ -280,7 +280,7 @@ public class RestaurantListViewModel extends ViewModel {
             attendantsByRestaurantIds.containsKey(placeId) &&
             attendantsByRestaurantIds.get(placeId) != null
         ) {
-            return attendantsByRestaurantIds.get(placeId).toString();
+            return String.valueOf(attendantsByRestaurantIds.get(placeId));
         } else {
             return "0";
         }

@@ -15,8 +15,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
 
 import com.emplk.go4lunch.R;
-import com.emplk.go4lunch.domain.autocomplete.PredictionEntity;
-import com.emplk.go4lunch.domain.autocomplete.use_case.GetPredictionsUseCase;
+import com.emplk.go4lunch.domain.autocomplete.use_case.GetPredictionPlaceIdUseCase;
 import com.emplk.go4lunch.domain.gps.IsGpsEnabledUseCase;
 import com.emplk.go4lunch.domain.gps.entity.LocationStateEntity;
 import com.emplk.go4lunch.domain.location.GetCurrentLocationStateUseCase;
@@ -58,7 +57,7 @@ public class RestaurantListViewModelTest {
 
     private final Resources resources = mock(Resources.class);
 
-    private final GetPredictionsUseCase getPredictionsUseCase = mock(GetPredictionsUseCase.class);
+    private final GetPredictionPlaceIdUseCase getPredictionPlaceIdUseCase = mock(GetPredictionPlaceIdUseCase.class);
 
     private final GetAttendantsGoingToSameRestaurantAsUserUseCase getAttendantsGoingToSameRestaurantAsUserUseCase = mock(GetAttendantsGoingToSameRestaurantAsUserUseCase.class);
 
@@ -68,9 +67,11 @@ public class RestaurantListViewModelTest {
 
     private final MutableLiveData<NearbySearchWrapper> nearbySearchWrapperLiveData = new MutableLiveData<>();
 
-    MutableLiveData<LocationStateEntity> locationStateEntityMutableLiveData = new MutableLiveData<>();
+    private final MutableLiveData<LocationStateEntity> locationStateEntityMutableLiveData = new MutableLiveData<>();
 
     private final MutableLiveData<Map<String, Integer>> attendantsGoingToSameRestaurantAsUserLiveData = new MutableLiveData<>();
+
+    MutableLiveData<String> predictionIdLiveData = new MutableLiveData<>();
 
     private RestaurantListViewModel restaurantListViewModel;
 
@@ -100,19 +101,17 @@ public class RestaurantListViewModelTest {
         attendantsGoingToSameRestaurantAsUserLiveData.setValue(attendantsByRestaurantIdsMap);
         doReturn(attendantsGoingToSameRestaurantAsUserLiveData).when(getAttendantsGoingToSameRestaurantAsUserUseCase).invoke();
 
-        List<PredictionEntity> predictionEntityList = Stubs.getPredictionEntityList();
-        MutableLiveData<List<PredictionEntity>> predictionEntityListMutableLiveData = new MutableLiveData<>();
-        predictionEntityListMutableLiveData.setValue(predictionEntityList);
-        doReturn(predictionEntityListMutableLiveData).when(getPredictionsUseCase).invoke();
+        predictionIdLiveData.setValue(null);
+        doReturn(predictionIdLiveData).when(getPredictionPlaceIdUseCase).invoke();
 
         restaurantListViewModel = new RestaurantListViewModel(
             getNearbySearchWrapperUseCase,
             getCurrentLocationStateUseCase,
             hasGpsPermissionUseCase,
             isGpsEnabledUseCase,
-            getPredictionsUseCase,
             resources,
-            getAttendantsGoingToSameRestaurantAsUserUseCase
+            getAttendantsGoingToSameRestaurantAsUserUseCase,
+            getPredictionPlaceIdUseCase
         );
     }
 
@@ -243,6 +242,19 @@ public class RestaurantListViewModelTest {
         assertEquals(ERROR_MESSAGE, ((RestaurantListViewStateItem.RestaurantListErrorItem) expectedViewStateItemList.get(0)).getErrorMessage());
         verify(getNearbySearchWrapperUseCase).invoke();
         verifyNoMoreInteractions(getNearbySearchWrapperUseCase);
+    }
+
+    @Test
+    public void placeIdIsNonNull_shouldReturnMatchingRestaurantViewState() {
+        // Given
+        predictionIdLiveData.setValue(Stubs.TEST_PREDICTION_ID + 0);
+
+        // When
+        List<RestaurantListViewStateItem> result = getValueForTesting(restaurantListViewModel.getRestaurants());
+
+        // Then
+        assertEquals(1, result.size());
+        assertEquals(Stubs.getPredictionEntityList().get(0).getPlaceId(), ((RestaurantListViewStateItem.RestaurantItemItem) result.get(0)).getId());
     }
 
     @Test
