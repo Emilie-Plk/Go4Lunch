@@ -144,7 +144,7 @@ public class ChatRepositoryFirestore implements ChatRepository {
                             if (documentSnapshot != null) {
                                 Log.d("ChatRepositoryFirestore", "Last chat message received: " + documentSnapshot.getData());
                                 LastChatMessageDto lastChatMessageDto = documentSnapshot.toObject(LastChatMessageDto.class);
-                                LastChatMessageEntity lastChatMessageEntity = mapToLastChatMessageEntity(lastChatMessageDto);
+                                LastChatMessageEntity lastChatMessageEntity = mapToLastChatMessageEntity(documentSnapshot.getId(), lastChatMessageDto);
                                 if (lastChatMessageEntity != null) {
                                     lastChatMessageEntities.add(lastChatMessageEntity);
                                 }
@@ -182,7 +182,7 @@ public class ChatRepositoryFirestore implements ChatRepository {
                         List<ChatConversationEntity> chatMessagesEntities = new ArrayList<>();
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                             ChatConversationDto chatMessage = queryDocumentSnapshot.toObject(ChatConversationDto.class);
-                            ChatConversationEntity conversation = mapToChatConversationEntity(chatMessage);
+                            ChatConversationEntity conversation = mapToChatConversationEntity(queryDocumentSnapshot.getId(), chatMessage);
                             if (conversation != null) {
                                 chatMessagesEntities.add(conversation);
                             }
@@ -204,7 +204,10 @@ public class ChatRepositoryFirestore implements ChatRepository {
     }
 
     @Nullable
-    private ChatConversationEntity mapToChatConversationEntity(ChatConversationDto chatConversationDto) {
+    private ChatConversationEntity mapToChatConversationEntity(
+        String documentId,
+        ChatConversationDto chatConversationDto
+    ) {
         if (chatConversationDto != null &&
             chatConversationDto.getSenderId() != null &&
             chatConversationDto.getSenderName() != null &&
@@ -216,6 +219,7 @@ public class ChatRepositoryFirestore implements ChatRepository {
             chatConversationDto.getTimestamp() != null
         ) {
             return new ChatConversationEntity(
+                documentId,
                 new SenderEntity(
                     chatConversationDto.getSenderId(),
                     chatConversationDto.getSenderName(),
@@ -235,7 +239,10 @@ public class ChatRepositoryFirestore implements ChatRepository {
     }
 
     @Nullable
-    private LastChatMessageEntity mapToLastChatMessageEntity(LastChatMessageDto lastChatMessageDto) {
+    private LastChatMessageEntity mapToLastChatMessageEntity(
+        String documentId,
+        LastChatMessageDto lastChatMessageDto
+    ) {
         if (lastChatMessageDto != null &&
             lastChatMessageDto.getMessage() != null &&
             lastChatMessageDto.getSenderId() != null &&
@@ -247,6 +254,7 @@ public class ChatRepositoryFirestore implements ChatRepository {
             lastChatMessageDto.getTimestamp() != null
         ) {
             return new LastChatMessageEntity(
+                documentId,
                 lastChatMessageDto.getMessage(),
                 new SenderEntity(
                     lastChatMessageDto.getSenderId(),

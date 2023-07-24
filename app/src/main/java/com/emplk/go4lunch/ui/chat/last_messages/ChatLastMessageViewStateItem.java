@@ -7,6 +7,9 @@ import java.util.Objects;
 public class ChatLastMessageViewStateItem {
 
     @NonNull
+    private final String id;
+
+    @NonNull
     private final String userId;
 
     @NonNull
@@ -22,17 +25,24 @@ public class ChatLastMessageViewStateItem {
     private final String date;
 
     public ChatLastMessageViewStateItem(
+        @NonNull String id,
         @NonNull String userId,
         @NonNull String name,
         @NonNull String lastMessage,
         @NonNull String photoUrl,
         @NonNull String date
     ) {
+        this.id = id;
         this.userId = userId;
         this.name = name;
         this.lastMessage = lastMessage;
         this.photoUrl = photoUrl;
         this.date = date;
+    }
+
+    @NonNull
+    public String getId() {
+        return id;
     }
 
     @NonNull
@@ -65,19 +75,19 @@ public class ChatLastMessageViewStateItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChatLastMessageViewStateItem that = (ChatLastMessageViewStateItem) o;
-        return userId.equals(that.userId) && name.equals(that.name) && lastMessage.equals(that.lastMessage) && Objects.equals(photoUrl, that.photoUrl) && date.equals(that.date);
+        return id.equals(that.id) && userId.equals(that.userId) && name.equals(that.name) && lastMessage.equals(that.lastMessage) && photoUrl.equals(that.photoUrl) && date.equals(that.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, name, lastMessage, photoUrl, date);
+        return Objects.hash(id, userId, name, lastMessage, photoUrl, date);
     }
 
-    @NonNull
     @Override
     public String toString() {
         return "ChatLastMessageViewStateItem{" +
-            "userId='" + userId + '\'' +
+            "id='" + id + '\'' +
+            ", userId='" + userId + '\'' +
             ", name='" + name + '\'' +
             ", lastMessage='" + lastMessage + '\'' +
             ", photoUrl='" + photoUrl + '\'' +

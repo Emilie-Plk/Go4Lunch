@@ -9,7 +9,8 @@ import com.google.firebase.Timestamp;
 import java.util.Objects;
 
 public class LastChatMessageEntity {
-
+    @NonNull
+    private final String id;
     @NonNull
     private final String lastMessage;
 
@@ -23,15 +24,22 @@ public class LastChatMessageEntity {
     private final Timestamp timestamp;
 
     public LastChatMessageEntity(
+        @NonNull String id,
         @NonNull String lastMessage,
         @NonNull SenderEntity senderEntity,
         @NonNull RecipientEntity recipientEntity,
         @NonNull Timestamp timestamp
     ) {
+        this.id = id;
         this.lastMessage = lastMessage;
         this.senderEntity = senderEntity;
         this.recipientEntity = recipientEntity;
         this.timestamp = timestamp;
+    }
+
+    @NonNull
+    public String getId() {
+        return id;
     }
 
     @NonNull
@@ -59,19 +67,20 @@ public class LastChatMessageEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LastChatMessageEntity that = (LastChatMessageEntity) o;
-        return lastMessage.equals(that.lastMessage) && senderEntity.equals(that.senderEntity) && recipientEntity.equals(that.recipientEntity) && timestamp.equals(that.timestamp);
+        return id.equals(that.id) && lastMessage.equals(that.lastMessage) && senderEntity.equals(that.senderEntity) && recipientEntity.equals(that.recipientEntity) && timestamp.equals(that.timestamp);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(lastMessage, senderEntity, recipientEntity, timestamp);
+        return Objects.hash(id, lastMessage, senderEntity, recipientEntity, timestamp);
     }
 
     @NonNull
     @Override
     public String toString() {
         return "LastChatMessageEntity{" +
-            "lastMessage='" + lastMessage + '\'' +
+            "id='" + id + '\'' +
+            ", lastMessage='" + lastMessage + '\'' +
             ", senderEntity=" + senderEntity +
             ", recipientEntity=" + recipientEntity +
             ", timestamp=" + timestamp +

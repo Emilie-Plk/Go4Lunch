@@ -106,7 +106,7 @@ public class ChatConversationListAdapter extends ListAdapter<ChatConversationMes
             @NonNull ChatConversationMessageViewStateItem oldItem,
             @NonNull ChatConversationMessageViewStateItem newItem
         ) {
-            return oldItem.getDate().equals(newItem.getDate());
+            return oldItem.getId().equals(newItem.getId());
         }
 
         @Override

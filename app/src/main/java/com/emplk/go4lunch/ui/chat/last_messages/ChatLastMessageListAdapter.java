@@ -78,7 +78,7 @@ public class ChatLastMessageListAdapter extends ListAdapter<ChatLastMessageViewS
             @NonNull ChatLastMessageViewStateItem oldItem,
             @NonNull ChatLastMessageViewStateItem newItem
         ) {
-            return oldItem.getDate().equals(newItem.getDate());
+            return oldItem.getId().equals(newItem.getId());
         }
 
         @Override

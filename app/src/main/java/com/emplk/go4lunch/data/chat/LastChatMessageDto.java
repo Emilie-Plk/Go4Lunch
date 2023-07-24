@@ -10,6 +10,9 @@ import java.util.Objects;
 public class LastChatMessageDto {
 
     @Nullable
+    private final String id;
+
+    @Nullable
     private final String message;
 
     @Nullable
@@ -33,10 +36,11 @@ public class LastChatMessageDto {
     private final Timestamp timestamp;
 
     public LastChatMessageDto() {
-        this(null, null, null, null, null, null, null, null);
+        this(null, null, null, null, null, null, null, null, null);
     }
 
     public LastChatMessageDto(
+        @Nullable String id,
         @Nullable String message,
         @Nullable String senderId,
         @Nullable String senderName,
@@ -46,6 +50,7 @@ public class LastChatMessageDto {
         @Nullable String recipientPictureUrl,
         @Nullable Timestamp timestamp
     ) {
+        this.id = id;
         this.message = message;
         this.senderId = senderId;
         this.senderName = senderName;
@@ -54,6 +59,11 @@ public class LastChatMessageDto {
         this.recipientName = recipientName;
         this.recipientPictureUrl = recipientPictureUrl;
         this.timestamp = timestamp;
+    }
+
+    @Nullable
+    public String getId() {
+        return id;
     }
 
     @Nullable
@@ -101,19 +111,20 @@ public class LastChatMessageDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LastChatMessageDto that = (LastChatMessageDto) o;
-        return Objects.equals(message, that.message) && Objects.equals(senderId, that.senderId) && Objects.equals(senderName, that.senderName) && Objects.equals(senderPictureUrl, that.senderPictureUrl) && Objects.equals(recipientId, that.recipientId) && Objects.equals(recipientName, that.recipientName) && Objects.equals(recipientPictureUrl, that.recipientPictureUrl) && Objects.equals(timestamp, that.timestamp);
+        return Objects.equals(id, that.id) && Objects.equals(message, that.message) && Objects.equals(senderId, that.senderId) && Objects.equals(senderName, that.senderName) && Objects.equals(senderPictureUrl, that.senderPictureUrl) && Objects.equals(recipientId, that.recipientId) && Objects.equals(recipientName, that.recipientName) && Objects.equals(recipientPictureUrl, that.recipientPictureUrl) && Objects.equals(timestamp, that.timestamp);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(message, senderId, senderName, senderPictureUrl, recipientId, recipientName, recipientPictureUrl, timestamp);
+        return Objects.hash(id, message, senderId, senderName, senderPictureUrl, recipientId, recipientName, recipientPictureUrl, timestamp);
     }
 
     @NonNull
     @Override
     public String toString() {
         return "LastChatMessageDto{" +
-            "message='" + message + '\'' +
+            "id='" + id + '\'' +
+            ", message='" + message + '\'' +
             ", senderId='" + senderId + '\'' +
             ", senderName='" + senderName + '\'' +
             ", senderPictureUrl='" + senderPictureUrl + '\'' +

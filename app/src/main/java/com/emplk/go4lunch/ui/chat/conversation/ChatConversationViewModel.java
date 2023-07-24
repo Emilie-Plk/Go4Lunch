@@ -65,6 +65,7 @@ public class ChatConversationViewModel extends ViewModel {
                     for (ChatConversationEntity chatConversationEntity : chatConversationEntities) {
                         chatConversationMessageViewStateItems.add(
                             new ChatConversationMessageViewStateItem(
+                                chatConversationEntity.getId(),
                                 chatConversationEntity.getSenderEntity().getSenderId(),
                                 chatConversationEntity.getSenderEntity().getSenderName(),
                                 chatConversationEntity.getSenderEntity().getSenderPictureUrl(),

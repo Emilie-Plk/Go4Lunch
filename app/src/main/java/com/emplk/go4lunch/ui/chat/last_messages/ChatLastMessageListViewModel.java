@@ -57,6 +57,7 @@ public class ChatLastMessageListViewModel extends ViewModel {
 
                     chatLastMessageViewStateItemList.add(
                         new ChatLastMessageViewStateItem(
+                            lastChatMessageEntity.getId(),
                             workmateId,
                             workmateName,
                             lastChatMessageEntity.getLastMessage(),

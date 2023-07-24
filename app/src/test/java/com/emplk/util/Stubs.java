@@ -135,7 +135,7 @@ public class Stubs {
         RecipientEntity recipientEntity = Stubs.getTestRecipientEntity();
         Timestamp timestamp = createMockTimestamp(index);
 
-        return new ChatConversationEntity(senderEntity, recipientEntity, TEST_CHAT_MESSAGE, timestamp);
+        return new ChatConversationEntity(id, senderEntity, recipientEntity, TEST_CHAT_MESSAGE, timestamp);
     }
 
     private static Timestamp createMockTimestamp(int index) {
