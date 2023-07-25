@@ -51,6 +51,7 @@ public class NotificationRepositoryImplementationTest {
         boolean result = notificationRepositoryImplementation.isNotificationEnabled();
 
         assertTrue(result);
+        verifyNoMoreInteractions(workManager);
     }
 
     @Test
@@ -61,6 +62,7 @@ public class NotificationRepositoryImplementationTest {
         // When
         boolean result = notificationRepositoryImplementation.isNotificationEnabled();
         assertFalse(result);
+        verifyNoMoreInteractions(workManager);
     }
 
     @Test
@@ -73,6 +75,7 @@ public class NotificationRepositoryImplementationTest {
 
         // Then
         verify(editor).putBoolean(KEY_NOTIFICATION_ENABLED, true);
+        verifyNoMoreInteractions(workManager);
     }
 
     @Test
@@ -85,6 +88,7 @@ public class NotificationRepositoryImplementationTest {
 
         // Then
         verify(editor).putBoolean(KEY_NOTIFICATION_ENABLED, false);
+        verifyNoMoreInteractions(workManager);
     }
 
     @Test
@@ -109,5 +113,6 @@ public class NotificationRepositoryImplementationTest {
 
         // Then
         verify(workManager).cancelAllWorkByTag(NOTIFICATION_WORKER);
+        verifyNoMoreInteractions(workManager);
     }
 }
