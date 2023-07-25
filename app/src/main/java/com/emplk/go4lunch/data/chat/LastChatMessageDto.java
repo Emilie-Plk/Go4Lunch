@@ -17,6 +17,7 @@ public class LastChatMessageDto {
 
     @Nullable
     private final String senderId;
+
     @Nullable
     private final String senderName;
 

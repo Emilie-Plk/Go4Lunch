@@ -30,7 +30,7 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
     private final GooglePlacesApi googlePlacesApi;
 
     // TODO: maybe add a DiskLruCache with double hookup
-    private final LruCache<DetailsKey, DetailsRestaurantEntity> detailsLruCache;
+    private final LruCache<String, DetailsRestaurantEntity> detailsLruCache;
 
     @Inject
     public DetailsRestaurantRepositoryGooglePlaces(GooglePlacesApi googlePlacesApi) {
@@ -42,9 +42,8 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
         @NonNull String placeId
     ) {
         MutableLiveData<DetailsRestaurantWrapper> resultMutableLiveData = new MutableLiveData<>();
-        DetailsKey cacheKey = generateCacheKey(placeId);
         Log.d("DetailsRestaurantRepo", "detailsLruCache size is:" + detailsLruCache.size());
-        DetailsRestaurantEntity cachedDetailsEntity = detailsLruCache.get(cacheKey);
+        DetailsRestaurantEntity cachedDetailsEntity = detailsLruCache.get(placeId);
 
         if (cachedDetailsEntity == null) {
             resultMutableLiveData.setValue(new DetailsRestaurantWrapper.Loading());
@@ -68,7 +67,7 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
                             ) {
                                 DetailsRestaurantEntity detailsRestaurantEntity = mapToDetailsRestaurantEntity(response.body());
                                 if (detailsRestaurantEntity != null) {
-                                    detailsLruCache.put(cacheKey, detailsRestaurantEntity);
+                                    detailsLruCache.put(placeId, detailsRestaurantEntity);
                                     resultMutableLiveData.setValue(new DetailsRestaurantWrapper.Success(detailsRestaurantEntity));
                                 } else {
                                     resultMutableLiveData.setValue(new DetailsRestaurantWrapper.Error(new Exception("Error while fetching details")));
@@ -93,69 +92,79 @@ public class DetailsRestaurantRepositoryGooglePlaces implements DetailsRestauran
         return resultMutableLiveData;
     }
 
-    private DetailsKey generateCacheKey(@NonNull String placeId) {
-        return new DetailsKey(placeId);
-    }
-
     private DetailsRestaurantEntity mapToDetailsRestaurantEntity(
         @Nullable DetailsRestaurantResponse
             response
     ) {
-        String placeId;
-        String name;
-        String vicinity;
+        String placeId = null;
+        String name = null;
+        String vicinity = null;
         String photoReference;
         Float rating;
         String formattedPhoneNumber;
         String website;
         Boolean isVeganFriendly;
 
-        placeId = response.getResult().getPlaceId();
-        name = response.getResult().getName();
-        vicinity = response.getResult().getVicinity();
+        if (response != null &&
+            response.getResult() != null
+        ) {
+            if (response.getResult().getPlaceId() != null &&
+                response.getResult().getName() != null &&
+                response.getResult().getVicinity() != null
+            ) {
+                placeId = response.getResult().getPlaceId();
+                name = response.getResult().getName();
+                vicinity = response.getResult().getVicinity();
+            }
 
+            if (response.getResult().getPhotos() != null &&
+                response.getResult().getPhotos().size() > 0 &&
+                response.getResult().getPhotos().get(0).getPhotoReference() != null) {
+                photoReference = response.getResult().getPhotos().get(0).getPhotoReference();
+            } else {
+                photoReference = null;
+            }
 
-        if (response.getResult().getPhotos() != null &&
-            response.getResult().getPhotos().get(0) != null &&
-            !response.getResult().getPhotos().get(0).getPhotoReference().isEmpty()) {
-            photoReference = response.getResult().getPhotos().get(0).getPhotoReference();
-        } else {
-            photoReference = null;
-        }
+            if (response.getResult().getRating() != null) {
+                rating = response.getResult().getRating();
+            } else {
+                rating = null;
+            }
 
-        if (response.getResult().getRating() != null) {
-            rating = response.getResult().getRating();
-        } else {
-            rating = null;
-        }
+            if (response.getResult().getFormattedPhoneNumber() != null) {
+                formattedPhoneNumber = response.getResult().getFormattedPhoneNumber();
+            } else {
+                formattedPhoneNumber = null;
+            }
 
-        if (response.getResult().getFormattedPhoneNumber() != null) {
-            formattedPhoneNumber = response.getResult().getFormattedPhoneNumber();
-        } else {
-            formattedPhoneNumber = null;
-        }
+            if (response.getResult().getWebsite() != null) {
+                website = response.getResult().getWebsite();
+            } else {
+                website = null;
+            }
 
-        if (response.getResult().getWebsite() != null) {
-            website = response.getResult().getWebsite();
-        } else {
-            website = null;
-        }
-
-        if (response.getResult().isServesVegetarianFood() != null) {
-            isVeganFriendly = response.getResult().isServesVegetarianFood();
-        } else {
-            isVeganFriendly = null;
-        }
-        if (placeId != null && name != null && vicinity != null) {
-            return new DetailsRestaurantEntity(
-                placeId,
-                name,
-                vicinity,
-                photoReference,
-                rating,
-                formattedPhoneNumber,
-                website,
-                isVeganFriendly);
+            if (response.getResult().isServesVegetarianFood() != null) {
+                isVeganFriendly = response.getResult().isServesVegetarianFood();
+            } else {
+                isVeganFriendly = null;
+            }
+            if (placeId != null &&
+                name != null &&
+                vicinity != null
+            ) {
+                return new DetailsRestaurantEntity(
+                    placeId,
+                    name,
+                    vicinity,
+                    photoReference,
+                    rating,
+                    formattedPhoneNumber,
+                    website,
+                    isVeganFriendly
+                );
+            } else {
+                return null;
+            }
         } else {
             return null;
         }

@@ -273,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getSearchViewQuery() {
-       binding.mainToolbarSearchView.setOnQueryTextListener(
+        binding.mainToolbarSearchView.setOnQueryTextListener(
             new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {

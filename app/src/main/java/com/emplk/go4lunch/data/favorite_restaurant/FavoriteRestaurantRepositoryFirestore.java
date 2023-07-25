@@ -18,15 +18,13 @@ import javax.inject.Singleton;
 public class FavoriteRestaurantRepositoryFirestore implements FavoriteRestaurantRepository {
 
     private final static String USERS_COLLECTION = "users";
-
     private final static String COLLECTION_PATH_FAVORITE_RESTAURANTS = "favoriteRestaurantIds";
+
     @NonNull
     private final FirebaseFirestore firestore;
 
     @Inject
-    public FavoriteRestaurantRepositoryFirestore(
-        @NonNull FirebaseFirestore firestore
-    ) {
+    public FavoriteRestaurantRepositoryFirestore(@NonNull FirebaseFirestore firestore) {
         this.firestore = firestore;
     }
 

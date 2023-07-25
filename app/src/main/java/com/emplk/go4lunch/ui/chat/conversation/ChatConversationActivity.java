@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,14 +21,12 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class ChatConversationActivity extends AppCompatActivity {
 
+    private static final String WORKMATE_ID = "workmateId";
+    private static final String WORKMATE_NAME = "workmateName";
+    private static final String WORKMATE_PHOTO_URL = "workmatePhotoUrl";
     private ChatActivityBinding binding;
 
     private ChatConversationViewModel viewModel;
-
-    private static final String WORKMATE_ID = "workmateId";
-    private static final String WORKMATE_NAME = "workmateName";
-
-    private static final String WORKMATE_PHOTO_URL = "workmatePhotoUrl";
 
     public static Intent navigate(
         @NonNull Context context,
@@ -87,7 +83,6 @@ public class ChatConversationActivity extends AppCompatActivity {
             }
         );
     }
-
 
     private void initRecyclerView() {
         ChatConversationListAdapter adapter = new ChatConversationListAdapter();

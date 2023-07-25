@@ -32,7 +32,6 @@ public class ChatRepositoryFirestore implements ChatRepository {
     private static final String CHAT_COLLECTION = "chat_conversations";
     private static final String CHAT_LAST_MESSAGES_COLLECTION = "chat_last_messages";
     private static final String MESSAGES_SUBCOLLECTION = "messages";
-
     private static final String LAST_MESSAGE_SUBCOLLECTION = "last_message";
     private static final String MESSAGE_TIMESTAMP = "timestamp";
 
@@ -40,9 +39,7 @@ public class ChatRepositoryFirestore implements ChatRepository {
     private final FirebaseFirestore firestore;
 
     @Inject
-    public ChatRepositoryFirestore(
-        @NonNull FirebaseFirestore firestore
-    ) {
+    public ChatRepositoryFirestore(@NonNull FirebaseFirestore firestore) {
         this.firestore = firestore;
     }
 
@@ -94,6 +91,7 @@ public class ChatRepositoryFirestore implements ChatRepository {
             null
         );
 
+        // Save recipient's last message
         firestore
             .collection(CHAT_LAST_MESSAGES_COLLECTION)
             .document(recipientId)
@@ -109,6 +107,7 @@ public class ChatRepositoryFirestore implements ChatRepository {
                 }
             );
 
+        // Save sender's last message
         firestore
             .collection(CHAT_LAST_MESSAGES_COLLECTION)
             .document(senderId)
@@ -240,10 +239,11 @@ public class ChatRepositoryFirestore implements ChatRepository {
 
     @Nullable
     private LastChatMessageEntity mapToLastChatMessageEntity(
-        String documentId,
-        LastChatMessageDto lastChatMessageDto
+        @Nullable String documentId,
+        @Nullable LastChatMessageDto lastChatMessageDto
     ) {
-        if (lastChatMessageDto != null &&
+        if (documentId != null &&
+            lastChatMessageDto != null &&
             lastChatMessageDto.getMessage() != null &&
             lastChatMessageDto.getSenderId() != null &&
             lastChatMessageDto.getSenderName() != null &&

@@ -18,8 +18,8 @@ import javax.inject.Singleton;
 
 @Singleton
 public class AuthRepositoryFirebaseAuth implements AuthRepository {
-
     private final FirebaseAuth firebaseAuth;
+
     private final MutableLiveData<Boolean> isUserLoggedMutableLiveData = new MutableLiveData<>();
 
     private final MutableLiveData<LoggedUserEntity> loggedUserMutableLiveData = new MutableLiveData<>();

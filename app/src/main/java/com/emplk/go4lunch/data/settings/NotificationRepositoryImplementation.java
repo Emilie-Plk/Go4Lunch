@@ -18,8 +18,8 @@ import javax.inject.Singleton;
 
 @Singleton
 public class NotificationRepositoryImplementation implements NotificationRepository {
-    private static final String KEY_NOTIFICATION_ENABLED = "NOTIFICATION_ENABLED";
 
+    private static final String KEY_NOTIFICATION_ENABLED = "NOTIFICATION_ENABLED";
     private final static String NOTIFICATION_WORKER = "NOTIFICATION_WORKER";
 
     @NonNull
@@ -58,7 +58,7 @@ public class NotificationRepositoryImplementation implements NotificationReposit
             .setInitialDelay(delay, TimeUnit.MILLISECONDS)
             .build();
 
-        Log.d("MainApplication", "Scheduled time: " + workRequest.getWorkSpec().initialDelay + " " + workRequest.getWorkSpec().constraints);
+        Log.d("MainApplication", "Scheduled delay: " + workRequest.getWorkSpec().initialDelay + " " + workRequest.getWorkSpec().constraints);
 
         workManager
             .enqueueUniquePeriodicWork(

@@ -34,16 +34,13 @@ import javax.inject.Singleton;
 public class UserRepositoryFirestore implements UserRepository {
 
     private static final String USERS_COLLECTION = "users";
-
     private static final String USERS_WITH_RESTAURANT_CHOICE = "usersWithRestaurantChoice";
 
     @NonNull
     private final FirebaseFirestore firestore;
 
     @Inject
-    public UserRepositoryFirestore(
-        @NonNull FirebaseFirestore firestore
-    ) {
+    public UserRepositoryFirestore(@NonNull FirebaseFirestore firestore) {
         this.firestore = firestore;
     }
 
@@ -139,7 +136,9 @@ public class UserRepositoryFirestore implements UserRepository {
                                 timestamp.compareTo(endTimestamp) <= 0) {
                                 String userId = documentSnapshot.getId();
                                 UserWithRestaurantChoiceEntity userWithRestaurantChoiceEntity = mapToUserWithRestaurantChoiceEntity(userWithRestaurantChoiceDto, userId);
-                                userWithRestaurantChoiceEntities.add(userWithRestaurantChoiceEntity);
+                                if (userWithRestaurantChoiceEntity != null) {
+                                    userWithRestaurantChoiceEntities.add(userWithRestaurantChoiceEntity);
+                                }
                             }
                         }
                         if (userWithRestaurantChoiceEntities.isEmpty()) {
@@ -178,19 +177,18 @@ public class UserRepositoryFirestore implements UserRepository {
                                 timestamp.compareTo(startTimestamp) >= 0 &&
                                 timestamp.compareTo(endTimestamp) <= 0) {
                                 UserWithRestaurantChoiceEntity userWithRestaurantChoiceEntity = mapToUserWithRestaurantChoiceEntity(userWithRestaurantChoiceDto, userId);
-                                userWithRestaurantChoiceEntityMutableLiveData.setValue(userWithRestaurantChoiceEntity);
+                                if (userWithRestaurantChoiceEntity != null) {
+                                    userWithRestaurantChoiceEntityMutableLiveData.setValue(userWithRestaurantChoiceEntity);
+                                }
                             } else {
                                 userWithRestaurantChoiceEntityMutableLiveData.setValue(null);
                             }
                         } else {
                             userWithRestaurantChoiceEntityMutableLiveData.setValue(null);
                         }
-                    } else {
-                        userWithRestaurantChoiceEntityMutableLiveData.setValue(null);
                     }
                 }
             );
-
         return userWithRestaurantChoiceEntityMutableLiveData;
     }
 
@@ -229,7 +227,9 @@ public class UserRepositoryFirestore implements UserRepository {
                         List<LoggedUserDto> loggedUserDtos = queryDocumentSnapshots.toObjects(LoggedUserDto.class);
                         List<LoggedUserEntity> loggedUserEntities = new ArrayList<>();
                         for (LoggedUserDto loggedUserDto : loggedUserDtos) {
-                            loggedUserEntities.add(mapToLoggedUserEntity(loggedUserDto));
+                            if (loggedUserDto != null) {
+                                loggedUserEntities.add(mapToLoggedUserEntity(loggedUserDto));
+                            }
                         }
                         loggedUserEntitiesMutableLiveData.setValue(loggedUserEntities);
                     }
@@ -260,7 +260,9 @@ public class UserRepositoryFirestore implements UserRepository {
                                 timestamp.compareTo(endTimestamp) <= 0) {
                                 String userId = documentSnapshot.getId();
                                 UserWithRestaurantChoiceEntity userWithRestaurantChoiceEntity = mapToUserWithRestaurantChoiceEntity(userWithRestaurantChoiceDto, userId);
-                                userWithRestaurantChoiceEntities.add(userWithRestaurantChoiceEntity);
+                                if (userWithRestaurantChoiceEntity != null) {
+                                    userWithRestaurantChoiceEntities.add(userWithRestaurantChoiceEntity);
+                                }
                             }
                         }
                         if (userWithRestaurantChoiceEntities.isEmpty()) {
@@ -268,7 +270,7 @@ public class UserRepositoryFirestore implements UserRepository {
                         } else {
                             taskCompletionSource.setResult(userWithRestaurantChoiceEntities);
                         }
-                    } else {
+                    } else if (task.getException() != null) {
                         taskCompletionSource.setException(task.getException());
                     }
                 }
@@ -280,7 +282,6 @@ public class UserRepositoryFirestore implements UserRepository {
             return null;
         }
     }
-
 
     private LoggedUserEntity mapToLoggedUserEntity(@Nullable LoggedUserDto result) {
         if (result != null &&
