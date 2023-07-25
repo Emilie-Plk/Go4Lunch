@@ -37,30 +37,30 @@ public class WorkmatesViewModel extends ViewModel {
         this.getCurrentLoggedUserUseCase = getCurrentLoggedUserUseCase;
     }
 
-
     public LiveData<List<WorkmatesViewStateItem>> getWorkmates() {
         LoggedUserEntity currentLoggedUser = getCurrentLoggedUserUseCase.invoke();
         if (currentLoggedUser != null) {
             String currentUserId = currentLoggedUser.getId();
             return Transformations.switchMap(getWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase.invoke(), workmateEntities -> {
-                List<WorkmatesViewStateItem> workmatesViewStateItems = new ArrayList<>();
-                MutableLiveData<List<WorkmatesViewStateItem>> result = new MutableLiveData<>();
-                for (WorkmateEntity workmate : workmateEntities) {
-                    if (!workmate.getLoggedUserEntity().getId().equals(currentUserId)) {
-                        workmatesViewStateItems.add(
-                            new WorkmatesViewStateItem.AllWorkmates(
-                                workmate.getLoggedUserEntity().getId(),
-                                workmate.getLoggedUserEntity().getName(),
-                                workmate.getLoggedUserEntity().getPictureUrl(),
-                                workmate.getAttendingRestaurantId() != null ? workmate.getAttendingRestaurantId() : null,
-                                workmate.getAttendingRestaurantName() != null ? workmate.getAttendingRestaurantName() : null
-                            )
-                        );
+                    List<WorkmatesViewStateItem> workmatesViewStateItems = new ArrayList<>();
+                    MutableLiveData<List<WorkmatesViewStateItem>> result = new MutableLiveData<>();
+                    for (WorkmateEntity workmate : workmateEntities) {
+                        if (!workmate.getLoggedUserEntity().getId().equals(currentUserId)) {
+                            workmatesViewStateItems.add(
+                                new WorkmatesViewStateItem.AllWorkmates(
+                                    workmate.getLoggedUserEntity().getId(),
+                                    workmate.getLoggedUserEntity().getName(),
+                                    workmate.getLoggedUserEntity().getPictureUrl(),
+                                    workmate.getAttendingRestaurantId() != null ? workmate.getAttendingRestaurantId() : null,
+                                    workmate.getAttendingRestaurantName() != null ? workmate.getAttendingRestaurantName() : null
+                                )
+                            );
+                        }
                     }
+                    result.setValue(workmatesViewStateItems);
+                    return result;
                 }
-                result.setValue(workmatesViewStateItems);
-                return result;
-            });
+            );
         } else {
             MutableLiveData<List<WorkmatesViewStateItem>> emptyResult = new MutableLiveData<>();
             emptyResult.setValue(Collections.emptyList());

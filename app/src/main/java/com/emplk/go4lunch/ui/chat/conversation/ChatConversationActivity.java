@@ -24,6 +24,7 @@ public class ChatConversationActivity extends AppCompatActivity {
     private static final String WORKMATE_ID = "workmateId";
     private static final String WORKMATE_NAME = "workmateName";
     private static final String WORKMATE_PHOTO_URL = "workmatePhotoUrl";
+
     private ChatActivityBinding binding;
 
     private ChatConversationViewModel viewModel;
@@ -55,7 +56,6 @@ public class ChatConversationActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(ChatConversationViewModel.class);
 
         initRecyclerView();
-
 
         binding.chatSendFabButton.setOnClickListener(v -> {
                 if (binding.chatMessageInputEt.getText() != null) {

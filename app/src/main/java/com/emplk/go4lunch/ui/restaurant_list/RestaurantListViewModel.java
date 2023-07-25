@@ -51,7 +51,6 @@ public class RestaurantListViewModel extends ViewModel {
     @NonNull
     private final MediatorLiveData<List<RestaurantListViewStateItem>> restaurantListMediatorLiveData = new MediatorLiveData<>();
 
-
     @Inject
     public RestaurantListViewModel(
         @NonNull GetNearbySearchWrapperUseCase getNearbySearchWrapperUseCase,
@@ -61,7 +60,6 @@ public class RestaurantListViewModel extends ViewModel {
         @NonNull Resources resources,
         @NonNull GetAttendantsGoingToSameRestaurantAsUserUseCase getAttendantsGoingToSameRestaurantAsUserUseCase,
         @NonNull GetPredictionPlaceIdUseCase getPredictionPlaceIdUseCase
-
     ) {
         this.resources = resources;
 
@@ -71,7 +69,6 @@ public class RestaurantListViewModel extends ViewModel {
         LiveData<Boolean> hasGpsPermissionLiveData = hasGpsPermissionUseCase.invoke();
         LiveData<NearbySearchWrapper> nearbySearchWrapperLiveData = getNearbySearchWrapperUseCase.invoke();
         LiveData<String> placeIdLiveData = getPredictionPlaceIdUseCase.invoke();
-
 
         restaurantListMediatorLiveData.addSource(hasGpsPermissionLiveData, hasGpsPermission ->
             combine(
@@ -137,7 +134,6 @@ public class RestaurantListViewModel extends ViewModel {
                 attendantsByRestaurantIdsLiveData.getValue(),
                 placeId)
         );
-
     }
 
     private void combine(
@@ -185,7 +181,6 @@ public class RestaurantListViewModel extends ViewModel {
             return;
         }
 
-
         if (nearbySearchWrapper instanceof NearbySearchWrapper.Loading) {
             result.add(
                 new RestaurantListViewStateItem.Loading()
@@ -201,7 +196,10 @@ public class RestaurantListViewModel extends ViewModel {
             if (locationStateEntity instanceof LocationStateEntity.Success) {
                 LocationEntity location = ((LocationStateEntity.Success) locationStateEntity).locationEntity;
 
-                List<NearbySearchEntity> sortedRestaurantList = sortNearbyRestaurants(((NearbySearchWrapper.Success) nearbySearchWrapper).getNearbySearchEntityList(), location);
+                List<NearbySearchEntity> sortedRestaurantList = sortNearbyRestaurants(
+                    ((NearbySearchWrapper.Success) nearbySearchWrapper).getNearbySearchEntityList(),
+                    location
+                );
                 for (NearbySearchEntity nearbySearchEntity : sortedRestaurantList) {
                     if (placeId == null) {
                         result.add(
@@ -209,7 +207,7 @@ public class RestaurantListViewModel extends ViewModel {
                                 nearbySearchEntity.getPlaceId(),
                                 nearbySearchEntity.getRestaurantName(),
                                 nearbySearchEntity.getVicinity(),
-                                (new DecimalFormat("#").format(nearbySearchEntity.getDistance())) + "m",
+                                (new DecimalFormat("#").format(nearbySearchEntity.getDistance())) + resources.getString(R.string.distance_meter),
                                 getAttendants(nearbySearchEntity.getPlaceId(), attendantsByRestaurantIds),
                                 formatOpeningStatus(nearbySearchEntity.isOpen()),
                                 parseRestaurantPictureUrl(nearbySearchEntity.getPhotoReferenceUrl()),
@@ -223,7 +221,7 @@ public class RestaurantListViewModel extends ViewModel {
                                 nearbySearchEntity.getPlaceId(),
                                 nearbySearchEntity.getRestaurantName(),
                                 nearbySearchEntity.getVicinity(),
-                                (new DecimalFormat("#").format(nearbySearchEntity.getDistance())) + "m",
+                                (new DecimalFormat("#").format(nearbySearchEntity.getDistance())) + resources.getString(R.string.distance_meter),
                                 getAttendants(nearbySearchEntity.getPlaceId(), attendantsByRestaurantIds),
                                 formatOpeningStatus(nearbySearchEntity.isOpen()),
                                 parseRestaurantPictureUrl(nearbySearchEntity.getPhotoReferenceUrl()),

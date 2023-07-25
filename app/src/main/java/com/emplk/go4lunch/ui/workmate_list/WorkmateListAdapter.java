@@ -37,12 +37,20 @@ public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, Rec
             case ALL_WORKMATES:
                 return new AllWorkMatesViewHolder(
                     WorkmateListItemBinding.inflate(
-                        LayoutInflater.from(parent.getContext()), parent, false)
+                        LayoutInflater.from(parent.getContext()
+                        ),
+                        parent,
+                        false
+                    )
                 );
             case WORKMATES_GOING_TO_SAME_RESTAURANT:
                 return new WorkmatesGoingToSameRestaurantViewHolder(
                     WorkmateListItemBinding.inflate(
-                        LayoutInflater.from(parent.getContext()), parent, false)
+                        LayoutInflater.from(parent.getContext()
+                        ),
+                        parent,
+                        false
+                    )
                 );
             default:
                 throw new IllegalStateException("Unknown viewType : " + viewType);
@@ -58,7 +66,10 @@ public class WorkmateListAdapter extends ListAdapter<WorkmatesViewStateItem, Rec
         if (holder instanceof AllWorkMatesViewHolder) {
             ((AllWorkMatesViewHolder) holder).bind((WorkmatesViewStateItem.AllWorkmates) getItem(position), listener);
         } else if (holder instanceof WorkmatesGoingToSameRestaurantViewHolder) {
-            ((WorkmatesGoingToSameRestaurantViewHolder) holder).bind((WorkmatesViewStateItem.WorkmatesGoingToSameRestaurant) getItem(position), listener);
+            ((WorkmatesGoingToSameRestaurantViewHolder) holder).bind(
+                (WorkmatesViewStateItem.WorkmatesGoingToSameRestaurant) getItem(position),
+                listener
+            );
         } else throw new IllegalStateException("Unknown item type at position: " + position);
     }
 

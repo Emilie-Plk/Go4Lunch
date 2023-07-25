@@ -50,7 +50,6 @@ public class RestaurantListFragment extends Fragment {
         initRecyclerView();
     }
 
-
     private void initRecyclerView() {
         RecyclerView recyclerView = binding.getRoot();
 
@@ -73,7 +72,6 @@ public class RestaurantListFragment extends Fragment {
                 }
             );
     }
-
 
     @Override
     public void onDestroyView() {

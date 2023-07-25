@@ -60,9 +60,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(RestaurantDetailViewModel.class);
 
         initRecyclerView();
-
         setupObservers();
-
     }
 
     private void initRecyclerView() {
@@ -73,7 +71,13 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                 @NonNull String workmateName,
                 @NonNull String workmatePhotoUrl
             ) {
-                startActivity(ChatConversationActivity.navigate(RestaurantDetailActivity.this, workmateId, workmateName, workmatePhotoUrl));
+                startActivity(ChatConversationActivity.navigate(
+                        RestaurantDetailActivity.this,
+                        workmateId,
+                        workmateName,
+                        workmatePhotoUrl
+                    )
+                );
             }
 
             @Override
@@ -115,20 +119,38 @@ public class RestaurantDetailActivity extends AppCompatActivity {
                     binding.detailRestaurantName.setText(detail.getName());
                     binding.detailRestaurantAddress.setText(detail.getVicinity());
                     binding.detailRestaurantRatingBar.setRating(detail.getRating());
-                    binding.detailRestaurantVeganFriendly.setVisibility(Boolean.TRUE.equals(detail.isVeganFriendly()) ? View.VISIBLE : View.INVISIBLE);
+                    binding.detailRestaurantVeganFriendly.setVisibility(
+                        Boolean.TRUE.equals(detail.isVeganFriendly()) ? View.VISIBLE : View.INVISIBLE
+                    );
                     binding.detailRestaurantWebsiteButton.setEnabled(detail.isWebsiteAvailable());
                     binding.detailRestaurantCallButton.setEnabled(detail.isPhoneNumberAvailable());
 
                     AttendanceState attendanceState = detail.getAttendanceState();
                     if (attendanceState != null) {
                         binding.detailRestaurantChoseFab.setText(attendanceState.getText());
-                        binding.detailRestaurantChoseFab.setBackgroundTintList(ContextCompat.getColorStateList(this, attendanceState.getBackgroundColorRes()));
-                        binding.detailRestaurantChoseFab.setIconTint(ContextCompat.getColorStateList(this, attendanceState.getIconColorRes()));
+                        binding.detailRestaurantChoseFab.setBackgroundTintList(
+                            ContextCompat.getColorStateList(
+                                this,
+                                attendanceState.getBackgroundColorRes()
+                            )
+                        );
+                        binding.detailRestaurantChoseFab.setIconTint(
+                            ContextCompat.getColorStateList(
+                                this,
+                                attendanceState.getIconColorRes()
+                            )
+                        );
                     }
                     if (attendanceState == AttendanceState.IS_ATTENDING) {
                         binding.detailRestaurantChoseFab.setOnClickListener(v -> viewModel.onRemoveUserRestaurantChoice());
                     } else if (attendanceState == AttendanceState.IS_NOT_ATTENDING) {
-                        binding.detailRestaurantChoseFab.setOnClickListener(v -> viewModel.onAddUserRestaurantChoice(detail.getName(), detail.getVicinity(), detail.getPictureUrl()));
+                        binding.detailRestaurantChoseFab.setOnClickListener(v ->
+                            viewModel.onAddUserRestaurantChoice(
+                                detail.getName(),
+                                detail.getVicinity(),
+                                detail.getPictureUrl()
+                            )
+                        );
                     }
 
                     RestaurantDetailsFavoriteState restaurantDetailsFavoriteState = detail.getRestaurantFavoriteState();
@@ -179,7 +201,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
             }
         );
     }
-
 
     @Override
     public boolean onSupportNavigateUp() {

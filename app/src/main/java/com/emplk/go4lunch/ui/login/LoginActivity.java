@@ -41,7 +41,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private LoginActivityViewModel viewModel;
 
-
     private GoogleSignInClient googleSignInClient;
 
     private FirebaseAuth firebaseAuth;
@@ -142,18 +141,15 @@ public class LoginActivity extends AppCompatActivity {
 
                         AuthCredential authCredential = GoogleAuthProvider.getCredential(googleSignInAccount.getIdToken(), null);
                         // Check credential
-                        firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()) {
-                                        viewModel.onLoginComplete();
-                                        startActivity(DispatcherActivity.navigate(LoginActivity.this));
-                                        Log.i(TAG, "Firebase auth successful");
-                                    } else {
-                                        Log.e("Firebase auth error: ", task.getException().getMessage());
-                                    }
-                                }
+                        firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(this, task -> {
+                            if (task.isSuccessful()) {
+                                viewModel.onLoginComplete();
+                                startActivity(DispatcherActivity.navigate(LoginActivity.this));
+                                Log.i(TAG, "Firebase auth successful");
+                            } else {
+                                Log.e("Firebase auth error: ", task.getException().getMessage());
                             }
+                        }
                         );
                     }
                 } catch (ApiException e) {

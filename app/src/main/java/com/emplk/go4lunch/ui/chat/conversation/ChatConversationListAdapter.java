@@ -30,10 +30,18 @@ public class ChatConversationListAdapter extends ListAdapter<ChatConversationMes
     ) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         if (viewType == VIEW_TYPE_SENDER) {
-            ChatSenderMessageItemBinding sentMessageBinding = ChatSenderMessageItemBinding.inflate(inflater, parent, false);
+            ChatSenderMessageItemBinding sentMessageBinding = ChatSenderMessageItemBinding.inflate(
+                inflater,
+                parent,
+                false
+            );
             return new SenderViewHolder(sentMessageBinding);
         } else if (viewType == VIEW_TYPE_RECIPIENT) {
-            ChatRecipientMessageItemBinding receivedMessageBinding = ChatRecipientMessageItemBinding.inflate(inflater, parent, false);
+            ChatRecipientMessageItemBinding receivedMessageBinding = ChatRecipientMessageItemBinding.inflate(
+                inflater,
+                parent,
+                false
+            );
             return new RecipientViewHolder(receivedMessageBinding);
         }
         throw new IllegalArgumentException("Invalid view type: " + viewType);

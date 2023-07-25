@@ -59,18 +59,14 @@ public class MainViewModel extends ViewModel {
     @NonNull
     private final ResetPredictionPlaceIdUseCase resetPredictionPlaceIdUseCase;
 
-
     @NonNull
     private final SingleLiveEvent<FragmentState> fragmentStateSingleLiveEvent = new SingleLiveEvent<>();
-
 
     @NonNull
     private final MutableLiveData<String> userQueryMutableLiveData;
 
-
     @NonNull
     private final LiveData<List<PredictionEntity>> predictionsLiveData;
-
 
     @Inject
     public MainViewModel(
@@ -108,6 +104,14 @@ public class MainViewModel extends ViewModel {
         );
     }
 
+    public LiveData<UserWithRestaurantChoiceEntity> getUserWithRestaurantChoice() {
+        return getUserWithRestaurantChoiceEntityLiveDataUseCase.invoke();
+    }
+
+    @NonNull
+    public SingleLiveEvent<FragmentState> getFragmentStateSingleLiveEvent() {
+        return fragmentStateSingleLiveEvent;
+    }
 
     public LiveData<LoggedUserEntity> getUserInfoLiveData() {
         LiveData<UserEntity> userEntityLiveData = getUserEntityUseCase.invoke();
@@ -125,24 +129,6 @@ public class MainViewModel extends ViewModel {
                 return loggedUserEntityMutableLiveData;
             }
         );
-    }
-
-    public LiveData<Boolean> onUserLogged() {
-        LiveData<Boolean> isUserLoggedInLiveData = isUserLoggedInLiveDataUseCase.invoke();
-        return Transformations.switchMap(isUserLoggedInLiveData, isLogged -> {
-                MutableLiveData<Boolean> isUserLoggedInMutableLiveData = new MutableLiveData<>();
-                if (isLogged) {
-                    isUserLoggedInMutableLiveData.setValue(true);
-                } else {
-                    isUserLoggedInMutableLiveData.setValue(false);
-                }
-                return isUserLoggedInMutableLiveData;
-            }
-        );
-    }
-
-    public LiveData<UserWithRestaurantChoiceEntity> getUserWithRestaurantChoice() {
-        return getUserWithRestaurantChoiceEntityLiveDataUseCase.invoke();
     }
 
     public LiveData<List<PredictionViewState>> getPredictionsLiveData() {
@@ -176,6 +162,11 @@ public class MainViewModel extends ViewModel {
         userQueryMutableLiveData.setValue(query);
     }
 
+    public void onPredictionClicked(String placeId) {
+        savePredictionPlaceIdUseCase.invoke(placeId);
+        userQueryMutableLiveData.setValue(null);
+    }
+
     public void onPredictionPlaceIdReset() {
         userQueryMutableLiveData.setValue(null);
         resetPredictionPlaceIdUseCase.invoke();
@@ -185,26 +176,32 @@ public class MainViewModel extends ViewModel {
         return isGpsEnabledUseCase.invoke();
     }
 
-    public void signOut() {
-        logoutUserUseCase.invoke();
-    }
-
-    @NonNull
-    public SingleLiveEvent<FragmentState> getFragmentStateSingleLiveEvent() {
-        return fragmentStateSingleLiveEvent;
+    public LiveData<Boolean> onUserLogged() {
+        LiveData<Boolean> isUserLoggedInLiveData = isUserLoggedInLiveDataUseCase.invoke();
+        return Transformations.switchMap(isUserLoggedInLiveData, isLogged -> {
+                MutableLiveData<Boolean> isUserLoggedInMutableLiveData = new MutableLiveData<>();
+                if (isLogged) {
+                    isUserLoggedInMutableLiveData.setValue(true);
+                } else {
+                    isUserLoggedInMutableLiveData.setValue(false);
+                }
+                return isUserLoggedInMutableLiveData;
+            }
+        );
     }
 
     public void onChangeFragmentView(@NonNull FragmentState fragmentState) {
         fragmentStateSingleLiveEvent.setValue(fragmentState);
     }
 
+    public void signOut() {
+        logoutUserUseCase.invoke();
+    }
+
+
     public void onResume() {
         startLocationRequestUseCase.invoke();
     }
-
-    public void onPredictionClicked(String placeId) {
-        savePredictionPlaceIdUseCase.invoke(placeId);
-        userQueryMutableLiveData.setValue(null);
-    }
 }
+
 

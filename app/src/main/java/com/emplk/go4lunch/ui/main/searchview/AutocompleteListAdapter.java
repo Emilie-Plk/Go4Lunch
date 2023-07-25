@@ -28,7 +28,11 @@ public class AutocompleteListAdapter extends ListAdapter<PredictionViewState, Re
     ) {
         return new PredictionViewHolder(
             PredictionItemBinding.inflate(
-                LayoutInflater.from(parent.getContext()), parent, false)
+                LayoutInflater.from(
+                    parent.getContext()),
+                parent,
+                false
+            )
         );
     }
 
@@ -54,7 +58,12 @@ public class AutocompleteListAdapter extends ListAdapter<PredictionViewState, Re
             @NonNull OnPredictionClickedListener listener
         ) {
             binding.predictionItemRestaurantName.setText(predictionViewState.getRestaurantName());
-            binding.predictionItemRestaurantName.setOnClickListener(v -> listener.onPredictionClicked(predictionViewState.getPlaceId(), predictionViewState.getRestaurantName()));
+            binding.predictionItemRestaurantName.setOnClickListener(v ->
+                listener.onPredictionClicked(
+                    predictionViewState.getPlaceId(),
+                    predictionViewState.getRestaurantName()
+                )
+            );
         }
     }
 

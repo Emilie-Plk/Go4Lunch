@@ -20,7 +20,6 @@ public class RestaurantMarkerViewStateItem {
     @ColorRes
     private final int colorAttendance;
 
-
     public RestaurantMarkerViewStateItem(
         @NonNull String id,
         @NonNull String name,

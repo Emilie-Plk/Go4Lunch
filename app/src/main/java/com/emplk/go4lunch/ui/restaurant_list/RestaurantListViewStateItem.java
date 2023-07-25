@@ -223,5 +223,4 @@ public abstract class RestaurantListViewStateItem {
                 '}';
         }
     }
-
 }

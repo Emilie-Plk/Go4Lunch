@@ -1,5 +1,7 @@
 package com.emplk.go4lunch.ui.restaurant_map;
 
+import android.content.res.Resources;
+
 import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,10 +42,8 @@ public class MapViewModel extends ViewModel {
     @NonNull
     private final SingleLiveEvent<Void> noRestaurantFoundSingleLiveEvent = new SingleLiveEvent<>();
 
-
     @NonNull
     private final MediatorLiveData<List<RestaurantMarkerViewStateItem>> mapViewStateMediatorLiveData = new MediatorLiveData<>();
-
 
     @Inject
     public MapViewModel(

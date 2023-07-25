@@ -28,7 +28,6 @@ public class ChatConversationViewModel extends ViewModel {
 
     private final GetChatConversationUseCase getChatConversationUseCase;
 
-
     private final SetMessageTypeStateUseCase setMessageTypeStateUseCase;
 
     @Inject

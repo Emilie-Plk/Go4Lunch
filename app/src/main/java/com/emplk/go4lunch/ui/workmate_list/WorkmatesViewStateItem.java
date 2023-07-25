@@ -10,7 +10,6 @@ public abstract class WorkmatesViewStateItem {
     public enum Type {
         WORKMATES_GOING_TO_SAME_RESTAURANT,
         ALL_WORKMATES,
-
         NO_WORKMATES
     }
 

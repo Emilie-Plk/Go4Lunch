@@ -56,9 +56,9 @@ public class NotificationWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-
         DayOfWeek dayOfWeek = LocalDate.now(clock).getDayOfWeek();
 
+        // No notification scheduled on weekends :)
         if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) {
             return Result.success();
         }
@@ -89,7 +89,7 @@ public class NotificationWorker extends Worker {
             if (workmates.size() == 1) {
                 contentText.append(context.getString(R.string.notification_content_and)).append(workmates.get(0));
             } else if (workmates.size() == 2) {
-                contentText.append(", ").append(workmates.get(0))  // ça on garde
+                contentText.append(", ").append(workmates.get(0))
                     .append(context.getString(R.string.notification_content_and)).append(workmates.get(1));
             } else {
                 for (int i = 0; i < workmates.size() - 1; i++) {

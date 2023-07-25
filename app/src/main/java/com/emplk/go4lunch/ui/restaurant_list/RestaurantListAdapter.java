@@ -38,20 +38,30 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewStateIt
             case LOADING_STATE:
                 return new RecyclerView.ViewHolder(
                     LoadingStateBinding.inflate(
-                            LayoutInflater.from(parent.getContext()), parent, false)
+                            LayoutInflater.from(
+                                parent.getContext()),
+                            parent,
+                            false
+                        )
                         .getRoot()
                 ) {
                 };
             case DISPLAY_RESTAURANT_LIST:
                 return new RestaurantListViewHolder(
                     RestaurantItemBinding.inflate(
-                        LayoutInflater.from(parent.getContext()), parent, false
+                        LayoutInflater.from(
+                            parent.getContext()),
+                        parent,
+                        false
                     )
                 );
             case ERROR_STATE:
                 return new ErrorViewHolder(
                     RestaurantListErrorStateBinding.inflate(
-                        LayoutInflater.from(parent.getContext()), parent, false
+                        LayoutInflater.from(
+                            parent.getContext()),
+                        parent,
+                        false
                     )
                 );
             default:
@@ -65,9 +75,14 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewStateIt
         int position
     ) {
         if (holder instanceof RestaurantListViewHolder) {
-            ((RestaurantListViewHolder) holder).bind((RestaurantListViewStateItem.RestaurantItemItem) getItem(position), listener);
+            ((RestaurantListViewHolder) holder).bind(
+                (RestaurantListViewStateItem.RestaurantItemItem) getItem(position),
+                listener
+            );
         } else if (holder instanceof ErrorViewHolder) {
-            ((ErrorViewHolder) holder).bind((RestaurantListViewStateItem.RestaurantListErrorItem) getItem(position));
+            ((ErrorViewHolder) holder).bind(
+                (RestaurantListViewStateItem.RestaurantListErrorItem) getItem(position)
+            );
         }
     }
 
@@ -102,7 +117,9 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewStateIt
 
             binding.listRestaurantDistance.setText(itemViewState.getDistance());
             binding.listRestaurantAttendants.setText(itemViewState.getAttendants());
-            binding.listRestaurantRating.setVisibility(itemViewState.getIsRatingBarVisible() ? View.VISIBLE : View.INVISIBLE);
+            binding.listRestaurantRating.setVisibility(
+                itemViewState.getIsRatingBarVisible() ? View.VISIBLE : View.INVISIBLE
+            );
             binding.listRestaurantRating.setRating(itemViewState.getRating());
             if (itemViewState.getRestaurantOpeningState() != RestaurantOpeningState.IS_NOT_DEFINED) {
                 binding.listRestaurantOpeningHours.setText(itemViewState.getRestaurantOpeningState().getText());
@@ -113,7 +130,6 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewStateIt
                 );
             }
         }
-
     }
 
     public static class ErrorViewHolder extends RecyclerView.ViewHolder {
@@ -144,7 +160,6 @@ public class RestaurantListAdapter extends ListAdapter<RestaurantListViewStateIt
             }
             binding.restaurantListErrorImage.setImageResource(drawableError);
         }
-
     }
 
     private static class ListRestaurantItemCallback extends DiffUtil.ItemCallback<RestaurantListViewStateItem> {

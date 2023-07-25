@@ -46,6 +46,7 @@ public class RestaurantDetailViewModel extends ViewModel {
 
     private final MediatorLiveData<RestaurantDetailViewState> restaurantDetailViewStateMediatorLiveData = new MediatorLiveData<>();
 
+    @NonNull
     private final AddFavoriteRestaurantUseCase addFavoriteRestaurantUseCase;
 
     @NonNull
@@ -163,7 +164,6 @@ public class RestaurantDetailViewModel extends ViewModel {
 
     public void onAddFavoriteRestaurant() {
         addFavoriteRestaurantUseCase.invoke(restaurantId);
-
     }
 
     public void onRemoveFavoriteRestaurant() {

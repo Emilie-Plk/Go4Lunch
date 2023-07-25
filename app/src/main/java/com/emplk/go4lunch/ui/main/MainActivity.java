@@ -257,7 +257,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             );
-
             hideSoftKeyboard();
         }
         );
