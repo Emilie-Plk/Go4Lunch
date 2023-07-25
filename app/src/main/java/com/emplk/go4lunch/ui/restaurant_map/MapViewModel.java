@@ -1,7 +1,5 @@
 package com.emplk.go4lunch.ui.restaurant_map;
 
-import android.content.res.Resources;
-
 import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

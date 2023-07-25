@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -21,7 +20,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -142,14 +140,14 @@ public class LoginActivity extends AppCompatActivity {
                         AuthCredential authCredential = GoogleAuthProvider.getCredential(googleSignInAccount.getIdToken(), null);
                         // Check credential
                         firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(this, task -> {
-                            if (task.isSuccessful()) {
-                                viewModel.onLoginComplete();
-                                startActivity(DispatcherActivity.navigate(LoginActivity.this));
-                                Log.i(TAG, "Firebase auth successful");
-                            } else {
-                                Log.e("Firebase auth error: ", task.getException().getMessage());
+                                if (task.isSuccessful()) {
+                                    viewModel.onLoginComplete();
+                                    startActivity(DispatcherActivity.navigate(LoginActivity.this));
+                                    Log.i(TAG, "Firebase auth successful");
+                                } else {
+                                    Log.e("Firebase auth error: ", task.getException().getMessage());
+                                }
                             }
-                        }
                         );
                     }
                 } catch (ApiException e) {

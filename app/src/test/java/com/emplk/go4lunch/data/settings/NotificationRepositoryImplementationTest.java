@@ -2,15 +2,18 @@ package com.emplk.go4lunch.data.settings;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import android.content.SharedPreferences;
 
+import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
@@ -26,9 +29,6 @@ public class NotificationRepositoryImplementationTest {
 
     private final SharedPreferences.Editor editor = mock(SharedPreferences.Editor.class);
 
-    private final PeriodicWorkRequest.Builder workRequestBuilder = mock(PeriodicWorkRequest.Builder.class);
-
-    private final PeriodicWorkRequest workRequest = mock(PeriodicWorkRequest.class);
 
     private final WorkManager workManager = mock(WorkManager.class);
 
@@ -38,10 +38,6 @@ public class NotificationRepositoryImplementationTest {
     public void setUp() {
         doReturn(editor).when(sharedPreferences).edit();
         doReturn(editor).when(editor).putBoolean(eq(KEY_NOTIFICATION_ENABLED), anyBoolean());
-
-        //    doReturn(workRequestBuilder).when(workRequestBuilder).addTag(NOTIFICATION_WORKER);
-        //    doReturn(workRequestBuilder).when(workRequestBuilder).setInitialDelay(eq(7200000L), eq(TimeUnit.MILLISECONDS));
-        //  doReturn(workRequest).when(workRequestBuilder).build();
 
         notificationRepositoryImplementation = new NotificationRepositoryImplementation(sharedPreferences, workManager);
     }
@@ -94,16 +90,16 @@ public class NotificationRepositoryImplementationTest {
     @Test
     public void onScheduleNotification() {
         // When
-        // 7200000ms, so 2 hours
-/*        notificationRepositoryImplementation.scheduleNotification(7200000L);
+        long delay = 7200000L;
+        notificationRepositoryImplementation.scheduleNotification(delay);
 
         // Then
         verify(workManager).enqueueUniquePeriodicWork(
-            NOTIFICATION_WORKER,
-            ExistingPeriodicWorkPolicy.KEEP,
-            workRequest);
-        verify(workRequestBuilder).addTag(NOTIFICATION_WORKER).setInitialDelay(eq(7200000L), eq(TimeUnit.MILLISECONDS));
-        verify(workRequestBuilder).build();*/
+            eq(NOTIFICATION_WORKER),
+            eq(ExistingPeriodicWorkPolicy.KEEP),
+            any(PeriodicWorkRequest.class)
+        );
+        verifyNoMoreInteractions(workManager);
     }
 
     @Test

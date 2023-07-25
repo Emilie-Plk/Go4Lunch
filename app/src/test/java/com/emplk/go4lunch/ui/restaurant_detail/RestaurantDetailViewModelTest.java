@@ -111,7 +111,7 @@ public class RestaurantDetailViewModelTest {
             new UserEntity(
                 Stubs.getTestLoggedUserEntity(),
                 Collections.emptySet(),
-                "KEY_RESTAURANT_ID"
+                null
             )
         );
 

@@ -287,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
             }
         );
 
-   binding.mainToolbarSearchView.setOnQueryTextFocusChangeListener(
+        binding.mainToolbarSearchView.setOnQueryTextFocusChangeListener(
             (v, hasFocus) -> {
                 if (!hasFocus) {
                     binding.mainSearchviewRecyclerview.setVisibility(View.GONE);
@@ -298,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
         );
 
         binding.mainToolbarSearchView.setOnCloseListener(() -> {
-             //   binding.mainToolbarSearchView.clearFocus();
+                //   binding.mainToolbarSearchView.clearFocus();
                 binding.mainToolbarSearchView.onActionViewCollapsed();
                 viewModel.onPredictionPlaceIdReset();
                 hideSoftKeyboard();
