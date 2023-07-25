@@ -7,7 +7,6 @@ import com.emplk.go4lunch.data.util.FirestoreFavoriteRestaurantIdsLiveData;
 import com.emplk.go4lunch.domain.favorite_restaurant.FavoriteRestaurantRepository;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Set;
 
