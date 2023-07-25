@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.bottom_bar_restaurant_list:
                         viewModel.onChangeFragmentView(FragmentState.LIST_FRAGMENT);
-                        binding.mainSearchviewRecyclerview.setVisibility(View.GONE);
+                        binding.mainSearchviewRecyclerview.setVisibility(View.VISIBLE);
                         binding.mainToolbarSearchView.setVisibility(View.VISIBLE);
                         return true;
                     case R.id.bottom_bar_workmate_list:
@@ -287,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
             }
         );
 
-        binding.mainToolbarSearchView.setOnQueryTextFocusChangeListener(
+   binding.mainToolbarSearchView.setOnQueryTextFocusChangeListener(
             (v, hasFocus) -> {
                 if (!hasFocus) {
                     binding.mainSearchviewRecyclerview.setVisibility(View.GONE);
@@ -298,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
         );
 
         binding.mainToolbarSearchView.setOnCloseListener(() -> {
-                binding.mainToolbarSearchView.clearFocus();
+             //   binding.mainToolbarSearchView.clearFocus();
                 binding.mainToolbarSearchView.onActionViewCollapsed();
                 viewModel.onPredictionPlaceIdReset();
                 hideSoftKeyboard();
