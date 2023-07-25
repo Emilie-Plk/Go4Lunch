@@ -7,8 +7,8 @@ import com.emplk.go4lunch.data.util.FirestoreFavoriteRestaurantIdsLiveData;
 import com.emplk.go4lunch.domain.favorite_restaurant.FavoriteRestaurantRepository;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -33,14 +33,12 @@ public class FavoriteRestaurantRepositoryFirestore implements FavoriteRestaurant
         @NonNull String userId,
         @NonNull String restaurantId
     ) {
-        Map<String, Object> restaurantMap = new HashMap<>();
-        restaurantMap.put("favoriteRestaurantId", restaurantId);
-
-        firestore.collection(USERS_COLLECTION)
+        firestore
+            .collection(USERS_COLLECTION)
             .document(userId)
             .collection(COLLECTION_PATH_FAVORITE_RESTAURANTS)
             .document(restaurantId)
-            .set(restaurantMap);
+            .set(new HashMap<>());
     }
 
     @Override
@@ -48,7 +46,8 @@ public class FavoriteRestaurantRepositoryFirestore implements FavoriteRestaurant
         @NonNull String userId,
         @NonNull String restaurantId
     ) {
-        firestore.collection(USERS_COLLECTION)
+        firestore
+            .collection(USERS_COLLECTION)
             .document(userId)
             .collection(COLLECTION_PATH_FAVORITE_RESTAURANTS)
             .document(restaurantId)

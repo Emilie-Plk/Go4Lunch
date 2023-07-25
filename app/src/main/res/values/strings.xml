@@ -15,7 +15,7 @@
     <string name="list_avatar_workmate_a11y">Picture of %s</string>
     <string name="list_workmate_send_message_a11y">Send message</string>
     <string name="detail_button_call">call</string>
-    <string name="detail_button_like" translatable="false">like</string>
+    <string name="detail_button_like">like</string>
     <string name="detail_button_website">website</string>
     <string name="detail_vegan_friendly_a11y">Vegan friendly</string>
     <string name="restaurant_item_food_image_a11y">Food image</string>
@@ -69,9 +69,8 @@
     <string name="chat_textinput_et_hint">Type your message…</string>
     <string name="chat_user_avatar_a11y">user avatar</string>
     <string name="show_rationale_title">Permission required</string>
-    <string name="toast_no_restaurant_match_found">No restaurant match found nearby</string>
     <string name="list_no_restaurant_match">No restaurant match found nearby</string>
     <string name="toast_no_restaurant_found_nearby">No restaurant found in your area</string>
-    <string name="distance_meter">m</string>
+    <string name="distance_meter" translatable="false">m</string>
 
 </resources>

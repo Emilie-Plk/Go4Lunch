@@ -89,7 +89,7 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
         );
 
         viewModel.getNoRestaurantMatchSingleLiveEvent().observe(getViewLifecycleOwner(), aVoid -> {
-                Toast.makeText(getContext(), R.string.toast_no_restaurant_match_found, Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), R.string.list_no_restaurant_match, Toast.LENGTH_LONG).show();
             }
         );
 

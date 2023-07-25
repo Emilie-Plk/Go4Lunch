@@ -12,6 +12,7 @@
     <string name="restaurant_item_food_image_a11y">Image de nourriture</string>
     <string name="detail_restaurant_chose_fab">Y aller ?</string>
     <string name="detail_button_call">Appeler</string>
+    <string name="detail_button_like">liker</string>
     <string name="detail_button_website">site web</string>
     <string name="detail_vegan_friendly_a11y">Convient aux végétarien·ne·s</string>
     <string name="detail_food_picture_a11y">Image de nourriture</string>
@@ -44,11 +45,11 @@
     <string name="toast_message_user_no_restaurant_chosen">Vous n\'avez pas encore choisi où déjeuner</string>
     <string name="notification_content_title">C\'est l\'heure de Go4Lunch !</string>
     <string name="notification_content_start">Vous</string>
-    <string name="notification_content_and">et</string>
-    <string name="notification_content_last_and">et</string>
-    <string name="notification_content_going_to_eat_at">allez déjeuner à</string>
-    <string name="notification_content_located_at">situé à</string>
-    <string name="notification_content_solo_user">Vous déjeuner à</string>
+    <string name="notification_content_and">" et "</string>
+    <string name="notification_content_last_and">"et "</string>
+    <string name="notification_content_going_to_eat_at">" allez déjeuner à "</string>
+    <string name="notification_content_located_at">" situé à "</string>
+    <string name="notification_content_solo_user">"Vous déjeuner à "</string>
     <string name="settings_activity_title">Paramètres</string>
     <string name="lunch_reminder_notifications">Notifications déjeuner</string>
     <string name="settings_activity_gps_button">Paramètres GPS</string>
@@ -57,4 +58,6 @@
     <string name="chat_textinput_et_hint">Écrivez votre message...</string>
     <string name="chat_user_avatar_a11y">avatar de l\'utilisateur</string>
     <string name="show_rationale_title">Permission requise</string>
+    <string name="list_no_restaurant_match">Aucune correspondance de ce restaurant dans les environs !</string>
+    <string name="toast_no_restaurant_found_nearby">Aucun restaurant trouvé dans les environs !</string>
 </resources>
