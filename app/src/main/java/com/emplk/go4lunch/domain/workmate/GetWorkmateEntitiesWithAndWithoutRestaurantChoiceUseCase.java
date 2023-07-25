@@ -32,7 +32,6 @@ public class GetWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase {
         LiveData<List<WorkmateEntity>> workmateEntitiesWithRestaurantChoiceLiveData = getWorkmateEntitiesWithRestaurantChoiceListUseCase.invoke();
         LiveData<List<LoggedUserEntity>> loggedUserEntitiesLiveData = getLoggedUserEntitiesUseCase.invoke();
 
-
         workmateEntitiesWithAndWithoutRestaurantChoiceMediatorLiveData.addSource(workmateEntitiesWithRestaurantChoiceLiveData, workmateEntitiesWithRestaurantChoice -> {
                 combine(workmateEntitiesWithRestaurantChoice, loggedUserEntitiesLiveData.getValue());
             }
@@ -42,12 +41,10 @@ public class GetWorkmateEntitiesWithAndWithoutRestaurantChoiceUseCase {
                 combine(workmateEntitiesWithRestaurantChoiceLiveData.getValue(), loggedUserEntities);
             }
         );
-
     }
 
     public LiveData<List<WorkmateEntity>> invoke() {
         return workmateEntitiesWithAndWithoutRestaurantChoiceMediatorLiveData;
-
     }
 
     private void combine(

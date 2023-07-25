@@ -42,6 +42,5 @@ public abstract class LocationStateEntity {
     }
 
     public static class GpsProviderDisabled extends LocationStateEntity {
-
     }
 }

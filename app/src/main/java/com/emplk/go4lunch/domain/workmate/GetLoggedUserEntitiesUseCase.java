@@ -16,9 +16,7 @@ public class GetLoggedUserEntitiesUseCase {
     private final UserRepository userRepository;
 
     @Inject
-    public GetLoggedUserEntitiesUseCase(
-        @NonNull UserRepository userRepository
-    ) {
+    public GetLoggedUserEntitiesUseCase(@NonNull UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

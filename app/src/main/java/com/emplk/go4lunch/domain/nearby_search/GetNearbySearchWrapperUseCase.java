@@ -16,6 +16,7 @@ public class GetNearbySearchWrapperUseCase {
 
     private static final int RADIUS = 1_000;
     private static final String TYPE = "restaurant";
+
     @NonNull
     private final NearbySearchRepository nearbySearchRepository;
 
@@ -30,7 +31,6 @@ public class GetNearbySearchWrapperUseCase {
         this.nearbySearchRepository = nearbySearchRepository;
         this.getCurrentLocationStateUseCase = getCurrentLocationStateUseCase;
     }
-
 
     public LiveData<NearbySearchWrapper> invoke() {
         LiveData<LocationStateEntity> locationStateLiveData = getCurrentLocationStateUseCase.invoke();

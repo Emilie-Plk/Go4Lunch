@@ -16,6 +16,7 @@ public class GetNotificationEntityUseCase {
 
     @NonNull
     private final UserRepository userRepository;
+
     @NonNull
     private final GetCurrentLoggedUserIdUseCase getCurrentLoggedUserIdUseCase;
 

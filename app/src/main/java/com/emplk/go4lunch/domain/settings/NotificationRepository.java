@@ -9,8 +9,7 @@ public interface NotificationRepository {
 
     void setNotificationEnabled(boolean enabled);
 
-    @NonNull
-    PeriodicWorkRequest scheduleNotification(long delay);
+    void scheduleNotification(long delay);
 
     void cancelNotification();
 }

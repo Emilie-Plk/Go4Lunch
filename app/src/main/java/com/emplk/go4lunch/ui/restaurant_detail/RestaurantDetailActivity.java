@@ -102,7 +102,6 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
     private void setupObservers() {
         viewModel.getRestaurantDetails().observe(this, restaurantDetail -> {
-
                 if (restaurantDetail instanceof RestaurantDetailViewState.Loading) {
                     binding.detailRestaurantLayout.setVisibility(View.GONE);
                     binding.detailRestaurantLoadingStateLayout.setVisibility(View.VISIBLE);

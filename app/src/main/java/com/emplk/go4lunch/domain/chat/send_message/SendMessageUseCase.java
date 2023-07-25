@@ -59,6 +59,7 @@ public class SendMessageUseCase {
             )
         );
 
+        // also save last message in Firestore
         saveLastChatMessageSentUseCase.invoke(
             recipientId,
             recipientName,

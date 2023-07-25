@@ -24,7 +24,6 @@ public class GetUserEntityUseCase {
     @NonNull
     private final MediatorLiveData<UserEntity> userEntityMediatorLiveData;
 
-
     @Inject
     public GetUserEntityUseCase(
         @NonNull GetFavoriteRestaurantsIdsUseCase getFavoriteRestaurantsIdsUseCase,
@@ -69,7 +68,6 @@ public class GetUserEntityUseCase {
             }
         );
 
-
         userEntityMediatorLiveData.addSource(loggedUserEntityLiveData, currentUser -> {
                 combine(
                     isUserLoggedInLiveData.getValue(),
@@ -79,13 +77,11 @@ public class GetUserEntityUseCase {
                 );
             }
         );
-
     }
 
     public LiveData<UserEntity> invoke() {
         return userEntityMediatorLiveData;
     }
-
 
     private void combine(
         @Nullable Boolean isUserLoggedIn,
@@ -93,7 +89,7 @@ public class GetUserEntityUseCase {
         @Nullable UserWithRestaurantChoiceEntity userWithRestaurantChoice,
         @Nullable LoggedUserEntity currentUser
     ) {
-        if (isUserLoggedIn == null || currentUser == null) {
+        if (isUserLoggedIn == null || !isUserLoggedIn || currentUser == null) {
             return;
         }
 

@@ -22,9 +22,7 @@ public class AddFavoriteRestaurantUseCase {
         this.getCurrentLoggedUserIdUseCase = getCurrentLoggedUserIdUseCase;
     }
 
-    public void invoke(
-        @NonNull String restaurantId
-    ) {
+    public void invoke(@NonNull String restaurantId) {
         favoriteRestaurantRepository.addFavoriteRestaurant(
             getCurrentLoggedUserIdUseCase.invoke(),
             restaurantId

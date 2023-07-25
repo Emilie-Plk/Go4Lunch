@@ -48,8 +48,7 @@ public class NotificationRepositoryImplementation implements NotificationReposit
     }
 
     @Override
-    @NonNull
-    public PeriodicWorkRequest scheduleNotification(long delay) {
+    public void scheduleNotification(long delay) {
         PeriodicWorkRequest workRequest = new PeriodicWorkRequest.Builder(
             NotificationWorker.class,
             24,
@@ -66,8 +65,6 @@ public class NotificationRepositoryImplementation implements NotificationReposit
                 ExistingPeriodicWorkPolicy.KEEP,
                 workRequest
             );
-
-        return workRequest;
     }
 
     @Override

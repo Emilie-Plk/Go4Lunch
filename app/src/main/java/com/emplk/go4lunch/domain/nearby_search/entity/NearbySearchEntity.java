@@ -11,8 +11,10 @@ public class NearbySearchEntity {
 
     @NonNull
     private final String placeId;
+
     @NonNull
     private final String restaurantName;
+
     @NonNull
     private final String vicinity;
 

@@ -33,7 +33,8 @@ public class GetChatConversationUseCase {
 
     public LiveData<List<ChatConversationEntity>> invoke(@NonNull String recipientId) {
         String currentLoggedUserId = getCurrentLoggedUserIdUseCase.invoke();
-        return Transformations.map(chatRepository.getChatConversation(currentLoggedUserId, recipientId), chatConversationEntities -> {
+        return Transformations.map(chatRepository.getChatConversation(
+                currentLoggedUserId, recipientId), chatConversationEntities -> {
                 Collections.sort(chatConversationEntities, Comparator.comparing(
                         chatConversationEntity -> chatConversationEntity.getTimestamp()
                     )
