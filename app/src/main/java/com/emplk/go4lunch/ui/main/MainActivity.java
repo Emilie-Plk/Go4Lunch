@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                                     );
                                 } else {
                                     Toast.makeText(
-                                            this, R.string.list_no_restaurant_match,
+                                            this, R.string.toast_message_user_no_restaurant_chosen,
                                             Toast.LENGTH_SHORT)
                                         .show();
                                 }

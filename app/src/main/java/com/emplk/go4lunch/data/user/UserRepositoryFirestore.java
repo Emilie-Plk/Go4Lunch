@@ -34,7 +34,7 @@ import javax.inject.Singleton;
 public class UserRepositoryFirestore implements UserRepository {
 
     private static final String USERS_COLLECTION = "users";
-    private static final String USERS_WITH_RESTAURANT_CHOICE = "usersWithRestaurantChoice";
+    private static final String USERS_WITH_RESTAURANT_CHOICE = "users_with_restaurant_choice";
 
     @NonNull
     private final FirebaseFirestore firestore;
@@ -292,7 +292,7 @@ public class UserRepositoryFirestore implements UserRepository {
                 result.getId(),
                 result.getName(),
                 result.getEmail(),
-                result.getPictureUrl()
+                result.getPicture_url()
             );
         } else {
             return null;

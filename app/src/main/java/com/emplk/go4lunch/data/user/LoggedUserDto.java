@@ -16,7 +16,7 @@ public class LoggedUserDto {
     private final String email;
 
     @Nullable
-    private final String pictureUrl;
+    private final String picture_url;
 
     public LoggedUserDto() {
         this(null, null, null, null);
@@ -26,12 +26,12 @@ public class LoggedUserDto {
         @Nullable String id,
         @Nullable String name,
         @Nullable String email,
-        @Nullable String pictureUrl
+        @Nullable String picture_url
     ) {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.pictureUrl = pictureUrl;
+        this.picture_url = picture_url;
     }
 
     @Nullable
@@ -50,8 +50,8 @@ public class LoggedUserDto {
     }
 
     @Nullable
-    public String getPictureUrl() {
-        return pictureUrl;
+    public String getPicture_url() {
+        return picture_url;
     }
 
     @Override
@@ -59,12 +59,12 @@ public class LoggedUserDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LoggedUserDto that = (LoggedUserDto) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(email, that.email) && Objects.equals(pictureUrl, that.pictureUrl);
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(email, that.email) && Objects.equals(picture_url, that.picture_url);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, pictureUrl);
+        return Objects.hash(id, name, email, picture_url);
     }
 
     @NonNull
@@ -74,7 +74,7 @@ public class LoggedUserDto {
             "id='" + id + '\'' +
             ", name='" + name + '\'' +
             ", email='" + email + '\'' +
-            ", pictureUrl='" + pictureUrl + '\'' +
+            ", picture_url='" + picture_url + '\'' +
             '}';
     }
 }

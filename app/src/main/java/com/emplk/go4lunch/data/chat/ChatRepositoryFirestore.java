@@ -31,8 +31,8 @@ public class ChatRepositoryFirestore implements ChatRepository {
 
     private static final String CHAT_COLLECTION = "chat_conversations";
     private static final String CHAT_LAST_MESSAGES_COLLECTION = "chat_last_messages";
-    private static final String MESSAGES_SUBCOLLECTION = "messages";
-    private static final String LAST_MESSAGE_SUBCOLLECTION = "last_message";
+    private static final String MESSAGES_SUB_COLLECTION = "messages";
+    private static final String LAST_MESSAGES_SUB_COLLECTION = "last_messages";
     private static final String MESSAGE_TIMESTAMP = "timestamp";
 
     @NonNull
@@ -52,7 +52,7 @@ public class ChatRepositoryFirestore implements ChatRepository {
         firestore
             .collection(CHAT_COLLECTION)
             .document(conversationUid)
-            .collection(MESSAGES_SUBCOLLECTION)
+            .collection(MESSAGES_SUB_COLLECTION)
             .add(
                 new ChatConversationDto(
                     sendMessageEntity.getSenderEntity().getSenderId(),
@@ -95,7 +95,7 @@ public class ChatRepositoryFirestore implements ChatRepository {
         firestore
             .collection(CHAT_LAST_MESSAGES_COLLECTION)
             .document(recipientId)
-            .collection(LAST_MESSAGE_SUBCOLLECTION)
+            .collection(LAST_MESSAGES_SUB_COLLECTION)
             .document(senderId)
             .set(lastMessageChatConversationDto)
             .addOnCompleteListener(task -> {
@@ -111,7 +111,7 @@ public class ChatRepositoryFirestore implements ChatRepository {
         firestore
             .collection(CHAT_LAST_MESSAGES_COLLECTION)
             .document(senderId)
-            .collection(LAST_MESSAGE_SUBCOLLECTION)
+            .collection(LAST_MESSAGES_SUB_COLLECTION)
             .document(recipientId)
             .set(lastMessageChatConversationDto)
             .addOnCompleteListener(task -> {
@@ -131,7 +131,7 @@ public class ChatRepositoryFirestore implements ChatRepository {
 
         firestore.collection(CHAT_LAST_MESSAGES_COLLECTION)
             .document(currentUserId)
-            .collection(LAST_MESSAGE_SUBCOLLECTION)
+            .collection(LAST_MESSAGES_SUB_COLLECTION)
             .addSnapshotListener((querySnapshot, error) -> {
                     if (error != null) {
                         Log.e("ChatRepositoryFirestore", "Error getting last chat messages list", error);
@@ -169,7 +169,7 @@ public class ChatRepositoryFirestore implements ChatRepository {
         firestore
             .collection(CHAT_COLLECTION)
             .document(conversationUid)
-            .collection(MESSAGES_SUBCOLLECTION)
+            .collection(MESSAGES_SUB_COLLECTION)
             .orderBy(MESSAGE_TIMESTAMP, Query.Direction.DESCENDING)
             .limit(30)
             .addSnapshotListener((queryDocumentSnapshots, error) -> {
