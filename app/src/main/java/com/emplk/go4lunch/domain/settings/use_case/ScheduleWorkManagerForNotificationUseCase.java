@@ -38,7 +38,7 @@ public class ScheduleWorkManagerForNotificationUseCase {
     }
 
     private long calculateDelayUntilNoon() {
-        Duration delay = Duration.between(LocalTime.now(clock), LocalTime.of(12, 14));
+        Duration delay = Duration.between(LocalTime.now(clock), LocalTime.NOON);
         if (delay.isNegative()) {
             delay = delay.plusDays(1);
         }

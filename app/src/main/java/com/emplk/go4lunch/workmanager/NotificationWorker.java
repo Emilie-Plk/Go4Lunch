@@ -83,7 +83,11 @@ public class NotificationWorker extends Worker {
         String restaurantName = notificationEntity.getRestaurantName();
         String restaurantVicinity = notificationEntity.getRestaurantVicinity();
 
-        if (!workmates.isEmpty()) {
+        if (workmates != null &&
+            !workmates.isEmpty() &&
+            restaurantName != null &&
+            restaurantVicinity != null
+        ) {
             contentText.append(context.getString(R.string.notification_content_start));
 
             if (workmates.size() == 1) {
