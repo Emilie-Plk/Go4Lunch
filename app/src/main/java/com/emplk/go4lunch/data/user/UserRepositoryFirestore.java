@@ -82,12 +82,10 @@ public class UserRepositoryFirestore implements UserRepository {
         if (loggedUserEntity != null) {
             String userId = loggedUserEntity.getId();
 
-            DocumentReference userWithRestaurantChoiceDocumentRef =
-                firestore
-                    .collection(USERS_WITH_RESTAURANT_CHOICE)
-                    .document(userId);
 
-            userWithRestaurantChoiceDocumentRef
+            firestore
+                .collection(USERS_WITH_RESTAURANT_CHOICE)
+                .document(userId)
                 .set(
                     new UserWithRestaurantChoiceDto(
                         null,
