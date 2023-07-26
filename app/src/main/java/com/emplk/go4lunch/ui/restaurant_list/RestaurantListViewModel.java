@@ -31,7 +31,6 @@ import com.emplk.go4lunch.domain.workmate.GetAttendantsGoingToSameRestaurantAsUs
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.SphericalUtil;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;

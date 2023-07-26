@@ -43,7 +43,6 @@ public class ChatRepositoryFirestore implements ChatRepository {
         this.firestore = firestore;
     }
 
-
     @Override
     public void sendMessage(@NonNull SendMessageEntity sendMessageEntity) {
         String senderId = sendMessageEntity.getSenderEntity().getSenderId();
