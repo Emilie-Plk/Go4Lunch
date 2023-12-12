@@ -1,1 +1,2 @@
-<img src="https://github.com/Emilie-Plk/Go4Lunch/files/13653383/logo-no-background.pdf" width="48">
+
+![App logo](https://github.com/Emilie-Plk/Go4Lunch/assets/96174269/06aa261d-15e0-4ef5-aa2b-c2f02e36735b)
